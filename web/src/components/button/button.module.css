@@ -1,0 +1,44 @@
+.btn {
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.wrapper > *:not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+.divider {
+  height: 20px;
+  width: 1px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.icon {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn.primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn.secondary {
+  background-color: var(--secondary);
+  color: white;
+}
+
+.label {
+  white-space: nowrap;
+}

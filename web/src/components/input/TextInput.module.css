@@ -1,0 +1,38 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  outline: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  background: none;
+
+  border-bottom: 1px solid #e3e3e3;
+  padding-bottom: 8px;
+  transition: all 0.1s ease;
+  color: white;
+}
+
+.label {
+  font-size: 16px;
+  color: #e5e5e5;
+  transform: translateY(100%);
+  cursor: text;
+  font-weight: 300;
+  transition: all 0.1s ease;
+}
+
+.label.focus {
+  transform: translateY(0);
+  font-size: 12px;
+  margin-bottom: 4px;
+  font-weight: bold;
+  color: var(--secondary);
+}
+
+.label.focus + .input {
+  border-bottom: 2px solid var(--secondary);
+}

@@ -1,0 +1,53 @@
+.page {
+  background-color: var(--primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.content > * {
+  flex: 1;
+}
+
+.logo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.logo > img {
+  max-width: 150px;
+}
+
+.body {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all ease 1s;
+}
+
+.body > .content {
+  max-width: 350px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: all ease 1s;
+}
+
+.body > .content > .section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.form > *:not(:last-child) {
+  margin-bottom: 2rem;
+}
