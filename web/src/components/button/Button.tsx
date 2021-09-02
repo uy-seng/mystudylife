@@ -1,24 +1,19 @@
 import React from "react";
 import { BaseButton } from "./BaseButton";
-import { BaseButtonProps } from "../types/button";
+import { ButtonProps } from "../types/button";
 import css from "./button.module.css";
 
-type type = "primary" | "secondary";
-interface Props extends BaseButtonProps {
-  type: type;
-}
-
-export const Button: React.FC<Props> = ({
+export const Button: React.FC<ButtonProps> = ({
+  as,
   text,
-  type,
-  className = "",
   style,
-  onClick,
+  className,
+  ...props
 }) => {
   return (
     <BaseButton
-      onClick={onClick}
-      className={className.concat(` ${css[type]}`)}
+      {...props}
+      className={className ? className.concat(` ${css[as]}`) : css[as]}
       style={{
         display: "flex",
         justifyContent: "center",

@@ -1,2 +1,3 @@
 import { SignUpForm } from "./SignUp.form";
-export { SignUpForm };
+import { SignInForm } from "./SignIn.form";
+export { SignUpForm, SignInForm };

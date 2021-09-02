@@ -64,58 +64,64 @@ const InnerForm: React.FC<FormikProps<FormValues>> = (props) => {
     <Form>
       <div>
         <FormikTextInput
+          autoComplete="no"
           style={{ color: "black" }}
           name="username"
           label="Username"
+          error={
+            touched.username &&
+            errors.username && <span className="error">{errors.username}</span>
+          }
         />
-        {touched.username && errors.username && (
-          <span className="error">{errors.username}</span>
-        )}
       </div>
       <div>
         <FormikTextInput
           style={{ color: "black" }}
           name="email"
           label="Email"
+          error={
+            touched.email &&
+            errors.email && <span className="error">{errors.email}</span>
+          }
         />
-
-        {touched.email && errors.email && (
-          <span className="error">{errors.email}</span>
-        )}
       </div>
       <div>
         <FormikTextInput
           style={{ color: "black" }}
           name="password"
           label="Password"
+          type="password"
+          error={
+            touched.password &&
+            errors.password && <span className="error">{errors.password}</span>
+          }
         />
-
-        {touched.password && errors.password && (
-          <span className="error">{errors.password}</span>
-        )}
       </div>
       <div>
         <FormikTextInput
           style={{ color: "black" }}
           name="confirmPassword"
           label="Confirm Password"
+          type="password"
+          error={
+            touched.confirmPassword &&
+            errors.confirmPassword && (
+              <span className="error">{errors.confirmPassword}</span>
+            )
+          }
         />
-        {touched.confirmPassword && errors.confirmPassword && (
-          <span className="error">{errors.confirmPassword}</span>
-        )}
       </div>
       <div className="txt-sm">
-        by creating an account you agree to our{" "}
+        <span>by creating an account you agree to our</span>
         <a className="txt-primary" href="/">
           privacy policy
-        </a>{" "}
-        and{" "}
+        </a>
+        <span>and</span>
         <a className="txt-primary" href="/">
-          {" "}
           terms of service
         </a>
       </div>
-      <Button as="submit" type="primary" text="Confirm" />
+      <Button type="submit" as="primary" text="Confirm" />
     </Form>
   );
 };

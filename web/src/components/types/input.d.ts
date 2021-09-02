@@ -1,27 +1,27 @@
 import * as CSS from "csstype";
+import { FieldAttributes } from "formik";
 
-export interface BaseInputProps {
-  className?: string;
-  style?: CSS.Properties;
-}
+export interface BaseInputProps
+  extends React.AllHTMLAttributes<HTMLDivElement> {}
 
-export interface BaseInputLabelProps extends BaseInputProps {
+export interface BaseInputLabelProps
+  extends React.LabelHTMLAttributes<HTMLLabelElement> {
   text: string;
-  htmlFor: string;
 }
 
-export interface BaseInputFieldProps extends BaseInputProps {
-  type: string;
-  id: string;
-  onFocus: (e) => void;
-}
-
-export interface BaseInputFormikField extends BaseInputFieldProps {
-  name: string;
-}
+export interface BaseInputFieldProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 export interface BaseInputSubcomponents {
   Label: React.FC<BaseInputLabelProps>;
   Field: React.FC<BaseInputFieldProps>;
-  FormikField: React.FC<BaseInputFormikField>;
+}
+
+export interface TextInputProps extends BaseInputFieldProps {
+  label: string;
+}
+
+export interface FormikInputProps extends TextInputProps {
+  name: string;
+  error?: React.ReactNode | null;
 }

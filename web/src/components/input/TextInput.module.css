@@ -21,7 +21,7 @@
   color: #e5e5e5;
   transform: translateY(100%);
   cursor: text;
-  font-weight: 300;
+  font-weight: 400;
   transition: all 0.1s ease;
 }
 
@@ -33,6 +33,21 @@
   color: var(--secondary);
 }
 
+.label.touched {
+  transform: translateY(0);
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.label.error {
+  font-weight: bold;
+  color: var(--error);
+}
+
 .label.focus + .input {
   border-bottom: 2px solid var(--secondary);
+}
+
+.label.error + .input {
+  border-bottom: 2px solid var(--error);
 }

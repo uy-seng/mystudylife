@@ -3,23 +3,19 @@ import { BaseButtonProps } from "../types/button";
 import css from "./button.module.css";
 
 export const BaseButton: React.FC<BaseButtonProps> = ({
-  children,
   text,
-  style,
-  className = "",
-  onClick = () => {},
-  as = "submit",
+  children,
+  className,
+  ...props
 }) => {
   return (
     <button
-      type={as}
-      onClick={onClick}
-      style={style}
-      className={className.concat(` ${css.btn}`)}
+      className={className ? className.concat(` ${css.btn}`) : css.btn}
+      {...props}
     >
       <div className={css.wrapper}>
         {children}
-        <div className={css.label}>{text}</div>
+        {text && <div className={css.label}>{text}</div>}
       </div>
     </button>
   );

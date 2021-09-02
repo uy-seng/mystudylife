@@ -6,16 +6,13 @@ import css from "./button.module.css";
 export const IconButton: React.FC<IconButtonProps> = ({
   icon,
   text,
-  className,
   style,
   children,
-  onClick,
-  as,
+  ...props
 }) => {
   return (
     <BaseButton
-      as={as}
-      onClick={onClick}
+      {...props}
       text={text}
       children={
         <React.Fragment>
@@ -23,7 +20,6 @@ export const IconButton: React.FC<IconButtonProps> = ({
           {children}
         </React.Fragment>
       }
-      className={className}
       style={{
         padding: "0.5rem 1rem",
         ...style,

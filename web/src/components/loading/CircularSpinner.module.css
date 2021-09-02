@@ -1,0 +1,15 @@
+.loader {
+  border: 4px solid white;
+  border-radius: 50%;
+  position: relative;
+  margin: 0 0.25rem;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  animation: loading 0.75s linear infinite;
+}
+
+@keyframes loading {
+  100% {
+    transform: rotate(360deg);
+  }
+}

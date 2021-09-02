@@ -11,7 +11,7 @@ export const NewTask: React.FC<Props> = () => {
   return (
     <React.Fragment>
       <IconButton
-        as="button"
+        type="button"
         onClick={() => setShow(true)}
         icon={<AiOutlinePlus />}
         text={"New Task"}

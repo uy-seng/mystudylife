@@ -1,18 +1,11 @@
 .page {
   background-color: var(--primary);
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+  display: grid;
+  grid-template-rows: 1fr 1fr --webkit-fill-available;
+  overflow: hidden;
 
-.content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.content > * {
-  flex: 1;
+  --content-grid: 1rem 1fr 1rem;
 }
 
 .logo {
@@ -27,27 +20,62 @@
 
 .body {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-template-columns: var(--content-grid);
+  justify-content: center;
   transition: all ease 1s;
 }
 
-.body > .content {
-  max-width: 350px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  transition: all ease 1s;
+/* content wrapper */
+.body > :first-child {
+  grid-column-start: 2;
 }
 
-.body > .content > .section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+.content {
+  height: 100%;
+  max-width: 400px;
+  margin: auto;
+}
+
+/* social media buttons container */
+.content > :first-child {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  row-gap: 1rem;
+}
+
+/* divider */
+.content > :nth-child(2) {
+  margin: 2rem 0;
+}
+
+/* sign in and sign up buttons container */
+.content > :nth-last-child(2) {
+  display: grid;
+  row-gap: 1rem;
+}
+
+/* agreement text */
+.content > :last-child {
+  margin: 1rem 0;
 }
 
 .form > *:not(:last-child) {
   margin-bottom: 2rem;
+}
+
+/* breakpoints */
+@media screen and (min-width: 510px) {
+  .body {
+    --content-grid: 0.5fr 1fr 0.5fr;
+  }
+
+  .content > :nth-last-child(2) {
+    grid-template-columns: 1fr 0.5fr 1fr;
+    column-gap: 1rem;
+  }
+
+  .content > :nth-last-child(2) > :first-child {
+    grid-column: 1 / span 2;
+  }
 }

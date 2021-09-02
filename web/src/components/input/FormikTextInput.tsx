@@ -2,27 +2,41 @@ import React from "react";
 import BaseInput from "./BaseInput";
 import { v4 as uuidv4 } from "uuid";
 import css from "./TextInput.module.css";
-import * as CSS from "csstype";
+import { Field } from "formik";
+import { FormikInputProps } from "../types/input";
 
-interface Props {
-  label: string;
-  name: string;
-  style?: CSS.Properties;
-}
-
-export const FormikTextInput: React.FC<Props> = ({ name, label, style }) => {
+export const FormikTextInput: React.FC<FormikInputProps> = ({
+  label,
+  name,
+  error = null,
+  value,
+  ...props
+}) => {
   const id = uuidv4();
+
+  React.useEffect(() => {
+    const label: HTMLElement = document.getElementById(id)
+      ?.previousElementSibling as HTMLElement;
+    if (error) {
+      if (!label.classList.contains(css.error)) label.classList.add(css.error);
+    } else {
+      if (label.classList.contains(css.error))
+        label.classList.remove(css.error);
+    }
+  }, [error, id]);
+
   return (
-    <BaseInput className={css.wrapper}>
+    <BaseInput onBlur={onBlurHandler} className={css.wrapper}>
       <BaseInput.Label className={css.label} htmlFor={id} text={label} />
-      <BaseInput.FormikField
-        name={name}
-        style={style}
-        onFocus={onFocusHandler}
-        className={css.input}
+      <Field
+        autoComplete={name}
         id={id}
-        type="text"
+        className={css.input}
+        onFocus={onFocusHandler}
+        name={name}
+        {...props}
       />
+      {error}
     </BaseInput>
   );
 };
@@ -30,7 +44,13 @@ export const FormikTextInput: React.FC<Props> = ({ name, label, style }) => {
 const onFocusHandler = (e: React.FocusEvent<HTMLInputElement>) => {
   const label: HTMLElement = e.currentTarget
     .previousElementSibling as HTMLElement;
-  if (!label.classList.contains(css.focus)) {
-    label.classList.add(css.focus);
+  if (!label.classList.contains(css.touched)) {
+    label.classList.add(css.touched);
   }
+  label.classList.toggle(css.focus);
+};
+
+const onBlurHandler = (e: React.FocusEvent<HTMLDivElement>) => {
+  const label: HTMLElement = e.currentTarget.firstElementChild as HTMLElement;
+  label.classList.toggle(css.focus);
 };

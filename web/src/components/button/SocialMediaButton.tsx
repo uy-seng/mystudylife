@@ -1,25 +1,16 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { IconButton } from ".";
-import { IconButtonProps } from "../types/button";
+import { SocialMediaButtonProps } from "../types/button";
 import css from "./button.module.css";
 
-interface Props extends IconButtonProps {}
-
-export const SocialMediaButton: React.FC<Props> = ({
-  icon,
-  text,
-  className,
-  onClick,
-  style,
+export const SocialMediaButton: React.FC<SocialMediaButtonProps> = ({
+  to,
+  ...props
 }) => {
   return (
-    <IconButton
-      children={<div className={css.divider} />}
-      icon={icon}
-      text={text}
-      className={className}
-      style={style}
-      onClick={onClick}
-    />
+    <Link style={{ textDecoration: "none", width: "100%" }} to={to}>
+      <IconButton children={<div className={css.divider} />} {...props} />
+    </Link>
   );
 };

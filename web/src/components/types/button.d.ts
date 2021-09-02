@@ -1,14 +1,25 @@
 import * as CSS from "csstype";
 
-type as = "submit" | "reset" | "button";
-export interface BaseButtonProps {
-  text: string;
-  style?: CSS.Properties;
-  className?: string;
-  onClick?: (e) => void;
-  as?: as;
+export interface BaseButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  text: string | null;
 }
 
+type as = "primary" | "secondary";
+export interface ButtonProps extends BaseButtonProps {
+  as: as;
+}
 export interface IconButtonProps extends BaseButtonProps {
   icon: React.ReactNode;
+}
+
+export interface LinkButtonProps extends BaseButtonProps {
+  to: string;
+}
+export interface SocialMediaButtonProps
+  extends IconButtonProps,
+    LinkButtonProps {}
+
+export interface LoaderButtonProps extends ButtonProps {
+  loading: boolean;
 }
