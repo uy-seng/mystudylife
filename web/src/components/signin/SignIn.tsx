@@ -36,7 +36,7 @@ const SocialMedia: React.FC = () => {
     <div className={css.content}>
       <div className={css.section}>
         <SocialMediaButton
-          to="/"
+          href={`${process.env.REACT_APP_API_ENDPOINT_URL}/auth/facebook`}
           style={{
             background: "#3b5998",
             color: "white",
@@ -45,7 +45,7 @@ const SocialMedia: React.FC = () => {
           text={"Continue with Facebook"}
         />
         <SocialMediaButton
-          to="/"
+          href={`${process.env.REACT_APP_API_ENDPOINT_URL}/auth/google`}
           style={{
             background: "#cc3732",
             color: "white",
@@ -54,7 +54,7 @@ const SocialMedia: React.FC = () => {
           text={"Continue with Google"}
         />
         <SocialMediaButton
-          to="/"
+          href="/"
           style={{
             background: "black",
             color: "white",

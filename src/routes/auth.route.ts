@@ -4,6 +4,7 @@ import { getConnection } from "typeorm";
 import { UserPayload } from "../interface/auth.d";
 import { createAccessToken, createRefreshToken } from "../helper/auth.utils";
 import { User } from "../entity/User";
+import passport from "passport";
 
 export const authRoute = Router();
 authRoute.get("/refresh", async (req, res) => {
@@ -31,3 +32,32 @@ authRoute.get("/refresh", async (req, res) => {
     accessToken: createAccessToken(userPayload),
   });
 });
+
+authRoute.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
+);
+
+authRoute.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    session: false,
+  }),
+  (_req, res) => {
+    return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
+  }
+);
+
+authRoute.get("/facebook", passport.authenticate("facebook"));
+
+authRoute.get(
+  "/facebook/callback",
+  passport.authenticate("facebook", {
+    session: false,
+  }),
+  (_req, res) => {
+    return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
+  }
+);

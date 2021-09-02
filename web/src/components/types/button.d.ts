@@ -16,9 +16,9 @@ export interface IconButtonProps extends BaseButtonProps {
 export interface LinkButtonProps extends BaseButtonProps {
   to: string;
 }
-export interface SocialMediaButtonProps
-  extends IconButtonProps,
-    LinkButtonProps {}
+export interface SocialMediaButtonProps extends IconButtonProps {
+  href: string;
+}
 
 export interface LoaderButtonProps extends ButtonProps {
   loading: boolean;

@@ -112,11 +112,11 @@ const InnerForm: React.FC<FormikProps<FormValues>> = (props) => {
         />
       </div>
       <div className="txt-sm">
-        <span>by creating an account you agree to our</span>
+        <span>by creating an account you agree to our </span>
         <a className="txt-primary" href="/">
           privacy policy
         </a>
-        <span>and</span>
+        <span> and </span>
         <a className="txt-primary" href="/">
           terms of service
         </a>

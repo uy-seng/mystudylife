@@ -9,6 +9,7 @@ import cors from "cors";
 
 import { AuthResolver, UserResolver } from "./graphql/resolvers";
 import { apiRoute } from "./routes";
+import { PassportService } from "./services/passport.service";
 
 (async () => {
   const app = express();
@@ -24,9 +25,11 @@ import { apiRoute } from "./routes";
   createConnection().then(() => {
     console.log("Database started");
   });
+  const passportService = new PassportService(app);
+  passportService.initGoogleOAuthStrategy();
+  passportService.initFacebookOAuthStrategy();
 
   app.use("/api", apiRoute);
-
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [AuthResolver, UserResolver],
