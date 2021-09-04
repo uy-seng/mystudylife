@@ -11,7 +11,6 @@ import {
 import { Class } from "./Class";
 import { Subject } from "./Subject";
 import { Task } from "./Task";
-import { dateTransformer } from "../helper/date.utils";
 import { AcademicYearWeekSchedule } from "./AcademicYearWeekSchedule";
 import { AcademicYearDaySchedule } from "./AcademicYearDaySchedule";
 import { academicYearSchedulingType } from "./types/academicYear";
@@ -25,46 +24,49 @@ export class AcademicYear extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({
-    transformer: dateTransformer,
-  })
-  start_date: Date;
+  @Field(() => String)
+  @Column("date")
+  start_date: string;
 
-  @Column({
-    transformer: dateTransformer,
-  })
-  end_date: Date;
+  @Field(() => String)
+  @Column("date")
+  end_date: string;
 
+  @Field(() => String)
   @Column("text")
   schedulingType: academicYearSchedulingType;
 
+  @Field(() => [Task])
   @ManyToOne(() => Task, (task) => task.academicYear)
   tasks: Task[];
 
+  @Field(() => [Subject])
   @OneToMany(() => Subject, (subject) => subject.academicYear)
   subjects: Subject[];
 
+  @Field(() => [Class])
   @OneToMany(() => Class, (_class) => _class.academicYear)
   classes: Class[];
 
+  @Field(() => [AcademicYearWeekSchedule])
   @OneToOne(
     () => AcademicYearWeekSchedule,
-    (academicYearWeekSchedule) => academicYearWeekSchedule.academicYear
+    (weeklySchedule) => weeklySchedule.academicYear
   )
-  academicYearWeekSchedule: AcademicYearWeekSchedule;
+  weeklySchedules: AcademicYearWeekSchedule[];
 
+  @Field(() => [AcademicYearDaySchedule])
   @OneToMany(
     () => AcademicYearDaySchedule,
-    (academicYearDaySchedule) => academicYearDaySchedule.academicYear
+    (dailySchedule) => dailySchedule.academicYear
   )
-  academicYearDaySchedules: AcademicYearDaySchedule[];
+  dailySchedules: AcademicYearDaySchedule[];
 
+  @Field(() => [AcademicYearTerm])
+  @OneToMany(() => AcademicYearTerm, (term) => term.academicYear)
+  terms: AcademicYearTerm[];
+
+  @Field(() => User)
   @ManyToOne(() => User, (user) => user.academicYears)
   user: User;
-
-  @OneToMany(
-    () => AcademicYearTerm,
-    (academicYearTerm) => academicYearTerm.academicYear
-  )
-  academicYearTerms: AcademicYearTerm[];
 }

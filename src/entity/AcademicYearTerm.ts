@@ -11,7 +11,6 @@ import { Class } from "./Class";
 import { Subject } from "./Subject";
 import { Task } from "./Task";
 import { AcademicYear } from "./AcademicYear";
-import { dateTransformer } from "../helper/date.utils";
 
 @ObjectType()
 @Entity("academic_year_term")
@@ -20,31 +19,29 @@ export class AcademicYearTerm extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Field(() => String)
   @Column()
   name: string;
 
-  @Column({
-    transformer: dateTransformer,
-  })
-  start_date: Date;
+  @Field(() => String)
+  @Column("date")
+  start_date: string;
+  @Column("date")
+  end_date: string;
 
-  @Column({
-    transformer: dateTransformer,
-  })
-  end_date: Date;
-
-  @OneToMany(() => Task, (task) => task.academicYearTerm)
+  @Field(() => [Task])
+  @OneToMany(() => Task, (task) => task.term)
   tasks: Task[];
 
-  @OneToMany(() => Subject, (subject) => subject.academicYearTerm)
+  @Field(() => [Subject])
+  @OneToMany(() => Subject, (subject) => subject.term)
   subjects: Subject[];
 
-  @OneToMany(() => Class, (_class) => _class.academicYearTerm)
+  @Field(() => [Class])
+  @OneToMany(() => Class, (_class) => _class.term)
   classes: Class[];
 
-  @ManyToOne(
-    () => AcademicYear,
-    (academicYear) => academicYear.academicYearTerms
-  )
+  @Field(() => AcademicYear)
+  @ManyToOne(() => AcademicYear, (academicYear) => academicYear.terms)
   academicYear: AcademicYear;
 }

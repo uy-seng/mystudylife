@@ -21,24 +21,27 @@ export class Subject extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Field(() => String)
   @Column()
   name: string;
 
+  @Field(() => [Task])
   @OneToMany(() => Task, (task) => task.subject)
   tasks: Task[];
 
+  @Field(() => AcademicYear)
   @ManyToOne(() => AcademicYear, (academicYear) => academicYear.subjects)
   academicYear: AcademicYear;
 
-  @ManyToOne(
-    () => AcademicYearTerm,
-    (academicYearTerm) => academicYearTerm.subjects
-  )
-  academicYearTerm: AcademicYearTerm;
+  @Field(() => AcademicYearTerm)
+  @ManyToOne(() => AcademicYearTerm, (term) => term.subjects)
+  term: AcademicYearTerm;
 
+  @Field(() => User)
   @ManyToOne(() => User, (user) => user.subjects)
   user: User;
 
+  @Field(() => Class)
   @OneToOne(() => Class, (_class) => _class.subject)
   class: Class;
 }

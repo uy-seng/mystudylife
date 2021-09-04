@@ -21,33 +21,38 @@ export class Class extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Field(() => String)
   @Column()
   module: string;
 
+  @Field(() => String)
   @Column()
   room: string;
 
+  @Field(() => String)
   @Column()
   building: string;
 
+  @Field(() => String)
   @Column()
   teacher: string;
 
+  @OneToMany(() => ClassIncur, (classIncur) => classIncur.class)
+  classIncurs: ClassIncur[];
+
+  @Field(() => Subject)
   @OneToOne(() => Subject, (subject) => subject.class)
   subject: Subject;
 
+  @Field(() => AcademicYear)
   @ManyToOne(() => AcademicYear, (academicYear) => academicYear.classes)
   academicYear: AcademicYear;
 
-  @ManyToOne(
-    () => AcademicYearTerm,
-    (academicYearTerm) => academicYearTerm.classes
-  )
-  academicYearTerm: AcademicYearTerm;
+  @Field(() => AcademicYearTerm)
+  @ManyToOne(() => AcademicYearTerm, (term) => term.classes)
+  term: AcademicYearTerm;
 
+  @Field(() => User)
   @ManyToOne(() => User, (user) => user.classes)
   user: User;
-
-  @OneToMany(() => ClassIncur, (classIncur) => classIncur.class)
-  classIncurs: ClassIncur[];
 }

@@ -7,7 +7,6 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { taskType } from "./types/task";
-import { dateTransformer } from "../helper/date.utils";
 import { Subject } from "./Subject";
 import { Exam } from "./Exam";
 import { AcademicYear } from "./AcademicYear";
@@ -25,11 +24,9 @@ export class Task extends BaseEntity {
   @Column("text")
   type: taskType;
 
-  @Field(() => Date)
-  @Column({
-    transformer: dateTransformer,
-  })
-  due_date: Date;
+  @Field(() => String)
+  @Column("date")
+  due_date: string;
 
   @Field(() => String)
   @Column()
@@ -39,18 +36,23 @@ export class Task extends BaseEntity {
   @Column()
   detail: string;
 
+  @Field(() => Subject)
   @ManyToOne(() => Subject, (subject) => subject.tasks)
   subject: Subject;
 
+  @Field(() => Exam)
   @ManyToOne(() => Exam, (exam) => exam.tasks)
   exam: Exam;
 
+  @Field(() => AcademicYear)
   @ManyToOne(() => AcademicYear, (exam) => exam.tasks)
   academicYear: AcademicYear;
 
+  @Field(() => AcademicYearTerm)
   @ManyToOne(() => AcademicYearTerm, (exam) => exam.tasks)
-  academicYearTerm: AcademicYearTerm;
+  term: AcademicYearTerm;
 
+  @Field(() => User)
   @ManyToOne(() => User, (exam) => exam.tasks)
   user: User;
 }

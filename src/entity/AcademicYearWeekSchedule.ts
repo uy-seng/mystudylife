@@ -15,15 +15,15 @@ export class AcademicYearWeekSchedule extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Field(() => Number)
   @Column()
   num_of_week: number;
 
+  @Field(() => Number)
   @Column()
   start_week: number;
 
-  @OneToOne(
-    () => AcademicYear,
-    (academicYear) => academicYear.academicYearWeekSchedule
-  )
+  @Field(() => AcademicYear)
+  @OneToOne(() => AcademicYear, (academicYear) => academicYear.weeklySchedules)
   academicYear: AcademicYear;
 }

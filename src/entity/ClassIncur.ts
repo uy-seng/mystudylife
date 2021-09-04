@@ -6,9 +6,9 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { dayOfWeek, classIncurType } from "./types/classIncur";
-import { dateTransformer, timeTransformer } from "../helper/date.utils";
+import { classIncurType } from "./types/classIncur";
 import { Class } from "./Class";
+import { dayOfWeek } from "./types";
 
 @ObjectType()
 @Entity("class_incur")
@@ -17,32 +17,31 @@ export class ClassIncur extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Field(() => String)
   @Column("text")
   type: classIncurType;
 
-  @Column({
-    transformer: timeTransformer,
-  })
-  start_time: Date;
+  @Field(() => String)
+  @Column("time")
+  start_time: string;
 
-  @Column({
-    transformer: timeTransformer,
-  })
-  end_time: Date;
+  @Field(() => String)
+  @Column("time")
+  end_time: string;
 
-  @Column({
-    transformer: dateTransformer,
-  })
-  start_date: Date;
+  @Field(() => String)
+  @Column("date")
+  start_date: string;
 
-  @Column({
-    transformer: dateTransformer,
-  })
-  end_date: Date;
+  @Field(() => String)
+  @Column("date")
+  end_date: string;
 
+  @Field(() => String)
   @Column("text")
   repeatDay: dayOfWeek;
 
+  @Field(() => Class)
   @ManyToOne(() => Class, (_class) => _class.classIncurs)
   class: Class;
 }

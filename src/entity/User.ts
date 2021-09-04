@@ -43,18 +43,23 @@ export class User extends BaseEntity {
   @Column({ default: 0 })
   tokenVersion: number;
 
+  @Field(() => [Task])
   @OneToMany(() => Task, (task) => task.user)
   tasks: Task[];
 
+  @Field(() => [Exam])
   @OneToMany(() => Exam, (exam) => exam.user)
   exams: Exam[];
 
+  @Field(() => [Subject])
   @OneToMany(() => Subject, (subject) => subject.user)
   subjects: Subject[];
 
+  @Field(() => [Class])
   @OneToMany(() => Class, (_class) => _class.user)
   classes: Class[];
 
+  @Field(() => [AcademicYear])
   @OneToMany(() => AcademicYear, (academicYear) => academicYear.user)
   academicYears: AcademicYear[];
 }

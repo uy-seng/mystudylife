@@ -8,7 +8,6 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Task } from "./Task";
-import { dateTransformer, timeTransformer } from "../helper/date.utils";
 import { User } from "./User";
 
 @ObjectType()
@@ -18,36 +17,39 @@ export class Exam extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Field(() => Boolean)
   @Column()
   resit: boolean;
 
+  @Field(() => String)
   @Column()
   module: string;
 
-  @Column({
-    transformer: dateTransformer,
-  })
-  date: Date;
+  @Field(() => String)
+  @Column("date")
+  date: string;
 
-  @Column({
-    transformer: timeTransformer,
-  })
-  start_time: Date;
+  @Field(() => String)
+  @Column("time")
+  start_time: string;
 
-  @Column({
-    transformer: timeTransformer,
-  })
-  end_time: Date;
+  @Field(() => String)
+  @Column("time")
+  end_time: string;
 
+  @Field(() => String)
   @Column()
   seat: string;
 
+  @Field(() => String)
   @Column()
   room: string;
 
+  @Field(() => [Task])
   @OneToMany(() => Task, (task) => task.exam)
   tasks: Task[];
 
+  @Field(() => User)
   @ManyToOne(() => User, (user) => user.exams)
   user: User;
 }
