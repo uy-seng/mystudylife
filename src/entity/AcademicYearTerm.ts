@@ -1,4 +1,3 @@
-import { Field, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
@@ -12,36 +11,29 @@ import { Subject } from "./Subject";
 import { Task } from "./Task";
 import { AcademicYear } from "./AcademicYear";
 
-@ObjectType()
-@Entity("academic_year_term")
+@Entity("academic_year_terms")
 export class AcademicYearTerm extends BaseEntity {
-  @Field(() => String)
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Field(() => String)
   @Column()
   name: string;
 
-  @Field(() => String)
   @Column("date")
   start_date: string;
+
   @Column("date")
   end_date: string;
 
-  @Field(() => [Task])
-  @OneToMany(() => Task, (task) => task.term)
+  @OneToMany(() => Task, (task) => task.term, { nullable: true })
   tasks: Task[];
 
-  @Field(() => [Subject])
-  @OneToMany(() => Subject, (subject) => subject.term)
+  @OneToMany(() => Subject, (subject) => subject.term, { nullable: true })
   subjects: Subject[];
 
-  @Field(() => [Class])
-  @OneToMany(() => Class, (_class) => _class.term)
+  @OneToMany(() => Class, (_class) => _class.term, { nullable: true })
   classes: Class[];
 
-  @Field(() => AcademicYear)
   @ManyToOne(() => AcademicYear, (academicYear) => academicYear.terms)
   academicYear: AcademicYear;
 }

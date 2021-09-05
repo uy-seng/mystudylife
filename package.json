@@ -13,6 +13,7 @@
       "@types/passport-facebook": "^2.1.11",
       "@types/passport-google-oauth20": "^2.0.9",
       "@types/uuid": "^8.3.1",
+      "@types/validator": "^13.6.3",
       "nodemon": "^2.0.12",
       "ts-node": "10.2.1",
       "typescript": "4.4.2"
@@ -21,6 +22,7 @@
       "apollo-server-express": "^3.1.2",
       "bcryptjs": "^2.4.3",
       "body-parser": "^1.19.0",
+      "class-validator": "^0.13.1",
       "concurrently": "^6.2.1",
       "cookie-parser": "^1.4.5",
       "cors": "^2.8.5",

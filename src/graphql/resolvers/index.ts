@@ -1,3 +1,4 @@
 import { AuthResolver } from "./auth.resolver";
 import { UserResolver } from "./user.resolver";
-export { AuthResolver, UserResolver };
+import { AcademicYearResolver } from "./academicYear.resolver";
+export { AuthResolver, UserResolver, AcademicYearResolver };

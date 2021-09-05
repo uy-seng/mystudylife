@@ -4,12 +4,16 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
-import { createConnection } from "typeorm";
 import cors from "cors";
 
-import { AuthResolver, UserResolver } from "./graphql/resolvers";
+import {
+  UserResolver,
+  AcademicYearResolver,
+  AuthResolver,
+} from "./graphql/resolvers";
 import { apiRoute } from "./routes";
 import { PassportService } from "./services/passport.service";
+import { DatabaseService } from "./services/database.service";
 
 (async () => {
   const app = express();
@@ -22,17 +26,18 @@ import { PassportService } from "./services/passport.service";
       origin: ["https://studio.apollographql.com", "http://localhost:3000"],
     })
   );
-  createConnection().then(() => {
-    console.log("Database started");
-  });
+  const databaseService = new DatabaseService();
+  await databaseService.init();
   const passportService = new PassportService(app);
   passportService.initGoogleOAuthStrategy();
   passportService.initFacebookOAuthStrategy();
-
+  app.get("/", (_req, res) => {
+    res.redirect("/graphql");
+  });
   app.use("/api", apiRoute);
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [AuthResolver, UserResolver],
+      resolvers: [UserResolver, AcademicYearResolver, AuthResolver],
     }),
     context: ({ req, res }) => ({ req, res }),
   });

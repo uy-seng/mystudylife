@@ -3,21 +3,21 @@ import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import bcrypt from "bcryptjs";
 import { AuthenticationError, ValidationError } from "apollo-server-errors";
 import { Context } from "../../interface";
-import { LoginResponse, UserPayloadGQL } from "../type/auth.type";
 import {
   sendRefreshToken,
   createAccessToken,
   createRefreshToken,
 } from "../../helper/auth.utils";
+import { LoginResponse, UserObjectType } from "../types";
 
 @Resolver()
 export class AuthResolver {
-  @Query(() => [User])
+  @Query(() => [UserObjectType])
   users() {
     return User.find();
   }
 
-  @Mutation(() => User)
+  @Mutation(() => UserObjectType)
   async register(
     @Arg("username") username: string,
     @Arg("email") email: string,
@@ -53,7 +53,7 @@ export class AuthResolver {
     if (!validPassword) throw new AuthenticationError("invalid credentails");
 
     // payload to be sent to client side
-    const userPayload: UserPayloadGQL = {
+    const userPayload: UserObjectType = {
       id: user.id,
       email: user.email,
       username: user.username,

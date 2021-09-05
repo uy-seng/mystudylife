@@ -1,14 +1,15 @@
 import { Field, Int, ObjectType } from "type-graphql";
+import {} from "../../entity";
 
 @ObjectType()
-export class UserPayloadGQL {
-  @Field()
+export class UserObjectType {
+  @Field(() => String)
   id: string;
 
   @Field(() => String, { nullable: true })
   email: string | null;
 
-  @Field()
+  @Field(() => String)
   username: string;
 
   @Field(() => String, { nullable: true })
@@ -16,13 +17,4 @@ export class UserPayloadGQL {
 
   @Field(() => Int)
   tokenVersion: number;
-}
-
-@ObjectType()
-export class LoginResponse {
-  @Field(() => String)
-  acesssToken: string;
-
-  @Field()
-  user: UserPayloadGQL;
 }

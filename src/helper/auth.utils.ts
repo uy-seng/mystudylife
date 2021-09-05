@@ -4,7 +4,7 @@ import { UserPayload } from "../interface/auth";
 
 export const createAccessToken = (user: UserPayload) => {
   return sign({ user: user }, process.env.ACCESS_TOKEN_SECRET!, {
-    expiresIn: "15m",
+    expiresIn: "1d",
   });
 };
 

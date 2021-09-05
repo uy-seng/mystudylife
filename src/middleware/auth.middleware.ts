@@ -15,8 +15,8 @@ export const authenticationGate: MiddlewareFn<Context> = (
     const decodedPayload = verify(
       accessToken,
       process.env.ACCESS_TOKEN_SECRET!
-    );
-    context.payload = decodedPayload as UserPayload;
+    ) as any;
+    context.user = decodedPayload.user as UserPayload;
   } catch (e) {
     throw new AuthenticationError(e.message);
   }

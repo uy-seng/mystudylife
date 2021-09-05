@@ -1,4 +1,3 @@
-import { Field, Int, ObjectType } from "type-graphql";
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -12,54 +11,43 @@ import { Subject } from "./Subject";
 import { Task } from "./Task";
 import { AcademicYear } from "./AcademicYear";
 
-@ObjectType()
-@Entity("user")
+@Entity("users")
 export class User extends BaseEntity {
-  @Field(() => String)
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Field(() => String)
   @Column({ unique: true })
   username: string;
 
-  @Field(() => String, { nullable: true })
   @Column({ unique: true, nullable: true })
   email: string;
 
-  @Field(() => String, { nullable: true })
   @Column({ nullable: true })
   password: string;
 
-  @Field(() => String, { nullable: true })
   @Column({ nullable: true })
   provider: string;
 
-  @Field(() => String, { nullable: true })
   @Column({ nullable: true })
   providerId: string;
 
-  @Field(() => Int)
   @Column({ default: 0 })
   tokenVersion: number;
 
-  @Field(() => [Task])
   @OneToMany(() => Task, (task) => task.user)
   tasks: Task[];
 
-  @Field(() => [Exam])
   @OneToMany(() => Exam, (exam) => exam.user)
   exams: Exam[];
 
-  @Field(() => [Subject])
   @OneToMany(() => Subject, (subject) => subject.user)
   subjects: Subject[];
 
-  @Field(() => [Class])
   @OneToMany(() => Class, (_class) => _class.user)
   classes: Class[];
 
-  @Field(() => [AcademicYear])
-  @OneToMany(() => AcademicYear, (academicYear) => academicYear.user)
+  @OneToMany(() => AcademicYear, (academicYear) => academicYear.user, {
+    cascade: true,
+  })
   academicYears: AcademicYear[];
 }
