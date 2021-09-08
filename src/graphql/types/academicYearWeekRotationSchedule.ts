@@ -1,5 +1,4 @@
 import { Field, InputType, Int, ObjectType } from "type-graphql";
-import { AcademicYearObjectType } from ".";
 
 @ObjectType()
 export class AcademicYearWeekRotationScheduleObjectType {
@@ -7,23 +6,17 @@ export class AcademicYearWeekRotationScheduleObjectType {
   id: string;
 
   @Field(() => Int)
-  num_of_week: number;
+  numOfWeek: number;
 
   @Field(() => Int)
-  start_week: number;
-
-  @Field(() => AcademicYearObjectType)
-  academicYear: AcademicYearObjectType;
+  startWeek: number;
 }
 
 @InputType()
 export class AcademicYearWeekRotationScheduleInputType {
-  @Field(() => String)
-  id: string;
+  @Field(() => Int)
+  numOfWeek: number;
 
   @Field(() => Int)
-  num_of_week: number;
-
-  @Field(() => Int)
-  start_week: number;
+  startWeek: number;
 }

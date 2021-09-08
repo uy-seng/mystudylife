@@ -14,10 +14,10 @@ export class AcademicYearDayRotationSchedule extends BaseEntity {
   id: string;
 
   @Column()
-  num_of_day: number;
+  numOfDay: number;
 
   @Column()
-  start_day: number;
+  startDay: number;
 
   @Column("int")
   repeatDay: dayOfWeek;

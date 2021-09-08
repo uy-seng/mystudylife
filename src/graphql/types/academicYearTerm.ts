@@ -15,10 +15,10 @@ export class AcademicYearTermObjectType {
   name: string;
 
   @Field(() => String)
-  start_date: string;
+  startDate: string;
 
   @Field(() => String)
-  end_date: string;
+  endDate: string;
 
   @Field(() => [TaskObjectType], { defaultValue: [] })
   tasks: TaskObjectType[];
@@ -39,8 +39,8 @@ export class AcademicYearTermInputType {
   name: string;
 
   @Field(() => String)
-  start_date: string;
+  startDate: string;
 
   @Field(() => String)
-  end_date: string;
+  endDate: string;
 }

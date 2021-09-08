@@ -20,10 +20,10 @@ export class AcademicYearTerm extends BaseEntity {
   name: string;
 
   @Column("date")
-  start_date: string;
+  startDate: string;
 
   @Column("date")
-  end_date: string;
+  endDate: string;
 
   @OneToMany(() => Task, (task) => task.term, { nullable: true })
   tasks: Task[];

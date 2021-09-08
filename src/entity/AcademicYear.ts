@@ -2,6 +2,7 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -22,10 +23,10 @@ export class AcademicYear extends BaseEntity {
   id: string;
 
   @Column("date")
-  start_date: string;
+  startDate: string;
 
   @Column("date")
-  end_date: string;
+  endDate: string;
 
   @Column("text")
   schedulingType: academicYearSchedulingType;
@@ -41,12 +42,12 @@ export class AcademicYear extends BaseEntity {
   @OneToMany(() => Class, (_class) => _class.academicYear, { nullable: true })
   classes: Class[];
 
-  @OneToOne(
-    () => AcademicYearWeekRotationSchedule,
-    (weekRotationSchedule) => weekRotationSchedule.academicYear,
-    { nullable: true, cascade: true }
-  )
-  weekRotationSchedules: AcademicYearWeekRotationSchedule[];
+  @OneToOne(() => AcademicYearWeekRotationSchedule, {
+    cascade: true,
+    nullable: true,
+  })
+  @JoinColumn()
+  weekRotationSchedule: AcademicYearWeekRotationSchedule;
 
   @OneToMany(
     () => AcademicYearDayRotationSchedule,

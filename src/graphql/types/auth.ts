@@ -4,7 +4,7 @@ import { UserObjectType } from ".";
 @ObjectType()
 export class LoginResponse {
   @Field(() => String)
-  acesssToken: string;
+  accessToken: string;
 
   @Field(() => UserObjectType)
   user: UserObjectType;

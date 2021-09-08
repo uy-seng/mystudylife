@@ -1,5 +1,5 @@
 import { User } from "../../entity/User";
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
 import bcrypt from "bcryptjs";
 import { AuthenticationError, ValidationError } from "apollo-server-errors";
 import { Context } from "../../interface";
@@ -12,11 +12,6 @@ import { LoginResponse, UserObjectType } from "../types";
 
 @Resolver()
 export class AuthResolver {
-  @Query(() => [UserObjectType])
-  users() {
-    return User.find();
-  }
-
   @Mutation(() => UserObjectType)
   async register(
     @Arg("username") username: string,
@@ -62,7 +57,7 @@ export class AuthResolver {
     };
 
     const response: LoginResponse = {
-      acesssToken: createAccessToken(userPayload),
+      accessToken: createAccessToken(userPayload),
       user: userPayload,
     };
 

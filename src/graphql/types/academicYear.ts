@@ -19,10 +19,10 @@ export class AcademicYearObjectType {
   id: string;
 
   @Field(() => String)
-  start_date: string;
+  startDate: string;
 
   @Field(() => String)
-  end_date: string;
+  endDate: string;
 
   @Field(() => String)
   schedulingType: academicYearSchedulingType;
@@ -36,11 +36,11 @@ export class AcademicYearObjectType {
   @Field(() => [ClassObjectType], { nullable: true, defaultValue: [] })
   classes: ClassObjectType[];
 
-  @Field(() => [AcademicYearWeekRotationScheduleObjectType], {
+  @Field(() => AcademicYearWeekRotationScheduleObjectType, {
     nullable: true,
     defaultValue: [],
   })
-  weekRotationSchedules: AcademicYearWeekRotationScheduleObjectType[];
+  weekRotationSchedule: AcademicYearWeekRotationScheduleObjectType;
 
   @Field(() => [AcademicYearDayRotationScheduleObjectType], {
     nullable: true,
@@ -61,20 +61,20 @@ export class AcademicYearObjectType {
 @InputType()
 export class AcademicYearInputType {
   @Field(() => String)
-  start_date: string;
+  startDate: string;
 
   @Field(() => String)
-  end_date: string;
+  endDate: string;
 
   @Field(() => String)
   schedulingType: academicYearSchedulingType;
 
-  @Field(() => [AcademicYearWeekRotationScheduleInputType], { nullable: true })
-  weekRotationSchedules: AcademicYearWeekRotationScheduleInputType[];
+  @Field(() => AcademicYearWeekRotationScheduleInputType, { nullable: true })
+  weekRotationSchedule: AcademicYearWeekRotationScheduleInputType;
 
   @Field(() => [AcademicYearDayRotationScheduleInputType], { nullable: true })
-  dayRotationSchedules: AcademicYearDayRotationScheduleInputType[];
+  dayRotationSchedules: AcademicYearDayRotationScheduleInputType;
 
-  @Field(() => [AcademicYearTermInputType], { defaultValue: [] })
+  @Field(() => [AcademicYearTermInputType], { nullable: true })
   terms: AcademicYearTermInputType[];
 }

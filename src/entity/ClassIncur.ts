@@ -5,7 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { classIncurType } from "./types/classIncur";
+import { classIncurRepeatDayType, classIncurType } from "./types/classIncur";
 import { Class } from "./Class";
 import { dayOfWeek } from "./types";
 
@@ -17,6 +17,9 @@ export class ClassIncur extends BaseEntity {
   @Column("text")
   type: classIncurType;
 
+  @Column("text")
+  dayType: classIncurRepeatDayType;
+
   @Column("time")
   start_time: string;
 
@@ -24,10 +27,10 @@ export class ClassIncur extends BaseEntity {
   end_time: string;
 
   @Column("date")
-  start_date: string;
+  startDate: string;
 
   @Column("date")
-  end_date: string;
+  endDate: string;
 
   @Column("int")
   repeatDay: dayOfWeek;

@@ -20,6 +20,7 @@ import { AcademicYearDayRotationSchedule } from "../../entity/AcademicYearDayRot
 import { AcademicYearWeekRotationSchedule } from "../../entity/AcademicYearWeekRotationSchedule";
 import { authenticationGate } from "../../middleware/auth.middleware";
 import { Context } from "../../interface/index.d";
+import { AcademicYearTerm } from "../../entity/AcademicYearTerm";
 
 registerEnumType(academicYearSchedulingType, {
   name: "schedulingType", // this one is mandatory
@@ -35,13 +36,13 @@ export class AcademicYearResolver {
     @Arg("schedulingType", () => academicYearSchedulingType)
     schedulingType: academicYearSchedulingType,
     @Arg("terms", () => [AcademicYearTermInputType], { nullable: true })
-    terms: AcademicYearTermInputType[],
+    terms: AcademicYearTermInputType[] | null,
     @Arg(
-      "weekRotationSchedules",
+      "weekRotationSchedule",
       () => AcademicYearWeekRotationScheduleInputType,
       { nullable: true }
     )
-    weekRotationSchedules: AcademicYearWeekRotationScheduleInputType[] | null,
+    weekRotationSchedule: AcademicYearWeekRotationScheduleInputType | null,
     @Arg(
       "dayRotationSchedules",
       () => AcademicYearDayRotationScheduleInputType,
@@ -51,19 +52,25 @@ export class AcademicYearResolver {
     @Ctx() { user }: Context
   ): Promise<AcademicYearObjectType> {
     const partialAcademicYear = AcademicYear.create({
-      start_date: startDate,
-      end_date: endDate,
+      startDate: startDate,
+      endDate: endDate,
       schedulingType: schedulingType,
-      terms: terms,
     });
+    if (terms)
+      partialAcademicYear.terms = terms.map((term) => {
+        const newTerm = AcademicYearTerm.create({
+          ...term,
+        });
+        return newTerm;
+      });
     if (schedulingType === "day_rotation") {
       if (dayRotationSchedules) {
         partialAcademicYear.dayRotationSchedules =
-          dayRotationSchedules.repeatDay.map((day) => {
+          dayRotationSchedules.repeatDays.map((day) => {
             const newDayRotationSchedule =
               AcademicYearDayRotationSchedule.create({
-                num_of_day: dayRotationSchedules.num_of_day,
-                start_day: dayRotationSchedules.start_day,
+                numOfDay: dayRotationSchedules.numOfDay,
+                startDay: dayRotationSchedules.startDay,
                 repeatDay: day,
               });
             return newDayRotationSchedule;
@@ -72,17 +79,12 @@ export class AcademicYearResolver {
         throw new ValidationError("require day rotation schedule(s)");
       }
     } else if (schedulingType === "week_rotation") {
-      if (weekRotationSchedules) {
-        partialAcademicYear.weekRotationSchedules = weekRotationSchedules.map(
-          (weekRotationSchedule) => {
-            const newWeekRotationSchedule =
-              AcademicYearWeekRotationSchedule.create({
-                ...weekRotationSchedule,
-                academicYear: partialAcademicYear,
-              });
-            return newWeekRotationSchedule;
-          }
-        );
+      if (weekRotationSchedule) {
+        partialAcademicYear.weekRotationSchedule =
+          AcademicYearWeekRotationSchedule.create({
+            numOfWeek: weekRotationSchedule.numOfWeek,
+            startWeek: weekRotationSchedule.startWeek,
+          });
       } else {
         throw new ValidationError("require week rotation schedule(s)");
       }

@@ -8,10 +8,10 @@ export class AcademicYearDayRotationScheduleObjectType {
   id: string;
 
   @Field(() => Int)
-  num_of_day: number;
+  numOfDay: number;
 
   @Field(() => Int)
-  start_day: number;
+  startDay: number;
 
   @Field(() => Int)
   repeatDay: dayOfWeek;
@@ -23,11 +23,11 @@ export class AcademicYearDayRotationScheduleObjectType {
 @InputType()
 export class AcademicYearDayRotationScheduleInputType {
   @Field(() => Int)
-  num_of_day: number;
+  numOfDay: number;
 
   @Field(() => Int)
-  start_day: number;
+  startDay: number;
 
   @Field(() => [Int])
-  repeatDay: dayOfWeek[];
+  repeatDays: dayOfWeek[];
 }

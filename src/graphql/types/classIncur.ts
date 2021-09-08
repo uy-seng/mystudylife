@@ -1,5 +1,8 @@
 import { Field, InputType, Int, ObjectType } from "type-graphql";
-import { classIncurType } from "../../entity/types/classIncur";
+import {
+  classIncurRepeatDayType,
+  classIncurType,
+} from "../../entity/types/classIncur";
 import { dayOfWeek } from "../../entity/types";
 import { ClassObjectType } from ".";
 
@@ -18,10 +21,10 @@ export class ClassIncurObjectType {
   end_time: string;
 
   @Field(() => String)
-  start_date: string;
+  startDate: string;
 
   @Field(() => String)
-  end_date: string;
+  endDate: string;
 
   @Field(() => Int)
   repeatDay: dayOfWeek;
@@ -35,6 +38,9 @@ export class ClassIncurInputType {
   @Field(() => classIncurType)
   type: classIncurType;
 
+  @Field(() => classIncurRepeatDayType)
+  dayType: classIncurRepeatDayType;
+
   @Field(() => String)
   start_time: string;
 
@@ -42,10 +48,10 @@ export class ClassIncurInputType {
   end_time: string;
 
   @Field(() => String)
-  start_date: string;
+  startDate: string;
 
   @Field(() => String)
-  end_date: string;
+  endDate: string;
 
   @Field(() => dayOfWeek)
   repeatDay: dayOfWeek;
