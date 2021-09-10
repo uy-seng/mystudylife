@@ -29,7 +29,7 @@ export class DatabaseService {
   }
 
   public async init() {
-    this.connection = await createConnection();
+    this.connection = await createConnection("development");
     console.log("Database initialized...");
     const CLEAN_DB = false;
     /**

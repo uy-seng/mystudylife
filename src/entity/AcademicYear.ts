@@ -1,5 +1,4 @@
 import {
-  BaseEntity,
   Column,
   Entity,
   JoinColumn,
@@ -8,17 +7,19 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Class } from "./Class";
-import { Subject } from "./Subject";
-import { Task } from "./Task";
-import { AcademicYearWeekRotationSchedule } from "./AcademicYearWeekRotationSchedule";
-import { AcademicYearDayRotationSchedule } from "./AcademicYearDayRotationSchedule";
-import { academicYearSchedulingType } from "./types/academicYear";
-import { User } from "./User";
-import { AcademicYearTerm } from "./AcademicYearTerm";
+import {
+  Task,
+  Subject,
+  Class,
+  AcademicYearWeekRotationSchedule,
+  AcademicYearDayRotationSchedule,
+  AcademicYearTerm,
+  User,
+} from ".";
+import { academicYearSchedulingType } from "./types";
 
 @Entity("academic_years")
-export class AcademicYear extends BaseEntity {
+export class AcademicYear {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

@@ -1,19 +1,9 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { taskType } from "./types/task";
-import { Subject } from "./Subject";
-import { Exam } from "./Exam";
-import { AcademicYear } from "./AcademicYear";
-import { AcademicYearTerm } from "./AcademicYearTerm";
-import { User } from "./User";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Subject, Exam, AcademicYear, AcademicYearTerm, User } from ".";
+import { taskType } from "./types";
 
 @Entity("tasks")
-export class Task extends BaseEntity {
+export class Task {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

@@ -1,16 +1,14 @@
 import {
-  BaseEntity,
   Column,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Task } from "./Task";
-import { User } from "./User";
+import { Task, User } from ".";
 
 @Entity("exams")
-export class Exam extends BaseEntity {
+export class Exam {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

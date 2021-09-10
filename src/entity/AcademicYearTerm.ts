@@ -1,18 +1,14 @@
 import {
-  BaseEntity,
   Column,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Class } from "./Class";
-import { Subject } from "./Subject";
-import { Task } from "./Task";
-import { AcademicYear } from "./AcademicYear";
+import { Task, Subject, Class, AcademicYear } from ".";
 
 @Entity("academic_year_terms")
-export class AcademicYearTerm extends BaseEntity {
+export class AcademicYearTerm {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

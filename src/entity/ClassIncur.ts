@@ -1,16 +1,9 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { classIncurRepeatDayType, classIncurType } from "./types/classIncur";
-import { Class } from "./Class";
-import { dayOfWeek } from "./types";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Class } from ".";
+import { classIncurType, classIncurRepeatDayType, dayOfWeek } from "./types";
 
 @Entity("class_incurs")
-export class ClassIncur extends BaseEntity {
+export class ClassIncur {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

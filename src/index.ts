@@ -5,15 +5,13 @@ import cookieParser from "cookie-parser";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import cors from "cors";
-
+import { apiRoute } from "./routes";
 import {
   UserResolver,
   AcademicYearResolver,
   AuthResolver,
 } from "./graphql/resolvers";
-import { apiRoute } from "./routes";
-import { PassportService } from "./services/passport.service";
-import { DatabaseService } from "./services/database.service";
+import { DatabaseService } from "./services";
 
 (async () => {
   const app = express();
@@ -28,9 +26,6 @@ import { DatabaseService } from "./services/database.service";
   );
   const databaseService = new DatabaseService();
   await databaseService.init();
-  const passportService = new PassportService(app);
-  passportService.initGoogleOAuthStrategy();
-  passportService.initFacebookOAuthStrategy();
   app.get("/", (_req, res) => {
     res.redirect("/graphql");
   });

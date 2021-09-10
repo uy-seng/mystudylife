@@ -1,5 +1,4 @@
 import {
-  BaseEntity,
   Column,
   Entity,
   ManyToOne,
@@ -7,14 +6,10 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Task } from "./Task";
-import { AcademicYear } from "./AcademicYear";
-import { AcademicYearTerm } from "./AcademicYearTerm";
-import { User } from "./User";
-import { Class } from "./Class";
+import { Task, AcademicYear, AcademicYearTerm, User, Class } from ".";
 
 @Entity("subjects")
-export class Subject extends BaseEntity {
+export class Subject {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

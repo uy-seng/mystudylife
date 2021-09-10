@@ -1,15 +1,9 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { AcademicYear } from "./AcademicYear";
-import { dayOfWeek } from "./types/index";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { AcademicYear } from ".";
+import { dayOfWeek } from "./types";
 
 @Entity("academic_year_day_rotation_schedules")
-export class AcademicYearDayRotationSchedule extends BaseEntity {
+export class AcademicYearDayRotationSchedule {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { sign } from "jsonwebtoken";
-import { UserPayload } from "../interface/auth";
+import { UserPayload } from "src/graphql/resolvers/auth/types";
 
 export const createAccessToken = (user: UserPayload) => {
   return sign({ user: user }, process.env.ACCESS_TOKEN_SECRET!, {

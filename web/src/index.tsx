@@ -11,6 +11,7 @@ const apolloClient = new ApolloClient({
   uri: "http://localhost:8000/graphql",
   cache: new InMemoryCache(),
 });
+
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={apolloClient}>
