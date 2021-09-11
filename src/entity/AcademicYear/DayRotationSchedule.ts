@@ -25,7 +25,7 @@ export class DayRotationSchedule {
   startDay: number;
 
   @Column("int", { array: true })
-  @Field(() => [DayOfWeek])
+  @Field(() => [Int])
   repeatDays: DayOfWeek[];
 
   @Column({ nullable: true })

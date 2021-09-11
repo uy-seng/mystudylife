@@ -1,8 +1,8 @@
 import { Term } from "src/entity";
-import { Field, InputType } from "type-graphql";
+import { ArgsType, Field } from "type-graphql";
 
-@InputType()
-export class TermInput implements Partial<Term> {
+@ArgsType()
+export class TermArgs implements Partial<Term> {
   @Field(() => String)
   name: string;
 

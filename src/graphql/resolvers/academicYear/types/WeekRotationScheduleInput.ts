@@ -1,10 +1,14 @@
 import { WeekRotationSchedule } from "src/entity";
-import { Field, InputType } from "type-graphql";
+import { ArgsType, Field, Int } from "type-graphql";
 
-@InputType()
-export class WeekRotationScheduleInput
-  implements Partial<WeekRotationSchedule>
-{
+@ArgsType()
+export class WeekRotationScheduleArgs implements Partial<WeekRotationSchedule> {
+  @Field(() => Int)
+  numOfWeek: number;
+
+  @Field(() => Int)
+  startWeek: number;
+
   @Field(() => String)
   scheduleId: string;
 }

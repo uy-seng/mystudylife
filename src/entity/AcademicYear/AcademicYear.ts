@@ -2,7 +2,6 @@ import { Field, ObjectType } from "type-graphql";
 import {
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -31,7 +30,6 @@ export class AcademicYear {
   terms: Term[];
 
   @OneToOne(() => AcademicYearSchedule)
-  @JoinColumn()
   @Field(() => AcademicYearSchedule)
   schedule: AcademicYearSchedule;
 

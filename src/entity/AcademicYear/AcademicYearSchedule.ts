@@ -1,5 +1,11 @@
 import { Field, ObjectType } from "type-graphql";
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { AcademicYear, DayRotationSchedule, WeekRotationSchedule } from "..";
 import { ScheduleType } from "../types";
 
@@ -14,6 +20,9 @@ export class AcademicYearSchedule {
   @Column("text")
   type: ScheduleType;
 
+  @Column("uuid", { nullable: true })
+  academicYearId: string;
+
   /**
    * Field Resolver here to get schedule info
    *  */
@@ -25,5 +34,6 @@ export class AcademicYearSchedule {
   weekRotation: WeekRotationSchedule;
 
   @OneToOne(() => AcademicYear)
+  @JoinColumn({ name: "academicYearId" })
   academicYear: AcademicYear;
 }

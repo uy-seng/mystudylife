@@ -1,11 +1,24 @@
-import { AcademicYear } from "src/entity";
+import { Term } from "src/entity";
 import { Args, Mutation, Resolver } from "type-graphql";
-import { TermInput } from "./types";
+import { getConnection } from "typeorm";
+import { TermArgs } from "./types";
 
 @Resolver()
 export class TermResolver {
-  @Mutation(() => AcademicYear)
-  async createTerm(
-    @Args() { academicYearId, name, startDate, endDate }: TermInput
-  ) {}
+  private readonly termRepository = getConnection(
+    process.env.NODE_ENV
+  ).getRepository(Term);
+
+  @Mutation(() => Term)
+  async newTerm(
+    @Args() { academicYearId, name, startDate, endDate }: TermArgs
+  ) {
+    const newTerm = this.termRepository.create({
+      academicYearId: academicYearId,
+      name: name,
+      startDate: startDate,
+      endDate: endDate,
+    });
+    return await this.termRepository.save(newTerm);
+  }
 }

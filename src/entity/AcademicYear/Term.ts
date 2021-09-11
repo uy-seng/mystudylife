@@ -1,7 +1,8 @@
-import { Field } from "type-graphql";
+import { Field, ObjectType } from "type-graphql";
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -9,6 +10,7 @@ import {
 import { Task, Subject, Class, AcademicYear } from "..";
 
 @Entity("academic_year_terms")
+@ObjectType()
 export class Term {
   @PrimaryGeneratedColumn("uuid")
   @Field(() => String)
@@ -26,6 +28,9 @@ export class Term {
   @Field(() => String)
   endDate: string;
 
+  @Column("uuid", { nullable: true })
+  academicYearId: string;
+
   @OneToMany(() => Task, (task) => task.term)
   tasks: Task[];
 
@@ -36,5 +41,6 @@ export class Term {
   classes: Class[];
 
   @ManyToOne(() => AcademicYear, (academicYear) => academicYear.terms)
+  @JoinColumn({ name: "academicYearId", referencedColumnName: "id" })
   academicYear: AcademicYear;
 }

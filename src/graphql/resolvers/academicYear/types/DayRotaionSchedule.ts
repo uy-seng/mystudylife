@@ -1,8 +1,18 @@
 import { DayRotationSchedule } from "src/entity";
-import { Field, InputType } from "type-graphql";
+import { DayOfWeek } from "src/entity/types";
+import { ArgsType, Field, Int } from "type-graphql";
 
-@InputType()
-export class DayRotationScheduleInput implements Partial<DayRotationSchedule> {
+@ArgsType()
+export class DayRotationScheduleArgs implements Partial<DayRotationSchedule> {
+  @Field(() => Int)
+  startDay: number;
+
+  @Field(() => Int)
+  numOfDay: number;
+
+  @Field(() => [Int])
+  repeatDays: DayOfWeek[];
+
   @Field(() => String)
   scheduleId: string;
 }

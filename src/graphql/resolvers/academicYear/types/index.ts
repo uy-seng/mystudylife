@@ -1,13 +1,13 @@
-import { AcademicYearInput } from "./AcademicYear";
-import { TermInput } from "./Term";
-import { AcademicYearScheduleInput } from "./AcademicYearSchedule";
-import { DayRotationScheduleInput } from "./DayRotaionSchedule";
-import { WeekRotationScheduleInput } from "./WeekRotationScheduleInput";
+import { AcademicYearArgs } from "./AcademicYear";
+import { TermArgs } from "./Term";
+import { AcademicYearScheduleArgs } from "./AcademicYearSchedule";
+import { DayRotationScheduleArgs } from "./DayRotaionSchedule";
+import { WeekRotationScheduleArgs } from "./WeekRotationScheduleInput";
 
 export {
-  AcademicYearInput,
-  TermInput,
-  AcademicYearScheduleInput,
-  DayRotationScheduleInput,
-  WeekRotationScheduleInput,
+  AcademicYearArgs,
+  TermArgs,
+  AcademicYearScheduleArgs,
+  DayRotationScheduleArgs,
+  WeekRotationScheduleArgs,
 };

@@ -1,8 +1,8 @@
 import { AcademicYear } from "src/entity";
-import { Field, InputType } from "type-graphql";
+import { ArgsType, Field } from "type-graphql";
 
-@InputType()
-export class AcademicYearInput implements Partial<AcademicYear> {
+@ArgsType()
+export class AcademicYearArgs implements Partial<AcademicYear> {
   @Field(() => String)
   id: string;
 
@@ -15,6 +15,6 @@ export class AcademicYearInput implements Partial<AcademicYear> {
   @Field(() => String)
   scheduleId: string;
 
-  @Field(() => String)
-  termId?: string;
+  @Field(() => [String], { nullable: true })
+  termIds: string[];
 }

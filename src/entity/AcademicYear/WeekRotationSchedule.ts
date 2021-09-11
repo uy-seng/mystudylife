@@ -1,4 +1,4 @@
-import { Field, Int } from "type-graphql";
+import { Field, Int, ObjectType } from "type-graphql";
 import {
   Column,
   Entity,
@@ -9,6 +9,7 @@ import {
 import { AcademicYearSchedule } from "..";
 
 @Entity("academic_year_week_rotation_schedules")
+@ObjectType()
 export class WeekRotationSchedule {
   @PrimaryGeneratedColumn("uuid")
   @Field(() => String)
