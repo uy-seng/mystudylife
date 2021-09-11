@@ -33,7 +33,7 @@ export class AcademicYearSchedule {
   @OneToOne(() => WeekRotationSchedule)
   weekRotation: WeekRotationSchedule;
 
-  @OneToOne(() => AcademicYear)
+  @OneToOne(() => AcademicYear, { createForeignKeyConstraints: false })
   @JoinColumn({ name: "academicYearId" })
   academicYear: AcademicYear;
 }

@@ -40,7 +40,9 @@ export class Term {
   @OneToMany(() => Class, (_class) => _class.term)
   classes: Class[];
 
-  @ManyToOne(() => AcademicYear, (academicYear) => academicYear.terms)
+  @ManyToOne(() => AcademicYear, (academicYear) => academicYear.terms, {
+    createForeignKeyConstraints: false,
+  })
   @JoinColumn({ name: "academicYearId", referencedColumnName: "id" })
   academicYear: AcademicYear;
 }

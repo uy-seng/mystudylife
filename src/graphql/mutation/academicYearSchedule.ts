@@ -1,11 +1,11 @@
 const newScheduleMutation = `
     mutation(
-        $newScheduleType: String!,
-        $newScheduleAcademicYearId: String!
+        $type: ScheduleType!,
+        $academicYearId: String!
     ){
         newSchedule(
-            type: $newScheduleType,
-            academicYearId: $newScheduleAcademicYearId
+            type: $type,
+            academicYearId: $academicYearId
         )
             {
                 id

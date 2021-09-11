@@ -1,6 +1,11 @@
 import { CookieOptions } from "express";
 import { graphql } from "graphql";
-import { AuthResolver } from "src/graphql/resolvers";
+import {
+  AuthResolver,
+  AcademicYearResolver,
+  AcademicYearScheduleResolver,
+  TermResolver,
+} from "src/graphql/resolvers";
 import { buildSchema, Maybe } from "type-graphql";
 
 interface Options {
@@ -32,7 +37,12 @@ export const testClient = async ({
   headers,
 }: Options) => {
   const schema = await buildSchema({
-    resolvers: [AuthResolver],
+    resolvers: [
+      AuthResolver,
+      AcademicYearResolver,
+      AcademicYearScheduleResolver,
+      TermResolver,
+    ],
   });
 
   return graphql({

@@ -26,7 +26,7 @@ export class WeekRotationSchedule {
   @Column({ nullable: true })
   scheduleId: string;
 
-  @OneToOne(() => AcademicYearSchedule)
+  @OneToOne(() => AcademicYearSchedule, { createForeignKeyConstraints: false })
   @JoinColumn({ name: "scheduleId" })
   schedule: AcademicYearSchedule;
 }
