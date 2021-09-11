@@ -6,14 +6,18 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Task, AcademicYear, AcademicYearTerm, User, Class } from ".";
+import { Task, AcademicYear, Term, User, Class } from "..";
+import { Field, ObjectType } from "type-graphql";
 
 @Entity("subjects")
+@ObjectType()
 export class Subject {
   @PrimaryGeneratedColumn("uuid")
+  @Field(() => String)
   id: string;
 
   @Column()
+  @Field(() => String)
   name: string;
 
   @OneToMany(() => Task, (task) => task.subject)
@@ -22,8 +26,8 @@ export class Subject {
   @ManyToOne(() => AcademicYear, (academicYear) => academicYear.subjects)
   academicYear: AcademicYear;
 
-  @ManyToOne(() => AcademicYearTerm, (term) => term.subjects)
-  term: AcademicYearTerm;
+  @ManyToOne(() => Term, (term) => term.subjects)
+  term: Term;
 
   @ManyToOne(() => User, (user) => user.subjects)
   user: User;

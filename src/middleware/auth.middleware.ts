@@ -2,7 +2,6 @@ import { AuthenticationError } from "apollo-server-errors";
 
 import { verify } from "jsonwebtoken";
 import { User } from "src/entity";
-import { UserPayload } from "src/graphql/resolvers/auth/types";
 import { Context } from "src/interface";
 import { MiddlewareFn } from "type-graphql";
 import { getConnection } from "typeorm";
@@ -19,7 +18,7 @@ export const authenticationGate: MiddlewareFn<Context> = async (
       accessToken,
       process.env.ACCESS_TOKEN_SECRET!
     ) as any;
-    context.user = decodedPayload.user as UserPayload;
+    context.user = decodedPayload.user as Partial<User>;
     const userRepository = getConnection(process.env.NODE_ENV).getRepository(
       User
     );

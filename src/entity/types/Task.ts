@@ -1,4 +1,4 @@
-export enum taskType {
+export enum TaskType {
   assignment = "assignment",
   revision = "revision",
   review = "review",

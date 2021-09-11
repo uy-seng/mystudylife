@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { UserPayload } from "./auth";
+import { User } from "src/entity";
 
 export interface Context {
   req: Request;
   res: Response;
-  user?: UserPayload;
+  user?: Partial<User>;
 }

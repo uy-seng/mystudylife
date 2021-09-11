@@ -6,11 +6,7 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import cors from "cors";
 import { apiRoute } from "./routes";
-import {
-  UserResolver,
-  AcademicYearResolver,
-  AuthResolver,
-} from "./graphql/resolvers";
+import { AuthResolver } from "./graphql/resolvers";
 import { DatabaseService } from "./services";
 
 (async () => {
@@ -32,7 +28,7 @@ import { DatabaseService } from "./services";
   app.use("/api", apiRoute);
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [UserResolver, AcademicYearResolver, AuthResolver],
+      resolvers: [AuthResolver],
     }),
     context: ({ req, res }) => ({ req, res }),
   });

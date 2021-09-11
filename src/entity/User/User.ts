@@ -1,25 +1,37 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { Task, Exam, Subject, Class, AcademicYear } from ".";
+import { Field, ObjectType } from "type-graphql";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  OneToOne,
+  JoinColumn,
+} from "typeorm";
+import { Task, Exam, Subject, Class, AcademicYear, UserProvider } from "..";
 
 @Entity("users")
+@ObjectType()
 export class User {
   @PrimaryGeneratedColumn("uuid")
+  @Field(() => String)
   id: string;
 
   @Column({ unique: true })
+  @Field(() => String)
   username: string;
 
   @Column({ unique: true, nullable: true })
+  @Field(() => String, { nullable: true })
   email: string;
 
   @Column({ nullable: true })
+  @Field(() => String, { nullable: true })
   password: string;
 
-  @Column({ nullable: true })
-  provider: string;
-
-  @Column({ nullable: true })
-  providerId: string;
+  @OneToOne(() => UserProvider)
+  @JoinColumn()
+  @Field(() => UserProvider)
+  provider: UserProvider;
 
   @Column({ default: 0 })
   tokenVersion: number;
@@ -36,8 +48,6 @@ export class User {
   @OneToMany(() => Class, (_class) => _class.user)
   classes: Class[];
 
-  @OneToMany(() => AcademicYear, (academicYear) => academicYear.user, {
-    cascade: true,
-  })
+  @OneToMany(() => AcademicYear, (academicYear) => academicYear.user)
   academicYears: AcademicYear[];
 }

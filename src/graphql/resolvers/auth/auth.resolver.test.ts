@@ -10,7 +10,6 @@ import {
   getCookies,
   cookie,
 } from "../../../../test/graphqlTestClient";
-import { UserPayload } from "./types";
 
 const testUser = {
   username: faker.internet.userName(),
@@ -38,7 +37,6 @@ const meQuery = `
         id
         username
         email
-        provider
       }
     }
 `;
@@ -130,7 +128,7 @@ describe("login functionality", () => {
   it("should return new refresh token", async () => {
     const cookies = getCookies() as any;
     const jid = cookies!.jid;
-    const userPayload = decode(jid) as UserPayload;
+    const userPayload = decode(jid) as Partial<User>;
     const userRepository = getConnection(process.env.NODE_ENV).getRepository(
       User
     );

@@ -1,2 +1,2 @@
-import { LoginResponse, UserPayload } from "./auth";
-export { LoginResponse, UserPayload };
+import { LoginResponse } from "./auth";
+export { LoginResponse };

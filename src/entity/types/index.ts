@@ -1,8 +1,8 @@
-import { academicYearSchedulingType } from "./academicYear";
-import { classIncurRepeatDayType, classIncurType } from "./classIncur";
-import { taskType } from "./task";
+import { ClassIncurType, ClassIncurRepeatDayType } from "./ClassIncur";
+import { TaskType } from "./Task";
+import { ScheduleType } from "./AcademicSchedule";
 
-enum dayOfWeek {
+enum DayOfWeek {
   monday = 1,
   tuesday,
   wednesday,
@@ -13,9 +13,9 @@ enum dayOfWeek {
 }
 
 export {
-  academicYearSchedulingType,
-  classIncurRepeatDayType,
-  classIncurType,
-  taskType,
-  dayOfWeek,
+  ClassIncurType,
+  ClassIncurRepeatDayType,
+  TaskType,
+  DayOfWeek,
+  ScheduleType,
 };

@@ -9,7 +9,6 @@ import {
 import bcrypt from "bcryptjs";
 import { AuthenticationError, ValidationError } from "apollo-server-errors";
 import { getConnection, QueryFailedError } from "typeorm";
-import { UserObjectType } from "../user/types/user";
 import { LoginResponse } from "./types/auth";
 import { User } from "src/entity";
 import {
@@ -18,7 +17,7 @@ import {
   createRefreshToken,
 } from "src/helper";
 import { authenticationGate } from "src/middleware";
-import { Context } from "vm";
+import { Context } from "src/interface";
 
 @Resolver()
 export class AuthResolver {
@@ -75,7 +74,6 @@ export class AuthResolver {
       id: user.id,
       email: user.email,
       username: user.username,
-      provider: user.provider,
       tokenVersion: user.tokenVersion,
     };
 
@@ -86,10 +84,10 @@ export class AuthResolver {
     return response;
   }
 
-  @Query(() => UserObjectType)
+  @Query(() => User)
   @UseMiddleware(authenticationGate)
-  me(@Ctx() { user }: Context): UserObjectType {
-    return user as UserObjectType;
+  me(@Ctx() { user }: Context): User {
+    return user as User;
   }
 
   @Mutation(() => Boolean)

@@ -1,5 +1,5 @@
-import { ObjectType, InputType, Field } from "type-graphql";
-import { ClassIncurObjectType } from ".";
+import { ObjectType, InputType, Field, ArgsType } from "type-graphql";
+import { ClassIncurInputType, ClassIncurObjectType } from ".";
 import {
   AcademicYearObjectType,
   AcademicYearTermObjectType,
@@ -56,4 +56,25 @@ export class ClassInputType {
 
   @Field(() => String)
   teacher: string;
+}
+
+@ArgsType()
+export class createNewClassArgs {
+  @Field(() => String)
+  subjectId: string;
+
+  @Field(() => String)
+  module?: string;
+
+  @Field(() => String)
+  room: string;
+
+  @Field(() => String)
+  building: string;
+
+  @Field(() => String)
+  teacher: string;
+
+  @Field(() => [ClassIncurInputType])
+  classIncur: ClassIncurInputType[];
 }

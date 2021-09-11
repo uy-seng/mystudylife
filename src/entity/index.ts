@@ -1,23 +1,29 @@
-import { AcademicYear } from "./AcademicYear";
-import { AcademicYearDayRotationSchedule } from "./AcademicYearDayRotationSchedule";
-import { AcademicYearTerm } from "./AcademicYearTerm";
-import { AcademicYearWeekRotationSchedule } from "./AcademicYearWeekRotationSchedule";
-import { Class } from "./Class";
+import {
+  AcademicYear,
+  AcademicYearSchedule,
+  DayRotationSchedule,
+  WeekRotationSchedule,
+  Term,
+} from "./AcademicYear";
+import { Class, ClassSchedule, OneOffSchedule, RepeatSchedule } from "./Class";
 import { Exam } from "./Exam";
-import { ClassIncur } from "./ClassIncur";
 import { Subject } from "./Subject";
 import { Task } from "./Task";
-import { User } from "./User";
+import { User, UserProvider } from "./User";
 
 export {
   AcademicYear,
-  AcademicYearDayRotationSchedule,
-  AcademicYearTerm,
-  AcademicYearWeekRotationSchedule,
+  AcademicYearSchedule,
+  DayRotationSchedule,
+  WeekRotationSchedule,
   Class,
+  ClassSchedule,
+  OneOffSchedule,
+  RepeatSchedule,
   Exam,
-  ClassIncur,
   Subject,
   Task,
   User,
+  UserProvider,
+  Term,
 };

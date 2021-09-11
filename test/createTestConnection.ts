@@ -1,15 +1,19 @@
 import { createConnection, getConnection } from "typeorm";
 import {
   AcademicYear,
-  AcademicYearDayRotationSchedule,
-  AcademicYearTerm,
-  AcademicYearWeekRotationSchedule,
+  AcademicYearSchedule,
+  WeekRotationSchedule,
+  DayRotationSchedule,
+  Term,
   Class,
-  ClassIncur,
+  ClassSchedule,
+  OneOffSchedule,
+  RepeatSchedule,
   Exam,
   Subject,
   Task,
   User,
+  UserProvider,
 } from "../src/entity";
 
 beforeAll(async () => {
@@ -26,15 +30,19 @@ beforeAll(async () => {
     dropSchema: true,
     entities: [
       AcademicYear,
-      AcademicYearDayRotationSchedule,
-      AcademicYearTerm,
-      AcademicYearWeekRotationSchedule,
+      AcademicYearSchedule,
+      WeekRotationSchedule,
+      DayRotationSchedule,
+      Term,
       Class,
-      ClassIncur,
+      ClassSchedule,
+      OneOffSchedule,
+      RepeatSchedule,
       Exam,
       Subject,
       Task,
       User,
+      UserProvider,
     ],
   });
 });
