@@ -6,6 +6,7 @@ import { store } from "./app/store";
 import { Provider } from "react-redux";
 import * as serviceWorker from "./serviceWorker";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import "jquery-ui-bundle";
 
 const apolloClient = new ApolloClient({
   uri: "http://localhost:8000/graphql",

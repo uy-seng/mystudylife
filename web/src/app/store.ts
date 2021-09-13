@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import GuestPageReducer from "../shared/Guest.slice";
+import NewAcademicYearReducer from "../shared/NewAcademicYear.slice";
 
 export const store = configureStore({
   reducer: {
     guestpage: GuestPageReducer,
+    newacademicyear: NewAcademicYearReducer,
   },
 });
 

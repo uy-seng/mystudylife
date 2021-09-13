@@ -1,0 +1,16 @@
+.days {
+  display: flex;
+}
+
+.day {
+  min-width: 50px;
+  cursor: pointer;
+  border: 1px solid #e5e5e5;
+  text-align: center;
+  padding: 8px;
+}
+
+.day.active {
+  background-color: cornflowerblue;
+  color: white;
+}

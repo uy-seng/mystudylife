@@ -20,8 +20,13 @@ export const Sidebar: React.FC<Props> = ({ menu }) => {
           <img src={logo} alt="" />
         </div>
         <div>
-          {menu.map((m) => (
-            <SidebarMenu active={m.key === current} key={m.key} icon={m.icon} />
+          {menu.map((m, index) => (
+            <SidebarMenu
+              pathname={m.pathname}
+              active={m.pathname === current}
+              key={index}
+              icon={m.icon}
+            />
           ))}
         </div>
       </div>
@@ -29,10 +34,14 @@ export const Sidebar: React.FC<Props> = ({ menu }) => {
   );
 };
 
-const SidebarMenu: React.FC<SidebarMenuProps> = ({ icon, active }) => {
+const SidebarMenu: React.FC<SidebarMenuProps> = ({
+  icon,
+  active,
+  pathname,
+}) => {
   return (
     <Link
-      to="/"
+      to={`/${pathname}`}
       className={active ? [css.menu, css.active].join(" ") : css.menu}
     >
       <div>

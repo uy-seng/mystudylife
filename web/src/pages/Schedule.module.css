@@ -1,0 +1,63 @@
+.content {
+  width: 100%;
+}
+
+.title {
+  font-weight: 400;
+  padding-left: 1rem;
+}
+
+.header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-gray);
+}
+
+.header > :last-child {
+  display: flex;
+  padding: 0.5rem;
+  align-items: center;
+}
+
+.header > :last-child > * {
+  height: min-content;
+  padding: 12px;
+}
+
+.header > :last-child > :not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+.body {
+  min-height: calc(100vh - 68.81px);
+  background-color: #cdd4d4;
+}
+
+.emptySchedule {
+  height: calc(100vh - 68.81px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emptyScheduleIcon {
+  font-size: 5rem;
+}
+
+.emptyScheduleContent {
+  max-width: 300px;
+}
+
+.emptyScheduleContent > * {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.emptyScheduleContent > :last-child > * {
+  height: min-content;
+  padding: 12px;
+  width: min-content;
+}

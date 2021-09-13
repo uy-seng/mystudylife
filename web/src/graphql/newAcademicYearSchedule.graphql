@@ -1,0 +1,8 @@
+mutation NewAcademicYearSchedule(
+  $type: AcademicYearScheduleType!
+  $academicYearId: String!
+) {
+  newSchedule(type: $type, academicYearId: $academicYearId) {
+    id
+  }
+}

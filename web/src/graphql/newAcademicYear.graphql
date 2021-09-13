@@ -1,0 +1,5 @@
+mutation NewAcademicYear($startDate: String!, $endDate: String!) {
+  newAcademicYear(startDate: $startDate, endDate: $endDate) {
+    id
+  }
+}

@@ -7,12 +7,5 @@ mutation Register(
     password: $registerPassword
     email: $registerEmail
     username: $registerUsername
-  ) {
-    id
-    email
-    username
-    password
-    provider
-    providerId
-  }
+  )
 }

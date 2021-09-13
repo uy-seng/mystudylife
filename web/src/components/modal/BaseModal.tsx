@@ -10,7 +10,7 @@ const BaseModal: React.FC<BaseModalProps> & BaseModalSubcomponents = ({
   parent,
   show,
 }) => {
-  if (className) className.concat(css.modal);
+  if (className) className += ` ${css.modal}`;
   else className = css.modal;
 
   if (show)

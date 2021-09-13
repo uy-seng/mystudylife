@@ -16,6 +16,8 @@ code {
   --primary: rgba(0, 150, 121, 1);
   --secondary: rgba(0, 185, 145, 1);
   --error: #c90019;
+  --bg-light-gray: #f9f9f9;
+  --border-gray: #cdd4d4;
 }
 
 .App {
@@ -32,7 +34,7 @@ code {
   font-family: 16px;
 }
 .txt-sm {
-  font-size: 12px;
+  font-size: 14px;
 }
 .txt-xs {
   font-size: 10px;

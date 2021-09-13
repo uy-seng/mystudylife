@@ -20,6 +20,8 @@
     "graphql": "^15.5.2",
     "graphql-tag": "^2.12.5",
     "http-proxy-middleware": "^2.0.1",
+    "jquery": "^3.6.0",
+    "jquery-ui-bundle": "^1.12.1-migrate",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
@@ -57,6 +59,8 @@
     "@graphql-codegen/typescript": "2.1.1",
     "@graphql-codegen/typescript-operations": "2.1.1",
     "@graphql-codegen/typescript-react-apollo": "3.1.1",
+    "@types/jquery": "^3.5.6",
+    "@types/jquery.ui.datetimepicker": "^0.3.30",
     "@types/react-router-dom": "^5.1.8",
     "@types/uuid": "^8.3.1"
   }

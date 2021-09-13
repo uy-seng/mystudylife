@@ -1,7 +1,7 @@
 import React from "react";
 import { AiOutlinePlus } from "react-icons/ai";
-import { IconButton } from "../button";
-import BaseModal from "./BaseModal";
+import { IconButton } from "../../button";
+import BaseModal from "../BaseModal";
 
 interface Props {}
 
@@ -47,7 +47,9 @@ export const NewTask: React.FC<Props> = () => {
             </div>
 
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <button>Cancel</button>
+              <button type="button" onClick={() => setShow(false)}>
+                Cancel
+              </button>
               <button>Submit</button>
             </div>
           </form>

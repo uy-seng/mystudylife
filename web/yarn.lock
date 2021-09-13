@@ -2199,6 +2199,28 @@
   dependencies:
     "jest-diff" "^24.3.0"
 
+"@types/jquery.ui.datetimepicker@^0.3.30":
+  "integrity" "sha512-jMtw+sM4LgnhSxx7CdVKzdDm1OiBkcNAPYJwniNCP6O6H9/RSSmQHcpbZfcWsNu5uzWQ9Mq6+slPrNX48HGbNw=="
+  "resolved" "https://registry.npmjs.org/@types/jquery.ui.datetimepicker/-/jquery.ui.datetimepicker-0.3.30.tgz"
+  "version" "0.3.30"
+  dependencies:
+    "@types/jquery" "*"
+    "@types/jqueryui" "*"
+
+"@types/jquery@*", "@types/jquery@^3.5.6":
+  "integrity" "sha512-SmgCQRzGPId4MZQKDj9Hqc6kSXFNWZFHpELkyK8AQhf8Zr6HKfCzFv9ZC1Fv3FyQttJZOlap3qYb12h61iZAIg=="
+  "resolved" "https://registry.npmjs.org/@types/jquery/-/jquery-3.5.6.tgz"
+  "version" "3.5.6"
+  dependencies:
+    "@types/sizzle" "*"
+
+"@types/jqueryui@*":
+  "integrity" "sha512-6huAQDpNlso9ayaUT9amBOA3kj02OCeUWs+UvDmbaJmwkHSg/HLsQOoap/D5uveN9ePwl72N45Bl+Frp5xyG1Q=="
+  "resolved" "https://registry.npmjs.org/@types/jqueryui/-/jqueryui-1.12.16.tgz"
+  "version" "1.12.16"
+  dependencies:
+    "@types/jquery" "*"
+
 "@types/js-yaml@^4.0.0":
   "integrity" "sha512-5t9BhoORasuF5uCPr+d5/hdB++zRFUTMIZOzbNkr+jZh3yQht4HYbRDyj9fY8n2TZT30iW9huzav73x4NikqWg=="
   "resolved" "https://registry.npmjs.org/@types/js-yaml/-/js-yaml-4.0.3.tgz"
@@ -2320,6 +2342,11 @@
   "integrity" "sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew=="
   "resolved" "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.2.tgz"
   "version" "0.16.2"
+
+"@types/sizzle@*":
+  "integrity" "sha512-JYM8x9EGF163bEyhdJBpR2QX1R5naCJHC8ucJylJ3w9/CVBaskdQ8WqBf8MmQrd1kRvp/a4TS8HJ+bxzR7ZJYQ=="
+  "resolved" "https://registry.npmjs.org/@types/sizzle/-/sizzle-2.3.3.tgz"
+  "version" "2.3.3"
 
 "@types/source-list-map@*":
   "integrity" "sha512-K5K+yml8LTo9bWJI/rECfIPrGgxdpeNbj+d53lwN4QjW1MCwlkhUms+gtdzigTeUyBr09+u8BwOIY3MXvHdcsA=="
@@ -8007,6 +8034,16 @@
     "@jest/core" "^26.6.0"
     "import-local" "^3.0.2"
     "jest-cli" "^26.6.0"
+
+"jquery-ui-bundle@^1.12.1-migrate":
+  "integrity" "sha1-uTQ+LDEHQ1J2Ms/4vtsMXpYAsUw="
+  "resolved" "https://registry.npmjs.org/jquery-ui-bundle/-/jquery-ui-bundle-1.12.1-migrate.tgz"
+  "version" "1.12.1-migrate"
+
+"jquery@^3.6.0":
+  "integrity" "sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw=="
+  "resolved" "https://registry.npmjs.org/jquery/-/jquery-3.6.0.tgz"
+  "version" "3.6.0"
 
 "js-tokens@^3.0.0 || ^4.0.0", "js-tokens@^4.0.0":
   "integrity" "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ=="

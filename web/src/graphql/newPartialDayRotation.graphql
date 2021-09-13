@@ -1,0 +1,15 @@
+mutation NewPartialDayRotation(
+  $startDay: Int!
+  $numOfDay: Int!
+  $repeatDays: [Int!]!
+  $scheduleId: String!
+) {
+  newPartialDayRotation(
+    startDay: $startDay
+    numOfDay: $numOfDay
+    repeatDays: $repeatDays
+    scheduleId: $scheduleId
+  ) {
+    id
+  }
+}

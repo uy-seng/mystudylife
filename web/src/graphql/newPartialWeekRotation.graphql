@@ -1,0 +1,13 @@
+mutation NewPartialWeekRotation(
+  $numOfWeek: Int!
+  $startWeek: Int!
+  $scheduleId: String!
+) {
+  newPartialWeekRotation(
+    numOfWeek: $numOfWeek
+    startWeek: $startWeek
+    scheduleId: $scheduleId
+  ) {
+    id
+  }
+}
