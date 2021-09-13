@@ -23,10 +23,12 @@ export class WeekRotationSchedule {
   @Field(() => Int)
   startWeek: number;
 
-  @Column({ nullable: true })
+  @Column("uuid")
   scheduleId: string;
 
-  @OneToOne(() => AcademicYearSchedule, { createForeignKeyConstraints: false })
-  @JoinColumn({ name: "scheduleId" })
+  @OneToOne(() => AcademicYearSchedule, (schedule) => schedule.weekRotation, {
+    onDelete: "CASCADE",
+  })
+  @JoinColumn({ name: "scheduleId", referencedColumnName: "id" })
   schedule: AcademicYearSchedule;
 }

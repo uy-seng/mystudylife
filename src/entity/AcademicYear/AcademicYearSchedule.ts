@@ -7,33 +7,43 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { AcademicYear, DayRotationSchedule, WeekRotationSchedule } from "..";
-import { ScheduleType } from "../types";
+import { AcademicYearScheduleType } from "../types";
 
 @ObjectType()
 @Entity("academic_year_schedules")
 export class AcademicYearSchedule {
-  @Field()
   @PrimaryGeneratedColumn("uuid")
+  @Field(() => String)
   id: string;
 
-  @Field()
   @Column("text")
-  type: ScheduleType;
-
-  @Column("uuid", { nullable: true })
-  academicYearId: string;
+  @Field(() => String)
+  type: AcademicYearScheduleType;
 
   /**
    * Field Resolver here to get schedule info
    *  */
 
-  @OneToOne(() => DayRotationSchedule)
+  @OneToOne(
+    () => DayRotationSchedule,
+    (dayRotationSchedule) => dayRotationSchedule.schedule
+  )
+  @Field(() => DayRotationSchedule, { nullable: true })
   dayRotation: DayRotationSchedule;
 
-  @OneToOne(() => WeekRotationSchedule)
+  @OneToOne(
+    () => WeekRotationSchedule,
+    (weekRotationSchedule) => weekRotationSchedule.schedule
+  )
+  @Field(() => WeekRotationSchedule, { nullable: true })
   weekRotation: WeekRotationSchedule;
 
-  @OneToOne(() => AcademicYear, { createForeignKeyConstraints: false })
-  @JoinColumn({ name: "academicYearId" })
+  @Column("uuid")
+  academicYearId: string;
+
+  @OneToOne(() => AcademicYear, (academicYear) => academicYear.schedule, {
+    onDelete: "CASCADE",
+  })
+  @JoinColumn({ name: "academicYearId", referencedColumnName: "id" })
   academicYear: AcademicYear;
 }

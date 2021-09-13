@@ -28,9 +28,6 @@ export class Term {
   @Field(() => String)
   endDate: string;
 
-  @Column("uuid", { nullable: true })
-  academicYearId: string;
-
   @OneToMany(() => Task, (task) => task.term)
   tasks: Task[];
 
@@ -40,8 +37,11 @@ export class Term {
   @OneToMany(() => Class, (_class) => _class.term)
   classes: Class[];
 
+  @Column("uuid")
+  academicYearId: string;
+
   @ManyToOne(() => AcademicYear, (academicYear) => academicYear.terms, {
-    createForeignKeyConstraints: false,
+    onDelete: "CASCADE",
   })
   @JoinColumn({ name: "academicYearId", referencedColumnName: "id" })
   academicYear: AcademicYear;

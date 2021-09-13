@@ -1,15 +1,15 @@
 const newTermMutation = `
     mutation(
-        $newTermName: String!,
-        $newTermStartDate: String!,
-        $newTermEndDate: String!,
-        $newTermAcademicYearId: String!
+        $name: String!,
+        $startDate: String!,
+        $endDate: String!,
+        $academicYearId: String!
     ){
         newTerm(
-            name: $newTermName,
-            startDate: $newTermStartDate,
-            endDate: $newTermEndDate,
-            academicYearId: $newTermAcademicYearId
+            name: $name,
+            startDate: $startDate,
+            endDate: $endDate,
+            academicYearId: $academicYearId
         )
             {
                 id

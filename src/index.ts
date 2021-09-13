@@ -22,7 +22,11 @@ import { DatabaseService } from "./services";
   app.use(
     cors({
       credentials: true,
-      origin: ["https://studio.apollographql.com", "http://localhost:3000"],
+      origin: [
+        "https://studio.apollographql.com",
+        "http://localhost:3000",
+        "http://localhost:3001",
+      ],
     })
   );
   const databaseService = new DatabaseService();

@@ -28,10 +28,12 @@ export class DayRotationSchedule {
   @Field(() => [Int])
   repeatDays: DayOfWeek[];
 
-  @Column({ nullable: true })
+  @Column("uuid")
   scheduleId: string;
 
-  @OneToOne(() => AcademicYearSchedule, { createForeignKeyConstraints: false })
+  @OneToOne(() => AcademicYearSchedule, (schedule) => schedule.dayRotation, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "scheduleId" })
   schedule: AcademicYearSchedule;
 }

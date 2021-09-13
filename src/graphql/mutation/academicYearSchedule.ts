@@ -1,6 +1,6 @@
 const newScheduleMutation = `
     mutation(
-        $type: ScheduleType!,
+        $type: AcademicYearScheduleType!,
         $academicYearId: String!
     ){
         newSchedule(
@@ -15,16 +15,16 @@ const newScheduleMutation = `
 
 const newPartialDayRotationMutation = `
     mutation(
-        $newPartialDayRotationStartDay: Int!,
-        $newPartialDayRotationNumOfDay: Int!,
-        $newPartialDayRotationRepeatDays: [Int!]!,
-        $newPartialDayRotationScheduleId: String!
+        $startDay: Int!,
+        $numOfDay: Int!,
+        $repeatDays: [Int!]!,
+        $scheduleId: String!
     ){
         newPartialDayRotation(
-            startDay: $newPartialDayRotationStartDay,
-            numOfDay: $newPartialDayRotationNumOfDay,
-            repeatDays: $newPartialDayRotationRepeatDays,
-            scheduleId: $newPartialDayRotationScheduleId
+            startDay: $startDay,
+            numOfDay: $numOfDay,
+            repeatDays: $repeatDays,
+            scheduleId: $scheduleId
         )
             {
                 id
@@ -34,14 +34,14 @@ const newPartialDayRotationMutation = `
 
 const newPartialWeekRotationMutation = `
     mutation(
-        $newPartialWeekRotationNumOfWeek: Int!,
-        $newPartialWeekRotationStartWeek: Int!,
-        $newPartialWeekRotationScheduleId: String!
+        $numOfWeek: Int!,
+        $startWeek: Int!,
+        $scheduleId: String!
     ){
         newPartialWeekRotation(
-            numOfWeek: $newPartialWeekRotationNumOfWeek,
-            startWeek: $newPartialWeekRotationStartWeek,
-            scheduleId: $newPartialWeekRotationScheduleId
+            numOfWeek: $numOfWeek,
+            startWeek: $startWeek,
+            scheduleId: $scheduleId
         )
             {
                 id

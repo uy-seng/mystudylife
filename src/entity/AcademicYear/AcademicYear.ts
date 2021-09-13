@@ -5,15 +5,14 @@ import {
   ManyToOne,
   OneToMany,
   OneToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 import { Task, Subject, Class, User, Term, AcademicYearSchedule } from "..";
 
 @Entity("academic_years")
 @ObjectType()
 export class AcademicYear {
-  // manually store uuid v4
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   @Field(() => String)
   id: string;
 
@@ -26,10 +25,10 @@ export class AcademicYear {
   endDate: string;
 
   @OneToMany(() => Term, (term) => term.academicYear)
-  @Field(() => Term)
+  @Field(() => [Term])
   terms: Term[];
 
-  @OneToOne(() => AcademicYearSchedule)
+  @OneToOne(() => AcademicYearSchedule, (schedule) => schedule.academicYear)
   @Field(() => AcademicYearSchedule)
   schedule: AcademicYearSchedule;
 
@@ -44,6 +43,6 @@ export class AcademicYear {
   @ManyToOne(() => Task, (task) => task.academicYear)
   tasks: Task[];
 
-  @ManyToOne(() => User, (user) => user.academicYears, { eager: true })
+  @ManyToOne(() => User, (user) => user.academicYears)
   user: User;
 }

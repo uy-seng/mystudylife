@@ -1,15 +1,11 @@
 const newAcademicYearMutation = `
     mutation(
-        $newAcademicYearId: String!,
-        $newAcademicYearStartDate: String!,
-        $newAcademicYearEndDate: String!,
-        $newAcademicYearScheduleId: String!
+        $startDate: String!,
+        $endDate: String!,
     ){
         newAcademicYear(
-            id: $newAcademicYearId,
-            startDate: $newAcademicYearStartDate,
-            endDate: $newAcademicYearEndDate,
-            scheduleId: $newAcademicYearScheduleId
+            startDate: $startDate,
+            endDate: $endDate,
         )
             {
                 id
@@ -17,4 +13,14 @@ const newAcademicYearMutation = `
     }
 `;
 
-export { newAcademicYearMutation };
+const deleteAcademicYearMutation = `
+    mutation(
+        $id: String!,
+    ){
+        deleteAcademicYear(
+            id: $id,
+        )
+    }
+`;
+
+export { newAcademicYearMutation, deleteAcademicYearMutation };
