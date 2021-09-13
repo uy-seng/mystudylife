@@ -1,6 +1,10 @@
 import React from "react";
+import { AiOutlineClose } from "react-icons/ai";
 import { Button } from "../../button";
+import { Datepicker } from "../../datepicker";
+import { BasicTextInput } from "../../input/BasicTextInput";
 import BaseModal from "../BaseModal";
+import css from "./NewTerm.module.css";
 
 interface Props {}
 
@@ -24,13 +28,53 @@ export const NewTerm: React.FC<Props> = () => {
         show={show}
       >
         <BaseModal.Body>
-          <div>
-            <div></div>
+          <div onClick={() => setShow(false)} className={css.close}>
+            <AiOutlineClose />
           </div>
           <div>
-            <div></div>
+            <div>
+              <BasicTextInput
+                placeholder="eg. Winter Term, Spring Quarter"
+                label="Name"
+              />
+            </div>
           </div>
-          <div></div>
+          <div
+            style={{
+              display: "flex",
+              marginTop: "1rem",
+            }}
+          >
+            <div
+              style={{
+                marginRight: "1rem",
+              }}
+            >
+              <label htmlFor="startDate">Start Date</label>
+              <div id="startDate">
+                <Datepicker />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="endDate">End Date</label>
+              <div id="endDate">
+                <Datepicker />
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              marginTop: "1rem",
+            }}
+          >
+            <Button
+              style={{
+                padding: "0.5rem",
+              }}
+              text="Save"
+              as="primary"
+            />
+          </div>
         </BaseModal.Body>
       </BaseModal>
     </React.Fragment>

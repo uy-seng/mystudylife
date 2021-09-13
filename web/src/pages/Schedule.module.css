@@ -31,11 +31,11 @@
 
 .body {
   min-height: calc(100vh - 68.81px);
-  background-color: #cdd4d4;
+  background-color: var(--bg-light-gray);
 }
 
 .emptySchedule {
-  height: calc(100vh - 68.81px);
+  height: calc(100vh - 58px);
   display: flex;
   align-items: center;
   justify-content: center;

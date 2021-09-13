@@ -1,0 +1,12 @@
+.close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  cursor: pointer;
+  transition: all ease 0.5s;
+}
+
+.close:hover {
+  color: red;
+  transform: rotate(90deg);
+}

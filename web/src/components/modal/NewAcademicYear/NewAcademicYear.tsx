@@ -32,13 +32,17 @@ export const NewAcademicYear: React.FC<Props> = () => {
           <div>
             <div className={css.academicYearPayload}>
               <div>
-                <label htmlFor="startDate">Start Date</label>
+                <label className={css.label} htmlFor="startDate">
+                  Start Date
+                </label>
                 <div id="startDate">
                   <Datepicker />
                 </div>
               </div>
               <div>
-                <label htmlFor="endDate">End Date</label>
+                <label className={css.label} htmlFor="endDate">
+                  End Date
+                </label>
                 <div id="endDate">
                   <Datepicker />
                 </div>
@@ -75,9 +79,10 @@ export const NewAcademicYear: React.FC<Props> = () => {
               </div>
             </div>
           </div>
-          <div>
-            <div>What Are Academic Years?</div>
+          <div className={css.textGroup}>
+            <div className="txt-md">What Are Academic Years?</div>
             <div
+              className="txt-sm"
               style={{
                 maxWidth: "500px",
               }}
@@ -86,6 +91,10 @@ export const NewAcademicYear: React.FC<Props> = () => {
               year and any terms (eg. semesters, trimesters, quarters) that you
               may have.
             </div>
+          </div>
+          <div className={css.actionBtnGroup}>
+            <Button onClick={() => setShow(false)} as="neutral" text="Cancel" />
+            <Button as="primary" text="Save" />
           </div>
         </BaseModal.Body>
       </BaseModal>

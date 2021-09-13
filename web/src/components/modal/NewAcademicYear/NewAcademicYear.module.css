@@ -3,6 +3,10 @@
   justify-content: space-between;
 }
 
+.label {
+  font-weight: 300;
+}
+
 .academicYearPayload > * {
   margin-right: 1rem;
 }
@@ -57,4 +61,27 @@
   border-right: 1px solid var(--border-gray);
   border-bottom: 1px solid var(--border-gray);
   padding: 1rem;
+}
+
+.textGroup {
+  margin-top: 1rem;
+}
+
+.textGroup > * {
+  margin-bottom: 0.5rem;
+}
+
+.actionBtnGroup {
+  display: flex;
+}
+
+.actionBtnGroup > :not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+.actionBtnGroup::before {
+  content: "";
+  height: 100%;
+  width: 700%;
+  background-color: red;
 }

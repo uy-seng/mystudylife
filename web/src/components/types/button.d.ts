@@ -5,7 +5,7 @@ export interface BaseButtonProps
   text: string | null;
 }
 
-type as = "primary" | "secondary";
+type as = "primary" | "secondary" | "neutral";
 export interface ButtonProps extends BaseButtonProps {
   as: as;
 }

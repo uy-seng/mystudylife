@@ -18,10 +18,12 @@ code {
   --error: #c90019;
   --bg-light-gray: #f9f9f9;
   --border-gray: #cdd4d4;
+  --txt-primary: #464646;
 }
 
 .App {
   position: relative;
+  color: var(--txt-primary);
 }
 
 .txt-xl {
@@ -31,7 +33,7 @@ code {
   font-size: 24px;
 }
 .txt-md {
-  font-family: 16px;
+  font-size: 16px;
 }
 .txt-sm {
   font-size: 14px;

@@ -25,3 +25,7 @@ export interface FormikInputProps extends TextInputProps {
   name: string;
   error?: React.ReactNode | null;
 }
+
+export interface BasicTextInputProps extends BaseInputFieldProps {
+  label: string;
+}
