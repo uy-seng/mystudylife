@@ -1,5 +1,7 @@
 import React from "react";
 import { NewTerm } from "..";
+import { useAppSelector } from "../../../app/hooks";
+import { selectAcademicYearComponentRefreshCounter } from "../../../shared/NewAcademicYear.slice";
 import { Button } from "../../button";
 import { Datepicker } from "../../datepicker";
 import BaseModal from "../BaseModal";
@@ -9,8 +11,15 @@ import { Scheduling } from "./Scheduling";
 interface Props {}
 
 export const NewAcademicYear: React.FC<Props> = () => {
-  const [show, setShow] = React.useState<boolean>(true);
+  const [show, setShow] = React.useState<boolean>(false);
   const [activeTab, setActiveTab] = React.useState<string>("scheduling");
+  const refreshCounter = useAppSelector(
+    selectAcademicYearComponentRefreshCounter
+  );
+
+  React.useEffect(() => {
+    console.log("rerendered");
+  }, [refreshCounter]);
 
   return (
     <React.Fragment>
@@ -32,20 +41,10 @@ export const NewAcademicYear: React.FC<Props> = () => {
           <div>
             <div className={css.academicYearPayload}>
               <div>
-                <label className={css.label} htmlFor="startDate">
-                  Start Date
-                </label>
-                <div id="startDate">
-                  <Datepicker />
-                </div>
+                <Datepicker rerender={refreshCounter} label="Start Date" />
               </div>
               <div>
-                <label className={css.label} htmlFor="endDate">
-                  End Date
-                </label>
-                <div id="endDate">
-                  <Datepicker />
-                </div>
+                <Datepicker rerender={refreshCounter} label="End Date" />
               </div>
             </div>
             <div

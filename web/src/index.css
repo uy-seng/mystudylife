@@ -24,6 +24,7 @@ code {
 .App {
   position: relative;
   color: var(--txt-primary);
+  box-sizing: border-box;
 }
 
 .txt-xl {

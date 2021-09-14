@@ -1,6 +1,5 @@
 import React from "react";
-
-import { Counter } from "../components/Counter";
+import { Counter } from "../components/counter";
 import { NewTask } from "../components/modal";
 
 import css from "./Dashboard.module.css";

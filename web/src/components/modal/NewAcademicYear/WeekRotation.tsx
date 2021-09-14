@@ -5,6 +5,7 @@ import {
   setWeekRotationPayload,
 } from "../../../shared/NewAcademicYear.slice";
 import { generateArrayBetween } from "../../../utils";
+import { BasicSelect } from "../../select";
 
 interface Props {}
 
@@ -13,11 +14,9 @@ export const WeekRotation: React.FC<Props> = () => {
   const dispatch = useAppDispatch();
   return (
     <div>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div>
-          <label htmlFor="numOfWeek">Number of Weeks</label>
-          <select
-            value={numOfWeek}
+          <BasicSelect
             onChange={(e) => {
               dispatch(
                 setWeekRotationPayload({
@@ -26,18 +25,18 @@ export const WeekRotation: React.FC<Props> = () => {
                 })
               );
             }}
-            name="numOfWeek"
-            id="numOfWeek"
-          >
-            {generateArrayBetween(2, 4).map((num) => (
-              <option value={num}>{num}</option>
-            ))}
-          </select>
+            label="Number of Weeks"
+            options={generateArrayBetween(2, 4).map((number) => {
+              return {
+                key: number,
+                value: number,
+              };
+            })}
+          />
         </div>
         <div>
-          <label htmlFor="startWeek">Start Week</label>
-          <select
-            value={startWeek}
+          <BasicSelect
+            label="Start Week"
             onChange={(e) => {
               dispatch(
                 setWeekRotationPayload({
@@ -46,13 +45,13 @@ export const WeekRotation: React.FC<Props> = () => {
                 })
               );
             }}
-            name="startWeek"
-            id="startWeek"
-          >
-            {generateArrayBetween(1, numOfWeek).map((num) => (
-              <option value={num}>Week {num}</option>
-            ))}
-          </select>
+            options={generateArrayBetween(1, numOfWeek).map((number) => {
+              return {
+                key: number,
+                value: number,
+              };
+            })}
+          />
         </div>
       </div>
     </div>

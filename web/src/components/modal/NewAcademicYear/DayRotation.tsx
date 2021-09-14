@@ -5,6 +5,7 @@ import {
   setDayRotationPayload,
 } from "../../../shared/NewAcademicYear.slice";
 import { generateArrayBetween } from "../../../utils";
+import { BasicSelect } from "../../select";
 import css from "./DayRotation.module.css";
 
 interface Props {}
@@ -17,10 +18,16 @@ export const DayRotation: React.FC<Props> = () => {
 
   return (
     <div>
-      <div style={{ display: "flex" }}>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <label htmlFor="numOfDay">Number of Days</label>
-          <select
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          margin: "1rem 0",
+        }}
+      >
+        <div>
+          <BasicSelect
+            label="Number of Days"
             onChange={(e) => {
               dispatch(
                 setDayRotationPayload({
@@ -29,21 +36,16 @@ export const DayRotation: React.FC<Props> = () => {
                 })
               );
             }}
-            defaultValue={numOfDay}
-            name="numOfDay"
-            id="numOfDay"
-          >
-            {generateArrayBetween(2, 20).map((number) => (
-              <option key={`numOfDay_${number}`} value={number}>
-                {number}
-              </option>
-            ))}
-          </select>
+            options={generateArrayBetween(2, 20).map((number) => {
+              return {
+                key: number,
+                value: number,
+              };
+            })}
+          />
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <label htmlFor="startDay">Start Day</label>
-          <select
-            value={startDay}
+          <BasicSelect
             onChange={(e) => {
               dispatch(
                 setDayRotationPayload({
@@ -52,19 +54,18 @@ export const DayRotation: React.FC<Props> = () => {
                 })
               );
             }}
-            name="startDay"
-            id="startDay"
-          >
-            {generateArrayBetween(1, numOfDay).map((number) => (
-              <option key={`startDay_${number}`} value={number}>
-                {number}
-              </option>
-            ))}
-          </select>
+            label="Start Day"
+            options={generateArrayBetween(1, numOfDay).map((number) => {
+              return {
+                key: number,
+                value: number,
+              };
+            })}
+          />
         </div>
       </div>
       <div>
-        <div>Days</div>
+        <div style={{ marginBottom: "0.5rem" }}>Days</div>
         <div className={css.days}>
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
             (day, index) => (

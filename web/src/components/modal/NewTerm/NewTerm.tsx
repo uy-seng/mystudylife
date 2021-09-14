@@ -1,15 +1,20 @@
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
+import { NewAcademicYear } from "..";
 import { Button } from "../../button";
 import { Datepicker } from "../../datepicker";
 import { BasicTextInput } from "../../input/BasicTextInput";
 import BaseModal from "../BaseModal";
 import css from "./NewTerm.module.css";
+import { useAppDispatch } from "../../../app/hooks";
+import { rerenderNewAcademicYearComponent } from "../../../shared/NewAcademicYear.slice";
 
 interface Props {}
 
 export const NewTerm: React.FC<Props> = () => {
   const [show, setShow] = React.useState<boolean>(false);
+  const dispatch = useAppDispatch();
+
   return (
     <React.Fragment>
       <Button
@@ -28,7 +33,13 @@ export const NewTerm: React.FC<Props> = () => {
         show={show}
       >
         <BaseModal.Body>
-          <div onClick={() => setShow(false)} className={css.close}>
+          <div
+            onClick={() => {
+              setShow(false);
+              dispatch(rerenderNewAcademicYearComponent());
+            }}
+            className={css.close}
+          >
             <AiOutlineClose />
           </div>
           <div>
@@ -50,16 +61,10 @@ export const NewTerm: React.FC<Props> = () => {
                 marginRight: "1rem",
               }}
             >
-              <label htmlFor="startDate">Start Date</label>
-              <div id="startDate">
-                <Datepicker />
-              </div>
+              <Datepicker label="Start Date" />
             </div>
             <div>
-              <label htmlFor="endDate">End Date</label>
-              <div id="endDate">
-                <Datepicker />
-              </div>
+              <Datepicker label="End Date" />
             </div>
           </div>
           <div

@@ -1,4 +1,18 @@
 .wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  margin-bottom: 8px;
+}
+
+.label.focused {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.datepicker {
   width: 216.61px;
   display: flex;
   border: 1px solid #e3e3e3;
@@ -6,7 +20,11 @@
   position: relative;
 }
 
-.wrapper.focused {
+.content {
+  display: flex;
+}
+
+.datepicker.focused {
   border: 1px solid #1c8d76 !important;
 }
 
@@ -17,7 +35,7 @@
   border: none;
 }
 
-.label {
+.calendar {
   cursor: pointer;
   display: flex;
   align-items: center;

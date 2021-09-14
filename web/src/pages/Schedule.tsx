@@ -9,7 +9,7 @@ export const Schedule: React.FC<Props> = () => {
   return (
     <div className={css.content}>
       <header className={css.header}>
-        <h2 className={css.title + " txt-md"}>Schedule</h2>
+        <h2 className={css.title + " txt-lg"}>Schedule</h2>
         <div>
           <ManageSubject />
           <NewAcademicYear />
@@ -34,7 +34,9 @@ const EmptySchedule: React.FC = () => {
           This is where your years, terms, classes and holidays will live. Add
           an academic year to get started
         </div>
-        <div>{/* <NewAcademicYear /> */}</div>
+        <div>
+          <NewAcademicYear />
+        </div>
       </div>
     </div>
   );

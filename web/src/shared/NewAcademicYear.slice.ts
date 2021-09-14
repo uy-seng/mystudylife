@@ -14,6 +14,7 @@ export interface CreateNewAcademicYearGlobalState {
     payload: TermPayload;
     terms: Term[];
   };
+  refreshCounter: number;
 }
 
 const currentDate = new Date();
@@ -46,6 +47,7 @@ const initialState: CreateNewAcademicYearGlobalState = {
     startDay: 1,
     repeatDays: [],
   },
+  refreshCounter: 0,
 };
 
 export const NewAcademicYearSlice = createSlice({
@@ -113,6 +115,9 @@ export const NewAcademicYearSlice = createSlice({
           (_, i) => i !== index.payload
         );
     },
+    rerenderNewAcademicYearComponent: (state) => {
+      state.refreshCounter += 1;
+    },
   },
 });
 
@@ -126,6 +131,8 @@ export const selectDayRotationPayload = (state: RootState) =>
   state.newacademicyear.dayRotationPayload;
 export const selectCreateTermComponentState = (state: RootState) =>
   state.newacademicyear.createTermComponentState;
+export const selectAcademicYearComponentRefreshCounter = (state: RootState) =>
+  state.newacademicyear.refreshCounter;
 
 export const {
   showCreateTermComponent,
@@ -137,6 +144,7 @@ export const {
   setWeekRotationPayload,
   addNewTerm,
   removeTerm,
+  rerenderNewAcademicYearComponent,
 } = NewAcademicYearSlice.actions;
 
 export default NewAcademicYearSlice.reducer;

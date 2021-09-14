@@ -35,7 +35,7 @@
 }
 
 .emptySchedule {
-  height: calc(100vh - 58px);
+  height: calc(100vh - 68.81px);
   display: flex;
   align-items: center;
   justify-content: center;

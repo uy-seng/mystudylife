@@ -1,0 +1,21 @@
+.main {
+  display: flex;
+  flex-direction: column;
+}
+
+.main > label {
+  margin-bottom: 0.5rem;
+}
+
+.main > select {
+  padding: 0.5rem;
+  outline: none;
+  background: none;
+
+  border: 1px solid var(--border-gray);
+  min-width: 200px;
+}
+
+.main > select:focus {
+  border: 1px solid var(--primary);
+}
