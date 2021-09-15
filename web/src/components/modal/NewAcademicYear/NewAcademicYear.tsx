@@ -1,9 +1,13 @@
 import React from "react";
 import { NewTerm } from "..";
-import { useAppSelector } from "../../../app/hooks";
-import { selectAcademicYearComponentRefreshCounter } from "../../../shared/NewAcademicYear.slice";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import {
+  selectAcademicYearComponentRefreshCounter,
+  selectAcademicYearPayload,
+  setAcademicYearPayload,
+} from "../../../shared/NewAcademicYear.slice";
 import { Button } from "../../button";
-import { Datepicker } from "../../datepicker";
+import { Datepicker } from "../../input";
 import BaseModal from "../BaseModal";
 import css from "./NewAcademicYear.module.css";
 import { Scheduling } from "./Scheduling";
@@ -16,10 +20,8 @@ export const NewAcademicYear: React.FC<Props> = () => {
   const refreshCounter = useAppSelector(
     selectAcademicYearComponentRefreshCounter
   );
-
-  React.useEffect(() => {
-    console.log("rerendered");
-  }, [refreshCounter]);
+  const { startDate, endDate } = useAppSelector(selectAcademicYearPayload);
+  const dispatch = useAppDispatch();
 
   return (
     <React.Fragment>
@@ -41,10 +43,34 @@ export const NewAcademicYear: React.FC<Props> = () => {
           <div>
             <div className={css.academicYearPayload}>
               <div>
-                <Datepicker rerender={refreshCounter} label="Start Date" />
+                <Datepicker
+                  dateHandler={(value) => {
+                    dispatch(
+                      setAcademicYearPayload({
+                        key: "startDate",
+                        value: value,
+                      })
+                    );
+                  }}
+                  defaultValue={startDate}
+                  rerender={refreshCounter}
+                  label="Start Date"
+                />
               </div>
               <div>
-                <Datepicker rerender={refreshCounter} label="End Date" />
+                <Datepicker
+                  dateHandler={(value) => {
+                    dispatch(
+                      setAcademicYearPayload({
+                        key: "endDate",
+                        value: value,
+                      })
+                    );
+                  }}
+                  defaultValue={endDate}
+                  rerender={refreshCounter}
+                  label="End Date"
+                />
               </div>
             </div>
             <div

@@ -3,7 +3,7 @@ import logo from "../assets/msl-logo-circle.svg";
 import css from "./Guest.module.css";
 import { useSelector } from "react-redux";
 import { selectSignInMode } from "../shared/Guest.slice";
-import { SignIn } from "../components/signin";
+import { SignIn } from "./components/signin";
 
 interface Props {}
 

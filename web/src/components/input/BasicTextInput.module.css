@@ -5,6 +5,8 @@
 
 .input {
   border: 1px solid #e3e3e3;
+  overflow: hidden;
+  display: flex;
 }
 
 .input > input {

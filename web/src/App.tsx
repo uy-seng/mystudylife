@@ -14,6 +14,7 @@ import {
   AiOutlineFileSearch,
 } from "react-icons/ai";
 import { Sidebar } from "./components/sidebar";
+import { Playground } from "./pages/Playground";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
               />
               <Route path="/dashboard" component={Dashboard} />
               <Route path="/schedule" component={Schedule} />
+              <Route path="/playground" component={Playground} />
             </div>
           </React.Fragment>
         </Switch>

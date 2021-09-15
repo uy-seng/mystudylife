@@ -20,7 +20,9 @@ export const BaseSelect: React.FC<BaseSelectProps> = ({
       <label htmlFor={`select_${id}`}>{label}</label>
       <select {...props}>
         {options.map((option) => (
-          <option value={option.value}>{option.key}</option>
+          <option key={option.key} value={option.value}>
+            {option.key}
+          </option>
         ))}
       </select>
     </div>

@@ -1,40 +1,54 @@
 import React from "react";
 import $ from "jquery";
 import { v4 as uuidv4 } from "uuid";
-import css from "./Datepicker.module.css";
-import "./jQueryDatepicker.css";
 import { BsCalendar } from "react-icons/bs";
 import { CgDanger } from "react-icons/cg";
-import { DatepickerProps } from "../types/datepicker";
 
-export const Datepicker: React.FC<DatepickerProps> = ({ label, rerender }) => {
+import BaseInput from "./BaseInput";
+import { DatepickerProps } from "../types/input";
+
+import css from "./Datepicker.module.css";
+import "./jQueryDatepicker.css";
+
+export const Datepicker: React.FC<DatepickerProps> = ({
+  label,
+  rerender,
+  defaultValue,
+  dateHandler,
+  ...props
+}) => {
   const [id] = React.useState<string>(uuidv4());
   const [error, setError] = React.useState<string>("");
 
   React.useLayoutEffect(() => {
-    $(`#start_date_${id}`).datepicker({
+    $(`#datepicker_input_${id}`).datepicker({
       beforeShow: (): any => {
         $(`#datepicker_${id}`).append($("#ui-datepicker-div"));
       },
       dateFormat: "MM dd yy",
-      onClose: () => {
-        setError("");
+      onSelect: (dateText) => {
+        dateHandler(dateText);
       },
     });
+    // add force rendering to prevent component coupling
   }, [id, rerender]);
 
   return (
-    <div className={css.wrapper}>
-      <label className={css.label} htmlFor={`datepicker_${id}`}>
-        {label}
-      </label>
+    <BaseInput className={css.wrapper}>
+      <BaseInput.Label
+        text={label}
+        className={css.label}
+        htmlFor={`datepicker_${id}`}
+      />
       <div className={css.content}>
         <div id={`datepicker_${id}`} className={css.datepicker}>
-          <input
+          <BaseInput.Field
+            {...props}
+            defaultValue={defaultValue}
             onFocus={onFocusHandler}
             onBlur={onBlurHandler}
             onChange={(e) => {
-              const date = e.target.value.split(" ");
+              const date = e.currentTarget.value.split(" ");
               if (date && !isValidDate(date)) {
                 const todayDate = new Date();
                 setError(
@@ -44,17 +58,21 @@ export const Datepicker: React.FC<DatepickerProps> = ({ label, rerender }) => {
                 );
               } else {
                 setError("");
+                dateHandler(e.currentTarget.value);
               }
             }}
             className={css.input}
             autoComplete="off"
             type="text"
-            name="start_date"
-            id={`start_date_${id}`}
+            id={`datepicker_input_${id}`}
           />
-          <label className={css.calendar} htmlFor={`start_date_${id}`}>
+          <BaseInput.Label
+            text={null}
+            className={css.calendar}
+            htmlFor={`datepicker_input_${id}`}
+          >
             <BsCalendar />
-          </label>
+          </BaseInput.Label>
         </div>
         {error && (
           <div className={css.tooltip}>
@@ -63,7 +81,7 @@ export const Datepicker: React.FC<DatepickerProps> = ({ label, rerender }) => {
           </div>
         )}
       </div>
-    </div>
+    </BaseInput>
   );
 };
 

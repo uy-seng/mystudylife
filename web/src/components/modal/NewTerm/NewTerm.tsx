@@ -1,22 +1,38 @@
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import { NewAcademicYear } from "..";
 import { Button } from "../../button";
-import { Datepicker } from "../../datepicker";
 import { BasicTextInput } from "../../input/BasicTextInput";
 import BaseModal from "../BaseModal";
 import css from "./NewTerm.module.css";
-import { useAppDispatch } from "../../../app/hooks";
-import { rerenderNewAcademicYearComponent } from "../../../shared/NewAcademicYear.slice";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import {
+  addNewTerm,
+  rerenderNewAcademicYearComponent,
+  selectAcademicYearPayload,
+  selectCreateTermComponentState,
+  setTermPayload,
+  TermPayload,
+} from "../../../shared/NewAcademicYear.slice";
+import { Datepicker } from "../../input";
+import NewTermForm from "../../forms/NewTerm.form";
 
 interface Props {}
 
 export const NewTerm: React.FC<Props> = () => {
   const [show, setShow] = React.useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const { payload, terms } = useAppSelector(selectCreateTermComponentState);
 
   return (
     <React.Fragment>
+      {terms.map((term) => (
+        <div>
+          <div className="txt-lg">{term.name}</div>
+          <div className="txt-md">
+            {term.startDate} - {term.endDate}
+          </div>
+        </div>
+      ))}
       <Button
         style={{
           color: "var(--primary)",
@@ -42,44 +58,7 @@ export const NewTerm: React.FC<Props> = () => {
           >
             <AiOutlineClose />
           </div>
-          <div>
-            <div>
-              <BasicTextInput
-                placeholder="eg. Winter Term, Spring Quarter"
-                label="Name"
-              />
-            </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              marginTop: "1rem",
-            }}
-          >
-            <div
-              style={{
-                marginRight: "1rem",
-              }}
-            >
-              <Datepicker label="Start Date" />
-            </div>
-            <div>
-              <Datepicker label="End Date" />
-            </div>
-          </div>
-          <div
-            style={{
-              marginTop: "1rem",
-            }}
-          >
-            <Button
-              style={{
-                padding: "0.5rem",
-              }}
-              text="Save"
-              as="primary"
-            />
-          </div>
+          <NewTermForm />
         </BaseModal.Body>
       </BaseModal>
     </React.Fragment>

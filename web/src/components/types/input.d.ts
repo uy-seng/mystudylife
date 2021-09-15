@@ -6,7 +6,7 @@ export interface BaseInputProps
 
 export interface BaseInputLabelProps
   extends React.LabelHTMLAttributes<HTMLLabelElement> {
-  text: string;
+  text: string | null;
 }
 
 export interface BaseInputFieldProps
@@ -28,4 +28,21 @@ export interface FormikInputProps extends TextInputProps {
 
 export interface BasicTextInputProps extends BaseInputFieldProps {
   label: string;
+}
+
+export interface DatepickerProps extends BasicTextInputProps {
+  label: string;
+  defaultValue?: string;
+  dateHandler: (value: string) => void;
+  rerender?: number;
+}
+
+export interface FormikBasicTextInputProps extends BasicTextInputProps {
+  name: string;
+  validate?: (value: string) => string | null;
+}
+
+export interface FormikDatepickerProps extends DatepickerProps {
+  name: string;
+  validate?: (value: string) => string | null;
 }

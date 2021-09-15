@@ -4,12 +4,16 @@ import {
   AiFillGithub,
   AiFillGoogleCircle,
 } from "react-icons/ai";
-import { Button, LinkButton, SocialMediaButton } from "../button";
-import { Divider } from "../divider";
-import { SignInForm } from "../forms";
-import { useAppDispatch } from "../../app/hooks";
-import { changeSignInMode } from "../../shared/Guest.slice";
-import css from "../../pages/Guest.module.css";
+import {
+  Button,
+  LinkButton,
+  SocialMediaButton,
+} from "../../../components/button";
+import { Divider } from "../../../components/divider";
+import { SignInForm } from "../../../components/forms";
+import { useAppDispatch } from "../../../app/hooks";
+import { changeSignInMode } from "../../../shared/Guest.slice";
+import css from "../../Guest.module.css";
 
 interface SignInComponents {
   Email: React.FC;

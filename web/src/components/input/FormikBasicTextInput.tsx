@@ -1,12 +1,15 @@
+import { Field } from "formik";
 import React from "react";
-import { BasicTextInputProps } from "../types/input";
+import { FormikBasicTextInputProps } from "../types/input";
 import BaseInput from "./BaseInput";
 import css from "./BasicTextInput.module.css";
 
-export const BasicTextInput: React.FC<BasicTextInputProps> = ({
+export const FormikBasicTextInput: React.FC<FormikBasicTextInputProps> = ({
   label,
   className,
   style,
+  name,
+  validate,
   ...props
 }) => {
   if (className) className += ` ${css.input}`;
@@ -16,7 +19,12 @@ export const BasicTextInput: React.FC<BasicTextInputProps> = ({
     <BaseInput className={css.wrapper}>
       <BaseInput.Label className={css.label} text={label} />
       <div style={style} className={className}>
-        <BaseInput.Field style={{ width: "100%" }} {...props} />
+        <Field
+          validate={validate}
+          name={name}
+          style={{ width: "100%" }}
+          {...props}
+        />
       </div>
     </BaseInput>
   );

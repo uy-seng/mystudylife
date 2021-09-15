@@ -6,8 +6,13 @@ import {
   BaseInputSubcomponents,
 } from "../types/input";
 
-const Label: React.FC<BaseInputLabelProps> = ({ text, ...props }) => {
-  return <label {...props}>{text}</label>;
+const Label: React.FC<BaseInputLabelProps> = ({ text, children, ...props }) => {
+  return (
+    <label {...props}>
+      {text}
+      {children}
+    </label>
+  );
 };
 
 const Field: React.FC<BaseInputFieldProps> = ({ ...props }) => {

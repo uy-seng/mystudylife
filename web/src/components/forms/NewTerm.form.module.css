@@ -1,0 +1,12 @@
+.name.error {
+  border: 1px solid var(--error);
+}
+
+.group {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.group > :not(:last-child) {
+  margin-right: 1rem;
+}

@@ -17,16 +17,14 @@ export interface CreateNewAcademicYearGlobalState {
   refreshCounter: number;
 }
 
-const currentDate = new Date();
-
 const initialState: CreateNewAcademicYearGlobalState = {
   createTermComponentState: {
     active: false,
     payload: {
       name: "",
-      startDate: formatDate(currentDate),
+      startDate: formatDate(new Date()),
       endDate: formatDate(
-        new Date(currentDate.setMonth(currentDate.getMonth() + 1))
+        new Date(new Date().setMonth(new Date().getMonth() + 1))
       ),
     },
     terms: [],
@@ -35,8 +33,10 @@ const initialState: CreateNewAcademicYearGlobalState = {
     type: "fixed",
   },
   academicYearPayload: {
-    startDate: "September 06, 2021",
-    endDate: "March 06, 2022",
+    startDate: formatDate(new Date()),
+    endDate: formatDate(
+      new Date(new Date().setMonth(new Date().getMonth() + 6))
+    ),
   },
   weekRotationPayload: {
     numOfWeek: 2,
@@ -149,33 +149,33 @@ export const {
 
 export default NewAcademicYearSlice.reducer;
 
-interface Term {
+export interface Term {
   name: string;
   startDate: string;
   endDate: string;
 }
 
-interface AcademicYearPayload {
+export interface AcademicYearPayload {
   startDate: string;
   endDate: string;
 }
 
-interface AcademicYearSchedulePayload {
+export interface AcademicYearSchedulePayload {
   type: AcademicYearScheduleType;
 }
 
-interface WeekRotationPayload {
+export interface WeekRotationPayload {
   numOfWeek: number;
   startWeek: number;
 }
 
-interface DayRotationPayload {
+export interface DayRotationPayload {
   numOfDay: number;
   startDay: number;
   repeatDays: number[];
 }
 
-interface TermPayload {
+export interface TermPayload {
   name: string;
   startDate: string;
   endDate: string;
