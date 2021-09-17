@@ -1,0 +1,91 @@
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.wrapper > * {
+  margin-right: 1rem;
+}
+
+.label {
+  font-weight: 300;
+}
+
+.tabs {
+  display: flex;
+  position: relative;
+}
+
+.tabs > div {
+  min-width: 100px;
+  text-align: center;
+  padding: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #eee;
+  border: 1px solid var(--border-gray);
+  position: relative;
+}
+
+.tabs::after {
+  content: "";
+  width: 100%;
+  border-bottom: 1px solid var(--border-gray);
+}
+
+.tabs > div:nth-child(2n) {
+  border-left: 0;
+}
+
+.tabs > div:nth-child(2n).active {
+  border-left: 1px solid var(--border-gray);
+}
+
+.tabs > div:nth-child(2n-1) {
+  border-right: 0;
+}
+
+.tabs > div:nth-child(2n-1).active {
+  border-right: 1px solid var(--border-gray);
+}
+
+.tabs > div.active {
+  background-color: white;
+  border-bottom: 0;
+  color: var(--primary);
+  cursor: auto;
+}
+
+.tabContent {
+  border-left: 1px solid var(--border-gray);
+  border-right: 1px solid var(--border-gray);
+  border-bottom: 1px solid var(--border-gray);
+  padding: 1rem;
+}
+
+.textGroup {
+  margin-top: 1rem;
+}
+
+.textGroup > * {
+  margin-bottom: 0.5rem;
+}
+
+.actionBtnGroup {
+  display: flex;
+}
+
+.actionBtnGroup > :not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+.actionBtnGroup::before {
+  content: "";
+  height: 100%;
+  width: 700%;
+  background-color: red;
+}
+
+.field {
+  display: flex;
+}

@@ -1,27 +1,13 @@
 import React from "react";
-import { NewTerm } from "..";
-import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import {
-  selectAcademicYearComponentRefreshCounter,
-  selectAcademicYearPayload,
-  setAcademicYearPayload,
-} from "../../../shared/NewAcademicYear.slice";
 import { Button } from "../../button";
-import { Datepicker } from "../../input";
+import { NewAcademicYearForm } from "../../forms";
 import BaseModal from "../BaseModal";
 import css from "./NewAcademicYear.module.css";
-import { Scheduling } from "./Scheduling";
 
 interface Props {}
 
 export const NewAcademicYear: React.FC<Props> = () => {
   const [show, setShow] = React.useState<boolean>(false);
-  const [activeTab, setActiveTab] = React.useState<string>("scheduling");
-  const refreshCounter = useAppSelector(
-    selectAcademicYearComponentRefreshCounter
-  );
-  const { startDate, endDate } = useAppSelector(selectAcademicYearPayload);
-  const dispatch = useAppDispatch();
 
   return (
     <React.Fragment>
@@ -40,88 +26,11 @@ export const NewAcademicYear: React.FC<Props> = () => {
           <BaseModal.Extra>2020/2021</BaseModal.Extra>
         </BaseModal.Header>
         <BaseModal.Body>
-          <div>
-            <div className={css.academicYearPayload}>
-              <div>
-                <Datepicker
-                  dateHandler={(value) => {
-                    dispatch(
-                      setAcademicYearPayload({
-                        key: "startDate",
-                        value: value,
-                      })
-                    );
-                  }}
-                  defaultValue={startDate}
-                  rerender={refreshCounter}
-                  label="Start Date"
-                />
-              </div>
-              <div>
-                <Datepicker
-                  dateHandler={(value) => {
-                    dispatch(
-                      setAcademicYearPayload({
-                        key: "endDate",
-                        value: value,
-                      })
-                    );
-                  }}
-                  defaultValue={endDate}
-                  rerender={refreshCounter}
-                  label="End Date"
-                />
-              </div>
-            </div>
-            <div
-              style={{
-                marginTop: "2rem",
-              }}
-            >
-              <div className={css.tabs}>
-                <div
-                  onClick={(e) => {
-                    if (activeTab !== "scheduling") setActiveTab("scheduling");
-                  }}
-                  className={
-                    activeTab === "scheduling" ? css.active : undefined
-                  }
-                >
-                  Scheduling
-                </div>
-                <div
-                  onClick={(e) => {
-                    if (activeTab !== "term") setActiveTab("term");
-                  }}
-                  className={activeTab === "term" ? css.active : undefined}
-                >
-                  Terms
-                </div>
-              </div>
-              <div className={css.tabContent}>
-                {activeTab === "scheduling" && <Scheduling />}
-                {activeTab === "term" && <NewTerm />}
-              </div>
-            </div>
-          </div>
-          <div className={css.textGroup}>
-            <div className="txt-md">What Are Academic Years?</div>
-            <div
-              className="txt-sm"
-              style={{
-                maxWidth: "500px",
-              }}
-            >
-              An academic year and its terms are used to represent your school
-              year and any terms (eg. semesters, trimesters, quarters) that you
-              may have.
-            </div>
-          </div>
-          <div className={css.actionBtnGroup}>
-            <Button onClick={() => setShow(false)} as="neutral" text="Cancel" />
-            <Button as="primary" text="Save" />
-          </div>
+          <NewAcademicYearForm />
         </BaseModal.Body>
+        <div className={css.footer}>
+          <Button onClick={() => setShow(false)} as="neutral" text="Cancel" />
+        </div>
       </BaseModal>
     </React.Fragment>
   );

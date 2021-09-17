@@ -1,0 +1,10 @@
+.divider {
+  height: 20px;
+  width: 1px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.link {
+  text-decoration: none;
+  width: 100%;
+}

@@ -1,27 +1,22 @@
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { Button } from "../../button";
-import { BasicTextInput } from "../../input/BasicTextInput";
 import BaseModal from "../BaseModal";
-import css from "./NewTerm.module.css";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import {
-  addNewTerm,
   rerenderNewAcademicYearComponent,
-  selectAcademicYearPayload,
   selectCreateTermComponentState,
-  setTermPayload,
-  TermPayload,
 } from "../../../shared/NewAcademicYear.slice";
-import { Datepicker } from "../../input";
-import NewTermForm from "../../forms/NewTerm.form";
+import { NewTermForm } from "../../forms";
+
+import css from "./NewTerm.module.css";
 
 interface Props {}
 
 export const NewTerm: React.FC<Props> = () => {
   const [show, setShow] = React.useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const { payload, terms } = useAppSelector(selectCreateTermComponentState);
+  const { terms } = useAppSelector(selectCreateTermComponentState);
 
   return (
     <React.Fragment>

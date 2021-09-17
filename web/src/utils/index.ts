@@ -15,6 +15,7 @@ const formatDate = (date: Date) => {
 
 const isValidDateFormat = (date: string) => {
   const exp =
+    // eslint-disable-next-line
     /^(?:January|February|March|April|May|June|July|August|September|October|November|December)[-\ ](([0]?[1-9])|([1-2][0-9])|(3[01]))[\ ]\b\d{4}$/gm;
   const regex = new RegExp(exp);
   return regex.test(date);

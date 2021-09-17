@@ -1,6 +1,8 @@
 import React from "react";
+
 import { BaseButtonProps } from "../types/button";
-import css from "./button.module.css";
+
+import css from "./BaseButton.module.css";
 
 export const BaseButton: React.FC<BaseButtonProps> = ({
   text,

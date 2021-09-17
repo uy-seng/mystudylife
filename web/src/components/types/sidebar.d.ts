@@ -3,3 +3,7 @@ export interface SidebarMenuProps {
   active?: boolean;
   pathname: string;
 }
+
+export interface SidebarProps {
+  menu: SidebarMenuProps[];
+}

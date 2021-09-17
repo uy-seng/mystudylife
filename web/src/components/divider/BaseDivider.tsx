@@ -1,6 +1,6 @@
 import React from "react";
 import { BaseDividerProps } from "../types/divider";
-import css from "./divider.module.css";
+import css from "./BaseDivider.module.css";
 
 export const BaseDivider: React.FC<BaseDividerProps> = ({
   className = "",

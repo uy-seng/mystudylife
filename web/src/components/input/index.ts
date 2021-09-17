@@ -1,12 +1,12 @@
-import { FormikTextInput } from "./FormikTextInput";
-import { TextInput } from "./TextInput";
-import { BasicTextInput } from "./BasicTextInput";
-import { FormikBasicTextInput } from "./FormikBasicTextInput";
-import { Datepicker } from "./Datepicker";
+import { BasicTextInput, FormikBasicTextInput } from "./BasicTextInput";
+import { Datepicker, FormikDatepicker } from "./Datepicker";
+import { FormikTextInput, TextInput } from "./TextInput";
+
 export {
-  FormikTextInput,
-  TextInput,
   BasicTextInput,
   FormikBasicTextInput,
   Datepicker,
+  FormikDatepicker,
+  FormikTextInput,
+  TextInput,
 };

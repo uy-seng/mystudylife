@@ -1,0 +1,5 @@
+.label {
+  background-color: var(--primary);
+  padding: 0 0.5rem;
+  color: var(--secondary);
+}
