@@ -26,7 +26,7 @@ export const NewAcademicYear: React.FC<Props> = () => {
           <BaseModal.Extra>2020/2021</BaseModal.Extra>
         </BaseModal.Header>
         <BaseModal.Body>
-          <NewAcademicYearForm />
+          <NewAcademicYearForm setShow={setShow} />
         </BaseModal.Body>
         <div className={css.footer}>
           <Button onClick={() => setShow(false)} as="neutral" text="Cancel" />

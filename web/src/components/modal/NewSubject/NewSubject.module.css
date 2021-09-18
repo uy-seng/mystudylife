@@ -1,0 +1,11 @@
+.link {
+  cursor: pointer;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0.9rem;
+  right: 9rem;
+}

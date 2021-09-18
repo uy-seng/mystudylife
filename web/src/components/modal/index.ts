@@ -1,5 +1,6 @@
-import { NewTask } from "./NewTask";
-import { ManageSubject } from "./ManageSubject";
 import { NewAcademicYear } from "./NewAcademicYear";
+import { ManageSubject } from "./ManageSubject";
+import { NewSubject } from "./NewSubject";
+import { NewTask } from "./NewTask";
 import { NewTerm } from "./NewTerm";
-export { NewTask, ManageSubject, NewAcademicYear, NewTerm };
+export { NewTask, NewSubject, ManageSubject, NewAcademicYear, NewTerm };

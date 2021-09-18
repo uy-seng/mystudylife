@@ -9,18 +9,39 @@ import {
   selectAcademicYearPayload,
   selectAcademicYearComponentRefreshCounter,
   setAcademicYearPayload,
+  selectAcademicYearSchedulePayload,
+  selectDayRotationPayload,
+  selectWeekRotationPayload,
+  selectCreateTermComponentState,
+  Term,
+  WeekRotationPayload,
+  DayRotationPayload,
+  AcademicYearSchedulePayload,
 } from "../../../shared/NewAcademicYear.slice";
 import { Pair } from "../../../types";
 import { isValidDateFormat, getMonthName } from "../../../utils";
-import { Button } from "../../button";
+import { Button, LoaderButton } from "../../button";
 import { FormikDatepicker } from "../../input";
 import { NewTerm } from "../../modal";
 import { Scheduling } from "./Scheduling";
 import { CgDanger } from "react-icons/cg";
 
 import css from "./NewAcademicYear.module.css";
+import {
+  NewAcademicYearMutationFn,
+  NewAcademicYearScheduleMutationFn,
+  NewPartialDayRotationMutationFn,
+  NewPartialWeekRotationMutationFn,
+  NewTermMutationFn,
+  useNewAcademicYearMutation,
+  useNewAcademicYearScheduleMutation,
+  useNewPartialDayRotationMutation,
+  useNewPartialWeekRotationMutation,
+  useNewTermMutation,
+} from "../../../generated/graphql";
+
 const InnerForm = (props: FormikProps<AcademicYearPayload> & DispatchMap) => {
-  const { errors, setAcademicYearPayload } = props;
+  const { errors, isSubmitting, setAcademicYearPayload } = props;
   const { startDate, endDate } = useAppSelector(selectAcademicYearPayload);
   const refreshCounter = useAppSelector(
     selectAcademicYearComponentRefreshCounter
@@ -103,7 +124,7 @@ const InnerForm = (props: FormikProps<AcademicYearPayload> & DispatchMap) => {
         >
           <div className={css.tabs}>
             <div
-              onClick={(e) => {
+              onClick={(_e) => {
                 if (activeTab !== "scheduling") setActiveTab("scheduling");
               }}
               className={activeTab === "scheduling" ? css.active : undefined}
@@ -111,7 +132,7 @@ const InnerForm = (props: FormikProps<AcademicYearPayload> & DispatchMap) => {
               Scheduling
             </div>
             <div
-              onClick={(e) => {
+              onClick={(_e) => {
                 if (activeTab !== "term") setActiveTab("term");
               }}
               className={activeTab === "term" ? css.active : undefined}
@@ -138,7 +159,16 @@ const InnerForm = (props: FormikProps<AcademicYearPayload> & DispatchMap) => {
         </div>
       </div>
       <div className={css.actionBtnGroup}>
-        <Button as="primary" type="submit" text="Save" />
+        <LoaderButton
+          style={{
+            padding: isSubmitting ? "0.7rem 2rem" : "1rem 2rem",
+          }}
+          loading={isSubmitting}
+          disabled={isSubmitting}
+          as="primary"
+          type="submit"
+          text="Save"
+        />
       </div>
     </Form>
   );
@@ -148,9 +178,43 @@ const InnerForm = (props: FormikProps<AcademicYearPayload> & DispatchMap) => {
 
 // Wrap our form with the withFormik HoC
 const MyForm = withFormik<any, AcademicYearPayload>({
-  handleSubmit: (values, { props }) => {
-    // do submitting things
-    console.log(props);
+  handleSubmit: (_values, { props, setSubmitting }) => {
+    const newAcademicYear = props.newAcademicYear as NewAcademicYearMutationFn;
+    const newAcademicYearSchedule =
+      props.newAcademicYearSchedule as NewAcademicYearScheduleMutationFn;
+    const newPartialDayRotation =
+      props.newPartialDayRotation as NewPartialDayRotationMutationFn;
+    const newPartialWeekRotation =
+      props.newPartialWeekRotation as NewPartialWeekRotationMutationFn;
+    const newTerm = props.newTerm as NewTermMutationFn;
+
+    const academicYearPayload =
+      props.academicYearPayload as AcademicYearPayload;
+    const academicYearSchedulePayload =
+      props.academicYearSchedulePayload as AcademicYearSchedulePayload;
+    const dayRotationPayload = props.dayRotationPayload as DayRotationPayload;
+    const weekRotationPayload =
+      props.weekRotationPayload as WeekRotationPayload;
+    const terms = props.terms as Term[];
+
+    const setShow = props.setShow as React.Dispatch<
+      React.SetStateAction<boolean>
+    >;
+
+    newAcademicYear({
+      variables: academicYearPayload,
+    }).then((response) => {
+      const academicYearId = response.data!.newAcademicYear.id;
+      newAcademicYearSchedule({
+        variables: {
+          academicYearId: academicYearId,
+          type: academicYearSchedulePayload.type,
+        },
+      }).then(() => {
+        setSubmitting(false);
+        setShow(false);
+      });
+    });
   },
   enableReinitialize: true,
   mapPropsToValues: (props) => {
@@ -175,7 +239,42 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchMap => ({
   },
 });
 
-export const NewAcademicYearForm = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MyForm);
+const ConnectedForm = connect(mapStateToProps, mapDispatchToProps)(MyForm);
+
+interface NewAcademicYearFormProps {
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const NewAcademicYearForm: React.FC<NewAcademicYearFormProps> = ({
+  setShow,
+}) => {
+  const [newAcademicYear] = useNewAcademicYearMutation();
+  const [newAcademicYearSchedule] = useNewAcademicYearScheduleMutation();
+  const [newPartialDayRotation] = useNewPartialDayRotationMutation();
+  const [newPartialWeekRotation] = useNewPartialWeekRotationMutation();
+  const [newTerm] = useNewTermMutation();
+
+  const academicYearPayload = useAppSelector(selectAcademicYearPayload);
+  const academicYearSchedulePayload = useAppSelector(
+    selectAcademicYearSchedulePayload
+  );
+  const dayRotationPayload = useAppSelector(selectDayRotationPayload);
+  const weekRotationPayload = useAppSelector(selectWeekRotationPayload);
+  const terms = useAppSelector(selectCreateTermComponentState).terms;
+
+  return (
+    <ConnectedForm
+      newAcademicYear={newAcademicYear}
+      newAcademicYearSchedule={newAcademicYearSchedule}
+      newPartialDayRotation={newPartialDayRotation}
+      newPartialWeekRotation={newPartialWeekRotation}
+      newTerm={newTerm}
+      academicYearPayload={academicYearPayload}
+      academicYearSchedulePayload={academicYearSchedulePayload}
+      dayRotationPayload={dayRotationPayload}
+      weekRotationPayload={weekRotationPayload}
+      terms={terms}
+      setShow={setShow}
+    />
+  );
+};
