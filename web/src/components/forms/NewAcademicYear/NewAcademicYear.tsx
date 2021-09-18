@@ -124,7 +124,7 @@ const InnerForm = (props: FormikProps<AcademicYearPayload> & DispatchMap) => {
         >
           <div className={css.tabs}>
             <div
-              onClick={(_e) => {
+              onClick={(e) => {
                 if (activeTab !== "scheduling") setActiveTab("scheduling");
               }}
               className={activeTab === "scheduling" ? css.active : undefined}
@@ -212,7 +212,8 @@ const MyForm = withFormik<any, AcademicYearPayload>({
         },
       }).then(() => {
         setSubmitting(false);
-        setShow(false);
+        console.log("ok");
+        // setShow(false);
       });
     });
   },

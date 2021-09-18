@@ -29,6 +29,7 @@ export const NewTerm: React.FC<Props> = () => {
         </div>
       ))}
       <Button
+        type="button"
         style={{
           color: "var(--primary)",
           backgroundColor: "white",
