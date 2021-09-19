@@ -37,8 +37,8 @@ describe("test case 1: create academic year with fixed schedule and term", () =>
     const response = await testClient({
       source: newAcademicYearMutation,
       variableValues: {
-        startDate: "September 12, 2021",
-        endDate: "March 12, 2022",
+        startDate: "September 12 2021",
+        endDate: "March 12 2022",
       },
     });
     expect(response.errors).toBeUndefined();
@@ -65,23 +65,23 @@ describe("test case 1: create academic year with fixed schedule and term", () =>
     const terms = [
       {
         name: "T1",
-        startDate: "September 12, 2021",
-        endDate: "October 12, 2021",
+        startDate: "September 12 2021",
+        endDate: "October 12 2021",
       },
       {
         name: "T2",
-        startDate: "October 27, 2021",
-        endDate: "November 27, 2021",
+        startDate: "October 27 2021",
+        endDate: "November 27 2021",
       },
       {
         name: "T3",
-        startDate: "December 12, 2021",
-        endDate: "January 12, 2022",
+        startDate: "December 12 2021",
+        endDate: "January 12 2022",
       },
       {
         name: "T4",
-        startDate: "January 27, 2022",
-        endDate: "February 12, 2022",
+        startDate: "January 27 2022",
+        endDate: "February 12 2022",
       },
     ];
     termIds = await Promise.all(
@@ -159,8 +159,8 @@ describe("test case 2: create academic year with week rotation schedule", () => 
     const response = await testClient({
       source: newAcademicYearMutation,
       variableValues: {
-        startDate: "September 12, 2021",
-        endDate: "March 12, 2022",
+        startDate: "September 12 2021",
+        endDate: "March 12 2022",
       },
     });
     expect(response.errors).toBeUndefined();
@@ -251,8 +251,8 @@ describe("test case 3: create academic year with day rotation schedule", () => {
     const response = await testClient({
       source: newAcademicYearMutation,
       variableValues: {
-        startDate: "September 12, 2021",
-        endDate: "March 12, 2022",
+        startDate: "September 12 2021",
+        endDate: "March 12 2022",
       },
     });
     expect(response.errors).toBeUndefined();

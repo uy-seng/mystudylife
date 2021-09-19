@@ -1,5 +1,6 @@
 .content {
   width: 100%;
+  position: relative;
 }
 
 .title {
@@ -60,4 +61,32 @@
   height: min-content;
   padding: 12px;
   width: min-content;
+}
+
+.scheduleListing {
+  height: calc(100vh - 68.81px);
+  display: grid;
+  grid-template-columns: 205px 1fr 1fr;
+}
+
+.scheduleListing > :nth-child(1) {
+  border-right: 1px solid var(--border-gray);
+  padding-top: 1rem;
+}
+
+.scheduleListing > :nth-child(1) > div {
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.scheduleListing > :nth-child(1) > div > div {
+  margin-bottom: 4px;
+}
+
+.scheduleListing > :nth-child(1) > div > :first-child {
+  font-weight: 500;
+}
+
+.scheduleListing > :nth-child(1) > div.active {
+  background-color: #eee;
 }

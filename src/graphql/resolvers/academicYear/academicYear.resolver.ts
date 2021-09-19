@@ -16,7 +16,6 @@ export class AcademicYearResolver {
       startDate: startDate,
       endDate: endDate,
     });
-    console.log(getConnection(process.env.NODE_ENV));
     return await this.academicYearRepository.save(newAcademicYear);
   }
 
