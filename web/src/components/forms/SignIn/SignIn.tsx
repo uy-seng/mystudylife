@@ -11,6 +11,7 @@ import { useAppDispatch } from "../../../app/hooks";
 import { changeSignInMode } from "../../../shared/Guest.slice";
 
 import css from "../../../pages/Guest.module.css";
+import { getAccessToken, setAccessToken } from "../../../auth";
 
 export const SignInForm: React.FC<React.AllHTMLAttributes<HTMLDivElement>> = (
   props
@@ -44,7 +45,7 @@ export const SignInForm: React.FC<React.AllHTMLAttributes<HTMLDivElement>> = (
                 loginPassword: values.password,
               },
             });
-            console.log(response);
+            setAccessToken(response.data!.login.accessToken);
             history.push("/dashboard");
           } catch (error) {
             /**

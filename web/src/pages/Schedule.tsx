@@ -1,6 +1,11 @@
 import React from "react";
 import { AiOutlineCalendar } from "react-icons/ai";
-import { ManageSubject, NewAcademicYear } from "../components/modal";
+import {
+  EditAcademicYear,
+  ManageSubject,
+  NewAcademicYear,
+  NewClass,
+} from "../components/modal";
 import {
   GetAcademicYearsQuery,
   useGetAcademicYearsQuery,
@@ -19,6 +24,7 @@ interface Props {}
 
 export const Schedule: React.FC<Props> = () => {
   const { data, loading } = useGetAcademicYearsQuery();
+  const { selectedYear } = useAppSelector(selectScheduleComponentState);
 
   return (
     <div className={css.content}>
@@ -26,6 +32,7 @@ export const Schedule: React.FC<Props> = () => {
         <h2 className={css.title + " txt-lg"}>Schedule</h2>
         <div>
           <ManageSubject />
+          {selectedYear && <EditAcademicYear />}
           <NewAcademicYear />
         </div>
       </header>
@@ -113,7 +120,13 @@ const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
           </div>
         ))}
       </div>
-      <div></div>
+      <div>
+        <div>
+          <div className="txt-md">Classes</div>
+          <NewClass />
+        </div>
+        <div></div>
+      </div>
       <div></div>
     </div>
   );

@@ -20,16 +20,60 @@ import {
   WeekRotationSchedule,
 } from "src/entity";
 import {
+  loginMutation,
   newAcademicYearMutation,
   newPartialDayRotationMutation,
   newPartialWeekRotationMutation,
   newScheduleMutation,
   newTermMutation,
+  registerMutation,
 } from "src/graphql/mutation";
 import { deleteAcademicYearMutation } from "src/graphql/mutation/academicYear";
-import { getAcademicYearsQuery } from "src/graphql/query";
+import { getAcademicYearsQuery, meQuery } from "src/graphql/query";
 import { getConnection } from "typeorm";
 import { testClient } from "../../../../test/graphqlTestClient";
+
+/**
+ * logging in user
+ */
+let accessToken: string;
+describe("before test", () => {
+  it("should create new account for user", async () => {
+    const response = await testClient({
+      source: registerMutation,
+      variableValues: {
+        email: "sengouy0@gmail.com",
+        username: "seng uy",
+        password: "123",
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+  });
+  it("should login user", async () => {
+    const response = await testClient({
+      source: loginMutation,
+      variableValues: {
+        email: "sengouy0@gmail.com",
+        password: "123",
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    accessToken = response.data!.login!.accessToken;
+  });
+  it("should show authenticated user", async () => {
+    expect(accessToken).toBeDefined();
+    const response = await testClient({
+      source: meQuery,
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+  });
+});
 
 describe("test case 1: create academic year with fixed schedule and term", () => {
   let academicYearId: string;
@@ -39,6 +83,9 @@ describe("test case 1: create academic year with fixed schedule and term", () =>
       variableValues: {
         startDate: "September 12 2021",
         endDate: "March 12 2022",
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
       },
     });
     expect(response.errors).toBeUndefined();
@@ -127,6 +174,9 @@ describe("test case 1: create academic year with fixed schedule and term", () =>
       variableValues: {
         id: academicYearId,
       },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -161,6 +211,9 @@ describe("test case 2: create academic year with week rotation schedule", () => 
       variableValues: {
         startDate: "September 12 2021",
         endDate: "March 12 2022",
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
       },
     });
     expect(response.errors).toBeUndefined();
@@ -219,6 +272,9 @@ describe("test case 2: create academic year with week rotation schedule", () => 
       variableValues: {
         id: academicYearId,
       },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -253,6 +309,9 @@ describe("test case 3: create academic year with day rotation schedule", () => {
       variableValues: {
         startDate: "September 12 2021",
         endDate: "March 12 2022",
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
       },
     });
     expect(response.errors).toBeUndefined();
@@ -309,8 +368,15 @@ describe("test case 4: fetching academic years", () => {
   it("should fetch all academic years", async () => {
     const response = await testClient({
       source: getAcademicYearsQuery,
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
   });
+});
+
+afterAll(() => {
+  getConnection(process.env.NODE_ENV).synchronize(true);
 });

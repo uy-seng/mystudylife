@@ -3,4 +3,14 @@ import { ManageSubject } from "./ManageSubject";
 import { NewSubject } from "./NewSubject";
 import { NewTask } from "./NewTask";
 import { NewTerm } from "./NewTerm";
-export { NewTask, NewSubject, ManageSubject, NewAcademicYear, NewTerm };
+import { EditAcademicYear } from "./EditAcademicYear";
+import { NewClass } from "./NewClass";
+export {
+  NewTask,
+  NewSubject,
+  ManageSubject,
+  NewAcademicYear,
+  NewTerm,
+  EditAcademicYear,
+  NewClass,
+};

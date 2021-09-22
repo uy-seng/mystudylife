@@ -1,8 +1,18 @@
-import { AcademicYear } from "src/entity";
-import { Arg, Args, Mutation, Query, Resolver } from "type-graphql";
+import { AcademicYear, User } from "src/entity";
+import {
+  Arg,
+  Args,
+  Ctx,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
 import { getConnection } from "typeorm";
 import { AcademicYearArgs } from "./types";
-import { ValidationError } from "apollo-server-errors";
+import { ForbiddenError, ValidationError } from "apollo-server-errors";
+import { authenticationGate } from "src/middleware";
+import { Context } from "src/interface";
 
 @Resolver()
 export class AcademicYearResolver {
@@ -11,31 +21,71 @@ export class AcademicYearResolver {
   ).getRepository(AcademicYear);
 
   @Mutation(() => AcademicYear)
-  async newAcademicYear(@Args() { startDate, endDate }: AcademicYearArgs) {
+  @UseMiddleware(authenticationGate)
+  async newAcademicYear(
+    @Args() { startDate, endDate }: AcademicYearArgs,
+    @Ctx() { user }: Context
+  ) {
     const newAcademicYear = this.academicYearRepository.create({
       startDate: startDate,
       endDate: endDate,
     });
+    const userRepository = getConnection(process.env.NODE_ENV).getRepository(
+      User
+    );
+    const qUser = await userRepository.findOne(user!.id);
+    if (!qUser) throw new ValidationError("invalid user");
+    newAcademicYear.user = qUser;
     return await this.academicYearRepository.save(newAcademicYear);
   }
 
   @Query(() => [AcademicYear])
-  async getAcademicYears() {
+  @UseMiddleware(authenticationGate)
+  async getAcademicYears(@Ctx() { user }: Context) {
     const academicYears = await this.academicYearRepository.find({
+      relations: [
+        "terms",
+        "user",
+        "schedule",
+        "schedule.dayRotation",
+        "schedule.weekRotation",
+      ],
+      where: {
+        user: {
+          id: user!.id,
+        },
+      },
+    });
+    return academicYears;
+  }
+
+  @Query(() => AcademicYear)
+  @UseMiddleware(authenticationGate)
+  async getAcademicYear(@Arg("id") id: string, @Ctx() { user }: Context) {
+    const academicYear = await this.academicYearRepository.findOne(id, {
       relations: [
         "terms",
         "schedule",
         "schedule.dayRotation",
         "schedule.weekRotation",
+        "user",
       ],
     });
-    return academicYears;
+    if (!academicYear) throw new ValidationError("invalid academic year id");
+    if (academicYear?.user.id !== user!.id)
+      throw new ForbiddenError("academic year not found for this user");
+    return academicYear;
   }
 
   @Mutation(() => Boolean)
-  async deleteAcademicYear(@Arg("id") id: string) {
-    const academicYear = await this.academicYearRepository.findOne(id);
+  @UseMiddleware(authenticationGate)
+  async deleteAcademicYear(@Arg("id") id: string, @Ctx() { user }: Context) {
+    const academicYear = await this.academicYearRepository.findOne(id, {
+      relations: ["user"],
+    });
     if (!academicYear) throw new ValidationError("invalid id");
+    if (academicYear.user.id !== user!.id)
+      throw new ForbiddenError("academic year not found for this user");
     await this.academicYearRepository.delete(academicYear);
     return true;
   }

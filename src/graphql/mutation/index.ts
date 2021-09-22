@@ -5,6 +5,7 @@ import {
   newScheduleMutation,
 } from "./academicYearSchedule";
 import { newTermMutation } from "./term";
+import { loginMutation, registerMutation } from "./auth";
 
 export {
   newAcademicYearMutation,
@@ -12,4 +13,6 @@ export {
   newPartialWeekRotationMutation,
   newScheduleMutation,
   newTermMutation,
+  loginMutation,
+  registerMutation,
 };

@@ -76,10 +76,10 @@ export class AuthResolver {
       username: user.username,
       tokenVersion: user.tokenVersion,
     };
-
     const response: LoginResponse = {
       accessToken: createAccessToken(userPayload),
     };
+
     sendRefreshToken(res, createRefreshToken(userPayload));
     return response;
   }

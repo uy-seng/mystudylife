@@ -15,14 +15,22 @@ import {
 } from "react-icons/ai";
 import { Sidebar } from "./components/sidebar";
 import { Playground } from "./pages/Playground";
+import { PrivateRoute, PublicRoute } from "./routes";
+import { useMeQuery } from "./generated/graphql";
 
 function App() {
+  const { data, loading, error } = useMeQuery();
+
+  if (error) console.log(error);
+
+  if (loading) return <div>Loading...</div>;
+
   return (
     <div className="App">
       <BrowserRouter>
         <Switch>
-          <Route exact path="/" component={Guest} />
-          <Route path="/sign-up" component={SignUp} />
+          <PublicRoute data={data} exact path="/" component={Guest} />
+          <PublicRoute data={data} path="/sign-up" component={SignUp} />
           <React.Fragment>
             <div className={css.page}>
               <Sidebar
@@ -35,9 +43,17 @@ function App() {
                   { icon: <AiOutlineFileSearch />, pathname: "search" },
                 ]}
               />
-              <Route path="/dashboard" component={Dashboard} />
-              <Route path="/schedule" component={Schedule} />
-              <Route path="/playground" component={Playground} />
+              <PrivateRoute
+                data={data}
+                path="/dashboard"
+                component={Dashboard}
+              />
+              <PrivateRoute data={data} path="/schedule" component={Schedule} />
+              <PrivateRoute
+                data={data}
+                path="/playground"
+                component={Playground}
+              />
             </div>
           </React.Fragment>
         </Switch>

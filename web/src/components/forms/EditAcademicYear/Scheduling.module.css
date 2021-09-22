@@ -1,0 +1,13 @@
+.group {
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.group > label {
+  font-size: 14px;
+}
+
+.group > input {
+  margin-right: 0.5rem;
+}

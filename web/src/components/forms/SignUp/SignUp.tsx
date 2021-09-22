@@ -3,14 +3,16 @@ import { ApolloError } from "@apollo/client";
 import { Formik, FormikProps, Form } from "formik";
 import * as Yup from "yup";
 
-import { Button } from "../../button";
+import { Button, LoaderButton } from "../../button";
 import { FormikTextInput } from "../../input";
 
 import { useRegisterMutation } from "../../../generated/graphql";
+import { useHistory } from "react-router";
 
 export const SignUpForm: React.FC<{}> = () => {
   const [error, setError] = React.useState<string>("");
   const [register] = useRegisterMutation();
+  const history = useHistory();
   React.useEffect(() => {
     if (error) {
       // empty error message
@@ -27,8 +29,9 @@ export const SignUpForm: React.FC<{}> = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={FormValuesValidationSchema}
-        onSubmit={async (values: FormValues) => {
+        onSubmit={async (values: FormValues, { setSubmitting }) => {
           try {
+            console.log("signing up...");
             await register({
               variables: {
                 registerEmail: values.email,
@@ -36,6 +39,8 @@ export const SignUpForm: React.FC<{}> = () => {
                 registerUsername: values.username,
               },
             });
+            setSubmitting(false);
+            history.push("/");
           } catch (error) {
             const e = error as ApolloError;
             if (e.message.includes("username"))
@@ -61,7 +66,7 @@ const FormValuesValidationSchema = Yup.object({
 });
 
 const InnerForm: React.FC<FormikProps<FormValues>> = (props) => {
-  const { touched, errors } = props;
+  const { touched, errors, isSubmitting } = props;
   return (
     <Form>
       <div>
@@ -123,7 +128,12 @@ const InnerForm: React.FC<FormikProps<FormValues>> = (props) => {
           terms of service
         </a>
       </div>
-      <Button type="submit" as="primary" text="Confirm" />
+      <LoaderButton
+        loading={isSubmitting}
+        type="submit"
+        as="primary"
+        text="Confirm"
+      />
     </Form>
   );
 };
