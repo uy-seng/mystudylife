@@ -1,0 +1,9 @@
+query GetSubjects {
+  getSubjects {
+    id
+    name
+    academicYear {
+      id
+    }
+  }
+}

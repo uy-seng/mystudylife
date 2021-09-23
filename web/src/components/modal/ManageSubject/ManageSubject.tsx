@@ -2,6 +2,7 @@ import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
 
 import { NewSubject } from "..";
+import { useGetSubjectsQuery } from "../../../generated/graphql";
 import { Button } from "../../button";
 import BaseModal from "../BaseModal";
 
@@ -11,6 +12,7 @@ interface Props {}
 
 export const ManageSubject: React.FC<Props> = () => {
   const [show, setShow] = React.useState<boolean>(false);
+  const { data } = useGetSubjectsQuery();
 
   return (
     <React.Fragment>
@@ -34,11 +36,15 @@ export const ManageSubject: React.FC<Props> = () => {
             <AiOutlineClose />
           </div>
           <div className={css.body}>
-            <div className={css.up}>
-              <span>It's a little lonely today,&nbsp;</span>
-              <NewSubject controller="link" />
-              <span>?</span>
-            </div>
+            {data && data.getSubjects.length > 0 ? (
+              data.getSubjects.map((subject) => <div>{subject.name}</div>)
+            ) : (
+              <div className={css.up}>
+                <span>It's a little lonely today,&nbsp;</span>
+                <NewSubject controller="link" />
+                <span>?</span>
+              </div>
+            )}
           </div>
           <div className={css.footer}>
             <NewSubject controller="button" />

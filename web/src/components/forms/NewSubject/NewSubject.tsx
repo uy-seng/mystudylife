@@ -88,6 +88,9 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
       </div>
       <div className={css.btns}>
         <LoaderButton
+          style={{
+            padding: "1rem 2rem",
+          }}
           loading={isSubmitting}
           type="submit"
           text="Save"

@@ -152,6 +152,8 @@ export type Query = {
   me: User;
   getAcademicYears: Array<AcademicYear>;
   getAcademicYear: AcademicYear;
+  getSubjects: Array<Subject>;
+  getSubject: Subject;
 };
 
 
@@ -159,10 +161,16 @@ export type QueryGetAcademicYearArgs = {
   id: Scalars['String'];
 };
 
+
+export type QueryGetSubjectArgs = {
+  id: Scalars['String'];
+};
+
 export type Subject = {
   __typename?: 'Subject';
   id: Scalars['String'];
   name: Scalars['String'];
+  academicYear?: Maybe<AcademicYear>;
 };
 
 export type Term = {
@@ -207,6 +215,11 @@ export type GetAcademicYearsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAcademicYearsQuery = { __typename?: 'Query', getAcademicYears: Array<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string, terms: Array<{ __typename?: 'Term', id: string, name: string, startDate: string, endDate: string }>, schedule: { __typename?: 'AcademicYearSchedule', id: string, type: string, dayRotation?: Maybe<{ __typename?: 'DayRotationSchedule', id: string, numOfDay: number, startDay: number, repeatDays: Array<number> }>, weekRotation?: Maybe<{ __typename?: 'WeekRotationSchedule', id: string, numOfWeek: number, startWeek: number }> } }> };
+
+export type GetSubjectsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetSubjectsQuery = { __typename?: 'Query', getSubjects: Array<{ __typename?: 'Subject', id: string, name: string, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string }> }> };
 
 export type LoginMutationVariables = Exact<{
   loginPassword: Scalars['String'];
@@ -372,6 +385,44 @@ export function useGetAcademicYearsLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type GetAcademicYearsQueryHookResult = ReturnType<typeof useGetAcademicYearsQuery>;
 export type GetAcademicYearsLazyQueryHookResult = ReturnType<typeof useGetAcademicYearsLazyQuery>;
 export type GetAcademicYearsQueryResult = Apollo.QueryResult<GetAcademicYearsQuery, GetAcademicYearsQueryVariables>;
+export const GetSubjectsDocument = gql`
+    query GetSubjects {
+  getSubjects {
+    id
+    name
+    academicYear {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetSubjectsQuery__
+ *
+ * To run a query within a React component, call `useGetSubjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSubjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSubjectsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSubjectsQuery(baseOptions?: Apollo.QueryHookOptions<GetSubjectsQuery, GetSubjectsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSubjectsQuery, GetSubjectsQueryVariables>(GetSubjectsDocument, options);
+      }
+export function useGetSubjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSubjectsQuery, GetSubjectsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSubjectsQuery, GetSubjectsQueryVariables>(GetSubjectsDocument, options);
+        }
+export type GetSubjectsQueryHookResult = ReturnType<typeof useGetSubjectsQuery>;
+export type GetSubjectsLazyQueryHookResult = ReturnType<typeof useGetSubjectsLazyQuery>;
+export type GetSubjectsQueryResult = Apollo.QueryResult<GetSubjectsQuery, GetSubjectsQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($loginPassword: String!, $loginEmail: String!) {
   login(password: $loginPassword, email: $loginEmail) {
