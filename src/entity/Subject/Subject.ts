@@ -24,6 +24,7 @@ export class Subject {
   tasks: Task[];
 
   @ManyToOne(() => AcademicYear, (academicYear) => academicYear.subjects)
+  @Field(() => AcademicYear, { nullable: true })
   academicYear: AcademicYear;
 
   @ManyToOne(() => Term, (term) => term.subjects)

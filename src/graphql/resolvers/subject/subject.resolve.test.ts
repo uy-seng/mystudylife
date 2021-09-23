@@ -139,7 +139,6 @@ describe("create academic year with fixed schedule and term", () => {
     expect(academicYear).toHaveProperty("terms");
     expect(academicYear.schedule).not.toBeNull();
     expect(academicYear.terms).not.toBeNull();
-
     expect(academicYear.schedule.id).toEqual(scheduleId);
     academicYear.terms.forEach((term) => {
       expect(termIds.includes(term.id)).toEqual(true);

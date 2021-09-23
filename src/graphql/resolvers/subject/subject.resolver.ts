@@ -1,7 +1,14 @@
 import { ForbiddenError, ValidationError } from "apollo-server-errors";
 import { Subject, AcademicYear, User } from "src/entity";
 import { Context } from "src/interface";
-import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
+import {
+  Arg,
+  Ctx,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
 import { getConnection } from "typeorm";
 import { authenticationGate } from "src/middleware";
 
@@ -51,5 +58,31 @@ export class SubjectResolver {
       throw new ForbiddenError("subject not found for this user");
     await this.subjectRepository.delete(subject);
     return true;
+  }
+
+  @Query(() => [Subject])
+  @UseMiddleware(authenticationGate)
+  async getSubjects(@Ctx() { user }: Context) {
+    const subjects = await this.subjectRepository.find({
+      relations: ["academicYear"],
+      where: {
+        user: {
+          id: user!.id,
+        },
+      },
+    });
+    return subjects;
+  }
+
+  @Query(() => Subject)
+  @UseMiddleware(authenticationGate)
+  async getSubject(@Arg("id") id: string, @Ctx() { user }: Context) {
+    const subject = await this.subjectRepository.findOne(id, {
+      relations: ["academicYear"],
+    });
+    if (!subject) throw new ValidationError("invalid subject id");
+    if (subject?.user.id !== user!.id)
+      throw new ForbiddenError("academic year not found for this user");
+    return subject;
   }
 }
