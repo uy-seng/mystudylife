@@ -1,65 +1,55 @@
-// import { ValidationError } from "apollo-server-errors";
-// import { Subject, AcademicYear, User, AcademicYearTerm } from "src/entity";
-// import { Context } from "src/interface";
-// import { Args, Ctx, Mutation, Resolver } from "type-graphql";
-// import { getConnection } from "typeorm";
-// import { SubjectObjectType } from "./types";
-// import { createNewSubjectArgs } from "./types/subject";
+import { ForbiddenError, ValidationError } from "apollo-server-errors";
+import { Subject, AcademicYear, User } from "src/entity";
+import { Context } from "src/interface";
+import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
+import { getConnection } from "typeorm";
+import { authenticationGate } from "src/middleware";
 
-// @Resolver()
-// export class SubjectResolver {
-//   @Mutation(() => SubjectObjectType)
-//   async createNewSubject(
-//     @Args() { name, academicYearId, academicTermId }: createNewSubjectArgs,
-//     @Ctx() { user }: Context
-//   ) {
-//     /**
-//      * repository
-//      */
-//     const subjectRepository = await getConnection(
-//       process.env.NODE_ENV
-//     ).getRepository(Subject);
-//     const academicYearRepository = await getConnection(
-//       process.env.NODE_ENV
-//     ).getRepository(AcademicYear);
-//     const userRepository = await getConnection(
-//       process.env.NODE_ENV
-//     ).getRepository(User);
-//     const academicYearTermRepository = await getConnection(
-//       process.env.NODE_ENV
-//     ).getRepository(AcademicYearTerm);
+@Resolver()
+export class SubjectResolver {
+  private readonly subjectRepository = getConnection(
+    process.env.NODE_ENV
+  ).getRepository(Subject);
+  private readonly academicYearRepository = getConnection(
+    process.env.NODE_ENV
+  ).getRepository(AcademicYear);
+  private readonly userRepository = getConnection(
+    process.env.NODE_ENV
+  ).getRepository(User);
 
-//     const partialSubject = subjectRepository.create({
-//       name: name,
-//     });
-//     const newSubject = await subjectRepository.save(partialSubject);
-//     if (academicYearId) {
-//       const qAcademicYear = await academicYearRepository.findOne(
-//         academicYearId,
-//         {
-//           relations: ["subjects", "terms"],
-//         }
-//       );
-//       if (!qAcademicYear) throw new ValidationError("invalid academic year id");
-//       const qTerm = await academicYearTermRepository.findOne(academicTermId);
-//       if (!qTerm) throw new ValidationError("invalid academic year term id");
-//       const validTerm = qAcademicYear?.terms.some(
-//         (term) => term.id === qTerm.id
-//       );
-//       if (!validTerm)
-//         throw new ValidationError(
-//           `term does not belong to the given academic year (${qAcademicYear.startDate} - ${qAcademicYear.endDate})`
-//         );
-//       qAcademicYear.subjects.push(newSubject);
-//       qTerm.subjects.push(newSubject);
-//       await academicYearRepository.save(qAcademicYear);
-//       await academicYearTermRepository.save(qTerm);
-//     }
-//     const currentUser = (await userRepository.findOne(user!.id, {
-//       relations: ["subjects"],
-//     })) as User;
-//     currentUser.subjects.push(newSubject);
-//     await userRepository.save(currentUser);
-//     return newSubject;
-//   }
-// }
+  @Mutation(() => Subject)
+  @UseMiddleware(authenticationGate)
+  async newSubject(
+    @Arg("name") name: string,
+    @Arg("academicYearId", { nullable: true }) academicYearId: string,
+    @Ctx() { user }: Context
+  ) {
+    const partialSubject = this.subjectRepository.create({
+      name: name,
+    });
+    const newSubject = await this.subjectRepository.save(partialSubject);
+    if (academicYearId) {
+      const academicYear = await this.academicYearRepository.findOne(
+        academicYearId
+      );
+      if (!academicYear) throw new ValidationError("invalid academic year id");
+      newSubject.academicYear = academicYear;
+    }
+    const currentUser = (await this.userRepository.findOne(user!.id)) as User;
+    newSubject.user = currentUser;
+    return await this.subjectRepository.save(newSubject);
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(authenticationGate)
+  async deleteSubject(@Arg("id") id: string, @Ctx() { user }: Context) {
+    const subject = await this.subjectRepository.findOne(id, {
+      relations: ["user"],
+    });
+    if (!subject) throw new ValidationError("invalid id");
+    if (subject.user.id !== user!.id)
+      throw new ForbiddenError("subject not found for this user");
+    await this.subjectRepository.delete(subject);
+    return true;
+  }
+}

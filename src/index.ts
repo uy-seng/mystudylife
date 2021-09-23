@@ -11,6 +11,7 @@ import {
   AcademicYearResolver,
   AcademicYearScheduleResolver,
   TermResolver,
+  SubjectResolver,
 } from "./graphql/resolvers";
 import { DatabaseService } from "./services";
 
@@ -42,6 +43,7 @@ import { DatabaseService } from "./services";
         AcademicYearResolver,
         AcademicYearScheduleResolver,
         TermResolver,
+        SubjectResolver,
       ],
     }),
     context: ({ req, res }) => ({ req, res }),

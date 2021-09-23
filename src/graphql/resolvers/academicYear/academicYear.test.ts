@@ -37,7 +37,7 @@ import { testClient } from "../../../../test/graphqlTestClient";
  * logging in user
  */
 let accessToken: string;
-describe("before test", () => {
+describe("setting up user account", () => {
   it("should create new account for user", async () => {
     const response = await testClient({
       source: registerMutation,
@@ -375,8 +375,4 @@ describe("test case 4: fetching academic years", () => {
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
   });
-});
-
-afterAll(() => {
-  getConnection(process.env.NODE_ENV).synchronize(true);
 });

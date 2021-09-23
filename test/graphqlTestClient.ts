@@ -5,6 +5,7 @@ import {
   AcademicYearResolver,
   AcademicYearScheduleResolver,
   TermResolver,
+  SubjectResolver,
 } from "src/graphql/resolvers";
 import { buildSchema, Maybe } from "type-graphql";
 
@@ -42,6 +43,7 @@ export const testClient = async ({
       AcademicYearResolver,
       AcademicYearScheduleResolver,
       TermResolver,
+      SubjectResolver,
     ],
   });
 

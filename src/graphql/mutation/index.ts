@@ -6,6 +6,7 @@ import {
 } from "./academicYearSchedule";
 import { newTermMutation } from "./term";
 import { loginMutation, registerMutation } from "./auth";
+import { newSubjectMutation, deleteSubjectMutation } from "./subject";
 
 export {
   newAcademicYearMutation,
@@ -15,4 +16,6 @@ export {
   newTermMutation,
   loginMutation,
   registerMutation,
+  newSubjectMutation,
+  deleteSubjectMutation,
 };

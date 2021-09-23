@@ -2,7 +2,11 @@ import { Router } from "express";
 import { decode } from "jsonwebtoken";
 import passport from "passport";
 import { User } from "src/entity";
-import { createAccessToken, createRefreshToken } from "src/helper";
+import {
+  createAccessToken,
+  createRefreshToken,
+  sendRefreshToken,
+} from "src/helper";
 import { getConnection } from "typeorm";
 
 export const authRoute = Router();
@@ -29,7 +33,7 @@ authRoute.get("/refresh-token", async (req, res) => {
   );
   // synchronous update
   userPayload.user.tokenVersion++;
-  res.cookie("jid", createRefreshToken(userPayload.user));
+  sendRefreshToken(res, createRefreshToken(userPayload.user));
   return res.status(200).json({
     accessToken: createAccessToken(userPayload.user),
   });
