@@ -79,6 +79,8 @@ export type Mutation = {
   newPartialWeekRotation: WeekRotationSchedule;
   newPartialDayRotation: DayRotationSchedule;
   newTerm: Term;
+  newSubject: Subject;
+  deleteSubject: Scalars['Boolean'];
 };
 
 
@@ -132,6 +134,17 @@ export type MutationNewTermArgs = {
   startDate: Scalars['String'];
   endDate: Scalars['String'];
   academicYearId: Scalars['String'];
+};
+
+
+export type MutationNewSubjectArgs = {
+  academicYearId?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+};
+
+
+export type MutationDeleteSubjectArgs = {
+  id: Scalars['String'];
 };
 
 export type Query = {
@@ -242,6 +255,14 @@ export type NewPartialWeekRotationMutationVariables = Exact<{
 
 
 export type NewPartialWeekRotationMutation = { __typename?: 'Mutation', newPartialWeekRotation: { __typename?: 'WeekRotationSchedule', id: string } };
+
+export type NewSubjectMutationVariables = Exact<{
+  name: Scalars['String'];
+  academicYearId?: Maybe<Scalars['String']>;
+}>;
+
+
+export type NewSubjectMutation = { __typename?: 'Mutation', newSubject: { __typename?: 'Subject', id: string } };
 
 export type NewTermMutationVariables = Exact<{
   name: Scalars['String'];
@@ -569,6 +590,40 @@ export function useNewPartialWeekRotationMutation(baseOptions?: Apollo.MutationH
 export type NewPartialWeekRotationMutationHookResult = ReturnType<typeof useNewPartialWeekRotationMutation>;
 export type NewPartialWeekRotationMutationResult = Apollo.MutationResult<NewPartialWeekRotationMutation>;
 export type NewPartialWeekRotationMutationOptions = Apollo.BaseMutationOptions<NewPartialWeekRotationMutation, NewPartialWeekRotationMutationVariables>;
+export const NewSubjectDocument = gql`
+    mutation NewSubject($name: String!, $academicYearId: String) {
+  newSubject(name: $name, academicYearId: $academicYearId) {
+    id
+  }
+}
+    `;
+export type NewSubjectMutationFn = Apollo.MutationFunction<NewSubjectMutation, NewSubjectMutationVariables>;
+
+/**
+ * __useNewSubjectMutation__
+ *
+ * To run a mutation, you first call `useNewSubjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNewSubjectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [newSubjectMutation, { data, loading, error }] = useNewSubjectMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      academicYearId: // value for 'academicYearId'
+ *   },
+ * });
+ */
+export function useNewSubjectMutation(baseOptions?: Apollo.MutationHookOptions<NewSubjectMutation, NewSubjectMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<NewSubjectMutation, NewSubjectMutationVariables>(NewSubjectDocument, options);
+      }
+export type NewSubjectMutationHookResult = ReturnType<typeof useNewSubjectMutation>;
+export type NewSubjectMutationResult = Apollo.MutationResult<NewSubjectMutation>;
+export type NewSubjectMutationOptions = Apollo.BaseMutationOptions<NewSubjectMutation, NewSubjectMutationVariables>;
 export const NewTermDocument = gql`
     mutation NewTerm($name: String!, $startDate: String!, $endDate: String!, $academicYearId: String!) {
   newTerm(

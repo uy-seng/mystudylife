@@ -28,7 +28,7 @@ export const NewSubject: React.FC<Props> = ({ controller }) => {
           <BaseModal.Title>New Subject</BaseModal.Title>
         </BaseModal.Header>
         <BaseModal.Body>
-          <NewSubjectForm />
+          <NewSubjectForm setShow={setShow} />
           <div className={css.footer}>
             <Button onClick={() => setShow(false)} as="neutral" text="Cancel" />
           </div>

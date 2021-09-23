@@ -11,8 +11,6 @@ import {
   useGetAcademicYearsQuery,
 } from "../generated/graphql";
 
-import { ScheduleLoader } from "./components/schedule";
-
 import css from "./Schedule.module.css";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
@@ -23,8 +21,19 @@ import {
 interface Props {}
 
 export const Schedule: React.FC<Props> = () => {
-  const { data, loading } = useGetAcademicYearsQuery();
+  const { data } = useGetAcademicYearsQuery();
   const { selectedYear } = useAppSelector(selectScheduleComponentState);
+  const dispatch = useAppDispatch();
+
+  React.useEffect(() => {
+    if (data)
+      dispatch(
+        setScheduleComponentState({
+          key: "academicYears",
+          value: data.getAcademicYears,
+        })
+      );
+  }, [data]);
 
   return (
     <div className={css.content}>
@@ -43,7 +52,7 @@ export const Schedule: React.FC<Props> = () => {
           <EmptySchedule />
         )}
       </div>
-      {loading ? <ScheduleLoader /> : null}
+      {/* {loading ? <PageLoader /> : null} */}
     </div>
   );
 };
@@ -89,6 +98,15 @@ const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
       <div>
         {schedules.map((schedule) => (
           <div
+            key={schedule.id}
+            onClick={() =>
+              dispatch(
+                setScheduleComponentState({
+                  key: "selectedYear",
+                  value: schedule,
+                })
+              )
+            }
             className={
               selectedYear?.id === schedule.id ? css.active : undefined
             }

@@ -46,7 +46,7 @@ export const SignInForm: React.FC<React.AllHTMLAttributes<HTMLDivElement>> = (
               },
             });
             setAccessToken(response.data!.login.accessToken);
-            history.push("/dashboard");
+            window.location.reload();
           } catch (error) {
             /**
              * error handling here

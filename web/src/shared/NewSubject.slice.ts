@@ -1,0 +1,45 @@
+import { createSlice } from "@reduxjs/toolkit";
+import { BatchParam } from "../types";
+import { RootState } from "../app/store";
+
+export interface CreateNewSubjectGlobalState {
+  subjectPayload: SubjectPayload;
+}
+
+const initialState: CreateNewSubjectGlobalState = {
+  subjectPayload: {
+    name: "",
+    academicYearId: undefined,
+  },
+};
+
+export const NewSubjectSlice = createSlice({
+  name: "NewSubject",
+  initialState,
+  reducers: {
+    setSubjectPayload: (state, params: BatchParam<SubjectPayload>) => {
+      switch (params.payload.key) {
+        case "name":
+          state.subjectPayload[params.payload.key] = params.payload.value;
+          break;
+        case "academicYearId":
+          state.subjectPayload[params.payload.key] = params.payload.value;
+          break;
+        default:
+          break;
+      }
+    },
+  },
+});
+
+export const selectSubjectPayload = (state: RootState) =>
+  state.newsubject.subjectPayload;
+
+export const { setSubjectPayload } = NewSubjectSlice.actions;
+
+export default NewSubjectSlice.reducer;
+
+export interface SubjectPayload {
+  name: string;
+  academicYearId: string | undefined;
+}

@@ -39,6 +39,7 @@ import {
   useNewPartialWeekRotationMutation,
   useNewTermMutation,
 } from "../../../generated/graphql";
+import { start } from "repl";
 
 const InnerForm = (props: FormikProps<AcademicYearPayload> & DispatchMap) => {
   const { errors, isSubmitting, setAcademicYearPayload } = props;
@@ -78,6 +79,12 @@ const InnerForm = (props: FormikProps<AcademicYearPayload> & DispatchMap) => {
             <FormikDatepicker
               name="startDate"
               validate={validateStartDate}
+              onChange={async (e) => {
+                setAcademicYearPayload({
+                  key: "startDate",
+                  value: e.target.value,
+                });
+              }}
               dateHandler={(value) => {
                 setAcademicYearPayload({
                   key: "startDate",
@@ -98,6 +105,12 @@ const InnerForm = (props: FormikProps<AcademicYearPayload> & DispatchMap) => {
           <div className={css.field}>
             <FormikDatepicker
               name="endDate"
+              onChange={async (e) => {
+                setAcademicYearPayload({
+                  key: "endDate",
+                  value: e.target.value,
+                });
+              }}
               validate={validateEndDate}
               dateHandler={(value) => {
                 setAcademicYearPayload({
@@ -109,10 +122,10 @@ const InnerForm = (props: FormikProps<AcademicYearPayload> & DispatchMap) => {
               rerender={refreshCounter}
               label="End Date"
             />
-            {errors.startDate && (
+            {errors.endDate && (
               <div className="tooltip">
                 <CgDanger />
-                <span className="tooltip-text">{errors.startDate}</span>
+                <span className="tooltip-text">{errors.endDate}</span>
               </div>
             )}
           </div>
@@ -212,8 +225,7 @@ const MyForm = withFormik<any, AcademicYearPayload>({
         },
       }).then(() => {
         setSubmitting(false);
-        console.log("ok");
-        // setShow(false);
+        setShow(false);
       });
     });
   },

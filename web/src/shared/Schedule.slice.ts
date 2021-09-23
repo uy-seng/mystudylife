@@ -10,6 +10,7 @@ export interface ScheduleGlobalState {
 const initialState: ScheduleGlobalState = {
   scheduleComponentState: {
     selectedYear: null,
+    academicYears: [],
   },
 };
 
@@ -21,7 +22,18 @@ export const ScheduleSlice = createSlice({
       state,
       params: BatchParam<ScheduleComponentState>
     ) => {
-      state.scheduleComponentState[params.payload.key] = params.payload.value;
+      switch (params.payload.key) {
+        case "selectedYear":
+          state.scheduleComponentState[params.payload.key] =
+            params.payload.value;
+          break;
+        case "academicYears":
+          state.scheduleComponentState[params.payload.key] =
+            params.payload.value;
+          break;
+        default:
+          break;
+      }
     },
   },
 });
@@ -35,6 +47,7 @@ export default ScheduleSlice.reducer;
 
 export interface ScheduleComponentState {
   selectedYear: AcademicYearResult | null;
+  academicYears: AcademicYearResult[];
 }
 
 interface AcademicYearResult {

@@ -1,10 +1,10 @@
 import React from "react";
-import logo from "../../../assets/msl-icon.svg";
+// import logo from "../../../assets/msl-icon.svg";
 
-import css from "./ScheduleLoader.module.css";
+import css from "./PageLoader.module.css";
 interface Props {}
 
-export const ScheduleLoader: React.FC<Props> = () => {
+export const PageLoader: React.FC<Props> = () => {
   return (
     <div
       style={{
@@ -20,7 +20,6 @@ export const ScheduleLoader: React.FC<Props> = () => {
       }}
     >
       <div style={{ maxWidth: "100px" }}>
-        <img style={{ maxWidth: "100%" }} src={logo} />
         <div
           style={{
             display: "flex",

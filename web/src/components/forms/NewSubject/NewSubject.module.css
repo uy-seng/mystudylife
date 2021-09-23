@@ -23,4 +23,5 @@
 
 .advanced {
   text-decoration: underline;
+  cursor: pointer;
 }

@@ -3,7 +3,7 @@ import { withFormik, FormikProps, Form } from "formik";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
-import { useAppSelector } from "../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { RootState } from "../../../app/store";
 import {
   TermPayload,
@@ -12,18 +12,23 @@ import {
 } from "../../../shared/NewAcademicYear.slice";
 
 import { Pair } from "../../../types";
-import { isValidDateFormat, getMonthName } from "../../../utils";
-import { Button } from "../../button";
-import { FormikBasicTextInput, FormikDatepicker } from "../../input";
-import { CgDanger } from "react-icons/cg";
+import { Button, LoaderButton } from "../../button";
+import { FormikBasicTextInput, SelectInput } from "../../input";
 
 import css from "./NewSubject.module.css";
+import { selectScheduleComponentState } from "../../../shared/Schedule.slice";
+import {
+  selectSubjectPayload,
+  setSubjectPayload,
+  SubjectPayload,
+} from "../../../shared/NewSubject.slice";
+import {
+  NewSubjectMutationFn,
+  useNewSubjectMutation,
+} from "../../../generated/graphql";
 const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
-  const { touched, errors, setTermPayload } = props;
+  const { touched, errors, setSubjectPayload, isSubmitting } = props;
   const [advanceMenu, setAdvanceMenu] = React.useState<boolean>(false);
-  const { startDate, endDate } = useAppSelector(
-    selectCreateTermComponentState
-  ).payload;
 
   React.useLayoutEffect(() => {
     if (touched.name && errors.name) {
@@ -48,7 +53,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
               name="name"
               validate={validateName}
               onChange={(e) => {
-                setTermPayload({
+                setSubjectPayload({
                   key: "name",
                   value: e.target.value,
                 });
@@ -62,8 +67,18 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
         </div>
       </div>
       <div className={css.group}>
-        <span className={css.advanced + " txt-sm"}>Advanced</span>
+        {advanceMenu ? (
+          <AdvancedMenu />
+        ) : (
+          <span
+            onClick={() => setAdvanceMenu(true)}
+            className={css.advanced + " txt-sm"}
+          >
+            Advanced
+          </span>
+        )}
       </div>
+
       <div className={css.group}>
         <div className="txt-md">What are Subjects?</div>
         <div className="txt-sm">
@@ -72,45 +87,118 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
         </div>
       </div>
       <div className={css.btns}>
-        <Button type="submit" text="Save" as="primary" />
+        <LoaderButton
+          loading={isSubmitting}
+          type="submit"
+          text="Save"
+          as="primary"
+        />
       </div>
     </Form>
+  );
+};
+
+const AdvancedMenu: React.FC = () => {
+  const { academicYears } = useAppSelector(selectScheduleComponentState);
+  const { academicYearId } = useAppSelector(selectSubjectPayload);
+  const dispatch = useAppDispatch();
+
+  return (
+    <React.Fragment>
+      <div style={{ display: "flex", alignItems: "flex-end" }}>
+        <SelectInput
+          value={academicYearId}
+          setState={(value) => {
+            dispatch(
+              setSubjectPayload({
+                key: "academicYearId",
+                value: value,
+              })
+            );
+          }}
+          label="Year / Term"
+          options={[
+            {
+              key: "None",
+              value: undefined,
+            },
+            ...academicYears.map((academicYear) => {
+              return {
+                key: `${academicYear.startDate.split("-")[0]} - ${
+                  academicYear.endDate.split("-")[0]
+                }`,
+                value: academicYear.id,
+              };
+            }),
+          ]}
+        />
+        <div
+          className="txt-sm"
+          style={{ paddingBottom: "0.5rem", paddingLeft: "0.5rem" }}
+        >
+          In timetable indefinitely
+        </div>
+      </div>
+      <div className="txt-sm">
+        <p>
+          Select a year or term for this subject if you are only taking it for a
+          single year or term. If you are taking this subject over multiple
+          years, assign the year or term to the class instead.
+        </p>
+      </div>
+    </React.Fragment>
   );
 };
 
 // The type of props MyForm receives
 
 // Wrap our form with the withFormik HoC
-const MyForm = withFormik<any, TermPayload>({
+const MyForm = withFormik<any, SubjectPayload>({
   handleSubmit: (values, { props }) => {
-    // do submitting things
-    console.log(props);
+    const newSubject = props.newSubject as NewSubjectMutationFn;
+    const setShow = props.setShow as React.Dispatch<
+      React.SetStateAction<boolean>
+    >;
+
+    newSubject({
+      variables: {
+        name: props.name,
+        academicYearId: props.academicYearId,
+      },
+    }).then(() => {
+      setShow(false);
+    });
   },
   enableReinitialize: true,
   mapPropsToValues: (props) => {
     return {
       name: props.name,
-      startDate: props.startDate,
-      endDate: props.endDate,
+      academicYearId: props.academicYearId,
     };
   },
 })(InnerForm);
 
 const mapStateToProps = (state: RootState) => {
-  return state.newacademicyear.createTermComponentState.payload;
+  return state.newsubject.subjectPayload;
 };
 
 interface DispatchMap {
-  setTermPayload: (params: Pair<TermPayload>) => void;
+  setSubjectPayload: (params: Pair<SubjectPayload>) => void;
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchMap => ({
-  setTermPayload: (params: Pair<TermPayload>) => {
-    dispatch(setTermPayload(params));
+  setSubjectPayload: (params: Pair<SubjectPayload>) => {
+    dispatch(setSubjectPayload(params));
   },
 });
 
-export const NewSubjectForm = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MyForm);
+const ConnectedForm = connect(mapStateToProps, mapDispatchToProps)(MyForm);
+
+interface NewSubjectFormProps {
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const NewSubjectForm: React.FC<NewSubjectFormProps> = ({ setShow }) => {
+  const [newSubject] = useNewSubjectMutation();
+  return <ConnectedForm newSubject={newSubject} setShow={setShow} />;
+};

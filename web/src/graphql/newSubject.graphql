@@ -1,0 +1,5 @@
+mutation NewSubject($name: String!, $academicYearId: String) {
+  newSubject(name: $name, academicYearId: $academicYearId) {
+    id
+  }
+}

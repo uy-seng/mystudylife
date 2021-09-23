@@ -17,13 +17,14 @@ import { Sidebar } from "./components/sidebar";
 import { Playground } from "./pages/Playground";
 import { PrivateRoute, PublicRoute } from "./routes";
 import { useMeQuery } from "./generated/graphql";
+import { PageLoader } from "./components/loading";
 
 function App() {
   const { data, loading, error } = useMeQuery();
 
   if (error) console.log(error);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <PageLoader />;
 
   return (
     <div className="App">
