@@ -2,7 +2,6 @@ import { Field, ObjectType } from "type-graphql";
 import {
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -32,13 +31,11 @@ export class Class {
   @Field(() => String)
   teacher: string;
 
-  @OneToOne(() => Subject, (subject) => subject.class)
-  @JoinColumn()
+  @ManyToOne(() => Subject, (subject) => subject.classes)
   @Field(() => Subject)
   subject: Subject;
 
   @OneToOne(() => ClassSchedule, (classSchedule) => classSchedule.class)
-  @JoinColumn()
   @Field(() => ClassSchedule)
   schedule: ClassSchedule;
 

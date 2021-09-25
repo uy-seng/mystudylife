@@ -1,4 +1,10 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { ClassScheduleType } from "../types/ClassSchedule";
 import { RepeatSchedule, OneOffSchedule, Class } from "..";
 import { Field, ObjectType } from "type-graphql";
@@ -14,16 +20,16 @@ export class ClassSchedule {
   @Field(() => String)
   type: ClassScheduleType;
 
-  /**
-   * Field Resolver here to get schedule info
-   *  */
-
   @OneToOne(() => OneOffSchedule)
   oneOff: OneOffSchedule;
 
   @OneToOne(() => RepeatSchedule)
   repeat: RepeatSchedule;
 
+  @Column("uuid")
+  classId: string;
+
   @OneToOne(() => Class)
+  @JoinColumn({ name: "classId", referencedColumnName: "id" })
   class: Class;
 }

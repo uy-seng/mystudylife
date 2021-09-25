@@ -31,11 +31,11 @@ export class Exam {
 
   @Column("time")
   @Field(() => String)
-  start_time: string;
+  startTime: string;
 
   @Column("time")
   @Field(() => String)
-  end_time: string;
+  endTime: string;
 
   @Column()
   @Field(() => String)

@@ -1,28 +1,43 @@
-// import {
-//   classIncurRepeatDayType,
-//   classIncurType,
-// } from "../../entity/types/classIncur";
-// import { Arg, Mutation, registerEnumType, Resolver } from "type-graphql";
-// import { ClassIncurInputType, ClassObjectType } from "../types";
+import { Args, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
+import { Class, Subject, User } from "src/entity";
+import { ClassArgs } from "./types";
+import { getConnection } from "typeorm";
+import { ValidationError } from "apollo-server-errors";
+import { authenticationGate } from "src/middleware";
+import { Context } from "src/interface";
 
-// registerEnumType(classIncurType, {
-//   name: "classIncurType",
-// });
-
-// registerEnumType(classIncurRepeatDayType, {
-//   name: "classIncurRepeatDayType",
-// });
-
-// @Resolver()
+@Resolver()
 export class ClassResolver {
-  //   @Mutation(() => ClassObjectType)
-  //   createNewClass(
-  //     @Arg("subjectId") subjectId: string,
-  //     @Arg("module") module: string,
-  //     @Arg("room") room: string,
-  //     @Arg("building") building: string,
-  //     @Arg("teacher") teacher: string,
-  //     @Arg("classIncur", () => [ClassIncurInputType])
-  //     classIncur: ClassIncurInputType[]
-  //   ) {}
+  private readonly classRespository = getConnection(
+    process.env.NODE_ENV
+  ).getRepository(Class);
+  private readonly subjectRepository = getConnection(
+    process.env.NODE_ENV
+  ).getRepository(Subject);
+  private readonly userRepository = getConnection(
+    process.env.NODE_ENV
+  ).getRepository(User);
+
+  @Mutation(() => Class)
+  @UseMiddleware(authenticationGate)
+  async newClass(
+    @Args() { subjectId, building, module, room, teacher }: ClassArgs,
+    @Ctx() { user }: Context
+  ) {
+    const newClass = this.classRespository.create({
+      building: building,
+      module: module,
+      room: room,
+      teacher: teacher,
+    });
+
+    const subject = await this.subjectRepository.findOne(subjectId);
+    if (!subject) throw new ValidationError("invalid subject id");
+    newClass.subject = subject;
+
+    const qUser = (await this.userRepository.findOne(user!.id)) as User;
+    newClass.user = qUser;
+
+    return await this.classRespository.save(newClass);
+  }
 }

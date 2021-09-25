@@ -18,10 +18,10 @@ export class ExamObjectType {
   date: string;
 
   @Field(() => String)
-  start_time: string;
+  startTime: string;
 
   @Field(() => String)
-  end_time: string;
+  endTime: string;
 
   @Field(() => String)
   seat: string;
@@ -48,10 +48,10 @@ export class ExamInputType {
   date: string;
 
   @Field(() => String)
-  start_time: string;
+  startTime: string;
 
   @Field(() => String)
-  end_time: string;
+  endTime: string;
 
   @Field(() => String)
   seat: string;

@@ -1,15 +1,19 @@
-import { AcademicYear, Subject } from "src/entity";
 import {
   loginMutation,
   newAcademicYearMutation,
+  newClassMutation,
+  newClassScheduleMutation,
+  newOneOffScheduleMutation,
+  newRepeatScheduleMutation,
   newScheduleMutation,
   newSubjectMutation,
   registerMutation,
 } from "src/graphql/mutation";
 import { meQuery } from "src/graphql/query";
-import { getConnection } from "typeorm";
 import { testClient } from "../../../../test/graphqlTestClient";
 import faker from "faker";
+import { getConnection } from "typeorm";
+import { AcademicYear, Subject } from "src/entity";
 
 const testUser = {
   email: faker.internet.email(),
@@ -107,35 +111,11 @@ describe("create academic year with fixed schedule and no term", () => {
   });
 });
 
-describe("test case 1: create subject with no academic year", () => {
-  let subjectId: string;
-  it("should create subject with no academic year", async () => {
-    const response = await testClient({
-      source: newSubjectMutation,
-      variableValues: {
-        name: "Subject 1",
-      },
-      headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
-    });
-    expect(response.errors).toBeUndefined();
-    expect(response.data).not.toBeNull();
-    subjectId = response.data!.newSubject.id;
-  });
-  it("should display subject with no academic year", async () => {
-    const subjectRepository = getConnection(process.env.NODE_ENV).getRepository(
-      Subject
-    );
-    const subject = await subjectRepository.findOne(subjectId, {
-      relations: ["academicYear"],
-    });
-    expect(subject?.academicYear).toBeNull();
-  });
-});
-
-describe("test case 2: create subject with academic year", () => {
-  let subjectId: string;
+/**
+ * create subject with academic year
+ */
+let subjectId: string;
+describe("create subject with academic year", () => {
   it("should create subject with academic year", async () => {
     const response = await testClient({
       source: newSubjectMutation,
@@ -159,5 +139,119 @@ describe("test case 2: create subject with academic year", () => {
       relations: ["academicYear"],
     });
     expect(subject?.academicYear).not.toBeNull();
+  });
+});
+
+/**
+ * creating class with one-off schedule
+ */
+describe("test case 1: create class with one-off schedule", () => {
+  let classId: string;
+  it("should create class", async () => {
+    const response = await testClient({
+      source: newClassMutation,
+      variableValues: {
+        subjectId: subjectId,
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    classId = response.data!.newClass.id;
+    expect(classId).toBeDefined();
+  });
+
+  let scheduleId: string;
+  it("should create class schedule", async () => {
+    const response = await testClient({
+      source: newClassScheduleMutation,
+      variableValues: {
+        classId: classId,
+        type: "one_off",
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    scheduleId = response.data!.newClassSchedule.id;
+    expect(scheduleId).toBeDefined();
+  });
+
+  it("should create one off schedule", async () => {
+    const response = await testClient({
+      source: newOneOffScheduleMutation,
+      variableValues: {
+        scheduleId: scheduleId,
+        date: "September 25 2021",
+        startTime: "8:00 AM",
+        endTime: "9:50 AM",
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+  });
+});
+
+/**
+ * creating class with repeat schedule
+ */
+describe("test case 2: create class with repeat schedule", () => {
+  let classId: string;
+  it("should create class", async () => {
+    const response = await testClient({
+      source: newClassMutation,
+      variableValues: {
+        subjectId: subjectId,
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    classId = response.data!.newClass.id;
+    expect(classId).toBeDefined();
+  });
+
+  let scheduleId: string;
+  it("should create class schedule", async () => {
+    const response = await testClient({
+      source: newClassScheduleMutation,
+      variableValues: {
+        classId: classId,
+        type: "repeat",
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    scheduleId = response.data!.newClassSchedule.id;
+    expect(scheduleId).toBeDefined();
+  });
+
+  it("should create repeat schedule", async () => {
+    const response = await testClient({
+      source: newRepeatScheduleMutation,
+      variableValues: {
+        scheduleId: scheduleId,
+        startTime: "8:00 AM",
+        endTime: "9:50 AM",
+        repeatDays: ["monday"],
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
   });
 });

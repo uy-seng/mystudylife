@@ -1,0 +1,137 @@
+import React from "react";
+import { withFormik, FormikProps, Form } from "formik";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
+
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { RootState } from "../../../app/store";
+import {
+  TermPayload,
+  selectCreateTermComponentState,
+  setTermPayload,
+} from "../../../shared/NewAcademicYear.slice";
+
+import { Pair } from "../../../types";
+import { Button, LoaderButton } from "../../button";
+import { FormikBasicTextInput, SelectInput } from "../../input";
+
+import css from "./NewClass.module.css";
+import { selectScheduleComponentState } from "../../../shared/Schedule.slice";
+import {
+  selectSubjectPayload,
+  setSubjectPayload,
+  SubjectPayload,
+} from "../../../shared/NewSubject.slice";
+import {
+  NewSubjectMutationFn,
+  useNewSubjectMutation,
+} from "../../../generated/graphql";
+const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
+  const { touched, errors, setSubjectPayload, isSubmitting } = props;
+  const [advanceMenu, setAdvanceMenu] = React.useState<boolean>(false);
+
+  React.useLayoutEffect(() => {
+    if (touched.name && errors.name) {
+      document.querySelector(`.${css.name}`)?.classList.add(css.error);
+    } else {
+      document.querySelector(`.${css.name}`)?.classList.remove(css.error);
+    }
+  }, [touched.name, errors.name]);
+
+  const validateName = (value: string) => {
+    if (value.length === 0) return "Required";
+    return null;
+  };
+
+  return (
+    <Form className={css.form}>
+      <div className={css.field}>
+        <div className={css.group}>
+          <div>
+            <FormikBasicTextInput
+              className={css.name}
+              name="name"
+              validate={validateName}
+              onChange={(e) => {
+                setSubjectPayload({
+                  key: "name",
+                  value: e.target.value,
+                });
+              }}
+              label="Name"
+            />
+            {touched.name && errors.name && (
+              <div className="error">{errors.name}</div>
+            )}
+          </div>
+          <div></div>
+        </div>
+      </div>
+
+      <div className={css.btns}>
+        <LoaderButton
+          style={{
+            padding: "1rem 2rem",
+          }}
+          loading={isSubmitting}
+          type="submit"
+          text="Save"
+          as="primary"
+        />
+      </div>
+    </Form>
+  );
+};
+
+// The type of props MyForm receives
+
+// Wrap our form with the withFormik HoC
+const MyForm = withFormik<any, SubjectPayload>({
+  handleSubmit: (values, { props }) => {
+    const newSubject = props.newSubject as NewSubjectMutationFn;
+    const setShow = props.setShow as React.Dispatch<
+      React.SetStateAction<boolean>
+    >;
+
+    newSubject({
+      variables: {
+        name: props.name,
+        academicYearId: props.academicYearId,
+      },
+    }).then(() => {
+      setShow(false);
+    });
+  },
+  enableReinitialize: true,
+  mapPropsToValues: (props) => {
+    return {
+      name: props.name,
+      academicYearId: props.academicYearId,
+    };
+  },
+})(InnerForm);
+
+const mapStateToProps = (state: RootState) => {
+  return state.newsubject.subjectPayload;
+};
+
+interface DispatchMap {
+  setSubjectPayload: (params: Pair<SubjectPayload>) => void;
+}
+
+const mapDispatchToProps = (dispatch: Dispatch): DispatchMap => ({
+  setSubjectPayload: (params: Pair<SubjectPayload>) => {
+    dispatch(setSubjectPayload(params));
+  },
+});
+
+const ConnectedForm = connect(mapStateToProps, mapDispatchToProps)(MyForm);
+
+interface NewSubjectFormProps {
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const NewClassForm: React.FC<NewSubjectFormProps> = ({ setShow }) => {
+  const [newSubject] = useNewSubjectMutation();
+  return <ConnectedForm newSubject={newSubject} setShow={setShow} />;
+};

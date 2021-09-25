@@ -3,6 +3,7 @@ import GuestPageReducer from "../shared/Guest.slice";
 import NewAcademicYearReducer from "../shared/NewAcademicYear.slice";
 import ScheduleReducer from "../shared/Schedule.slice";
 import NewSubjectReducer from "../shared/NewSubject.slice";
+import NewClassReducer from "../shared/NewClass.slice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     newacademicyear: NewAcademicYearReducer,
     schedule: ScheduleReducer,
     newsubject: NewSubjectReducer,
+    newclass: NewClassReducer,
   },
 });
 

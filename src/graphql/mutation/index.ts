@@ -7,6 +7,10 @@ import {
 import { newTermMutation } from "./term";
 import { loginMutation, registerMutation } from "./auth";
 import { newSubjectMutation, deleteSubjectMutation } from "./subject";
+import { newClassMutation, deleteClassMutation } from "./class";
+import { newClassScheduleMutation } from "./classSchedule";
+import { newOneOffScheduleMutation } from "./oneOffSchedule";
+import { newRepeatScheduleMutation } from "./repeatSchedule";
 
 export {
   newAcademicYearMutation,
@@ -18,4 +22,9 @@ export {
   registerMutation,
   newSubjectMutation,
   deleteSubjectMutation,
+  newClassMutation,
+  deleteClassMutation,
+  newClassScheduleMutation,
+  newOneOffScheduleMutation,
+  newRepeatScheduleMutation,
 };

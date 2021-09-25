@@ -1,8 +1,5 @@
-import { ClassInputType, ClassObjectType } from "./class";
-import { ClassIncurInputType, ClassIncurObjectType } from "./classIncur";
-export {
-  ClassInputType,
-  ClassObjectType,
-  ClassIncurInputType,
-  ClassIncurObjectType,
-};
+import { ClassArgs } from "./class";
+import { ClassScheduleArgs } from "./classSchedule";
+import { OneOffScheduleArgs } from "./oneOffSchedule";
+import { RepeatScheduleArgs } from "./repeatSchedule";
+export { ClassArgs, ClassScheduleArgs, OneOffScheduleArgs, RepeatScheduleArgs };

@@ -7,6 +7,10 @@ import {
   TermResolver,
   SubjectResolver,
 } from "src/graphql/resolvers";
+import { ClassResolver } from "src/graphql/resolvers/class/class.resolver";
+import { ClassScheduleResolver } from "src/graphql/resolvers/class/classSchedule.resolver";
+import { OneOffScheduleResolver } from "src/graphql/resolvers/class/oneOffSchedule.resolver";
+import { RepeatScheduleResolver } from "src/graphql/resolvers/class/repeatSchedule.resolver";
 import { buildSchema, Maybe } from "type-graphql";
 
 interface Options {
@@ -44,6 +48,10 @@ export const testClient = async ({
       AcademicYearScheduleResolver,
       TermResolver,
       SubjectResolver,
+      ClassResolver,
+      ClassScheduleResolver,
+      OneOffScheduleResolver,
+      RepeatScheduleResolver,
     ],
   });
 

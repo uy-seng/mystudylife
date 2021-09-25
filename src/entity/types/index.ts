@@ -4,12 +4,12 @@ import { AcademicYearScheduleType } from "./AcademicSchedule";
 
 enum DayOfWeek {
   monday = 1,
-  tuesday,
-  wednesday,
-  thursday,
-  friday,
-  saturday,
-  sunday,
+  tuesday = 2,
+  wednesday = 3,
+  thursday = 4,
+  friday = 5,
+  saturday = 6,
+  sunday = 7,
 }
 
 export {

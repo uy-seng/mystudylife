@@ -1,2 +1,3 @@
 import { BasicSelect } from "./BasicSelect";
-export { BasicSelect };
+import { HeaderSelect } from "./HeaderSelect";
+export { BasicSelect, HeaderSelect };

@@ -3,7 +3,6 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Task, AcademicYear, Term, User, Class } from "..";
@@ -33,6 +32,6 @@ export class Subject {
   @ManyToOne(() => User, (user) => user.subjects)
   user: User;
 
-  @OneToOne(() => Class, (_class) => _class.subject)
-  class: Class;
+  @OneToMany(() => Class, (_class) => _class.subject)
+  classes: Class[];
 }

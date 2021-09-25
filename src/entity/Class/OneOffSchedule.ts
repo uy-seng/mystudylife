@@ -21,16 +21,16 @@ export class OneOffSchedule {
 
   @Column("time")
   @Field(() => String)
-  start_time: string;
+  startTime: string;
 
   @Column("time")
   @Field(() => String)
-  end_time: string;
+  endTime: string;
 
-  @Column({ nullable: true })
+  @Column("uuid", { nullable: true })
   scheduleId: string;
 
   @OneToOne(() => ClassSchedule)
-  @JoinColumn({ name: "scheduleId" })
+  @JoinColumn({ name: "scheduleId", referencedColumnName: "id" })
   schedule: ClassSchedule;
 }

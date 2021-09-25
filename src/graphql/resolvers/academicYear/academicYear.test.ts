@@ -32,9 +32,16 @@ import { deleteAcademicYearMutation } from "src/graphql/mutation/academicYear";
 import { getAcademicYearsQuery, meQuery } from "src/graphql/query";
 import { getConnection } from "typeorm";
 import { testClient } from "../../../../test/graphqlTestClient";
+import faker from "faker";
+
+const testUser = {
+  email: faker.internet.email(),
+  username: faker.internet.userName(),
+  password: faker.internet.password(),
+};
 
 /**
- * logging in user
+ * user setup
  */
 let accessToken: string;
 describe("setting up user account", () => {
@@ -42,9 +49,9 @@ describe("setting up user account", () => {
     const response = await testClient({
       source: registerMutation,
       variableValues: {
-        email: "sengouy0@gmail.com",
-        username: "seng uy",
-        password: "123",
+        email: testUser.email,
+        username: testUser.username,
+        password: testUser.password,
       },
     });
     expect(response.errors).toBeUndefined();
@@ -54,8 +61,8 @@ describe("setting up user account", () => {
     const response = await testClient({
       source: loginMutation,
       variableValues: {
-        email: "sengouy0@gmail.com",
-        password: "123",
+        email: testUser.email,
+        password: testUser.password,
       },
     });
     expect(response.errors).toBeUndefined();
@@ -75,6 +82,9 @@ describe("setting up user account", () => {
   });
 });
 
+/**
+ * creating academic year with fixed schedule and term
+ */
 describe("test case 1: create academic year with fixed schedule and term", () => {
   let academicYearId: string;
   it("should create empty academic year", async () => {
@@ -203,6 +213,9 @@ describe("test case 1: create academic year with fixed schedule and term", () =>
   });
 });
 
+/**
+ * creating academic year with week rotation schedule
+ */
 describe("test case 2: create academic year with week rotation schedule", () => {
   let academicYearId: string;
   it("should create empty academic year", async () => {
@@ -301,6 +314,9 @@ describe("test case 2: create academic year with week rotation schedule", () => 
   });
 });
 
+/**
+ * creating academic year with day rotation schedule
+ */
 describe("test case 3: create academic year with day rotation schedule", () => {
   let academicYearId: string;
   it("should create empty academic year", async () => {
@@ -364,6 +380,9 @@ describe("test case 3: create academic year with day rotation schedule", () => {
   });
 });
 
+/**
+ * fetctching academic year for user
+ */
 describe("test case 4: fetching academic years", () => {
   it("should fetch all academic years", async () => {
     const response = await testClient({
