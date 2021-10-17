@@ -18,6 +18,7 @@ import { Playground } from "./pages/Playground";
 import { PrivateRoute, PublicRoute } from "./routes";
 import { useMeQuery } from "./generated/graphql";
 import { PageLoader } from "./components/loading";
+import { ManageCalendar } from "./pages/ManageCalendar";
 
 function App() {
   const { data, loading, error } = useMeQuery();
@@ -50,6 +51,11 @@ function App() {
                 component={Dashboard}
               />
               <PrivateRoute data={data} path="/schedule" component={Schedule} />
+              <PrivateRoute
+                data={data}
+                path="/calendar"
+                component={ManageCalendar}
+              />
               <PrivateRoute
                 data={data}
                 path="/playground"

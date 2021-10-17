@@ -46,5 +46,6 @@ export class Class {
   term: Term;
 
   @ManyToOne(() => User, (user) => user.classes)
+  @Field(() => User)
   user: User;
 }

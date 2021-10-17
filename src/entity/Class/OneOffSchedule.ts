@@ -27,10 +27,10 @@ export class OneOffSchedule {
   @Field(() => String)
   endTime: string;
 
-  @Column("uuid", { nullable: true })
+  @Column("uuid")
   scheduleId: string;
 
-  @OneToOne(() => ClassSchedule)
+  @OneToOne(() => ClassSchedule, (schedule) => schedule.oneOff)
   @JoinColumn({ name: "scheduleId", referencedColumnName: "id" })
   schedule: ClassSchedule;
 }

@@ -9,7 +9,7 @@ import {
   newSubjectMutation,
   registerMutation,
 } from "src/graphql/mutation";
-import { meQuery } from "src/graphql/query";
+import { getClassesByDateQuery, meQuery } from "src/graphql/query";
 import { testClient } from "../../../../test/graphqlTestClient";
 import faker from "faker";
 import { getConnection } from "typeorm";
@@ -145,13 +145,14 @@ describe("create subject with academic year", () => {
 /**
  * creating class with one-off schedule
  */
-describe("test case 1: create class with one-off schedule", () => {
+describe("test case 1: create class with one-off schedule with academic year", () => {
   let classId: string;
   it("should create class", async () => {
     const response = await testClient({
       source: newClassMutation,
       variableValues: {
         subjectId: subjectId,
+        academicYearId: academicYearId,
       },
       headers: {
         authorization: `Bearer ${accessToken}`,
@@ -169,7 +170,7 @@ describe("test case 1: create class with one-off schedule", () => {
       source: newClassScheduleMutation,
       variableValues: {
         classId: classId,
-        type: "one_off",
+        type: "oneOff",
       },
       headers: {
         authorization: `Bearer ${accessToken}`,
@@ -186,7 +187,7 @@ describe("test case 1: create class with one-off schedule", () => {
       source: newOneOffScheduleMutation,
       variableValues: {
         scheduleId: scheduleId,
-        date: "September 25 2021",
+        date: "September 26 2021",
         startTime: "8:00 AM",
         endTime: "9:50 AM",
       },
@@ -245,7 +246,7 @@ describe("test case 2: create class with repeat schedule", () => {
         scheduleId: scheduleId,
         startTime: "8:00 AM",
         endTime: "9:50 AM",
-        repeatDays: ["monday"],
+        repeatDays: ["sunday"],
       },
       headers: {
         authorization: `Bearer ${accessToken}`,
@@ -253,5 +254,40 @@ describe("test case 2: create class with repeat schedule", () => {
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
+  });
+});
+
+/**
+ * querying for class depending on date
+ */
+describe("test case 3: query class base on date", () => {
+  it("should return no class", async () => {
+    const response = await testClient({
+      source: getClassesByDateQuery,
+      variableValues: {
+        date: new Date("2100-12-02").toISOString().split("T")[0],
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    expect(response.data!.getClassesByDate.length).toEqual(0);
+  });
+
+  it("should return class based on date", async () => {
+    const response = await testClient({
+      source: getClassesByDateQuery,
+      variableValues: {
+        date: new Date("2021-09-26").toISOString().split("T")[0],
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    expect(response.data!.getClassesByDate.length).toEqual(2);
   });
 });

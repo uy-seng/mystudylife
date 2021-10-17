@@ -36,10 +36,10 @@ export class RepeatSchedule {
   @Field(() => String, { nullable: true })
   endDate: string;
 
-  @Column("uuid", { nullable: true })
+  @Column("uuid")
   scheduleId: string;
 
-  @OneToOne(() => ClassSchedule)
+  @OneToOne(() => ClassSchedule, (schedule) => schedule.repeat)
   @JoinColumn({ name: "scheduleId", referencedColumnName: "id" })
   schedule: ClassSchedule;
 }

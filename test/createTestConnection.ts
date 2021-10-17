@@ -1,3 +1,4 @@
+import { registerEnumType } from "type-graphql";
 import { createConnection, getConnection } from "typeorm";
 import {
   AcademicYear,
@@ -15,6 +16,12 @@ import {
   User,
   UserProvider,
 } from "../src/entity";
+import {
+  AcademicYearScheduleType,
+  ClassScheduleType,
+  DayOfWeek,
+  TaskType,
+} from "../src/entity/types";
 
 beforeAll(async () => {
   await createConnection({
@@ -45,6 +52,13 @@ beforeAll(async () => {
       UserProvider,
     ],
   });
+
+  registerEnumType(ClassScheduleType, { name: "ClassScheduleType" });
+  registerEnumType(AcademicYearScheduleType, {
+    name: "AcademicYearScheduleType",
+  });
+  registerEnumType(DayOfWeek, { name: "DayOfWeek" });
+  registerEnumType(TaskType, { name: "TaskType" });
 });
 
 afterAll(async () => {

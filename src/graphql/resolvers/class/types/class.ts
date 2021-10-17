@@ -17,4 +17,7 @@ export class ClassArgs implements Partial<Class> {
 
   @Field(() => String, { defaultValue: "" })
   teacher?: string;
+
+  @Field(() => String, { nullable: true })
+  academicYearId: string;
 }

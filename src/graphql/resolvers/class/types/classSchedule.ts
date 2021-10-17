@@ -1,5 +1,5 @@
 import { ClassSchedule } from "src/entity";
-import { ClassScheduleType } from "src/entity/types/ClassSchedule";
+import { ClassScheduleType } from "src/entity/types";
 import { ArgsType, Field, registerEnumType } from "type-graphql";
 
 registerEnumType(ClassScheduleType, {

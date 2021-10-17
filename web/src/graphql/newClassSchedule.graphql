@@ -1,0 +1,5 @@
+mutation newClassSchedule($classId: String!, $type: ClassScheduleType!) {
+  newClassSchedule(classId: $classId, type: $type) {
+    id
+  }
+}

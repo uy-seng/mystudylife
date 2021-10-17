@@ -17,11 +17,21 @@ export const FormikBasicTextInput: React.FC<FormikBasicTextInputProps> = ({
   if (className) className += ` ${css.input}`;
   else className = css.input;
 
+  const [focused, setFocused] = React.useState(false);
+
   return (
     <BaseInput className={css.wrapper}>
       <BaseInput.Label className={css.label} text={label} />
-      <div style={style} className={className}>
+      <div
+        style={{
+          ...style,
+          border: focused ? "1px solid var(--primary)" : "1px solid #e3e3e3",
+        }}
+        className={className}
+      >
         <Field
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
           validate={validate}
           name={name}
           style={{ width: "100%" }}

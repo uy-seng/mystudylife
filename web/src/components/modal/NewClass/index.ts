@@ -1,2 +1,3 @@
 import { NewClass } from "./NewClass";
-export { NewClass };
+import { RepeatSchedule } from "./RepeatSchedule";
+export { NewClass, RepeatSchedule };

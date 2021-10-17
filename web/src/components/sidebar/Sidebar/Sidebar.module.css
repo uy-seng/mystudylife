@@ -1,7 +1,7 @@
 .sidebar {
   background-color: black;
   color: white;
-  max-width: 60px;
+  width: 60px;
   height: 100vh;
   position: sticky;
 }

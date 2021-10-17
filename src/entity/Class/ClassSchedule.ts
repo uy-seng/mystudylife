@@ -5,9 +5,9 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { ClassScheduleType } from "../types/ClassSchedule";
 import { RepeatSchedule, OneOffSchedule, Class } from "..";
 import { Field, ObjectType } from "type-graphql";
+import { ClassScheduleType } from "../types";
 
 @Entity("class_schedules")
 @ObjectType()
@@ -20,10 +20,12 @@ export class ClassSchedule {
   @Field(() => String)
   type: ClassScheduleType;
 
-  @OneToOne(() => OneOffSchedule)
+  @OneToOne(() => OneOffSchedule, (oneoff) => oneoff.schedule)
+  @Field(() => OneOffSchedule, { nullable: true })
   oneOff: OneOffSchedule;
 
-  @OneToOne(() => RepeatSchedule)
+  @OneToOne(() => RepeatSchedule, (repeat) => repeat.schedule)
+  @Field(() => RepeatSchedule, { nullable: true })
   repeat: RepeatSchedule;
 
   @Column("uuid")
