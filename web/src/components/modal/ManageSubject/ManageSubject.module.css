@@ -11,37 +11,24 @@
   position: relative;
 }
 
-.body::after {
-  content: "";
-  height: 1px;
-  width: 100%;
-  position: absolute;
-  left: 0;
-  bottom: 60%;
-  background-color: var(--border-gray);
-}
-
-.footer::before {
-  content: "";
-  width: 400%;
-}
-
 .footer {
   display: flex;
   justify-content: flex-end;
-  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-gray);
+  margin-top: 0.5rem;
 }
 
-.close {
-  position: absolute;
-  top: -45%;
-  right: 1rem;
+.footer > button {
+  max-width: 100px;
+  padding: 10px;
+}
+
+.subject {
+  padding: 8px;
+}
+
+.subject:hover {
   cursor: pointer;
-  transition: all ease 0.5s;
-  color: white;
-}
-
-.close:hover {
-  color: red;
-  transform: rotate(90deg);
+  background-color: #eee;
 }

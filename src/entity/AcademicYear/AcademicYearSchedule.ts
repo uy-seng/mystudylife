@@ -17,7 +17,7 @@ export class AcademicYearSchedule {
   id: string;
 
   @Column("text")
-  @Field(() => String)
+  @Field(() => AcademicYearScheduleType)
   type: AcademicYearScheduleType;
 
   /**

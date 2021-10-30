@@ -1,11 +1,12 @@
 import React from "react";
+import { FaPlus } from "react-icons/fa";
 import { Button } from "../../button";
 import { NewSubjectForm } from "../../forms";
 import BaseModal from "../BaseModal";
 
 import css from "./NewSubject.module.css";
 
-type controller = "button" | "link";
+type controller = "button" | "link" | "plus";
 interface Props {
   controller: controller;
 }
@@ -22,6 +23,15 @@ export const NewSubject: React.FC<Props> = ({ controller }) => {
         <span onClick={() => setShow(true)} className={css.link}>
           add a subject
         </span>
+      )}
+      {controller === "plus" && (
+        <button
+          type="button"
+          onClick={() => setShow(true)}
+          className={css.plus}
+        >
+          <FaPlus />
+        </button>
       )}
       <BaseModal parent={document.querySelector(".App") as Element} show={show}>
         <BaseModal.Header>

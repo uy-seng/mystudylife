@@ -13,6 +13,9 @@
   width: 100%;
   justify-content: space-between;
   border-bottom: 1px solid var(--border-gray);
+  position: sticky;
+  top: 0;
+  background-color: white;
 }
 
 .header > :last-child {
@@ -64,7 +67,7 @@
 }
 
 .scheduleListing {
-  height: calc(100vh - 68.81px);
+  min-height: calc(100vh - 68.81px);
   display: grid;
   grid-template-columns: 205px 1fr 1fr;
 }
@@ -101,4 +104,20 @@
   align-items: center;
   padding: 1rem;
   border-bottom: 1px solid var(--border-gray);
+}
+
+.class {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.class:hover {
+  background-color: #eee;
+}
+
+.class > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
 }

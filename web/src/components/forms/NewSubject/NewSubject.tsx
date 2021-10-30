@@ -5,14 +5,10 @@ import { Dispatch } from "redux";
 
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { RootState } from "../../../app/store";
-import {
-  TermPayload,
-  selectCreateTermComponentState,
-  setTermPayload,
-} from "../../../shared/NewAcademicYear.slice";
+import { TermPayload } from "../../../shared/NewAcademicYear.slice";
 
 import { Pair } from "../../../types";
-import { Button, LoaderButton } from "../../button";
+import { LoaderButton } from "../../button";
 import { FormikBasicTextInput, SelectInput } from "../../input";
 
 import css from "./NewSubject.module.css";
@@ -23,9 +19,13 @@ import {
   SubjectPayload,
 } from "../../../shared/NewSubject.slice";
 import {
+  Exact,
+  GetSubjectsQuery,
   NewSubjectMutationFn,
+  useGetSubjectsQuery,
   useNewSubjectMutation,
 } from "../../../generated/graphql";
+import { ApolloQueryResult } from "@apollo/client";
 const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
   const { touched, errors, setSubjectPayload, isSubmitting } = props;
   const [advanceMenu, setAdvanceMenu] = React.useState<boolean>(false);
@@ -162,13 +162,23 @@ const MyForm = withFormik<any, SubjectPayload>({
     const setShow = props.setShow as React.Dispatch<
       React.SetStateAction<boolean>
     >;
+    const refetch = props.refetch as (
+      variables?:
+        | Partial<
+            Exact<{
+              [key: string]: never;
+            }>
+          >
+        | undefined
+    ) => Promise<ApolloQueryResult<GetSubjectsQuery>>;
 
     newSubject({
       variables: {
         name: props.name,
         academicYearId: props.academicYearId,
       },
-    }).then(() => {
+    }).then(async () => {
+      await refetch();
       setShow(false);
     });
   },
@@ -203,5 +213,12 @@ interface NewSubjectFormProps {
 
 export const NewSubjectForm: React.FC<NewSubjectFormProps> = ({ setShow }) => {
   const [newSubject] = useNewSubjectMutation();
-  return <ConnectedForm newSubject={newSubject} setShow={setShow} />;
+  const { refetch } = useGetSubjectsQuery();
+  return (
+    <ConnectedForm
+      newSubject={newSubject}
+      refetch={refetch}
+      setShow={setShow}
+    />
+  );
 };

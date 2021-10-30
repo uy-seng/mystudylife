@@ -40,6 +40,7 @@ export class Class {
   schedule: ClassSchedule;
 
   @ManyToOne(() => AcademicYear, (academicYear) => academicYear.classes)
+  @Field(() => AcademicYear, { nullable: true })
   academicYear: AcademicYear;
 
   @ManyToOne(() => Term, (term) => term.classes)

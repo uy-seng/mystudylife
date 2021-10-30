@@ -19,7 +19,7 @@ import {
   AcademicYearSchedulePayload,
 } from "../../../shared/NewAcademicYear.slice";
 import { Pair } from "../../../types";
-import { isValidDateFormat, getMonthName } from "../../../utils";
+import { isValidDateFormat, getMonthName, formatDate } from "../../../utils";
 import { Button, LoaderButton } from "../../button";
 import { FormikDatepicker } from "../../input";
 import { NewTerm } from "../../modal";
@@ -28,11 +28,14 @@ import { CgDanger } from "react-icons/cg";
 
 import css from "./NewAcademicYear.module.css";
 import {
+  Exact,
+  GetAcademicYearsQuery,
   NewAcademicYearMutationFn,
   NewAcademicYearScheduleMutationFn,
   NewPartialDayRotationMutationFn,
   NewPartialWeekRotationMutationFn,
   NewTermMutationFn,
+  useGetAcademicYearsQuery,
   useNewAcademicYearMutation,
   useNewAcademicYearScheduleMutation,
   useNewPartialDayRotationMutation,
@@ -40,6 +43,7 @@ import {
   useNewTermMutation,
 } from "../../../generated/graphql";
 import { start } from "repl";
+import { ApolloQueryResult } from "@apollo/client";
 
 const InnerForm = (props: FormikProps<AcademicYearPayload> & DispatchMap) => {
   const { errors, isSubmitting, setAcademicYearPayload } = props;
@@ -70,6 +74,17 @@ const InnerForm = (props: FormikProps<AcademicYearPayload> & DispatchMap) => {
       return "Invalid end date. (End date must occur after start date)";
     return null;
   };
+
+  React.useEffect(() => {
+    setAcademicYearPayload({
+      key: "endDate",
+      value: formatDate(
+        new Date(
+          new Date(startDate).setMonth(new Date(startDate).getMonth() + 6)
+        )
+      ),
+    });
+  }, [startDate]);
 
   return (
     <Form>
@@ -199,7 +214,17 @@ const MyForm = withFormik<any, AcademicYearPayload>({
       props.newPartialDayRotation as NewPartialDayRotationMutationFn;
     const newPartialWeekRotation =
       props.newPartialWeekRotation as NewPartialWeekRotationMutationFn;
+    //! not yet create new term
     const newTerm = props.newTerm as NewTermMutationFn;
+    const refetchAcademicYears = props.refetch as (
+      variables?:
+        | Partial<
+            Exact<{
+              [key: string]: never;
+            }>
+          >
+        | undefined
+    ) => Promise<ApolloQueryResult<GetAcademicYearsQuery>>;
 
     const academicYearPayload =
       props.academicYearPayload as AcademicYearPayload;
@@ -223,7 +248,24 @@ const MyForm = withFormik<any, AcademicYearPayload>({
           academicYearId: academicYearId,
           type: academicYearSchedulePayload.type,
         },
-      }).then(() => {
+      }).then(async (response) => {
+        const academicYearScheduleId = response.data!.newSchedule.id;
+        if (academicYearSchedulePayload.type === "dayRotation") {
+          await newPartialDayRotation({
+            variables: {
+              ...dayRotationPayload,
+              scheduleId: academicYearScheduleId,
+            },
+          });
+        } else if (academicYearSchedulePayload.type === "weekRotation") {
+          await newPartialWeekRotation({
+            variables: {
+              ...weekRotationPayload,
+              scheduleId: academicYearScheduleId,
+            },
+          });
+        }
+        await refetchAcademicYears();
         setSubmitting(false);
         setShow(false);
       });
@@ -266,6 +308,7 @@ export const NewAcademicYearForm: React.FC<NewAcademicYearFormProps> = ({
   const [newPartialDayRotation] = useNewPartialDayRotationMutation();
   const [newPartialWeekRotation] = useNewPartialWeekRotationMutation();
   const [newTerm] = useNewTermMutation();
+  const { refetch } = useGetAcademicYearsQuery();
 
   const academicYearPayload = useAppSelector(selectAcademicYearPayload);
   const academicYearSchedulePayload = useAppSelector(
@@ -288,6 +331,7 @@ export const NewAcademicYearForm: React.FC<NewAcademicYearFormProps> = ({
       weekRotationPayload={weekRotationPayload}
       terms={terms}
       setShow={setShow}
+      refetch={refetch}
     />
   );
 };

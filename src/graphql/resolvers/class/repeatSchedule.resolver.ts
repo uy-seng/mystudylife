@@ -21,6 +21,7 @@ export class RepeatScheduleResolver {
       scheduleId,
       startDate,
       endDate,
+      rotationWeek,
     }: RepeatScheduleArgs
   ) {
     const repeatSchedule = this.repeatScheduleRepository.create({
@@ -30,6 +31,7 @@ export class RepeatScheduleResolver {
       scheduleId: scheduleId,
       startDate: startDate,
       endDate: endDate,
+      rotationWeek: rotationWeek,
     });
     return await this.repeatScheduleRepository.save(repeatSchedule);
   }

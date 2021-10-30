@@ -1,4 +1,5 @@
 import {
+  deleteClassMutation,
   loginMutation,
   newAcademicYearMutation,
   newClassMutation,
@@ -13,7 +14,17 @@ import { getClassesByDateQuery, meQuery } from "src/graphql/query";
 import { testClient } from "../../../../test/graphqlTestClient";
 import faker from "faker";
 import { getConnection } from "typeorm";
-import { AcademicYear, Subject } from "src/entity";
+import {
+  AcademicYear,
+  Class,
+  ClassSchedule,
+  OneOffSchedule,
+  RepeatSchedule,
+  Subject,
+} from "src/entity";
+import { getClassesQuery } from "src/graphql/query/class";
+import { updateClassMutation } from "src/graphql/mutation/class";
+import { updateOneOffScheduleMutation } from "src/graphql/mutation/oneOffSchedule";
 
 const testUser = {
   email: faker.internet.email(),
@@ -116,7 +127,22 @@ describe("create academic year with fixed schedule and no term", () => {
  */
 let subjectId: string;
 describe("create subject with academic year", () => {
-  it("should create subject with academic year", async () => {
+  it("should create subject with academic year: subject 1", async () => {
+    const response = await testClient({
+      source: newSubjectMutation,
+      variableValues: {
+        name: "Subject 1",
+        academicYearId: academicYearId,
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+  });
+
+  it("should create subject with academic year: subject 2", async () => {
     const response = await testClient({
       source: newSubjectMutation,
       variableValues: {
@@ -289,5 +315,243 @@ describe("test case 3: query class base on date", () => {
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
     expect(response.data!.getClassesByDate.length).toEqual(2);
+  });
+
+  it("should return class within academic years", async () => {
+    const response = await testClient({
+      source: getClassesByDateQuery,
+      variableValues: {
+        date: new Date("2021-09-19").toISOString().split("T")[0],
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    expect(response.data!.getClassesByDate.length).toEqual(1);
+  });
+
+  it("should return no class", async () => {
+    const response = await testClient({
+      source: getClassesByDateQuery,
+      variableValues: {
+        date: new Date("2021-03-13").toISOString().split("T")[0],
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    expect(response.data!.getClassesByDate.length).toEqual(0);
+  });
+});
+
+/**
+ * querying for all class
+ */
+describe("test case 4: query all class", () => {
+  it("should return all class", async () => {
+    const response = await testClient({
+      source: getClassesQuery,
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    expect(response.data!.getClasses.length).toEqual(2);
+    expect(response.data!.getClasses[0]).toHaveProperty("subject");
+    expect(response.data!.getClasses[0]).toHaveProperty("academicYear");
+  });
+});
+
+describe("test case 5: update class with one off schedule", () => {
+  let c: any;
+  it("should get one random class id from all classes", async () => {
+    const response = await testClient({
+      source: getClassesQuery,
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    expect(response.data!.getClasses.length).toEqual(2);
+    expect(response.data!.getClasses[0]).toHaveProperty("subject");
+    expect(response.data!.getClasses[0]).toHaveProperty("academicYear");
+    c = response.data!.getClasses[0];
+    expect(c).toBeDefined();
+  });
+
+  it("should update subject of class", async () => {
+    const subjects = await getConnection(process.env.NODE_ENV)
+      .getRepository(Subject)
+      .find();
+    const newSubjectId = subjects[0].id;
+
+    const response = await testClient({
+      source: updateClassMutation,
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+      variableValues: {
+        id: c.id,
+        subjectId: newSubjectId,
+        academicYearId: c.academicYear.id,
+        module: c.module,
+        room: c.room,
+        building: c.building,
+        teacher: c.teacher,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    const updatedClass = (await getConnection(process.env.NODE_ENV)
+      .getRepository(Class)
+      .findOne(c.id, {
+        relations: ["subject"],
+      })) as Class;
+    expect(updatedClass.subject.id).toEqual(newSubjectId);
+  });
+
+  it("should update one off schedule of class", async () => {
+    const response = await testClient({
+      source: updateOneOffScheduleMutation,
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+      variableValues: {
+        id: c.schedule.oneOff.id,
+        scheduleId: c.schedule.id,
+        date: "2021-10-30",
+        startTime: "01:00:00",
+        endTime: "02:50:00",
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    const updatedClass = await getConnection(process.env.NODE_ENV)
+      .getRepository(Class)
+      .findOne(c.id, { relations: ["schedule", "schedule.oneOff"] });
+    expect(updatedClass).toBeDefined();
+    expect(updatedClass?.schedule.oneOff.date).toEqual("2021-10-30");
+    expect(updatedClass?.schedule.oneOff.startTime).toEqual("01:00:00");
+    expect(updatedClass?.schedule.oneOff.endTime).toEqual("02:50:00");
+  });
+});
+
+describe("test case 6: deleting class with one off schedule", () => {
+  let classId: string;
+  let classScheduleId: string;
+  let oneOffScheduleId: string;
+  it("should get one random class id from all classes", async () => {
+    const response = await testClient({
+      source: getClassesQuery,
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    expect(response.data!.getClasses.length).toEqual(2);
+    expect(response.data!.getClasses[1]).toHaveProperty("subject");
+    expect(response.data!.getClasses[1]).toHaveProperty("academicYear");
+    classId = response.data!.getClasses[1].id;
+    classScheduleId = response.data!.getClasses[1].schedule.id;
+    oneOffScheduleId = response.data!.getClasses[1].schedule.oneOff.id;
+    expect(classId).toBeDefined();
+    expect(classScheduleId).toBeDefined();
+    expect(oneOffScheduleId).toBeDefined();
+  });
+
+  it(`should delete class with id specified`, async () => {
+    const response = await testClient({
+      source: deleteClassMutation,
+      variableValues: {
+        id: classId,
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+  });
+
+  it("should delete schedule of class with id specified", async () => {
+    const classScheduleRepository = getConnection(
+      process.env.NODE_ENV
+    ).getRepository(ClassSchedule);
+    const q = await classScheduleRepository.findOne(classScheduleId);
+    expect(q).toBeUndefined();
+  });
+
+  it("should delete one-off schedule of class with id specified", async () => {
+    const oneOffScheduleRepository = getConnection(
+      process.env.NODE_ENV
+    ).getRepository(OneOffSchedule);
+    const q = await oneOffScheduleRepository.findOne(oneOffScheduleId);
+    expect(q).toBeUndefined();
+  });
+});
+
+//! test case 7: updating class with repeat schedule
+//? update subject of the class
+//? update repeat schedule of the class
+
+describe("test case 8: deleting class with repeat schedule", () => {
+  let classId: string;
+  let classScheduleId: string;
+  let repeatScheduleId: string;
+  it("should get one random class id from all classes", async () => {
+    const response = await testClient({
+      source: getClassesQuery,
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    expect(response.data!.getClasses.length).toEqual(1);
+    expect(response.data!.getClasses[0]).toHaveProperty("subject");
+    expect(response.data!.getClasses[0]).toHaveProperty("academicYear");
+    classId = response.data!.getClasses[0].id;
+    classScheduleId = response.data!.getClasses[0].schedule.id;
+    repeatScheduleId = response.data!.getClasses[0].schedule.repeat.id;
+    expect(classId).toBeDefined();
+    expect(classScheduleId).toBeDefined();
+    expect(repeatScheduleId).toBeDefined();
+  });
+
+  it(`should delete class with id specified`, async () => {
+    const response = await testClient({
+      source: deleteClassMutation,
+      variableValues: {
+        id: classId,
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+  });
+
+  it("should delete schedule of class with id specified", async () => {
+    const classScheduleRepository = getConnection(
+      process.env.NODE_ENV
+    ).getRepository(ClassSchedule);
+    const q = await classScheduleRepository.findOne(classScheduleId);
+    expect(q).toBeUndefined();
+  });
+
+  it("should delete repeat schedule of class with id specified", async () => {
+    const repeatScheduleRepository = getConnection(
+      process.env.NODE_ENV
+    ).getRepository(RepeatSchedule);
+    const q = await repeatScheduleRepository.findOne(repeatScheduleId);
+    expect(q).toBeUndefined();
   });
 });

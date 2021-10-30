@@ -31,4 +31,26 @@ const deleteClassMutation = `
     }
 `;
 
-export { newClassMutation, deleteClassMutation };
+const updateClassMutation = `
+    mutation(
+        $id: String!,
+        $subjectId: String!,
+        $module: String,
+        $room: String,
+        $building: String,
+        $teacher: String,
+        $academicYearId: String,
+    ){
+        updateClass(
+            id: $id,
+            subjectId: $subjectId,
+            module: $module,
+            room: $room,
+            building: $building,
+            teacher: $teacher
+            academicYearId: $academicYearId
+        )
+    }
+`;
+
+export { newClassMutation, deleteClassMutation, updateClassMutation };

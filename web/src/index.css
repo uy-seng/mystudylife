@@ -1,5 +1,5 @@
 * {
-  transition: all linear 0.2s;
+  transition: all linear 0.1s;
 }
 
 body {
@@ -57,6 +57,9 @@ code {
 }
 .txt-white {
   color: white;
+}
+.txt-thin {
+  font-weight: 300;
 }
 
 .txt-bold {
@@ -123,4 +126,63 @@ code {
 
 .tooltip svg path {
   color: red;
+}
+
+.close {
+  position: absolute;
+  top: -45%;
+  right: 1rem;
+  cursor: pointer;
+  transition: all ease 0.5s;
+  color: white;
+  display: flex;
+  justify-content: center;
+  padding: 4px;
+}
+
+.close svg {
+  stroke-width: 100px;
+}
+
+.close:hover {
+  color: var(--primary);
+  background-color: white;
+  border-radius: 4px;
+  transform: rotate(90deg);
+}
+
+.edit {
+  position: absolute;
+  top: -45%;
+  right: calc(1.5rem * 2);
+  cursor: pointer;
+  transition: all ease 0.5s;
+  color: white;
+  display: flex;
+  justify-content: center;
+  padding: 4px;
+}
+
+.edit:hover {
+  color: var(--primary);
+  background-color: white;
+  border-radius: 4px;
+}
+
+.delete {
+  position: absolute;
+  top: -45%;
+  right: calc(1.75rem * 3);
+  cursor: pointer;
+  transition: all ease 0.5s;
+  color: white;
+  display: flex;
+  justify-content: center;
+  padding: 4px;
+}
+
+.delete:hover {
+  color: var(--primary);
+  background-color: white;
+  border-radius: 4px;
 }

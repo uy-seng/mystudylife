@@ -5,6 +5,9 @@ import { NewTask } from "./NewTask";
 import { NewTerm } from "./NewTerm";
 import { EditAcademicYear } from "./EditAcademicYear";
 import { NewClass, RepeatSchedule } from "./NewClass";
+import { ViewClass } from "./ViewClass";
+import { DeleteClass } from "./DeleteClass";
+import { EditClass } from "./EditClass";
 export {
   NewTask,
   NewSubject,
@@ -14,4 +17,7 @@ export {
   EditAcademicYear,
   NewClass,
   RepeatSchedule,
+  ViewClass,
+  DeleteClass,
+  EditClass,
 };

@@ -59,22 +59,28 @@ export class AcademicYearResolver {
     return academicYears;
   }
 
-  @Query(() => AcademicYear)
+  @Query(() => AcademicYear, { nullable: true })
   @UseMiddleware(authenticationGate)
-  async getAcademicYear(@Arg("id") id: string, @Ctx() { user }: Context) {
-    const academicYear = await this.academicYearRepository.findOne(id, {
-      relations: [
-        "terms",
-        "schedule",
-        "schedule.dayRotation",
-        "schedule.weekRotation",
-        "user",
-      ],
-    });
-    if (!academicYear) throw new ValidationError("invalid academic year id");
-    if (academicYear?.user.id !== user!.id)
-      throw new ForbiddenError("academic year not found for this user");
-    return academicYear;
+  async getAcademicYear(
+    @Arg("id", { nullable: true }) id: string,
+    @Ctx() { user }: Context
+  ) {
+    if (id) {
+      const academicYear = await this.academicYearRepository.findOne(id, {
+        relations: [
+          "terms",
+          "schedule",
+          "schedule.dayRotation",
+          "schedule.weekRotation",
+          "user",
+        ],
+      });
+      if (!academicYear) throw new ValidationError("invalid academic year id");
+      if (academicYear?.user.id !== user!.id)
+        throw new ForbiddenError("academic year not found for this user");
+      return academicYear;
+    }
+    return null;
   }
 
   @Mutation(() => Boolean)

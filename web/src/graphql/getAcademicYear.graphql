@@ -1,0 +1,17 @@
+query GetAcademicYear($id: String) {
+  getAcademicYear(id: $id) {
+    id
+    startDate
+    endDate
+    schedule {
+      type
+      dayRotation {
+        id
+      }
+      weekRotation {
+        numOfWeek
+        startWeek
+      }
+    }
+  }
+}

@@ -47,6 +47,7 @@
   border: 1px solid rgb(205, 212, 212);
   padding: 0.5rem;
   color: #656565;
+  position: relative;
 }
 
 .calendar td.active {
@@ -55,7 +56,7 @@
 }
 
 .calendar td.focused {
-  background-color: var(--primary);
+  background-color: var(--secondary);
   color: white;
 }
 
@@ -85,4 +86,62 @@
 
 .other {
   color: #c9c8c8;
+}
+
+.class {
+  position: absolute;
+  width: calc(100% - 1.75rem);
+}
+
+.class .classItem:not(.more) {
+  background-color: var(--primary);
+  color: white;
+  padding: 6px;
+  font-size: 12px;
+  width: 100%;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 4px;
+}
+
+.class .classItem:not(:last-child) {
+  margin-bottom: 4px;
+}
+
+.more {
+  background: none;
+  font-size: 12px;
+  padding: 6px;
+  font-weight: bold;
+  width: 100%;
+  border-radius: 4px;
+}
+
+.more:hover {
+  background-color: white;
+  cursor: pointer;
+  color: var(--primary);
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.expandedClass {
+  width: 100%;
+  position: absolute;
+  top: -85%;
+  left: 0;
+  background-color: white;
+  box-shadow: 0 1px 3px 0 rgb(60 64 67 / 30%), 0 4px 8px 3px rgb(60 64 67 / 15%);
+  transform: scale(0);
+  border-radius: 8px;
+  z-index: 0;
+}
+
+.expandedClass.active {
+  transform: scale(100%);
+}
+
+.expandedClass > .class {
+  padding: 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
 }

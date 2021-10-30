@@ -13,6 +13,7 @@ interface Props {}
 export const WeekRotation: React.FC<Props> = () => {
   const { numOfWeek } = useAppSelector(selectWeekRotationPayload);
   const dispatch = useAppDispatch();
+
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -46,7 +47,7 @@ export const WeekRotation: React.FC<Props> = () => {
                 })
               );
             }}
-            options={generateArrayBetween(1, numOfWeek).map((number) => {
+            options={generateArrayBetween(1, numOfWeek + 1).map((number) => {
               return {
                 key: number,
                 value: number,

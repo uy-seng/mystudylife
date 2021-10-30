@@ -1,13 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { BatchParam } from "../types";
+import { BatchParam, Param } from "../types";
 import { RootState } from "../app/store";
-import { ClassScheduleType } from "../generated/graphql";
 import { formatDate } from "../utils";
+import { ClassScheduleType, DayOfWeek } from "../generated/graphql";
 
 export interface CreateNewClasstGlobalState {
   classPayload: ClassPayload;
   classSchedulePayload: ClassSchedulePayload;
   oneOffSchedulePayload: OneOffSchedulePayload;
+  repeatSchedules: RepeatSchedulePayload[];
 }
 
 const initialState: CreateNewClasstGlobalState = {
@@ -25,16 +26,27 @@ const initialState: CreateNewClasstGlobalState = {
   },
   oneOffSchedulePayload: {
     date: formatDate(new Date()),
-    startTime: "",
-    endTime: "",
+    startTime: "08:00",
+    endTime: "09:50",
   },
+  repeatSchedules: [],
 };
 
 export const NewClassSlice = createSlice({
   name: "NewClass",
   initialState,
   reducers: {
-    setClassPayload: (state, params: BatchParam<ClassPayload>) => {},
+    setClassPayload: (state, params: BatchParam<ClassPayload>) => {
+      switch (params.payload.key) {
+        case "academicYearId":
+        case "subjectId":
+          state.classPayload[params.payload.key] = params.payload.value;
+          break;
+        default:
+          state.classPayload[params.payload.key] = params.payload.value;
+          break;
+      }
+    },
     setClassSchedulePayload: (
       state,
       params: BatchParam<ClassSchedulePayload>
@@ -47,6 +59,12 @@ export const NewClassSlice = createSlice({
     ) => {
       state.oneOffSchedulePayload[params.payload.key] = params.payload.value;
     },
+    setRepeatSchedules: (
+      state,
+      repeatSchedule: Param<RepeatSchedulePayload[]>
+    ) => {
+      state.repeatSchedules = repeatSchedule.payload;
+    },
   },
 });
 
@@ -54,11 +72,16 @@ export const selectClassPayload = (state: RootState) =>
   state.newclass.classPayload;
 export const selectClassSchedulePayload = (state: RootState) =>
   state.newclass.classSchedulePayload;
+export const selectOneOffSchedulePayload = (state: RootState) =>
+  state.newclass.oneOffSchedulePayload;
+export const selectRepeatSchedules = (state: RootState) =>
+  state.newclass.repeatSchedules;
 
 export const {
   setClassPayload,
   setClassSchedulePayload,
   setOneOffSchedulePayload,
+  setRepeatSchedules,
 } = NewClassSlice.actions;
 
 export default NewClassSlice.reducer;
@@ -74,11 +97,18 @@ export interface ClassPayload {
 }
 
 export interface ClassSchedulePayload {
-  type: string;
+  type: ClassScheduleType;
 }
 
 export interface OneOffSchedulePayload {
   date: string;
   startTime: string;
   endTime: string;
+}
+
+export interface RepeatSchedulePayload {
+  days: DayOfWeek[];
+  startTime: string;
+  endTime: string;
+  rotationWeek?: number;
 }

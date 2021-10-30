@@ -12,7 +12,7 @@ import {
 } from "../../../shared/NewAcademicYear.slice";
 
 import { Pair } from "../../../types";
-import { isValidDateFormat, getMonthName } from "../../../utils";
+import { isValidDateFormat, getMonthName, formatDate } from "../../../utils";
 import { Button } from "../../button";
 import { FormikBasicTextInput, FormikDatepicker } from "../../input";
 import { CgDanger } from "react-icons/cg";
@@ -59,6 +59,17 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
       return "Invalid end date. (End date must occur after start date)";
     return null;
   };
+
+  React.useEffect(() => {
+    setTermPayload({
+      key: "endDate",
+      value: formatDate(
+        new Date(
+          new Date(startDate).setMonth(new Date(startDate).getMonth() + 2)
+        )
+      ),
+    });
+  }, [startDate]);
 
   return (
     <Form>

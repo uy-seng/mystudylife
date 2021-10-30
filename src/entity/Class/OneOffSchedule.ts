@@ -30,7 +30,9 @@ export class OneOffSchedule {
   @Column("uuid")
   scheduleId: string;
 
-  @OneToOne(() => ClassSchedule, (schedule) => schedule.oneOff)
+  @OneToOne(() => ClassSchedule, (schedule) => schedule.oneOff, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "scheduleId", referencedColumnName: "id" })
   schedule: ClassSchedule;
 }

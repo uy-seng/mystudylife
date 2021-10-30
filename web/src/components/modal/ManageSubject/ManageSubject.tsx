@@ -15,7 +15,7 @@ interface Props {}
 
 export const ManageSubject: React.FC<Props> = () => {
   const [show, setShow] = React.useState<boolean>(false);
-  const { data } = useGetSubjectsQuery();
+  const { data, refetch } = useGetSubjectsQuery();
   const { academicYears, selectedYear } = useAppSelector(
     selectScheduleComponentState
   );
@@ -28,7 +28,9 @@ export const ManageSubject: React.FC<Props> = () => {
     if (data)
       setSubjects(
         data!.getSubjects.filter(
-          (subject) => subject.academicYear?.id === selectedAcademicYearId
+          (subject) =>
+            subject.academicYear?.id === selectedAcademicYearId ||
+            !subject.academicYear
         )
       );
   }, [data, selectedAcademicYearId]);
@@ -69,19 +71,33 @@ export const ManageSubject: React.FC<Props> = () => {
               }),
             ]}
           />
+          <div
+            onClick={() => {
+              setShow(false);
+            }}
+            className="close"
+            style={{ top: "2rem" }}
+          >
+            <AiOutlineClose />
+          </div>
         </BaseModal.Header>
         <BaseModal.Body>
           <div
             onClick={() => {
               setShow(false);
             }}
-            className={css.close}
+            style={{
+              top: "0",
+            }}
+            className={"close"}
           >
             <AiOutlineClose />
           </div>
           <div className={css.body}>
             {subjects.length > 0 ? (
-              subjects.map((subject) => <div>{subject.name}</div>)
+              subjects.map((subject) => (
+                <div className={css.subject}>{subject.name}</div>
+              ))
             ) : (
               <div className={css.up}>
                 <span>It's a little lonely today,&nbsp;</span>

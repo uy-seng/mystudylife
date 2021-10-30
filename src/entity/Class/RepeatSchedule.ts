@@ -7,7 +7,7 @@ import {
 } from "typeorm";
 import { DayOfWeek } from "../types";
 import { ClassSchedule } from "..";
-import { Field, ObjectType } from "type-graphql";
+import { Field, Int, ObjectType } from "type-graphql";
 
 @Entity("class_repeat_schedule")
 @ObjectType()
@@ -36,10 +36,16 @@ export class RepeatSchedule {
   @Field(() => String, { nullable: true })
   endDate: string;
 
+  @Column("int", { nullable: true })
+  @Field(() => Int, { nullable: true })
+  rotationWeek: number;
+
   @Column("uuid")
   scheduleId: string;
 
-  @OneToOne(() => ClassSchedule, (schedule) => schedule.repeat)
+  @OneToOne(() => ClassSchedule, (schedule) => schedule.repeat, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn({ name: "scheduleId", referencedColumnName: "id" })
   schedule: ClassSchedule;
 }

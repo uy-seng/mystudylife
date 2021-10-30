@@ -31,7 +31,7 @@ export class ClassSchedule {
   @Column("uuid")
   classId: string;
 
-  @OneToOne(() => Class)
+  @OneToOne(() => Class, { onDelete: "CASCADE" })
   @JoinColumn({ name: "classId", referencedColumnName: "id" })
   class: Class;
 }

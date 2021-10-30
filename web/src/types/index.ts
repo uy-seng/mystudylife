@@ -8,3 +8,8 @@ export interface BatchParam<T extends object> extends PayloadAction<Pair<T>> {
   payload: Pair<T>;
   type: string;
 }
+
+export interface Param<T> {
+  payload: T;
+  type: string;
+}

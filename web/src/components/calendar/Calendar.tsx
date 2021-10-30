@@ -19,10 +19,17 @@ export const Calendar: React.FC<Props> = () => {
             <FaChevronLeft
               onClick={() => {
                 setCurrentDate(() => {
+                  const cd = new Date();
                   const m = new Date(
                     currentDate.setMonth(currentDate.getMonth() - 1)
                   );
-                  const d = new Date(m.setDate(1));
+                  let d = new Date(m.setDate(1));
+                  if (
+                    d.getFullYear() === cd.getFullYear() &&
+                    d.getMonth() === cd.getMonth()
+                  ) {
+                    d = cd;
+                  }
                   return d;
                 });
               }}
@@ -44,10 +51,17 @@ export const Calendar: React.FC<Props> = () => {
             <FaChevronRight
               onClick={() => {
                 setCurrentDate(() => {
+                  const cd = new Date();
                   const m = new Date(
                     currentDate.setMonth(currentDate.getMonth() + 1)
                   );
-                  const d = new Date(m.setDate(1));
+                  let d = new Date(m.setDate(1));
+                  if (
+                    d.getFullYear() === cd.getFullYear() &&
+                    d.getMonth() === cd.getMonth()
+                  ) {
+                    d = cd;
+                  }
                   return d;
                 });
               }}

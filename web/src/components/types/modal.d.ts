@@ -5,11 +5,13 @@ export interface BaseModalProps {
   style?: CSS.Properties;
   show: boolean;
   parent: Element;
+  hide?: () => void;
+  ref?: LegacyRef<T> | undefined;
 }
 
 export interface BaseModalSubcomponents {
-  Header: React.FC;
-  Title: React.FC;
-  Body: React.FC;
-  Extra: React.FC;
+  Header: React.FC<React.HTMLAttributes<HTMLDivElement>>;
+  Title: React.FC<React.HTMLAttributes<HTMLDivElement>>;
+  Body: React.FC<React.HTMLAttributes<HTMLDivElement>>;
+  Extra: React.FC<React.HTMLAttributes<HTMLDivElement>>;
 }

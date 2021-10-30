@@ -1,6 +1,6 @@
 import { RepeatSchedule } from "src/entity";
 import { DayOfWeek } from "src/entity/types";
-import { ArgsType, Field, registerEnumType } from "type-graphql";
+import { ArgsType, Field, Int, registerEnumType } from "type-graphql";
 
 registerEnumType(DayOfWeek, {
   name: "DayOfWeek",
@@ -25,4 +25,7 @@ export class RepeatScheduleArgs implements Partial<RepeatSchedule> {
 
   @Field(() => String, { nullable: true })
   endDate: string;
+
+  @Field(() => Int, { nullable: true })
+  rotationWeek: number;
 }

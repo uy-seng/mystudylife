@@ -9,7 +9,16 @@
   bottom: 0;
   right: 0;
 
-  animation: growFromCenterAnimation 0.25s;
+  animation: growFromCenterAnimation 0.25s alternate;
+}
+
+@keyframes growFromCenterAnimation {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
 }
 
 .parent {
@@ -21,6 +30,7 @@
   color: white;
   padding: 1rem;
   border-top-left-radius: 8px;
+  position: relative;
   border-top-right-radius: 8px;
 }
 
@@ -41,15 +51,6 @@
   max-height: max-content;
 
   transition: all ease 0.5s;
-}
-
-@keyframes growFromCenterAnimation {
-  from {
-    transform: scale(0);
-  }
-  to {
-    transform: scale(1);
-  }
 }
 
 .overlay {

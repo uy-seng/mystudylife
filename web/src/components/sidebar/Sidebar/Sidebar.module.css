@@ -4,6 +4,7 @@
   width: 60px;
   height: 100vh;
   position: sticky;
+  top: 0;
 }
 
 .logo {

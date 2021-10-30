@@ -30,7 +30,7 @@ export type AcademicYear = {
 export type AcademicYearSchedule = {
   __typename?: 'AcademicYearSchedule';
   id: Scalars['String'];
-  type: Scalars['String'];
+  type: AcademicYearScheduleType;
   dayRotation?: Maybe<DayRotationSchedule>;
   weekRotation?: Maybe<WeekRotationSchedule>;
 };
@@ -49,6 +49,7 @@ export type Class = {
   teacher: Scalars['String'];
   subject: Subject;
   schedule: ClassSchedule;
+  academicYear?: Maybe<AcademicYear>;
   user: User;
 };
 
@@ -101,6 +102,7 @@ export type Mutation = {
   newSubject: Subject;
   deleteSubject: Scalars['Boolean'];
   newClass: Class;
+  deleteClass: Scalars['Boolean'];
   newClassSchedule: ClassSchedule;
   newOneOffSchedule: OneOffSchedule;
   newRepeatSchedule: RepeatSchedule;
@@ -181,6 +183,11 @@ export type MutationNewClassArgs = {
 };
 
 
+export type MutationDeleteClassArgs = {
+  id: Scalars['String'];
+};
+
+
 export type MutationNewClassScheduleArgs = {
   type: ClassScheduleType;
   classId: Scalars['String'];
@@ -202,6 +209,7 @@ export type MutationNewRepeatScheduleArgs = {
   scheduleId: Scalars['String'];
   startDate?: Maybe<Scalars['String']>;
   endDate?: Maybe<Scalars['String']>;
+  rotationWeek?: Maybe<Scalars['Int']>;
 };
 
 export type OneOffSchedule = {
@@ -216,15 +224,16 @@ export type Query = {
   __typename?: 'Query';
   me: User;
   getAcademicYears: Array<AcademicYear>;
-  getAcademicYear: AcademicYear;
+  getAcademicYear?: Maybe<AcademicYear>;
   getSubjects: Array<Subject>;
   getSubject: Subject;
+  getClasses: Array<Class>;
   getClassesByDate: Array<Class>;
 };
 
 
 export type QueryGetAcademicYearArgs = {
-  id: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
 };
 
 
@@ -245,6 +254,7 @@ export type RepeatSchedule = {
   repeatDays: Array<DayOfWeek>;
   startDate?: Maybe<Scalars['String']>;
   endDate?: Maybe<Scalars['String']>;
+  rotationWeek?: Maybe<Scalars['Int']>;
 };
 
 export type Subject = {
@@ -292,10 +302,29 @@ export type DeleteAcademicYearMutationVariables = Exact<{
 
 export type DeleteAcademicYearMutation = { __typename?: 'Mutation', deleteAcademicYear: boolean };
 
+export type DeleteClassMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeleteClassMutation = { __typename?: 'Mutation', deleteClass: boolean };
+
+export type GetAcademicYearQueryVariables = Exact<{
+  id?: Maybe<Scalars['String']>;
+}>;
+
+
+export type GetAcademicYearQuery = { __typename?: 'Query', getAcademicYear?: Maybe<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string, schedule: { __typename?: 'AcademicYearSchedule', type: AcademicYearScheduleType, dayRotation?: Maybe<{ __typename?: 'DayRotationSchedule', id: string }>, weekRotation?: Maybe<{ __typename?: 'WeekRotationSchedule', numOfWeek: number, startWeek: number }> } }> };
+
 export type GetAcademicYearsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAcademicYearsQuery = { __typename?: 'Query', getAcademicYears: Array<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string, terms: Array<{ __typename?: 'Term', id: string, name: string, startDate: string, endDate: string }>, schedule: { __typename?: 'AcademicYearSchedule', id: string, type: string, dayRotation?: Maybe<{ __typename?: 'DayRotationSchedule', id: string, numOfDay: number, startDay: number, repeatDays: Array<number> }>, weekRotation?: Maybe<{ __typename?: 'WeekRotationSchedule', id: string, numOfWeek: number, startWeek: number }> } }> };
+export type GetAcademicYearsQuery = { __typename?: 'Query', getAcademicYears: Array<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string, terms: Array<{ __typename?: 'Term', id: string, name: string, startDate: string, endDate: string }>, schedule: { __typename?: 'AcademicYearSchedule', id: string, type: AcademicYearScheduleType, dayRotation?: Maybe<{ __typename?: 'DayRotationSchedule', id: string, numOfDay: number, startDay: number, repeatDays: Array<number> }>, weekRotation?: Maybe<{ __typename?: 'WeekRotationSchedule', id: string, numOfWeek: number, startWeek: number }> } }> };
+
+export type GetClassesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetClassesQuery = { __typename?: 'Query', getClasses: Array<{ __typename?: 'Class', id: string, building: string, module: string, room: string, teacher: string, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string, schedule: { __typename?: 'AcademicYearSchedule', type: AcademicYearScheduleType, dayRotation?: Maybe<{ __typename?: 'DayRotationSchedule', id: string }>, weekRotation?: Maybe<{ __typename?: 'WeekRotationSchedule', id: string, numOfWeek: number }> } }>, subject: { __typename?: 'Subject', id: string, name: string }, schedule: { __typename?: 'ClassSchedule', id: string, type: string, oneOff?: Maybe<{ __typename?: 'OneOffSchedule', id: string, date: string, startTime: string, endTime: string }>, repeat?: Maybe<{ __typename?: 'RepeatSchedule', id: string, startTime: string, endTime: string, repeatDays: Array<DayOfWeek>, startDate?: Maybe<string>, endDate?: Maybe<string>, rotationWeek?: Maybe<number> }> } }> };
 
 export type GetSubjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -387,6 +416,7 @@ export type NewRepeatScheduleMutationVariables = Exact<{
   repeatDays: Array<DayOfWeek> | DayOfWeek;
   startDate?: Maybe<Scalars['String']>;
   endDate?: Maybe<Scalars['String']>;
+  rotationWeek?: Maybe<Scalars['Int']>;
 }>;
 
 
@@ -451,6 +481,84 @@ export function useDeleteAcademicYearMutation(baseOptions?: Apollo.MutationHookO
 export type DeleteAcademicYearMutationHookResult = ReturnType<typeof useDeleteAcademicYearMutation>;
 export type DeleteAcademicYearMutationResult = Apollo.MutationResult<DeleteAcademicYearMutation>;
 export type DeleteAcademicYearMutationOptions = Apollo.BaseMutationOptions<DeleteAcademicYearMutation, DeleteAcademicYearMutationVariables>;
+export const DeleteClassDocument = gql`
+    mutation DeleteClass($id: String!) {
+  deleteClass(id: $id)
+}
+    `;
+export type DeleteClassMutationFn = Apollo.MutationFunction<DeleteClassMutation, DeleteClassMutationVariables>;
+
+/**
+ * __useDeleteClassMutation__
+ *
+ * To run a mutation, you first call `useDeleteClassMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteClassMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteClassMutation, { data, loading, error }] = useDeleteClassMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteClassMutation(baseOptions?: Apollo.MutationHookOptions<DeleteClassMutation, DeleteClassMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteClassMutation, DeleteClassMutationVariables>(DeleteClassDocument, options);
+      }
+export type DeleteClassMutationHookResult = ReturnType<typeof useDeleteClassMutation>;
+export type DeleteClassMutationResult = Apollo.MutationResult<DeleteClassMutation>;
+export type DeleteClassMutationOptions = Apollo.BaseMutationOptions<DeleteClassMutation, DeleteClassMutationVariables>;
+export const GetAcademicYearDocument = gql`
+    query GetAcademicYear($id: String) {
+  getAcademicYear(id: $id) {
+    id
+    startDate
+    endDate
+    schedule {
+      type
+      dayRotation {
+        id
+      }
+      weekRotation {
+        numOfWeek
+        startWeek
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetAcademicYearQuery__
+ *
+ * To run a query within a React component, call `useGetAcademicYearQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAcademicYearQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAcademicYearQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetAcademicYearQuery(baseOptions?: Apollo.QueryHookOptions<GetAcademicYearQuery, GetAcademicYearQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAcademicYearQuery, GetAcademicYearQueryVariables>(GetAcademicYearDocument, options);
+      }
+export function useGetAcademicYearLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAcademicYearQuery, GetAcademicYearQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAcademicYearQuery, GetAcademicYearQueryVariables>(GetAcademicYearDocument, options);
+        }
+export type GetAcademicYearQueryHookResult = ReturnType<typeof useGetAcademicYearQuery>;
+export type GetAcademicYearLazyQueryHookResult = ReturnType<typeof useGetAcademicYearLazyQuery>;
+export type GetAcademicYearQueryResult = Apollo.QueryResult<GetAcademicYearQuery, GetAcademicYearQueryVariables>;
 export const GetAcademicYearsDocument = gql`
     query GetAcademicYears {
   getAcademicYears {
@@ -508,6 +616,82 @@ export function useGetAcademicYearsLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type GetAcademicYearsQueryHookResult = ReturnType<typeof useGetAcademicYearsQuery>;
 export type GetAcademicYearsLazyQueryHookResult = ReturnType<typeof useGetAcademicYearsLazyQuery>;
 export type GetAcademicYearsQueryResult = Apollo.QueryResult<GetAcademicYearsQuery, GetAcademicYearsQueryVariables>;
+export const GetClassesDocument = gql`
+    query GetClasses {
+  getClasses {
+    id
+    building
+    module
+    room
+    teacher
+    academicYear {
+      id
+      startDate
+      endDate
+      schedule {
+        type
+        dayRotation {
+          id
+        }
+        weekRotation {
+          id
+          numOfWeek
+        }
+      }
+    }
+    subject {
+      id
+      name
+    }
+    schedule {
+      id
+      type
+      oneOff {
+        id
+        date
+        startTime
+        endTime
+      }
+      repeat {
+        id
+        startTime
+        endTime
+        repeatDays
+        startDate
+        endDate
+        rotationWeek
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetClassesQuery__
+ *
+ * To run a query within a React component, call `useGetClassesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClassesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClassesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetClassesQuery(baseOptions?: Apollo.QueryHookOptions<GetClassesQuery, GetClassesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetClassesQuery, GetClassesQueryVariables>(GetClassesDocument, options);
+      }
+export function useGetClassesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetClassesQuery, GetClassesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetClassesQuery, GetClassesQueryVariables>(GetClassesDocument, options);
+        }
+export type GetClassesQueryHookResult = ReturnType<typeof useGetClassesQuery>;
+export type GetClassesLazyQueryHookResult = ReturnType<typeof useGetClassesLazyQuery>;
+export type GetClassesQueryResult = Apollo.QueryResult<GetClassesQuery, GetClassesQueryVariables>;
 export const GetSubjectsDocument = gql`
     query GetSubjects {
   getSubjects {
@@ -885,7 +1069,7 @@ export type NewPartialWeekRotationMutationHookResult = ReturnType<typeof useNewP
 export type NewPartialWeekRotationMutationResult = Apollo.MutationResult<NewPartialWeekRotationMutation>;
 export type NewPartialWeekRotationMutationOptions = Apollo.BaseMutationOptions<NewPartialWeekRotationMutation, NewPartialWeekRotationMutationVariables>;
 export const NewRepeatScheduleDocument = gql`
-    mutation newRepeatSchedule($scheduleId: String!, $startTime: String!, $endTime: String!, $repeatDays: [DayOfWeek!]!, $startDate: String, $endDate: String) {
+    mutation newRepeatSchedule($scheduleId: String!, $startTime: String!, $endTime: String!, $repeatDays: [DayOfWeek!]!, $startDate: String, $endDate: String, $rotationWeek: Int) {
   newRepeatSchedule(
     scheduleId: $scheduleId
     startTime: $startTime
@@ -893,6 +1077,7 @@ export const NewRepeatScheduleDocument = gql`
     repeatDays: $repeatDays
     startDate: $startDate
     endDate: $endDate
+    rotationWeek: $rotationWeek
   ) {
     id
   }
@@ -919,6 +1104,7 @@ export type NewRepeatScheduleMutationFn = Apollo.MutationFunction<NewRepeatSched
  *      repeatDays: // value for 'repeatDays'
  *      startDate: // value for 'startDate'
  *      endDate: // value for 'endDate'
+ *      rotationWeek: // value for 'rotationWeek'
  *   },
  * });
  */

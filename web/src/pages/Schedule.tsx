@@ -5,10 +5,12 @@ import {
   ManageSubject,
   NewAcademicYear,
   NewClass,
+  ViewClass,
 } from "../components/modal";
 import {
   GetAcademicYearsQuery,
   useGetAcademicYearsQuery,
+  useGetClassesQuery,
 } from "../generated/graphql";
 
 import css from "./Schedule.module.css";
@@ -17,11 +19,12 @@ import {
   selectScheduleComponentState,
   setScheduleComponentState,
 } from "../shared/Schedule.slice";
+import { formatTime } from "../utils";
 
 interface Props {}
 
 export const Schedule: React.FC<Props> = () => {
-  const { data } = useGetAcademicYearsQuery();
+  const { data, loading } = useGetAcademicYearsQuery();
   const { selectedYear } = useAppSelector(selectScheduleComponentState);
   const dispatch = useAppDispatch();
 
@@ -49,10 +52,9 @@ export const Schedule: React.FC<Props> = () => {
         {data && data!.getAcademicYears.length > 0 ? (
           <ScheduleListing schedules={data.getAcademicYears} />
         ) : (
-          <EmptySchedule />
+          !loading && <EmptySchedule />
         )}
       </div>
-      {/* {loading ? <PageLoader /> : null} */}
     </div>
   );
 };
@@ -84,6 +86,8 @@ interface ScheduleListingProps {
 const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
   const dispatch = useAppDispatch();
   const { selectedYear } = useAppSelector(selectScheduleComponentState);
+  var { data: classesQueryResult } = useGetClassesQuery();
+  const [classes, setClasses] = React.useState<any[]>([]);
 
   React.useEffect(() => {
     dispatch(
@@ -93,59 +97,106 @@ const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
       })
     );
   }, []);
-  return (
-    <div className={css.scheduleListing}>
-      <div>
-        {schedules.map((schedule) => (
-          <div
-            key={schedule.id}
-            onClick={() =>
-              dispatch(
-                setScheduleComponentState({
-                  key: "selectedYear",
-                  value: schedule,
-                })
-              )
-            }
-            className={
-              selectedYear?.id === schedule.id ? css.active : undefined
-            }
-          >
-            <div className="txt-md">
-              {schedule.startDate.split("-")[0]}
-              {" - "}
-              {schedule.endDate.split("-")[0]}
-            </div>
-            <div className="txt-xs">
-              {new Date(schedule.startDate)
-                .toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "2-digit",
-                  year: "numeric",
-                })
-                .split(",")
-                .join("")}
-              {" - "}
-              {new Date(schedule.endDate)
-                .toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "2-digit",
-                  year: "numeric",
-                })
-                .split(",")
-                .join("")}
-            </div>
-          </div>
-        ))}
-      </div>
-      <div>
+
+  React.useEffect(() => {
+    if (classesQueryResult) setClasses([...classesQueryResult?.getClasses]);
+  }, [classesQueryResult]);
+
+  React.useEffect(() => {
+    if (classes && classesQueryResult) {
+      setClasses([
+        ...classesQueryResult?.getClasses.filter(
+          (c) => c.academicYear?.id === selectedYear?.id
+        ),
+      ]);
+    }
+  }, [selectedYear, classesQueryResult]);
+
+  if (classes)
+    return (
+      <div className={css.scheduleListing}>
         <div>
-          <div className="txt-md">Classes</div>
-          <NewClass />
+          {schedules.map((schedule) => (
+            <div
+              key={schedule.id}
+              onClick={() =>
+                dispatch(
+                  setScheduleComponentState({
+                    key: "selectedYear",
+                    value: schedule,
+                  })
+                )
+              }
+              className={
+                selectedYear?.id === schedule.id ? css.active : undefined
+              }
+            >
+              <div className="txt-md">
+                {schedule.startDate.split("-")[0]}
+                {" - "}
+                {schedule.endDate.split("-")[0]}
+              </div>
+              <div className="txt-xs">
+                {new Date(schedule.startDate)
+                  .toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "2-digit",
+                    year: "numeric",
+                  })
+                  .split(",")
+                  .join("")}
+                {" - "}
+                {new Date(schedule.endDate)
+                  .toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "2-digit",
+                    year: "numeric",
+                  })
+                  .split(",")
+                  .join("")}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div>
+          <div>
+            <div className="txt-md">Classes</div>
+            <NewClass />
+          </div>
+          <div className={css.classListing}>
+            {classes.map((c) => (
+              <ViewClass
+                data={c}
+                childController={
+                  <div className={css.class}>
+                    <div>
+                      <div className="txt-md">{`${c.subject.name} ${
+                        c.module ? `: ${c.module}` : ``
+                      }`}</div>
+                      <div className="txt-sm">{c.teacher}</div>
+                    </div>
+                    <div className="txt-sm txt-thin">
+                      {c.schedule.type === "oneOff"
+                        ? `${formatTime(
+                            c.schedule.oneOff?.startTime
+                          )} - ${formatTime(c.schedule.oneOff?.endTime)}`
+                        : ""}
+                      {c.schedule.type === "repeat"
+                        ? `${formatTime(
+                            c.schedule.repeat?.startTime
+                          )} - ${formatTime(c.schedule.repeat?.endTime)} ${
+                            c.schedule.repeat?.repeatDays
+                          }`
+                        : ""}
+                    </div>
+                  </div>
+                }
+              />
+            ))}
+          </div>
         </div>
         <div></div>
       </div>
-      <div></div>
-    </div>
-  );
+    );
+  else return null;
 };

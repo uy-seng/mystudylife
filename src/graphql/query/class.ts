@@ -28,4 +28,43 @@ const getClassesByDateQuery = `
     }
 `;
 
-export { getClassesByDateQuery };
+const getClassesQuery = `
+    query{
+        getClasses{
+            id
+            building
+            module
+            room
+            teacher
+            subject{
+                id
+                name
+            }
+            academicYear{
+                id
+                startDate
+                endDate
+            }
+            schedule{
+                id
+                type
+                oneOff {
+                    id
+                    date
+                    startTime
+                    endTime
+                }
+                repeat {
+                    id
+                    startTime
+                    endTime
+                    repeatDays
+                    startDate
+                    endDate
+                }
+            }
+        }
+    }
+`;
+
+export { getClassesByDateQuery, getClassesQuery };

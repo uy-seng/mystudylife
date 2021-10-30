@@ -22,7 +22,7 @@ export const HeaderSelect: React.FC<Props> = ({
   React.useEffect(() => {
     if (defaultValue)
       setSelected(data.filter((d) => d.value === defaultValue)[0]);
-  }, [defaultValue]);
+  }, []);
 
   return (
     <div className={css.wrapper}>

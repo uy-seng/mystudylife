@@ -1,0 +1,47 @@
+query GetClasses {
+  getClasses {
+    id
+    building
+    module
+    room
+    teacher
+    academicYear {
+      id
+      startDate
+      endDate
+      schedule {
+        type
+        dayRotation {
+          id
+        }
+        weekRotation {
+          id
+          numOfWeek
+        }
+      }
+    }
+    subject {
+      id
+      name
+    }
+    schedule {
+      id
+      type
+      oneOff {
+        id
+        date
+        startTime
+        endTime
+      }
+      repeat {
+        id
+        startTime
+        endTime
+        repeatDays
+        startDate
+        endDate
+        rotationWeek
+      }
+    }
+  }
+}
