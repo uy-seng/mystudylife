@@ -56,9 +56,9 @@ export type Class = {
 export type ClassSchedule = {
   __typename?: 'ClassSchedule';
   id: Scalars['String'];
-  type: Scalars['String'];
+  type: ClassScheduleType;
   oneOff?: Maybe<OneOffSchedule>;
-  repeat?: Maybe<RepeatSchedule>;
+  repeat?: Maybe<Array<RepeatSchedule>>;
 };
 
 export type ClassScheduleType =
@@ -103,9 +103,12 @@ export type Mutation = {
   deleteSubject: Scalars['Boolean'];
   newClass: Class;
   deleteClass: Scalars['Boolean'];
+  updateClass: Scalars['Boolean'];
   newClassSchedule: ClassSchedule;
   newOneOffSchedule: OneOffSchedule;
+  updateOneOffSchedule: Scalars['Boolean'];
   newRepeatSchedule: RepeatSchedule;
+  updateRepeatSchedule: Scalars['Boolean'];
 };
 
 
@@ -188,6 +191,17 @@ export type MutationDeleteClassArgs = {
 };
 
 
+export type MutationUpdateClassArgs = {
+  subjectId: Scalars['String'];
+  module?: Maybe<Scalars['String']>;
+  room?: Maybe<Scalars['String']>;
+  building?: Maybe<Scalars['String']>;
+  teacher?: Maybe<Scalars['String']>;
+  academicYearId?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+};
+
+
 export type MutationNewClassScheduleArgs = {
   type: ClassScheduleType;
   classId: Scalars['String'];
@@ -202,6 +216,15 @@ export type MutationNewOneOffScheduleArgs = {
 };
 
 
+export type MutationUpdateOneOffScheduleArgs = {
+  date: Scalars['String'];
+  startTime: Scalars['String'];
+  endTime: Scalars['String'];
+  scheduleId: Scalars['String'];
+  id: Scalars['String'];
+};
+
+
 export type MutationNewRepeatScheduleArgs = {
   startTime: Scalars['String'];
   endTime: Scalars['String'];
@@ -210,6 +233,18 @@ export type MutationNewRepeatScheduleArgs = {
   startDate?: Maybe<Scalars['String']>;
   endDate?: Maybe<Scalars['String']>;
   rotationWeek?: Maybe<Scalars['Int']>;
+};
+
+
+export type MutationUpdateRepeatScheduleArgs = {
+  startTime: Scalars['String'];
+  endTime: Scalars['String'];
+  repeatDays: Array<DayOfWeek>;
+  scheduleId: Scalars['String'];
+  startDate?: Maybe<Scalars['String']>;
+  endDate?: Maybe<Scalars['String']>;
+  rotationWeek?: Maybe<Scalars['Int']>;
+  id: Scalars['String'];
 };
 
 export type OneOffSchedule = {
@@ -228,6 +263,7 @@ export type Query = {
   getSubjects: Array<Subject>;
   getSubject: Subject;
   getClasses: Array<Class>;
+  getClassById: Class;
   getClassesByDate: Array<Class>;
 };
 
@@ -238,6 +274,11 @@ export type QueryGetAcademicYearArgs = {
 
 
 export type QueryGetSubjectArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryGetClassByIdArgs = {
   id: Scalars['String'];
 };
 
@@ -324,7 +365,7 @@ export type GetAcademicYearsQuery = { __typename?: 'Query', getAcademicYears: Ar
 export type GetClassesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetClassesQuery = { __typename?: 'Query', getClasses: Array<{ __typename?: 'Class', id: string, building: string, module: string, room: string, teacher: string, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string, schedule: { __typename?: 'AcademicYearSchedule', type: AcademicYearScheduleType, dayRotation?: Maybe<{ __typename?: 'DayRotationSchedule', id: string }>, weekRotation?: Maybe<{ __typename?: 'WeekRotationSchedule', id: string, numOfWeek: number }> } }>, subject: { __typename?: 'Subject', id: string, name: string }, schedule: { __typename?: 'ClassSchedule', id: string, type: string, oneOff?: Maybe<{ __typename?: 'OneOffSchedule', id: string, date: string, startTime: string, endTime: string }>, repeat?: Maybe<{ __typename?: 'RepeatSchedule', id: string, startTime: string, endTime: string, repeatDays: Array<DayOfWeek>, startDate?: Maybe<string>, endDate?: Maybe<string>, rotationWeek?: Maybe<number> }> } }> };
+export type GetClassesQuery = { __typename?: 'Query', getClasses: Array<{ __typename?: 'Class', id: string, building: string, module: string, room: string, teacher: string, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string, schedule: { __typename?: 'AcademicYearSchedule', type: AcademicYearScheduleType, dayRotation?: Maybe<{ __typename?: 'DayRotationSchedule', id: string }>, weekRotation?: Maybe<{ __typename?: 'WeekRotationSchedule', id: string, numOfWeek: number }> } }>, subject: { __typename?: 'Subject', id: string, name: string }, schedule: { __typename?: 'ClassSchedule', id: string, type: ClassScheduleType, oneOff?: Maybe<{ __typename?: 'OneOffSchedule', id: string, date: string, startTime: string, endTime: string }>, repeat?: Maybe<Array<{ __typename?: 'RepeatSchedule', id: string, startTime: string, endTime: string, repeatDays: Array<DayOfWeek>, startDate?: Maybe<string>, endDate?: Maybe<string>, rotationWeek?: Maybe<number> }>> } }> };
 
 export type GetSubjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -448,6 +489,43 @@ export type RegisterMutationVariables = Exact<{
 
 
 export type RegisterMutation = { __typename?: 'Mutation', register?: Maybe<boolean> };
+
+export type UpdateClassMutationVariables = Exact<{
+  id: Scalars['String'];
+  subjectId: Scalars['String'];
+  module?: Maybe<Scalars['String']>;
+  room?: Maybe<Scalars['String']>;
+  building?: Maybe<Scalars['String']>;
+  teacher?: Maybe<Scalars['String']>;
+  academicYearId?: Maybe<Scalars['String']>;
+}>;
+
+
+export type UpdateClassMutation = { __typename?: 'Mutation', updateClass: boolean };
+
+export type UpdateOneOffScheduleMutationVariables = Exact<{
+  id: Scalars['String'];
+  scheduleId: Scalars['String'];
+  date: Scalars['String'];
+  startTime: Scalars['String'];
+  endTime: Scalars['String'];
+}>;
+
+
+export type UpdateOneOffScheduleMutation = { __typename?: 'Mutation', updateOneOffSchedule: boolean };
+
+export type UpdateRepeatScheduleMutationVariables = Exact<{
+  id: Scalars['String'];
+  scheduleId: Scalars['String'];
+  startTime: Scalars['String'];
+  endTime: Scalars['String'];
+  repeatDays: Array<DayOfWeek> | DayOfWeek;
+  startDate?: Maybe<Scalars['String']>;
+  endDate?: Maybe<Scalars['String']>;
+}>;
+
+
+export type UpdateRepeatScheduleMutation = { __typename?: 'Mutation', updateRepeatSchedule: boolean };
 
 
 export const DeleteAcademicYearDocument = gql`
@@ -1227,3 +1305,134 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const UpdateClassDocument = gql`
+    mutation UpdateClass($id: String!, $subjectId: String!, $module: String, $room: String, $building: String, $teacher: String, $academicYearId: String) {
+  updateClass(
+    id: $id
+    subjectId: $subjectId
+    module: $module
+    room: $room
+    building: $building
+    teacher: $teacher
+    academicYearId: $academicYearId
+  )
+}
+    `;
+export type UpdateClassMutationFn = Apollo.MutationFunction<UpdateClassMutation, UpdateClassMutationVariables>;
+
+/**
+ * __useUpdateClassMutation__
+ *
+ * To run a mutation, you first call `useUpdateClassMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateClassMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateClassMutation, { data, loading, error }] = useUpdateClassMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      subjectId: // value for 'subjectId'
+ *      module: // value for 'module'
+ *      room: // value for 'room'
+ *      building: // value for 'building'
+ *      teacher: // value for 'teacher'
+ *      academicYearId: // value for 'academicYearId'
+ *   },
+ * });
+ */
+export function useUpdateClassMutation(baseOptions?: Apollo.MutationHookOptions<UpdateClassMutation, UpdateClassMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateClassMutation, UpdateClassMutationVariables>(UpdateClassDocument, options);
+      }
+export type UpdateClassMutationHookResult = ReturnType<typeof useUpdateClassMutation>;
+export type UpdateClassMutationResult = Apollo.MutationResult<UpdateClassMutation>;
+export type UpdateClassMutationOptions = Apollo.BaseMutationOptions<UpdateClassMutation, UpdateClassMutationVariables>;
+export const UpdateOneOffScheduleDocument = gql`
+    mutation UpdateOneOffSchedule($id: String!, $scheduleId: String!, $date: String!, $startTime: String!, $endTime: String!) {
+  updateOneOffSchedule(
+    id: $id
+    scheduleId: $scheduleId
+    date: $date
+    startTime: $startTime
+    endTime: $endTime
+  )
+}
+    `;
+export type UpdateOneOffScheduleMutationFn = Apollo.MutationFunction<UpdateOneOffScheduleMutation, UpdateOneOffScheduleMutationVariables>;
+
+/**
+ * __useUpdateOneOffScheduleMutation__
+ *
+ * To run a mutation, you first call `useUpdateOneOffScheduleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateOneOffScheduleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateOneOffScheduleMutation, { data, loading, error }] = useUpdateOneOffScheduleMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      scheduleId: // value for 'scheduleId'
+ *      date: // value for 'date'
+ *      startTime: // value for 'startTime'
+ *      endTime: // value for 'endTime'
+ *   },
+ * });
+ */
+export function useUpdateOneOffScheduleMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOneOffScheduleMutation, UpdateOneOffScheduleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateOneOffScheduleMutation, UpdateOneOffScheduleMutationVariables>(UpdateOneOffScheduleDocument, options);
+      }
+export type UpdateOneOffScheduleMutationHookResult = ReturnType<typeof useUpdateOneOffScheduleMutation>;
+export type UpdateOneOffScheduleMutationResult = Apollo.MutationResult<UpdateOneOffScheduleMutation>;
+export type UpdateOneOffScheduleMutationOptions = Apollo.BaseMutationOptions<UpdateOneOffScheduleMutation, UpdateOneOffScheduleMutationVariables>;
+export const UpdateRepeatScheduleDocument = gql`
+    mutation UpdateRepeatSchedule($id: String!, $scheduleId: String!, $startTime: String!, $endTime: String!, $repeatDays: [DayOfWeek!]!, $startDate: String, $endDate: String) {
+  updateRepeatSchedule(
+    id: $id
+    scheduleId: $scheduleId
+    startTime: $startTime
+    endTime: $endTime
+    repeatDays: $repeatDays
+    startDate: $startDate
+    endDate: $endDate
+  )
+}
+    `;
+export type UpdateRepeatScheduleMutationFn = Apollo.MutationFunction<UpdateRepeatScheduleMutation, UpdateRepeatScheduleMutationVariables>;
+
+/**
+ * __useUpdateRepeatScheduleMutation__
+ *
+ * To run a mutation, you first call `useUpdateRepeatScheduleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateRepeatScheduleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateRepeatScheduleMutation, { data, loading, error }] = useUpdateRepeatScheduleMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      scheduleId: // value for 'scheduleId'
+ *      startTime: // value for 'startTime'
+ *      endTime: // value for 'endTime'
+ *      repeatDays: // value for 'repeatDays'
+ *      startDate: // value for 'startDate'
+ *      endDate: // value for 'endDate'
+ *   },
+ * });
+ */
+export function useUpdateRepeatScheduleMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRepeatScheduleMutation, UpdateRepeatScheduleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateRepeatScheduleMutation, UpdateRepeatScheduleMutationVariables>(UpdateRepeatScheduleDocument, options);
+      }
+export type UpdateRepeatScheduleMutationHookResult = ReturnType<typeof useUpdateRepeatScheduleMutation>;
+export type UpdateRepeatScheduleMutationResult = Apollo.MutationResult<UpdateRepeatScheduleMutation>;
+export type UpdateRepeatScheduleMutationOptions = Apollo.BaseMutationOptions<UpdateRepeatScheduleMutation, UpdateRepeatScheduleMutationVariables>;

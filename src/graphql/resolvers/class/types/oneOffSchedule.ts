@@ -15,3 +15,9 @@ export class OneOffScheduleArgs implements Partial<OneOffSchedule> {
   @Field(() => String)
   scheduleId: string;
 }
+
+@ArgsType()
+export class UpdateOneOffScheduleArgs extends OneOffScheduleArgs {
+  @Field(() => String)
+  id: string;
+}

@@ -13,7 +13,6 @@ export interface CreateNewClasstGlobalState {
 
 const initialState: CreateNewClasstGlobalState = {
   classPayload: {
-    name: "",
     academicYearId: undefined,
     subjectId: undefined,
     module: "",
@@ -93,7 +92,6 @@ export interface ClassPayload {
   room: string;
   building: string;
   teacher: string;
-  name: string;
 }
 
 export interface ClassSchedulePayload {

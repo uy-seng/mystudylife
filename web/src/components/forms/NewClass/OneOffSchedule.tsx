@@ -1,3 +1,4 @@
+import moment from "moment";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import {
@@ -15,6 +16,15 @@ export const OneOffSchedule: React.FC<Props> = () => {
   const { startTime, endTime, date } = useAppSelector(
     selectOneOffSchedulePayload
   );
+
+  React.useEffect(() => {
+    dispatch(
+      setOneOffSchedulePayload({
+        key: "endTime",
+        value: moment(startTime, "hh:mm").add(1, "hours").format("hh:mm"),
+      })
+    );
+  }, [startTime]);
 
   return (
     <div>
@@ -34,8 +44,32 @@ export const OneOffSchedule: React.FC<Props> = () => {
         />
       </div>
       <div className={css.row}>
-        <Timepicker value={startTime} label="Start Time" name={"startTime"} />
-        <Timepicker value={endTime} label="End Time" name={"endTime"} />
+        <Timepicker
+          onChange={(e) => {
+            dispatch(
+              setOneOffSchedulePayload({
+                key: "startTime",
+                value: e.target.value,
+              })
+            );
+          }}
+          value={startTime}
+          label="Start Time"
+          name={"startTime"}
+        />
+        <Timepicker
+          onChange={(e) => {
+            dispatch(
+              setOneOffSchedulePayload({
+                key: "endTime",
+                value: e.target.value,
+              })
+            );
+          }}
+          value={endTime}
+          label="End Time"
+          name={"endTime"}
+        />
       </div>
     </div>
   );

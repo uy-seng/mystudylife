@@ -1,0 +1,15 @@
+mutation UpdateOneOffSchedule(
+  $id: String!
+  $scheduleId: String!
+  $date: String!
+  $startTime: String!
+  $endTime: String!
+) {
+  updateOneOffSchedule(
+    id: $id
+    scheduleId: $scheduleId
+    date: $date
+    startTime: $startTime
+    endTime: $endTime
+  )
+}

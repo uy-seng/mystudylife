@@ -6,6 +6,7 @@ export const BaseSelect: React.FC<BaseSelectProps> = ({
   label,
   options,
   className,
+  defaultValue,
   ...props
 }) => {
   const id = uuidv4();
@@ -20,7 +21,11 @@ export const BaseSelect: React.FC<BaseSelectProps> = ({
       <label htmlFor={`select_${id}`}>{label}</label>
       <select {...props}>
         {options.map((option) => (
-          <option key={option.key} value={option.value}>
+          <option
+            selected={defaultValue === option.value}
+            key={option.key}
+            value={option.value}
+          >
             {option.key}
           </option>
         ))}

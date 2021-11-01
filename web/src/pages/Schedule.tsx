@@ -175,20 +175,19 @@ const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
                       }`}</div>
                       <div className="txt-sm">{c.teacher}</div>
                     </div>
-                    <div className="txt-sm txt-thin">
-                      {c.schedule.type === "oneOff"
-                        ? `${formatTime(
-                            c.schedule.oneOff?.startTime
-                          )} - ${formatTime(c.schedule.oneOff?.endTime)}`
-                        : ""}
-                      {c.schedule.type === "repeat"
-                        ? `${formatTime(
-                            c.schedule.repeat?.startTime
-                          )} - ${formatTime(c.schedule.repeat?.endTime)} ${
-                            c.schedule.repeat?.repeatDays
-                          }`
-                        : ""}
-                    </div>
+                    {c.schedule.type === "oneOff" && (
+                      <div className="txt-sm txt-thin">{`${formatTime(
+                        c.schedule.oneOff?.startTime
+                      )} - ${formatTime(c.schedule.oneOff?.endTime)}`}</div>
+                    )}
+                    {c.schedule.type === "repeat" &&
+                      c.schedule.repeat.map((r: any) => (
+                        <div className="txt-sm txt-thin">
+                          {`${formatTime(r.startTime)} - ${formatTime(
+                            r.endTime
+                          )} ${r.repeatDays.join(",")}`}
+                        </div>
+                      ))}
                   </div>
                 }
               />

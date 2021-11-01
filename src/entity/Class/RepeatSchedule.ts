@@ -2,7 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { DayOfWeek } from "../types";
@@ -43,7 +43,7 @@ export class RepeatSchedule {
   @Column("uuid")
   scheduleId: string;
 
-  @OneToOne(() => ClassSchedule, (schedule) => schedule.repeat, {
+  @ManyToOne(() => ClassSchedule, (schedule) => schedule.repeat, {
     onDelete: "CASCADE",
   })
   @JoinColumn({ name: "scheduleId", referencedColumnName: "id" })

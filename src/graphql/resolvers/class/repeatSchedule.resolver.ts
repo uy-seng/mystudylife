@@ -1,8 +1,17 @@
-import { Args, Mutation, Resolver, UseMiddleware } from "type-graphql";
+import {
+  Arg,
+  Args,
+  Ctx,
+  Mutation,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
 import { RepeatSchedule } from "src/entity";
 import { RepeatScheduleArgs } from "./types";
 import { getConnection } from "typeorm";
 import { authenticationGate } from "src/middleware";
+import { Context } from "src/interface";
+import { ValidationError } from "apollo-server-express";
 
 @Resolver()
 export class RepeatScheduleResolver {
@@ -34,5 +43,27 @@ export class RepeatScheduleResolver {
       rotationWeek: rotationWeek,
     });
     return await this.repeatScheduleRepository.save(repeatSchedule);
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(authenticationGate)
+  async updateRepeatSchedule(
+    @Arg("id", () => String) id: string,
+    @Args() updateContext: RepeatScheduleArgs,
+    @Ctx() { user }: Context
+  ) {
+    const q = await this.repeatScheduleRepository.findOne(id, {
+      relations: ["schedule", "schedule.class", "schedule.class.user"],
+    });
+    if (q?.schedule.class.user.id !== user!.id || !q)
+      throw new ValidationError("items not found, please provide a valid id");
+    q.startDate = updateContext.startDate;
+    q.startTime = updateContext.startTime;
+    q.endDate = updateContext.endDate;
+    q.endTime = updateContext.endTime;
+    q.rotationWeek = updateContext.rotationWeek;
+    q.repeatDays = updateContext.repeatDays;
+    await this.repeatScheduleRepository.save(q);
+    return true;
   }
 }

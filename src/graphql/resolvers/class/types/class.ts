@@ -21,3 +21,9 @@ export class ClassArgs implements Partial<Class> {
   @Field(() => String, { nullable: true })
   academicYearId: string;
 }
+
+@ArgsType()
+export class UpdateClassArgs extends ClassArgs {
+  @Field(() => String)
+  id: string;
+}

@@ -7,6 +7,7 @@ export interface BaseSelectProps
   extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
   options: Options[];
+  defaultValue?: any;
 }
 
 export interface BasicSelectProps extends BaseSelectProps {}

@@ -1,0 +1,35 @@
+.days {
+  display: flex;
+}
+
+.days:last-child {
+  border-right: 0.5px solid #e5e5e5 !important;
+}
+
+.day {
+  min-width: 50px;
+  cursor: pointer;
+  border-top: 0.5px solid #e5e5e5;
+  border-left: 0.5px solid #e5e5e5;
+  border-bottom: 0.5px solid #e5e5e5;
+  text-align: center;
+  padding: 8px;
+  font-size: 12px;
+}
+
+.day.active {
+  background-color: var(--primary);
+  color: white;
+  border-left: 0.5px solid var(--primary);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1rem;
+  margin: 1rem 0;
+}
+
+.weekRotation {
+  margin-bottom: 1rem;
+}

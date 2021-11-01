@@ -7,7 +7,7 @@ import { EditAcademicYear } from "./EditAcademicYear";
 import { NewClass, RepeatSchedule } from "./NewClass";
 import { ViewClass } from "./ViewClass";
 import { DeleteClass } from "./DeleteClass";
-import { EditClass } from "./EditClass";
+import { EditClass, EditRepeatSchedule, NewRepeatSchedule } from "./EditClass";
 export {
   NewTask,
   NewSubject,
@@ -20,4 +20,6 @@ export {
   ViewClass,
   DeleteClass,
   EditClass,
+  EditRepeatSchedule,
+  NewRepeatSchedule,
 };

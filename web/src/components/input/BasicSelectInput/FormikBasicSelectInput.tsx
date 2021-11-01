@@ -13,6 +13,7 @@ interface Props extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
   name: string;
   options?: Option[];
+  defaultValue?: any;
 }
 
 export const FormikBasicSelectInput: React.FC<Props> = ({
@@ -20,6 +21,7 @@ export const FormikBasicSelectInput: React.FC<Props> = ({
   name,
   options,
   children,
+  defaultValue,
   ...props
 }) => {
   const id = uuidv4();
@@ -43,7 +45,11 @@ export const FormikBasicSelectInput: React.FC<Props> = ({
           {...props}
         >
           {options?.map((option) => (
-            <option value={option.value} key={option.key}>
+            <option
+              selected={defaultValue === option.value}
+              value={option.value}
+              key={option.key}
+            >
               {option.label}
             </option>
           ))}

@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -17,16 +18,16 @@ export class ClassSchedule {
   id: string;
 
   @Column("text")
-  @Field(() => String)
+  @Field(() => ClassScheduleType)
   type: ClassScheduleType;
 
   @OneToOne(() => OneOffSchedule, (oneoff) => oneoff.schedule)
   @Field(() => OneOffSchedule, { nullable: true })
   oneOff: OneOffSchedule;
 
-  @OneToOne(() => RepeatSchedule, (repeat) => repeat.schedule)
-  @Field(() => RepeatSchedule, { nullable: true })
-  repeat: RepeatSchedule;
+  @OneToMany(() => RepeatSchedule, (repeat) => repeat.schedule)
+  @Field(() => [RepeatSchedule], { nullable: true })
+  repeat: [RepeatSchedule];
 
   @Column("uuid")
   classId: string;

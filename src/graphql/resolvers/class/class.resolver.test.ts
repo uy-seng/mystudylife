@@ -22,9 +22,10 @@ import {
   RepeatSchedule,
   Subject,
 } from "src/entity";
-import { getClassesQuery } from "src/graphql/query/class";
+import { getClassByIdQuery, getClassesQuery } from "src/graphql/query/class";
 import { updateClassMutation } from "src/graphql/mutation/class";
 import { updateOneOffScheduleMutation } from "src/graphql/mutation/oneOffSchedule";
+import { updateRepeatScheduleMutation } from "src/graphql/mutation/repeatSchedule";
 
 const testUser = {
   email: faker.internet.email(),
@@ -224,6 +225,23 @@ describe("test case 1: create class with one-off schedule with academic year", (
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
   });
+
+  it("should return class with correct data", async () => {
+    const response = await testClient({
+      source: getClassByIdQuery,
+      variableValues: {
+        id: classId,
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    expect(response.data!.getClassById!.academicYear!.id).toEqual(
+      academicYearId
+    );
+  });
 });
 
 /**
@@ -381,7 +399,9 @@ describe("test case 5: update class with one off schedule", () => {
     expect(response.data!.getClasses.length).toEqual(2);
     expect(response.data!.getClasses[0]).toHaveProperty("subject");
     expect(response.data!.getClasses[0]).toHaveProperty("academicYear");
-    c = response.data!.getClasses[0];
+    c = response.data!.getClasses.filter(
+      (c: any) => c.schedule.type === "oneOff"
+    )[0];
     expect(c).toBeDefined();
   });
 
@@ -498,8 +518,85 @@ describe("test case 6: deleting class with one off schedule", () => {
 });
 
 //! test case 7: updating class with repeat schedule
-//? update subject of the class
-//? update repeat schedule of the class
+describe("test case 7: updating class with repeat schedule", () => {
+  let c: any;
+  it("should get one random class id from all classes", async () => {
+    const response = await testClient({
+      source: getClassesQuery,
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    c = response.data!.getClasses[0];
+    expect(response.data!.getClasses.length).toEqual(1);
+    expect(response.data!.getClasses[0]).toHaveProperty("subject");
+    expect(response.data!.getClasses[0]).toHaveProperty("academicYear");
+    expect(c).toBeDefined();
+  });
+
+  it("should update subject of class", async () => {
+    const subjects = await getConnection(process.env.NODE_ENV)
+      .getRepository(Subject)
+      .find();
+    const newSubjectId = subjects[0].id;
+
+    const response = await testClient({
+      source: updateClassMutation,
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+      variableValues: {
+        id: c.id,
+        subjectId: newSubjectId,
+        academicYearId: c?.academicYear?.id,
+        module: c.module,
+        room: c.room,
+        building: c.building,
+        teacher: c.teacher,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    const updatedClass = (await getConnection(process.env.NODE_ENV)
+      .getRepository(Class)
+      .findOne(c.id, {
+        relations: ["subject"],
+      })) as Class;
+    expect(updatedClass.subject.id).toEqual(newSubjectId);
+  });
+
+  it("should update repeat schedule of class", async () => {
+    const response = await testClient({
+      source: updateRepeatScheduleMutation,
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+      variableValues: {
+        id: c.schedule.repeat[0].id,
+        scheduleId: c.schedule.id,
+        startTime: "01:00:00",
+        endTime: "02:50:00",
+        repeatDays: ["monday", "tuesday"],
+        startDate: null,
+        endDate: null,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    const updatedClass = await getConnection(process.env.NODE_ENV)
+      .getRepository(Class)
+      .findOne(c.id, { relations: ["schedule", "schedule.repeat"] });
+    expect(updatedClass).toBeDefined();
+    expect(updatedClass?.schedule.repeat[0].startTime).toEqual("01:00:00");
+    expect(updatedClass?.schedule.repeat[0].endTime).toEqual("02:50:00");
+    expect(updatedClass?.schedule.repeat[0].repeatDays).toContain(1);
+    expect(updatedClass?.schedule.repeat[0].repeatDays).toContain(2);
+    expect(updatedClass?.schedule.repeat[0].startDate).toEqual(null);
+    expect(updatedClass?.schedule.repeat[0].endDate).toEqual(null);
+  });
+});
 
 describe("test case 8: deleting class with repeat schedule", () => {
   let classId: string;
@@ -519,7 +616,7 @@ describe("test case 8: deleting class with repeat schedule", () => {
     expect(response.data!.getClasses[0]).toHaveProperty("academicYear");
     classId = response.data!.getClasses[0].id;
     classScheduleId = response.data!.getClasses[0].schedule.id;
-    repeatScheduleId = response.data!.getClasses[0].schedule.repeat.id;
+    repeatScheduleId = response.data!.getClasses[0].schedule.repeat[0].id;
     expect(classId).toBeDefined();
     expect(classScheduleId).toBeDefined();
     expect(repeatScheduleId).toBeDefined();
@@ -553,5 +650,90 @@ describe("test case 8: deleting class with repeat schedule", () => {
     ).getRepository(RepeatSchedule);
     const q = await repeatScheduleRepository.findOne(repeatScheduleId);
     expect(q).toBeUndefined();
+  });
+});
+
+//! test case 9: create new class with multiple repeat schedule
+describe("test case 9: create class with repeat schedule", () => {
+  let classId: string;
+  it("should create class", async () => {
+    const response = await testClient({
+      source: newClassMutation,
+      variableValues: {
+        subjectId: subjectId,
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    classId = response.data!.newClass.id;
+    expect(classId).toBeDefined();
+  });
+
+  let scheduleId: string;
+  it("should create class schedule", async () => {
+    const response = await testClient({
+      source: newClassScheduleMutation,
+      variableValues: {
+        classId: classId,
+        type: "repeat",
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    scheduleId = response.data!.newClassSchedule.id;
+    expect(scheduleId).toBeDefined();
+  });
+
+  it("should create repeat schedule (1)", async () => {
+    const response = await testClient({
+      source: newRepeatScheduleMutation,
+      variableValues: {
+        scheduleId: scheduleId,
+        startTime: "8:00 AM",
+        endTime: "9:50 AM",
+        repeatDays: ["sunday"],
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+  });
+
+  it("should create repeat schedule (2)", async () => {
+    const response = await testClient({
+      source: newRepeatScheduleMutation,
+      variableValues: {
+        scheduleId: scheduleId,
+        startTime: "8:00 AM",
+        endTime: "9:50 AM",
+        repeatDays: ["monday"],
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+  });
+
+  it("should return new class with 2 repeat schedules", async () => {
+    const response = await testClient({
+      source: getClassesQuery,
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    expect(response.data!.getClasses.length).toEqual(1);
+    expect(response.data!.getClasses[0].schedule.repeat.length).toEqual(2);
   });
 });

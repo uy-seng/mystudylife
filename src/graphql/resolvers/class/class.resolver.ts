@@ -10,9 +10,10 @@ import {
 import { AcademicYear, Class, Subject, User } from "src/entity";
 import { ClassArgs } from "./types";
 import { getConnection } from "typeorm";
-import { ValidationError } from "apollo-server-errors";
+import { ValidationError, ApolloError } from "apollo-server-errors";
 import { authenticationGate } from "src/middleware";
 import { Context } from "src/interface";
+import { UpdateClassArgs } from "./types/class";
 
 @Resolver()
 export class ClassResolver {
@@ -85,6 +86,26 @@ export class ClassResolver {
     return classes;
   }
 
+  @Query(() => Class)
+  @UseMiddleware(authenticationGate)
+  async getClassById(
+    @Arg("id", () => String) id: string,
+    @Ctx() { user }: Context
+  ) {
+    const q = await this.classRespository.findOne(id, {
+      relations: [
+        "schedule",
+        "schedule.oneOff",
+        "schedule.repeat",
+        "academicYear",
+        "user",
+        "subject",
+      ],
+    });
+    if (!q || q.user.id !== user!.id) throw new ApolloError("result not found");
+    return q;
+  }
+
   @Query(() => [Class])
   @UseMiddleware(authenticationGate)
   async getClassesByDate(
@@ -122,11 +143,15 @@ export class ClassResolver {
         // check if date is between academic year
         if (c.academicYear)
           return (
-            c.schedule.repeat.repeatDays.includes(new Date(date).getDay()) &&
+            c.schedule.repeat.some((r) =>
+              r.repeatDays.includes(new Date(date).getDay())
+            ) &&
             +date >= +new Date(c.academicYear.startDate) &&
             +date <= +new Date(c.academicYear.endDate)
           );
-        return c.schedule.repeat.repeatDays.includes(new Date(date).getDay());
+        return c.schedule.repeat.some((r) =>
+          r.repeatDays.includes(new Date(date).getDay())
+        );
       }
     });
   }
@@ -154,11 +179,10 @@ export class ClassResolver {
   @Mutation(() => Boolean)
   @UseMiddleware(authenticationGate)
   async updateClass(
-    @Arg("id", () => String) id: string,
-    @Args() updateContext: ClassArgs,
+    @Args() updateContext: UpdateClassArgs,
     @Ctx() { user }: Context
   ) {
-    const q = await this.classRespository.findOne(id, {
+    const q = await this.classRespository.findOne(updateContext.id, {
       relations: ["user", "schedule", "academicYear"],
     });
     const updatedSubject = await this.subjectRepository.findOne(

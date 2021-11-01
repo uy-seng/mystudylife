@@ -1,17 +1,11 @@
-import {
-  Arg,
-  Args,
-  Ctx,
-  Mutation,
-  Resolver,
-  UseMiddleware,
-} from "type-graphql";
+import { Args, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
 import { OneOffSchedule } from "src/entity";
 import { OneOffScheduleArgs } from "./types";
 import { getConnection } from "typeorm";
 import { authenticationGate } from "src/middleware";
 import { Context } from "src/interface";
 import { ValidationError } from "apollo-server-express";
+import { UpdateOneOffScheduleArgs } from "./types/oneOffSchedule";
 
 @Resolver()
 export class OneOffScheduleResolver {
@@ -36,11 +30,10 @@ export class OneOffScheduleResolver {
   @Mutation(() => Boolean)
   @UseMiddleware(authenticationGate)
   async updateOneOffSchedule(
-    @Arg("id", () => String) id: string,
-    @Args() updateContext: OneOffScheduleArgs,
+    @Args() updateContext: UpdateOneOffScheduleArgs,
     @Ctx() { user }: Context
   ) {
-    const q = await this.oneOffScheduleRepository.findOne(id, {
+    const q = await this.oneOffScheduleRepository.findOne(updateContext.id, {
       relations: ["schedule", "schedule.class", "schedule.class.user"],
     });
     if (q?.schedule.class.user.id !== user!.id || !q)

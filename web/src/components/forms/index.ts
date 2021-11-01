@@ -5,6 +5,7 @@ import { SignUpForm } from "./SignUp";
 import { NewSubjectForm } from "./NewSubject";
 import { EditAcademicYearForm } from "./EditAcademicYear";
 import { NewClassForm } from "./NewClass";
+import { EditClassForm } from "./EditClass";
 
 export {
   SignUpForm,
@@ -14,4 +15,5 @@ export {
   NewSubjectForm,
   EditAcademicYearForm,
   NewClassForm,
+  EditClassForm,
 };

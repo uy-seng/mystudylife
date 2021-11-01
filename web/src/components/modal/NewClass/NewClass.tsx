@@ -18,14 +18,7 @@ interface Props {}
 
 export const NewClass: React.FC<Props> = () => {
   const [show, setShow] = React.useState<boolean>(false);
-  // const { academicYears, selectedYear } = useAppSelector(
-  //   selectScheduleComponentState
-  // );
   const { data: academicYears } = useGetAcademicYearsQuery();
-
-  // const [selectedAcademicYearId, setSelectedAcademicYearId] = React.useState<
-  //   string | null
-  // >(null);
   const { academicYearId } = useAppSelector(selectClassPayload);
   const dispatch = useAppDispatch();
   const { type: classScheduleType } = useAppSelector(

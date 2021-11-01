@@ -291,6 +291,7 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                             if (index < 2) {
                               return (
                                 <ViewClass
+                                  data={c}
                                   childController={
                                     <div className={css.classItem}>
                                       {c.subject.name} - {c.module}
@@ -343,6 +344,7 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                               )
                             )?.map((c) => (
                               <ViewClass
+                                data={c}
                                 childController={
                                   <div className={css.classItem}>
                                     {c.subject.name} - {c.module}
