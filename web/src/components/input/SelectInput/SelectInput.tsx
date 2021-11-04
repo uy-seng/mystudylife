@@ -12,6 +12,7 @@ export const SelectInput: React.FC<SelectInputProps> = ({
   style,
   options,
   value,
+  defaultValue,
   setState,
   ...props
 }) => {
@@ -29,6 +30,15 @@ export const SelectInput: React.FC<SelectInputProps> = ({
       );
     });
   }, [searchTarget]);
+
+  React.useEffect(() => {
+    if (defaultValue) {
+      const defaultKey = filteredOptions.filter(
+        (option) => option.value === defaultValue
+      )[0].key;
+      setSearchTarget(defaultKey);
+    }
+  }, []);
 
   return (
     <BaseInput className={css.wrapper}>

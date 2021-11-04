@@ -1,82 +1,34 @@
-import {
-  Subject,
-  Exam,
-  AcademicYear,
-  AcademicYearTerm,
-  User,
-} from "src/entity";
-import { taskType } from "src/entity/types";
-import { Field, InputType, ObjectType } from "type-graphql";
-import {
-  AcademicYearObjectType,
-  AcademicYearTermObjectType,
-} from "../../academicYear/types";
-import { ExamObjectType } from "../../exam/types";
-import { SubjectObjectType } from "../../subject/types";
-import { UserObjectType } from "../../user/types";
+import { Task } from "src/entity";
+import { TaskType } from "src/entity/types";
+import { ArgsType, Field, registerEnumType } from "type-graphql";
 
-@ObjectType()
-export class TaskObjectType {
-  @Field(() => String)
-  id: string;
+registerEnumType(TaskType, {
+  name: "TaskType",
+});
 
+@ArgsType()
+export class TaskArgs implements Partial<Task> {
   @Field(() => String)
-  type: taskType;
+  subjectId: string;
+
+  @Field(() => String, { nullable: true })
+  academicYearId: string;
+
+  @Field(() => TaskType)
+  type: TaskType;
 
   @Field(() => String)
   due_date: string;
 
-  @Field(() => String)
-  title: string;
+  @Field(() => String, { defaultValue: "" })
+  title?: string;
 
-  @Field(() => String)
-  detail: string;
-
-  @Field(() => [SubjectObjectType])
-  subject: SubjectObjectType;
-
-  @Field(() => [ExamObjectType])
-  exam: ExamObjectType;
-
-  @Field(() => AcademicYearObjectType)
-  academicYear: AcademicYearObjectType;
-
-  @Field(() => AcademicYearTermObjectType)
-  term: AcademicYearTermObjectType;
-
-  @Field(() => UserObjectType)
-  user: UserObjectType;
+  @Field(() => String, { defaultValue: "" })
+  detail?: string;
 }
 
-@InputType()
-export class TaskInputType {
+@ArgsType()
+export class UpdateTaskArgs extends TaskArgs {
   @Field(() => String)
   id: string;
-
-  @Field(() => taskType)
-  type: taskType;
-
-  @Field(() => String)
-  due_date: string;
-
-  @Field(() => String)
-  title: string;
-
-  @Field(() => String)
-  detail: string;
-
-  @Field(() => [Subject])
-  subject: Subject;
-
-  @Field(() => [Exam])
-  exam: Exam;
-
-  @Field(() => AcademicYear)
-  academicYear: AcademicYear;
-
-  @Field(() => AcademicYearTerm)
-  term: AcademicYearTerm;
-
-  @Field(() => User)
-  user: User;
 }

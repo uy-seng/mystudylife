@@ -99,7 +99,6 @@ export const EditClassSlice = createSlice({
       }
     ) => {
       state.toBeUpdatedRepeatSchedules = params.payload;
-      console.log(state.toBeUpdatedRepeatSchedules);
     },
     setNewRepeatSchedules: (
       state,

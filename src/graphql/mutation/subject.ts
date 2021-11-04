@@ -23,4 +23,18 @@ const deleteSubjectMutation = `
     }
 `;
 
-export { newSubjectMutation, deleteSubjectMutation };
+const updateSubjectMutation = `
+    mutation(
+        $id: String!, 
+        $name: String!, 
+        $academicYearId: String
+    ) {
+        updateSubject(
+            id: $id,
+            name: $name,
+            academicYearId: $academicYearId
+        )
+    }
+`;
+
+export { newSubjectMutation, deleteSubjectMutation, updateSubjectMutation };

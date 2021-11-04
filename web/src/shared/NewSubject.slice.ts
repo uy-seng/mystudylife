@@ -29,13 +29,20 @@ export const NewSubjectSlice = createSlice({
           break;
       }
     },
+    setSubjectPayloadToDefault: (state) => {
+      state.subjectPayload = {
+        name: "",
+        academicYearId: undefined,
+      };
+    },
   },
 });
 
 export const selectSubjectPayload = (state: RootState) =>
   state.newsubject.subjectPayload;
 
-export const { setSubjectPayload } = NewSubjectSlice.actions;
+export const { setSubjectPayload, setSubjectPayloadToDefault } =
+  NewSubjectSlice.actions;
 
 export default NewSubjectSlice.reducer;
 

@@ -21,7 +21,7 @@ export const OneOffSchedule: React.FC<Props> = () => {
     dispatch(
       setOneOffSchedulePayload({
         key: "endTime",
-        value: moment(startTime, "hh:mm").add(1, "hours").format("hh:mm"),
+        value: moment(startTime, "HH:mm").add(1, "hours").format("HH:mm"),
       })
     );
   }, [startTime]);

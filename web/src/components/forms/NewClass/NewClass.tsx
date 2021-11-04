@@ -22,7 +22,11 @@ import {
   selectOneOffSchedulePayload,
   selectRepeatSchedules,
   setClassPayload,
+  setClassPayloadToDefault,
   setClassSchedulePayload,
+  setClassSchedulePayloadToDefault,
+  setOneOffSchedulePayloadToDefault,
+  setRepeatSchedulesToDefault,
 } from "../../../shared/NewClass.slice";
 import {
   Exact,
@@ -248,6 +252,12 @@ const MyForm = withFormik<any, ClassPayload>({
           >
         | undefined
     ) => Promise<ApolloQueryResult<GetClassesQuery>>;
+    const setClassPayloadToDefault = props.setClassPayloadToDefault;
+    const setClassSchedulePayloadToDefault =
+      props.setClassSchedulePayloadToDefault;
+    const setOneOffSchedulePayloadToDefault =
+      props.setOneOffSchedulePayloadToDefault;
+    const setRepeatSchedulesToDefault = props.setRepeatSchedulesToDefault;
     newClass({
       variables: {
         ...classPayload,
@@ -255,9 +265,9 @@ const MyForm = withFormik<any, ClassPayload>({
         academicYearId: classPayload.academicYearId as string,
       },
     })
-      .then((response) => {
+      .then(async (response) => {
         const classId = response.data?.newClass.id;
-        newClassSchedule({
+        await newClassSchedule({
           variables: {
             classId: classId as string,
             type: classSchedulePayload.type,
@@ -288,9 +298,13 @@ const MyForm = withFormik<any, ClassPayload>({
               });
             });
           }
-          await refetchClasses();
-          setShow(false);
         });
+        await refetchClasses();
+        setClassPayloadToDefault();
+        setClassSchedulePayloadToDefault();
+        setOneOffSchedulePayloadToDefault();
+        setRepeatSchedulesToDefault();
+        setShow(false);
       })
       .catch((error) => console.log(error));
   },
@@ -333,12 +347,17 @@ export const NewClassForm: React.FC<NewClassProps> = ({ setShow }) => {
   const [newClassSchedule] = useNewClassScheduleMutation();
   const [newOneOffSchedule] = useNewOneOffScheduleMutation();
   const [newRepeatSchedule] = useNewRepeatScheduleMutation();
-  const { refetch } = useGetClassesQuery();
+  const { refetch } = useGetClassesQuery({
+    fetchPolicy: "network-only",
+  });
 
   const classPayload = useAppSelector(selectClassPayload);
   const classSchedulePayload = useAppSelector(selectClassSchedulePayload);
   const oneOffSchedulePayload = useAppSelector(selectOneOffSchedulePayload);
   const repeatSchedules = useAppSelector(selectRepeatSchedules);
+
+  const dispatch = useAppDispatch();
+
   return (
     <ConnectedForm
       newClass={newClass}
@@ -350,6 +369,16 @@ export const NewClassForm: React.FC<NewClassProps> = ({ setShow }) => {
       classSchedulePayload={classSchedulePayload}
       oneOffSchedulePayload={oneOffSchedulePayload}
       repeatSchedules={repeatSchedules}
+      setClassPayloadToDefault={() => dispatch(setClassPayloadToDefault())}
+      setClassSchedulePayloadToDefault={() =>
+        dispatch(setClassSchedulePayloadToDefault())
+      }
+      setOneOffSchedulePayloadToDefault={() =>
+        dispatch(setOneOffSchedulePayloadToDefault())
+      }
+      setRepeatSchedulesToDefault={() =>
+        dispatch(setRepeatSchedulesToDefault())
+      }
       refetchClasses={refetch}
     />
   );

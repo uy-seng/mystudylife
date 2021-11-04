@@ -1,7 +1,10 @@
 import moment from "moment";
 import React from "react";
 import { useAppSelector } from "../../../app/hooks";
-import { selectToBeUpdatedRepeatSchedules } from "../../../shared/EditClass.slice";
+import {
+  selectNewRepeatSchedules,
+  selectToBeUpdatedRepeatSchedules,
+} from "../../../shared/EditClass.slice";
 import { RepeatSchedulePayload } from "../../../shared/NewClass.slice";
 import { EditRepeatSchedule, NewRepeatSchedule } from "../../modal";
 import css from "./RepeatSchedule.module.css";
@@ -12,6 +15,7 @@ export const RepeatSchedule: React.FC<Props> = () => {
   const toBeUpdatedRepeatSchedules = useAppSelector(
     selectToBeUpdatedRepeatSchedules
   );
+  const newRepeatSchedules = useAppSelector(selectNewRepeatSchedules);
   const dayOfWeekOptions = React.useMemo(
     () => [
       { key: "Sun", value: "sunday" },
@@ -25,7 +29,7 @@ export const RepeatSchedule: React.FC<Props> = () => {
     []
   );
 
-  if (toBeUpdatedRepeatSchedules)
+  if (toBeUpdatedRepeatSchedules && newRepeatSchedules)
     return (
       <div>
         {toBeUpdatedRepeatSchedules.map((repeatSchedule) => (
@@ -52,6 +56,27 @@ export const RepeatSchedule: React.FC<Props> = () => {
               </div>
             }
           />
+        ))}
+
+        {newRepeatSchedules.map((repeatSchedule) => (
+          <div className={css.option}>
+            <div>
+              <div>
+                {moment(repeatSchedule.startTime, "HH:mm").format("hh:mm")}{" "}
+                {" - "}
+                {moment(repeatSchedule.endTime, "HH:mm").format("hh:mm")}
+              </div>
+              <div>
+                {repeatSchedule.days
+                  .map(
+                    (day) =>
+                      dayOfWeekOptions.filter((d) => d.value === day)[0].key
+                  )
+                  .join(",")}
+              </div>
+            </div>
+            <div></div>
+          </div>
         ))}
         <NewRepeatSchedule />
       </div>

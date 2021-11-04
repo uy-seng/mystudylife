@@ -1,4 +1,8 @@
-import { ForbiddenError, ValidationError } from "apollo-server-errors";
+import {
+  ForbiddenError,
+  ValidationError,
+  ApolloError,
+} from "apollo-server-errors";
 import { Subject, AcademicYear, User } from "src/entity";
 import { Context } from "src/interface";
 import {
@@ -84,5 +88,40 @@ export class SubjectResolver {
     if (subject?.user.id !== user!.id)
       throw new ForbiddenError("academic year not found for this user");
     return subject;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(authenticationGate)
+  async updateSubject(
+    @Arg("id", () => String) id: string,
+    @Arg("name") name: string,
+    @Arg("academicYearId", { nullable: true }) academicYearId: string,
+    @Ctx() { user }: Context
+  ) {
+    const q = await this.subjectRepository.findOne(id, {
+      relations: ["user"],
+      where: {
+        user: {
+          id: user!.id,
+        },
+      },
+    });
+    if (!q) throw new ApolloError("item not found. please provide a valid id");
+    q.name = name;
+    if (
+      academicYearId &&
+      (!q.academicYear || q.academicYear.id !== academicYearId)
+    ) {
+      const toBeUpdatedAcademicYear = await this.academicYearRepository.findOne(
+        academicYearId
+      );
+      if (!toBeUpdatedAcademicYear)
+        throw new ApolloError(
+          "item not found. pleaase provide a valid academic year id"
+        );
+      q.academicYear = toBeUpdatedAcademicYear;
+    }
+    await this.subjectRepository.save(q);
+    return true;
   }
 }

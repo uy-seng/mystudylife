@@ -6,10 +6,15 @@ import {
   newSubjectMutation,
   registerMutation,
 } from "src/graphql/mutation";
-import { meQuery } from "src/graphql/query";
+import { getSubjectsQuery, meQuery } from "src/graphql/query";
 import { getConnection } from "typeorm";
 import { testClient } from "../../../../test/graphqlTestClient";
 import faker from "faker";
+import {
+  updateSubjectMutation,
+  deleteSubjectMutation,
+} from "src/graphql/mutation/subject";
+import { asyncForEach } from "src/helper";
 
 const testUser = {
   email: faker.internet.email(),
@@ -159,5 +164,117 @@ describe("test case 2: create subject with academic year", () => {
       relations: ["academicYear"],
     });
     expect(subject?.academicYear).not.toBeNull();
+  });
+});
+
+describe("test case 3: should be able to fetch subjects", () => {
+  it("should fetch all subjects", async () => {
+    const response = await testClient({
+      source: getSubjectsQuery,
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    expect(response!.data!.getSubjects.length).toEqual(2);
+    expect(response!.data!.getSubjects[0]).toHaveProperty("academicYear");
+  });
+});
+
+describe("test case 4: should be able to update subject", () => {
+  let subjectId: string;
+  it("should fetch 1 subject with name and no academic year", async () => {
+    const response = await testClient({
+      source: getSubjectsQuery,
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    expect(
+      response.data!.getSubjects!.filter((s: any) => s.academicYear === null)
+        .length
+    ).toEqual(1);
+    subjectId = response.data!.getSubjects!.filter(
+      (s: any) => s.academicYear === null
+    )[0];
+    expect(subjectId).toBeDefined();
+  });
+  it("should update name of subject", async () => {
+    const subject = await getConnection(process.env.NODE_ENV)
+      .getRepository(Subject)
+      .findOne(subjectId, { relations: ["academicYear"] });
+    expect(subject).toBeDefined();
+    const response = await testClient({
+      source: updateSubjectMutation,
+      variableValues: {
+        id: subject?.id,
+        academicYearId: subject?.academicYear?.id || null,
+        name: "meow",
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    const updatedSubject = await getConnection(process.env.NODE_ENV)
+      .getRepository(Subject)
+      .findOne(subjectId, { relations: ["academicYear"] });
+    expect(updatedSubject?.name).toEqual("meow");
+  });
+
+  it("should update academic year of subject", async () => {
+    const subject = await getConnection(process.env.NODE_ENV)
+      .getRepository(Subject)
+      .findOne(subjectId, { relations: ["academicYear"] });
+    const response = await testClient({
+      source: updateSubjectMutation,
+      variableValues: {
+        id: subject?.id,
+        academicYearId: academicYearId,
+        name: subject?.name,
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    const updatedSubject = await getConnection(process.env.NODE_ENV)
+      .getRepository(Subject)
+      .findOne(subjectId, { relations: ["academicYear"] });
+    expect(updatedSubject).toHaveProperty("academicYear");
+    expect(updatedSubject?.academicYear.id).toEqual(academicYearId);
+  });
+});
+
+describe("test case 5: deleting subject", () => {
+  it("should delete all subjects", async () => {
+    const response = await testClient({
+      source: getSubjectsQuery,
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    await asyncForEach(response!.data!.getSubjects, async (subject: any) => {
+      await testClient({
+        source: deleteSubjectMutation,
+        variableValues: {
+          id: subject!.id,
+        },
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      });
+    });
+    const subjects = await getConnection(process.env.NODE_ENV)
+      .getRepository(Subject)
+      .find();
+    expect(subjects.length).toEqual(0);
   });
 });

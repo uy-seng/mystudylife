@@ -1,0 +1,18 @@
+query GetTasks {
+  getTasks {
+    id
+    title
+    detail
+    type
+    due_date
+    academicYear {
+      id
+      startDate
+      endDate
+    }
+    subject {
+      id
+      name
+    }
+  }
+}

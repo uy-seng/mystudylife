@@ -1,0 +1,27 @@
+.name.error {
+  border: 1px solid var(--error);
+}
+
+.form {
+  min-width: 400px;
+  max-width: 500px;
+}
+
+.btns {
+  display: flex;
+  margin-top: 1rem;
+}
+
+.btns::before {
+  content: "";
+  width: 700%;
+}
+
+.group {
+  margin: 1rem 0;
+}
+
+.advanced {
+  text-decoration: underline;
+  cursor: pointer;
+}

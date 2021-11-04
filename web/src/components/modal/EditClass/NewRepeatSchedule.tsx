@@ -2,8 +2,14 @@ import moment from "moment";
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { useAppSelector } from "../../../app/hooks";
-import { selectToBeUpdatedRepeatSchedules } from "../../../shared/EditClass.slice";
-import { selectRepeatSchedules } from "../../../shared/NewClass.slice";
+import {
+  selectNewRepeatSchedules,
+  selectToBeUpdatedRepeatSchedules,
+} from "../../../shared/EditClass.slice";
+import {
+  RepeatSchedulePayload,
+  selectRepeatSchedules,
+} from "../../../shared/NewClass.slice";
 import { Button } from "../../button";
 import { NewRepeatScheduleForm } from "../../forms/EditClass/NewRepeatSchedule";
 import { RepeatScheduleForm } from "../../forms/NewClass/RepeatSchedule";
@@ -13,11 +19,9 @@ interface Props {}
 
 export const NewRepeatSchedule: React.FC<Props> = () => {
   const [show, setShow] = React.useState(false);
-  const toBeUpdatedRepeatSchedules = useAppSelector(
-    selectToBeUpdatedRepeatSchedules
-  );
+  const newRepeatSchedules = useAppSelector(selectNewRepeatSchedules);
 
-  if (toBeUpdatedRepeatSchedules)
+  if (newRepeatSchedules)
     return (
       <React.Fragment>
         <Button

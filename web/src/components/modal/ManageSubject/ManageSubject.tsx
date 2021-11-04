@@ -8,6 +8,8 @@ import { selectScheduleComponentState } from "../../../shared/Schedule.slice";
 import { Button } from "../../button";
 import { HeaderSelect } from "../../select";
 import BaseModal from "../BaseModal";
+import { DeleteSubject } from "../DeleteSubject/DeleteSubject";
+import { EditSubject } from "../EditSubject";
 
 import css from "./ManageSubject.module.css";
 
@@ -15,7 +17,7 @@ interface Props {}
 
 export const ManageSubject: React.FC<Props> = () => {
   const [show, setShow] = React.useState<boolean>(false);
-  const { data, refetch } = useGetSubjectsQuery();
+  const { data, loading } = useGetSubjectsQuery();
   const { academicYears, selectedYear } = useAppSelector(
     selectScheduleComponentState
   );
@@ -25,7 +27,7 @@ export const ManageSubject: React.FC<Props> = () => {
   const [subjects, setSubjects] = React.useState<any[]>([]);
 
   React.useEffect(() => {
-    if (data)
+    if (data) {
       setSubjects(
         data!.getSubjects.filter(
           (subject) =>
@@ -33,6 +35,7 @@ export const ManageSubject: React.FC<Props> = () => {
             !subject.academicYear
         )
       );
+    }
   }, [data, selectedAcademicYearId]);
 
   React.useEffect(() => {
@@ -46,7 +49,11 @@ export const ManageSubject: React.FC<Props> = () => {
         text="Manage Subject"
         onClick={() => setShow(true)}
       />
-      <BaseModal parent={document.querySelector(".App") as Element} show={show}>
+      <BaseModal
+        hide={() => setShow(false)}
+        parent={document.querySelector(".App") as Element}
+        show={show}
+      >
         <BaseModal.Header>
           <HeaderSelect
             defaultValue={selectedAcademicYearId}
@@ -96,7 +103,12 @@ export const ManageSubject: React.FC<Props> = () => {
           <div className={css.body}>
             {subjects.length > 0 ? (
               subjects.map((subject) => (
-                <div className={css.subject}>{subject.name}</div>
+                <EditSubject
+                  data={subject}
+                  childController={
+                    <div className={css.subject}>{subject.name}</div>
+                  }
+                />
               ))
             ) : (
               <div className={css.up}>

@@ -1,6 +1,7 @@
 import { Field, ObjectType } from "type-graphql";
 import {
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   OneToOne,
@@ -8,7 +9,11 @@ import {
 } from "typeorm";
 import { Subject, AcademicYear, Term, User, ClassSchedule } from "..";
 
-@Entity("classes")
+@Entity("classes", {
+  orderBy: {
+    createdAt: "ASC",
+  },
+})
 @ObjectType()
 export class Class {
   @PrimaryGeneratedColumn("uuid")
@@ -49,4 +54,7 @@ export class Class {
   @ManyToOne(() => User, (user) => user.classes)
   @Field(() => User)
   user: User;
+
+  @CreateDateColumn({ default: () => "NOW()" })
+  createdAt: Date;
 }

@@ -10,7 +10,7 @@ import ctx from "classnames";
 import { AiOutlineClose } from "react-icons/ai";
 import { MdEdit } from "react-icons/md";
 import { BsCalendar } from "react-icons/bs";
-import { formatDate } from "../../../utils";
+import { formatDate, formatTime } from "../../../utils";
 import { DeleteClass, EditClass } from "..";
 
 interface Props {
@@ -44,11 +44,16 @@ export const ViewClass: React.FC<Props> = ({ childController, data }) => {
             <BaseModal.Title
               style={{
                 fontSize: "20px",
+                maxWidth: "300px",
               }}
             >{`${data?.subject.name}: ${data?.module} Class`}</BaseModal.Title>
-            <BaseModal.Extra>{`${data?.academicYear?.startDate.split("-")[0]}-${
-              data?.academicYear?.endDate.split("-")[0]
-            }`}</BaseModal.Extra>
+            <BaseModal.Extra>
+              {data.academicYear
+                ? `${data?.academicYear?.startDate.split("-")[0]}-${
+                    data?.academicYear?.endDate.split("-")[0]
+                  }`
+                : `No year/term`}
+            </BaseModal.Extra>
 
             <DeleteClass
               classId={data!.id}
@@ -56,15 +61,6 @@ export const ViewClass: React.FC<Props> = ({ childController, data }) => {
               parentClassName={"viewClass"}
             />
             <EditClass c={data} />
-            {/* <div
-              onClick={() => {
-                setShow(false);
-              }}
-              className="edit"
-              style={{ top: "1.5rem" }}
-            >
-              <MdEdit />
-            </div> */}
             <div
               onClick={() => {
                 setShow(false);
@@ -83,15 +79,11 @@ export const ViewClass: React.FC<Props> = ({ childController, data }) => {
                     <BsCalendar />
                   </div>
                   <div>
-                    {`${moment(
-                      data.schedule.oneOff.startTime,
-                      "hh:mm:mm"
-                    ).format("h:mm A")} - ${moment(
-                      data.schedule.oneOff.endTime,
-                      "hh:mm:mm"
-                    ).format("h:mm A")} --${
-                      data.schedule.oneOff.date ===
-                      new Date().toISOString().split("T")[0]
+                    {`${formatTime(
+                      data.schedule.oneOff.startTime
+                    )} - ${formatTime(data.schedule.oneOff.endTime)} --${
+                      formatDate(new Date(data.schedule.oneOff.date)) ===
+                      formatDate(new Date())
                         ? " Today"
                         : ` ${formatDate(new Date(data.schedule.oneOff.date))}`
                     }`}
@@ -121,9 +113,9 @@ export const ViewClass: React.FC<Props> = ({ childController, data }) => {
                     <div className={ctx(css.weekDetail, css.levelTwo)}>
                       <div>{d.repeatDays.join(", ")}</div>
                       <div>
-                        {`${moment(d.startTime, "hh:mm:mm").format(
-                          "h:mm A"
-                        )} - ${moment(d.endTime, "hh:mm:mm").format("h:mm A")}`}
+                        {`${formatTime(d.startTime)} - ${formatTime(
+                          d.endTime
+                        )}`}
                       </div>
                     </div>
                   </div>

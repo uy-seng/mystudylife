@@ -1,0 +1,18 @@
+query GetTasksByDate($date: DateTime!) {
+  getTasksByDate(date: $date) {
+    id
+    title
+    detail
+    type
+    due_date
+    academicYear {
+      id
+      startDate
+      endDate
+    }
+    subject {
+      id
+      name
+    }
+  }
+}

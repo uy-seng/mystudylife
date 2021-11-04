@@ -1,0 +1,21 @@
+.link {
+  cursor: pointer;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0.9rem;
+  right: 9rem;
+}
+
+.plus {
+  height: 100%;
+  max-height: 35px;
+  margin-top: auto;
+  border: none;
+  outline: none;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}

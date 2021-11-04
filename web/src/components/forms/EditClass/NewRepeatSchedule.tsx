@@ -2,6 +2,11 @@ import React, { useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { DayOfWeek, useGetAcademicYearQuery } from "../../../generated/graphql";
 import {
+  selectNewRepeatSchedules,
+  selectToBeUpdatedClassPayload,
+  setNewRepeatSchedules,
+} from "../../../shared/EditClass.slice";
+import {
   selectClassPayload,
   selectRepeatSchedules,
   setRepeatSchedules,
@@ -21,11 +26,11 @@ export const NewRepeatScheduleForm: React.FC<Props> = ({ setShow }) => {
   const [startTime, setStartTime] = React.useState("08:00");
   const [endTime, setEndTime] = React.useState("09:50");
   const [rotationWeek, setRotationWeek] = React.useState(0);
-  const repeatSchedules = useAppSelector(selectRepeatSchedules);
+  const newRepeatSchedules = useAppSelector(selectNewRepeatSchedules);
   const dispatch = useAppDispatch();
-  const { academicYearId } = useAppSelector(selectClassPayload);
+  const toBeUpdatedClassPayload = useAppSelector(selectToBeUpdatedClassPayload);
   const { data: academicYear } = useGetAcademicYearQuery({
-    variables: { id: academicYearId },
+    variables: { id: toBeUpdatedClassPayload?.academicYearId },
   });
 
   const dayOfWeekOptions = useMemo(
@@ -40,6 +45,7 @@ export const NewRepeatScheduleForm: React.FC<Props> = ({ setShow }) => {
     ],
     []
   );
+
   if (academicYear)
     return (
       <div>
@@ -114,29 +120,29 @@ export const NewRepeatScheduleForm: React.FC<Props> = ({ setShow }) => {
 
         <Button
           onClick={() => {
-            // if (academicYear.getAcademicYear?.schedule.type === "weekRotation")
-            //   dispatch(
-            //     setRepeatSchedules([
-            //       ...repeatSchedules,
-            //       {
-            //         days: days,
-            //         startTime: startTime,
-            //         endTime: endTime,
-            //         rotationWeek: rotationWeek,
-            //       },
-            //     ])
-            //   );
-            // else
-            //   dispatch(
-            //     setRepeatSchedules([
-            //       ...repeatSchedules,
-            //       {
-            //         days: days,
-            //         startTime: startTime,
-            //         endTime: endTime,
-            //       },
-            //     ])
-            //   );
+            if (academicYear.getAcademicYear?.schedule.type === "weekRotation")
+              dispatch(
+                setNewRepeatSchedules([
+                  ...newRepeatSchedules,
+                  {
+                    days: days,
+                    startTime: startTime,
+                    endTime: endTime,
+                    rotationWeek: rotationWeek,
+                  },
+                ])
+              );
+            else
+              dispatch(
+                setNewRepeatSchedules([
+                  ...newRepeatSchedules,
+                  {
+                    days: days,
+                    startTime: startTime,
+                    endTime: endTime,
+                  },
+                ])
+              );
             setShow(false);
           }}
           style={{

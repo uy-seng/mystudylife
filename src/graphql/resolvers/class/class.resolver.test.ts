@@ -476,11 +476,11 @@ describe("test case 6: deleting class with one off schedule", () => {
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
     expect(response.data!.getClasses.length).toEqual(2);
-    expect(response.data!.getClasses[1]).toHaveProperty("subject");
-    expect(response.data!.getClasses[1]).toHaveProperty("academicYear");
-    classId = response.data!.getClasses[1].id;
-    classScheduleId = response.data!.getClasses[1].schedule.id;
-    oneOffScheduleId = response.data!.getClasses[1].schedule.oneOff.id;
+    expect(response.data!.getClasses[0]).toHaveProperty("subject");
+    expect(response.data!.getClasses[0]).toHaveProperty("academicYear");
+    classId = response.data!.getClasses[0].id;
+    classScheduleId = response.data!.getClasses[0].schedule.id;
+    oneOffScheduleId = response.data!.getClasses[0].schedule.oneOff.id;
     expect(classId).toBeDefined();
     expect(classScheduleId).toBeDefined();
     expect(oneOffScheduleId).toBeDefined();

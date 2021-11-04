@@ -1,12 +1,15 @@
 import React from "react";
 import { Counter } from "../components/counter";
 import { NewTask } from "../components/modal";
+import { useGetTasksQuery } from "../generated/graphql";
 
 import css from "./Dashboard.module.css";
 
 interface Props {}
 
 export const Dashboard: React.FC<Props> = () => {
+  const { data: tasks } = useGetTasksQuery();
+
   return (
     <div className={css.content}>
       <header className={css.header}>
@@ -59,7 +62,9 @@ export const Dashboard: React.FC<Props> = () => {
       </header>
       <div className={css.body}>
         <div className={css.bodySection}></div>
-        <div className={css.bodySection}></div>
+        <div className={css.bodySection}>
+          {tasks && tasks.getTasks.map((task) => <div>{task.title}</div>)}
+        </div>
         <div className={css.bodySection}></div>
       </div>
     </div>

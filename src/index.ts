@@ -18,6 +18,7 @@ import {
   RepeatScheduleResolver,
 } from "./graphql/resolvers";
 import { DatabaseService } from "./services";
+import { TaskResolver } from "src/graphql/resolvers/task/task.resolver";
 
 (async () => {
   const app = express();
@@ -52,6 +53,7 @@ import { DatabaseService } from "./services";
         ClassScheduleResolver,
         OneOffScheduleResolver,
         RepeatScheduleResolver,
+        TaskResolver,
       ],
     }),
     context: ({ req, res }) => ({ req, res }),

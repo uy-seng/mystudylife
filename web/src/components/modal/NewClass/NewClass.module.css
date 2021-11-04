@@ -4,3 +4,13 @@
   background-color: #eee;
   padding: 1rem;
 }
+
+.alert {
+  display: flex;
+  align-items: center;
+}
+
+.alert > :first-child {
+  margin-right: 0.5rem;
+  font-size: 1.5rem;
+}

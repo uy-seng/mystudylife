@@ -46,11 +46,26 @@ export const NewClassSlice = createSlice({
           break;
       }
     },
+    setClassPayloadToDefault: (state) => {
+      state.classPayload = {
+        academicYearId: state.classPayload.academicYearId,
+        subjectId: undefined,
+        module: "",
+        room: "",
+        building: "",
+        teacher: "",
+      };
+    },
     setClassSchedulePayload: (
       state,
       params: BatchParam<ClassSchedulePayload>
     ) => {
       state.classSchedulePayload[params.payload.key] = params.payload.value;
+    },
+    setClassSchedulePayloadToDefault: (state) => {
+      state.classSchedulePayload = {
+        type: "oneOff",
+      };
     },
     setOneOffSchedulePayload: (
       state,
@@ -58,11 +73,21 @@ export const NewClassSlice = createSlice({
     ) => {
       state.oneOffSchedulePayload[params.payload.key] = params.payload.value;
     },
+    setOneOffSchedulePayloadToDefault: (state) => {
+      state.oneOffSchedulePayload = {
+        date: formatDate(new Date()),
+        startTime: "08:00",
+        endTime: "09:50",
+      };
+    },
     setRepeatSchedules: (
       state,
       repeatSchedule: Param<RepeatSchedulePayload[]>
     ) => {
       state.repeatSchedules = repeatSchedule.payload;
+    },
+    setRepeatSchedulesToDefault: (state) => {
+      state.repeatSchedules = [];
     },
   },
 });
@@ -81,6 +106,10 @@ export const {
   setClassSchedulePayload,
   setOneOffSchedulePayload,
   setRepeatSchedules,
+  setClassPayloadToDefault,
+  setClassSchedulePayloadToDefault,
+  setOneOffSchedulePayloadToDefault,
+  setRepeatSchedulesToDefault,
 } = NewClassSlice.actions;
 
 export default NewClassSlice.reducer;

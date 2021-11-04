@@ -17,6 +17,7 @@ export const NewAcademicYear: React.FC<Props> = () => {
         onClick={() => setShow(true)}
       />
       <BaseModal
+        hide={() => setShow(false)}
         className="newAcademicYear"
         parent={document.querySelector(".App") as Element}
         show={show}

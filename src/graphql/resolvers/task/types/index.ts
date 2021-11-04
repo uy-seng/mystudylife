@@ -1,2 +1,2 @@
-import { TaskInputType, TaskObjectType } from "./task";
-export { TaskInputType, TaskObjectType };
+import { TaskArgs, UpdateTaskArgs } from "./task";
+export { TaskArgs, UpdateTaskArgs };

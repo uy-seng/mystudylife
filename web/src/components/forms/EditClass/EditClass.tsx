@@ -50,6 +50,7 @@ import { NewClass, NewSubject } from "../../modal";
 import { asyncForEach } from "../../../utils";
 import { ApolloQueryResult } from "@apollo/client";
 import {
+  selectNewRepeatSchedules,
   selectToBeUpdatedClassPayload,
   selectToBeUpdatedClassSchedulePayload,
   selectToBeUpdatedOneOffSchedulePayload,
@@ -242,11 +243,17 @@ const MyForm = withFormik<any, ClassPayload>({
       props.toBeUpdatedRepeatSchedules as (RepeatSchedulePayload & {
         id: string;
       })[];
+    const newRepeatSchedules =
+      props.newRepeatSchedules as RepeatSchedulePayload[];
+
     const updateClass = props.updateClass as UpdateClassMutationFn;
     const updateOneOffSchedule =
       props.updateOneOffSchedule as UpdateOneOffScheduleMutationFn;
     const updateRepeatSchedule =
       props.updateRepeatSchedule as UpdateRepeatScheduleMutationFn;
+    const newRepeatSchedule =
+      props.newRepeatSchedule as NewRepeatScheduleMutationFn;
+
     const setShow = props.setShow;
     const refetchClasses = props.refetch as (
       variables?:
@@ -295,6 +302,18 @@ const MyForm = withFormik<any, ClassPayload>({
               });
             }
           );
+          if (newRepeatSchedules.length > 0) {
+            await asyncForEach(newRepeatSchedules, async (repeatSchedule) => {
+              await newRepeatSchedule({
+                variables: {
+                  scheduleId: toBeUpdatedClassSchedulePayload.id,
+                  startTime: repeatSchedule.startTime,
+                  endTime: repeatSchedule.endTime,
+                  repeatDays: repeatSchedule.days,
+                },
+              });
+            });
+          }
         }
         await refetchClasses();
         setShow(false);
@@ -348,9 +367,12 @@ export const EditClassForm: React.FC<EditClassProps> = ({ setShow }) => {
   const toBeUpdatedRepeatSchedules = useAppSelector(
     selectToBeUpdatedRepeatSchedules
   );
+  const newRepeatSchedules = useAppSelector(selectNewRepeatSchedules);
+
   const [updateClass] = useUpdateClassMutation();
   const [updateOneOffSchedule] = useUpdateOneOffScheduleMutation();
   const [updateRepeatSchedule] = useUpdateRepeatScheduleMutation();
+  const [newRepeatSchedule] = useNewRepeatScheduleMutation();
 
   const { refetch } = useGetClassesQuery();
 
@@ -360,9 +382,11 @@ export const EditClassForm: React.FC<EditClassProps> = ({ setShow }) => {
       toBeUpdatedClassSchedulePayload={toBeUpdatedClassSchedulePayload}
       toBeUpdatedOneOffSchedulePayload={toBeUpdatedOneOffSchedulePayload}
       toBeUpdatedRepeatSchedules={toBeUpdatedRepeatSchedules}
+      newRepeatSchedules={newRepeatSchedules}
       updateClass={updateClass}
       updateOneOffSchedule={updateOneOffSchedule}
       updateRepeatSchedule={updateRepeatSchedule}
+      newRepeatSchedule={newRepeatSchedule}
       setShow={setShow}
       refetch={refetch}
     />

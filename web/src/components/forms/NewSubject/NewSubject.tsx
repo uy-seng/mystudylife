@@ -16,6 +16,7 @@ import { selectScheduleComponentState } from "../../../shared/Schedule.slice";
 import {
   selectSubjectPayload,
   setSubjectPayload,
+  setSubjectPayloadToDefault,
   SubjectPayload,
 } from "../../../shared/NewSubject.slice";
 import {
@@ -171,6 +172,7 @@ const MyForm = withFormik<any, SubjectPayload>({
           >
         | undefined
     ) => Promise<ApolloQueryResult<GetSubjectsQuery>>;
+    const setDefault = props.setDefault;
 
     newSubject({
       variables: {
@@ -178,6 +180,7 @@ const MyForm = withFormik<any, SubjectPayload>({
         academicYearId: props.academicYearId,
       },
     }).then(async () => {
+      setDefault();
       await refetch();
       setShow(false);
     });
@@ -214,11 +217,16 @@ interface NewSubjectFormProps {
 export const NewSubjectForm: React.FC<NewSubjectFormProps> = ({ setShow }) => {
   const [newSubject] = useNewSubjectMutation();
   const { refetch } = useGetSubjectsQuery();
+  const dispatch = useAppDispatch();
+  const setDefault = () => {
+    dispatch(setSubjectPayloadToDefault());
+  };
   return (
     <ConnectedForm
       newSubject={newSubject}
       refetch={refetch}
       setShow={setShow}
+      setDefault={setDefault}
     />
   );
 };

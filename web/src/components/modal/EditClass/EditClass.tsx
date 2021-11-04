@@ -106,7 +106,7 @@ export const EditClass: React.FC<Props> = ({ c }) => {
         >
           <BaseModal.Header>
             <HeaderSelect
-              defaultValue={c.academicYear!.id}
+              defaultValue={c.academicYear ? c.academicYear.id : null}
               setState={(value: string) =>
                 dispatch(
                   setToBeUpdatedClassPayload({

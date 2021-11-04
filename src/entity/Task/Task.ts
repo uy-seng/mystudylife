@@ -1,9 +1,19 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Subject, Exam, AcademicYear, Term, User } from "..";
 import { TaskType } from "../types";
 import { Field, ObjectType } from "type-graphql";
 
-@Entity("tasks")
+@Entity("tasks", {
+  orderBy: {
+    createdAt: "ASC",
+  },
+})
 @ObjectType()
 export class Task {
   @PrimaryGeneratedColumn("uuid")
@@ -26,11 +36,15 @@ export class Task {
   @Field(() => String)
   detail: string;
 
+  @CreateDateColumn({ default: () => "NOW()" })
+  createdAt: Date;
+
   @ManyToOne(() => Subject, (subject) => subject.tasks)
   @Field(() => Subject)
   subject: Subject;
 
   @ManyToOne(() => AcademicYear, (academicYear) => academicYear.tasks)
+  @Field(() => AcademicYear, { nullable: true })
   academicYear: AcademicYear;
 
   @ManyToOne(() => Exam, (exam) => exam.tasks)

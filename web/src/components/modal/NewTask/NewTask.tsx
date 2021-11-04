@@ -1,60 +1,85 @@
 import React from "react";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
+import { useAppDispatch } from "../../../app/hooks";
+import { useGetAcademicYearsQuery } from "../../../generated/graphql";
+import { setTaskPayload } from "../../../shared/NewTask.slice";
 import { IconButton } from "../../button";
+import { NewTaskForm } from "../../forms/NewTask";
+import { HeaderSelect } from "../../select";
 import BaseModal from "../BaseModal";
 
 interface Props {}
 
 export const NewTask: React.FC<Props> = () => {
   const [show, setShow] = React.useState<boolean>(false);
+  const { data: academicYears } = useGetAcademicYearsQuery();
+  const dispatch = useAppDispatch();
 
-  return (
-    <React.Fragment>
-      <IconButton
-        type="button"
-        onClick={() => setShow(true)}
-        icon={<AiOutlinePlus />}
-        text={"New Task"}
-      />
-      <BaseModal parent={document.querySelector(".App") as Element} show={show}>
-        <BaseModal.Header>
-          <BaseModal.Title>New Task</BaseModal.Title>
-          <BaseModal.Extra>2020/2021</BaseModal.Extra>
-        </BaseModal.Header>
-        <BaseModal.Body>
-          <form style={{ width: "max-content" }}>
-            <div style={{ display: "flex" }}>
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <label htmlFor="subject">Subject</label>
-                <input type="text" name="subject" id="subject" />
-              </div>
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <label htmlFor="type">Type</label>
-                <input type="text" name="type" id="type" />
-              </div>
+  if (academicYears)
+    return (
+      <React.Fragment>
+        <IconButton
+          type="button"
+          style={{
+            backgroundColor: "var(--primary)",
+            color: "white",
+          }}
+          onClick={() => setShow(true)}
+          icon={<AiOutlinePlus />}
+          text={"New Task"}
+        />
+        <BaseModal
+          parent={document.querySelector(".App") as Element}
+          show={show}
+        >
+          <BaseModal.Header>
+            <HeaderSelect
+              defaultValue={null}
+              setState={(value: string) => {
+                dispatch(
+                  setTaskPayload({
+                    key: "academicYearId",
+                    value: value,
+                  })
+                );
+              }}
+              label="New Task"
+              data={[
+                {
+                  key: "None",
+                  value: null,
+                  label: "No year/term",
+                },
+                ...academicYears.getAcademicYears.map((academicYear) => {
+                  return {
+                    key: `${academicYear.startDate.split("-")[0]} - ${
+                      academicYear.endDate.split("-")[0]
+                    }`,
+                    label: `${academicYear.startDate.split("-")[0]} - ${
+                      academicYear.endDate.split("-")[0]
+                    }`,
+                    value: academicYear.id,
+                  };
+                }),
+              ]}
+            />
+            <div
+              onClick={() => {
+                setShow(false);
+              }}
+              className="close"
+              style={{
+                top: "2rem",
+              }}
+            >
+              <AiOutlineClose />
             </div>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor="due-date">Due Date</label>
-              <input type="text" name="due-date" id="due-date" />
-            </div>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor="title">Title</label>
-              <input type="text" name="title" id="title" />
-            </div>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor="detail">Detail</label>
-              <input type="text" name="detail" id="detail" />
-            </div>
-
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <button type="button" onClick={() => setShow(false)}>
-                Cancel
-              </button>
-              <button>Submit</button>
-            </div>
-          </form>
-        </BaseModal.Body>
-      </BaseModal>
-    </React.Fragment>
-  );
+          </BaseModal.Header>
+          <BaseModal.Body>
+            <NewTaskForm setShow={setShow} />
+          </BaseModal.Body>
+        </BaseModal>
+      </React.Fragment>
+    );
+  else return null;
 };

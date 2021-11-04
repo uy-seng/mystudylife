@@ -37,6 +37,7 @@ export interface SelectInputProps extends BaseInputFieldProps {
     value: string | undefined;
   }[];
   setState: (value: any) => void;
+  defaultValue?: any;
 }
 
 export interface DatepickerProps extends BasicTextInputProps {

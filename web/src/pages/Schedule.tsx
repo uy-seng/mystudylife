@@ -106,7 +106,8 @@ const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
     if (classes && classesQueryResult) {
       setClasses([
         ...classesQueryResult?.getClasses.filter(
-          (c) => c.academicYear?.id === selectedYear?.id
+          (c) =>
+            c.academicYear?.id === selectedYear?.id || c.academicYear === null
         ),
       ]);
     }

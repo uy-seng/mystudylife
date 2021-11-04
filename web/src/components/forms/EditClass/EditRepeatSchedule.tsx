@@ -3,16 +3,12 @@ import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { DayOfWeek, useGetAcademicYearQuery } from "../../../generated/graphql";
 import {
   selectToBeUpdatedClassPayload,
-  selectToBeUpdatedClassSchedulePayload,
   selectToBeUpdatedRepeatSchedules,
   setToBeUpdatedRepeatSchedules,
 } from "../../../shared/EditClass.slice";
 import {
   ClassPayload,
   RepeatSchedulePayload,
-  selectClassPayload,
-  selectRepeatSchedules,
-  setRepeatSchedules,
 } from "../../../shared/NewClass.slice";
 import { generateArrayBetween, mutateItemInArray } from "../../../utils";
 import { Button } from "../../button";
@@ -20,6 +16,7 @@ import { Timepicker } from "../../input";
 import { BasicSelect } from "../../select";
 import css from "./EditRepeatSchedule.module.css";
 import ctx from "classnames";
+import moment from "moment";
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -60,6 +57,22 @@ export const EditRepeatScheduleForm: React.FC<Props> = ({ setShow, data }) => {
       setToBeUpdatedRepeatSchedulePayload(data);
     }
   }, [data]);
+
+  // add render counter to fix bug for initial rendering problem of start time
+  const [startTimeRenderCounter, setStartTimeRenderCounter] =
+    React.useState<number>(0);
+  React.useEffect(() => {
+    setStartTimeRenderCounter(startTimeRenderCounter + 1);
+    if (toBeUpdatedRepeatSchedulePayload && startTimeRenderCounter > 1) {
+      setToBeUpdatedRepeatSchedulePayload({
+        ...toBeUpdatedRepeatSchedulePayload,
+        endTime: moment(toBeUpdatedRepeatSchedulePayload?.startTime, "HH:mm")
+          .add(1, "hours")
+          .add(50, "minutes")
+          .format("HH:mm"),
+      });
+    }
+  }, [toBeUpdatedRepeatSchedulePayload?.startTime]);
 
   if (
     academicYear &&
@@ -147,12 +160,12 @@ export const EditRepeatScheduleForm: React.FC<Props> = ({ setShow, data }) => {
                 startTime: e.target.value,
               });
             }}
-            value={data.startTime}
+            value={toBeUpdatedRepeatSchedulePayload.startTime}
             label="Start Time"
             name={"startTime"}
           />
           <Timepicker
-            value={data.endTime}
+            value={toBeUpdatedRepeatSchedulePayload.endTime}
             onChange={(e) => {
               setToBeUpdatedRepeatSchedulePayload({
                 ...toBeUpdatedRepeatSchedulePayload,

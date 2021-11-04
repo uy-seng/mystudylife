@@ -5,6 +5,8 @@ import ScheduleReducer from "../shared/Schedule.slice";
 import NewSubjectReducer from "../shared/NewSubject.slice";
 import NewClassReducer from "../shared/NewClass.slice";
 import EditClassReducer from "../shared/EditClass.slice";
+import EditSubjectReducer from "../shared/EditSubject.slice";
+import NewTaskReducer from "../shared/NewTask.slice";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +16,8 @@ export const store = configureStore({
     newsubject: NewSubjectReducer,
     newclass: NewClassReducer,
     editclass: EditClassReducer,
+    editsubject: EditSubjectReducer,
+    newtask: NewTaskReducer,
   },
 });
 

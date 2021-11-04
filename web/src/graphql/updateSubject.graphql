@@ -1,0 +1,3 @@
+mutation UpdateSubject($id: String!, $name: String!, $academicYearId: String) {
+  updateSubject(id: $id, name: $name, academicYearId: $academicYearId)
+}
