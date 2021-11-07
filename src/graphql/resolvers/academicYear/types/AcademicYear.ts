@@ -1,4 +1,4 @@
-import { AcademicYear } from "src/entity";
+import { AcademicYear } from "../../../../entity";
 import { ArgsType, Field } from "type-graphql";
 
 @ArgsType()

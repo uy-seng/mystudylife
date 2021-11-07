@@ -1,4 +1,4 @@
-import { OneOffSchedule } from "src/entity";
+import { OneOffSchedule } from "../../../../entity";
 import { ArgsType, Field } from "type-graphql";
 
 @ArgsType()

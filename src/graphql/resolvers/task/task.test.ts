@@ -4,18 +4,21 @@ import {
   newScheduleMutation,
   newSubjectMutation,
   registerMutation,
-} from "src/graphql/mutation";
-import { meQuery } from "src/graphql/query";
+} from "../../../graphql/mutation";
+import { meQuery } from "../../../graphql/query";
 import { testClient } from "../../../../test/graphqlTestClient";
 import faker from "faker";
 import { getConnection } from "typeorm";
-import { AcademicYear, Subject, Task } from "src/entity";
+import { AcademicYear, Subject, Task } from "../../../entity";
 import {
   deleteTaskMutation,
   newTaskMutation,
   updateTaskMutation,
-} from "src/graphql/mutation/task";
-import { getTasksByDateQuery, getTasksQuery } from "src/graphql/query/task";
+} from "../../../graphql/mutation/task";
+import {
+  getTasksByDateQuery,
+  getTasksQuery,
+} from "../../../graphql/query/task";
 
 const testUser = {
   email: faker.internet.email(),

@@ -1,20 +1,20 @@
-import { AcademicYear, Subject } from "src/entity";
+import { AcademicYear, Subject } from "../../../entity";
 import {
   loginMutation,
   newAcademicYearMutation,
   newScheduleMutation,
   newSubjectMutation,
   registerMutation,
-} from "src/graphql/mutation";
-import { getSubjectsQuery, meQuery } from "src/graphql/query";
+} from "../../../graphql/mutation";
+import { getSubjectsQuery, meQuery } from "../../../graphql/query";
 import { getConnection } from "typeorm";
 import { testClient } from "../../../../test/graphqlTestClient";
 import faker from "faker";
 import {
   updateSubjectMutation,
   deleteSubjectMutation,
-} from "src/graphql/mutation/subject";
-import { asyncForEach } from "src/helper";
+} from "../../../graphql/mutation/subject";
+import { asyncForEach } from "../../../helper";
 
 const testUser = {
   email: faker.internet.email(),

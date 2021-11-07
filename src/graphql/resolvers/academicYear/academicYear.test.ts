@@ -18,7 +18,7 @@ import {
   AcademicYearSchedule,
   Term,
   WeekRotationSchedule,
-} from "src/entity";
+} from "../../../entity";
 import {
   loginMutation,
   newAcademicYearMutation,
@@ -27,9 +27,9 @@ import {
   newScheduleMutation,
   newTermMutation,
   registerMutation,
-} from "src/graphql/mutation";
-import { deleteAcademicYearMutation } from "src/graphql/mutation/academicYear";
-import { getAcademicYearsQuery, meQuery } from "src/graphql/query";
+} from "../../../graphql/mutation";
+import { deleteAcademicYearMutation } from "../../../graphql/mutation/academicYear";
+import { getAcademicYearsQuery, meQuery } from "../../../graphql/query";
 import { getConnection } from "typeorm";
 import { testClient } from "../../../../test/graphqlTestClient";
 import faker from "faker";

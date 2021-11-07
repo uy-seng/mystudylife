@@ -1,4 +1,4 @@
-import { Term } from "src/entity";
+import { Term } from "../../../../entity";
 import { ArgsType, Field } from "type-graphql";
 
 @ArgsType()

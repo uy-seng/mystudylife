@@ -1,4 +1,4 @@
-import { WeekRotationSchedule } from "src/entity";
+import { WeekRotationSchedule } from "../../../../entity";
 import { ArgsType, Field, Int } from "type-graphql";
 
 @ArgsType()

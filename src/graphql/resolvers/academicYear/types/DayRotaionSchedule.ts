@@ -1,5 +1,5 @@
-import { DayRotationSchedule } from "src/entity";
-import { DayOfWeek } from "src/entity/types";
+import { DayRotationSchedule } from "../../../../entity";
+import { DayOfWeek } from "../../../../entity/types";
 import { ArgsType, Field, Int } from "type-graphql";
 
 @ArgsType()

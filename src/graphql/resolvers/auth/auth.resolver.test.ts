@@ -1,8 +1,8 @@
 import faker from "faker";
 import { GraphQLError } from "graphql";
 import { decode } from "jsonwebtoken";
-import { User } from "src/entity";
-import { createRefreshToken, createAccessToken } from "src/helper";
+import { User } from "../../../entity";
+import { createRefreshToken, createAccessToken } from "../../../helper";
 import { getConnection } from "typeorm";
 
 import {

@@ -1,5 +1,5 @@
-import { Task } from "src/entity";
-import { TaskType } from "src/entity/types";
+import { Task } from "../../../../entity";
+import { TaskType } from "../../../../entity/types";
 import { ArgsType, Field, registerEnumType } from "type-graphql";
 
 registerEnumType(TaskType, {

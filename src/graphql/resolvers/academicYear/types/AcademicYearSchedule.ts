@@ -1,5 +1,5 @@
-import { AcademicYearSchedule } from "src/entity";
-import { AcademicYearScheduleType } from "src/entity/types";
+import { AcademicYearSchedule } from "../../../../entity";
+import { AcademicYearScheduleType } from "../../../../entity/types";
 import { ArgsType, Field, registerEnumType } from "type-graphql";
 
 registerEnumType(AcademicYearScheduleType, {

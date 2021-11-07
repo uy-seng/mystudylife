@@ -1,5 +1,5 @@
-import { RepeatSchedule } from "src/entity";
-import { DayOfWeek } from "src/entity/types";
+import { RepeatSchedule } from "../../../../entity";
+import { DayOfWeek } from "../../../../entity/types";
 import { ArgsType, Field, Int, registerEnumType } from "type-graphql";
 
 registerEnumType(DayOfWeek, {
