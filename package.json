@@ -50,7 +50,7 @@
       "uuid": "^8.3.2"
    },
    "scripts": {
-      "start": "ts-node src/index.ts",
+      "start": "node dist/index.js",
       "server": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
       "web": "npm run start --prefix web",
       "build": "tsc",
