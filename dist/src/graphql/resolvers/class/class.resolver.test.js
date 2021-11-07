@@ -3,16 +3,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mutation_1 = require("src/graphql/mutation");
-const query_1 = require("src/graphql/query");
+const mutation_1 = require("../../mutation");
+const query_1 = require("../../query");
 const graphqlTestClient_1 = require("../../../../test/graphqlTestClient");
 const faker_1 = __importDefault(require("faker"));
 const typeorm_1 = require("typeorm");
-const entity_1 = require("src/entity");
-const class_1 = require("src/graphql/query/class");
-const class_2 = require("src/graphql/mutation/class");
-const oneOffSchedule_1 = require("src/graphql/mutation/oneOffSchedule");
-const repeatSchedule_1 = require("src/graphql/mutation/repeatSchedule");
+const entity_1 = require("../../../entity");
+const class_1 = require("../../query/class");
+const class_2 = require("../../mutation/class");
+const oneOffSchedule_1 = require("../../mutation/oneOffSchedule");
+const repeatSchedule_1 = require("../../mutation/repeatSchedule");
 const testUser = {
     email: faker_1.default.internet.email(),
     username: faker_1.default.internet.userName(),

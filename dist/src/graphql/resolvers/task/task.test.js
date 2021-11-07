@@ -3,14 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mutation_1 = require("src/graphql/mutation");
-const query_1 = require("src/graphql/query");
+const mutation_1 = require("../../../graphql/mutation");
+const query_1 = require("../../../graphql/query");
 const graphqlTestClient_1 = require("../../../../test/graphqlTestClient");
 const faker_1 = __importDefault(require("faker"));
 const typeorm_1 = require("typeorm");
-const entity_1 = require("src/entity");
-const task_1 = require("src/graphql/mutation/task");
-const task_2 = require("src/graphql/query/task");
+const entity_1 = require("../../../entity");
+const task_1 = require("../../../graphql/mutation/task");
+const task_2 = require("../../../graphql/query/task");
 const testUser = {
     email: faker_1.default.internet.email(),
     username: faker_1.default.internet.userName(),

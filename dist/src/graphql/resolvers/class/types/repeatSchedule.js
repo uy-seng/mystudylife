@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RepeatScheduleArgs = void 0;
-const types_1 = require("src/entity/types");
+const types_1 = require("../../../../entity/types");
 const type_graphql_1 = require("type-graphql");
 (0, type_graphql_1.registerEnumType)(types_1.DayOfWeek, {
     name: "DayOfWeek",

@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const faker_1 = __importDefault(require("faker"));
 const graphql_1 = require("graphql");
 const jsonwebtoken_1 = require("jsonwebtoken");
-const entity_1 = require("src/entity");
-const helper_1 = require("src/helper");
+const entity_1 = require("../../../entity");
+const helper_1 = require("../../../helper");
 const typeorm_1 = require("typeorm");
 const graphqlTestClient_1 = require("../../../../test/graphqlTestClient");
 const testUser = {

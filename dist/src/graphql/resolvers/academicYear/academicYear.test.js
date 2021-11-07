@@ -3,10 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const entity_1 = require("src/entity");
-const mutation_1 = require("src/graphql/mutation");
-const academicYear_1 = require("src/graphql/mutation/academicYear");
-const query_1 = require("src/graphql/query");
+const entity_1 = require("../../../entity");
+const mutation_1 = require("../../../graphql/mutation");
+const academicYear_1 = require("../../../graphql/mutation/academicYear");
+const query_1 = require("../../../graphql/query");
 const typeorm_1 = require("typeorm");
 const graphqlTestClient_1 = require("../../../../test/graphqlTestClient");
 const faker_1 = __importDefault(require("faker"));
