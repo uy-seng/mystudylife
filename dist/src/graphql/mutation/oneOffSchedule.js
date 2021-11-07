@@ -1,41 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateOneOffScheduleMutation = exports.newOneOffScheduleMutation = void 0;
-const newOneOffScheduleMutation = `
-    mutation(
-        $scheduleId: String!,
-        $date: String!,
-        $startTime: String!,
-        $endTime: String!
-    ){
-        newOneOffSchedule(
-            scheduleId: $scheduleId,
-            date: $date,
-            startTime: $startTime,
-            endTime: $endTime
-        )
-            {
-                id
-            }
-    }
-`;
-exports.newOneOffScheduleMutation = newOneOffScheduleMutation;
-const updateOneOffScheduleMutation = `
-    mutation(
-        $id: String!,
-        $scheduleId: String!,
-        $date: String!,
-        $startTime: String!,
-        $endTime: String!
-    ){
-        updateOneOffSchedule(
-            id: $id,
-            scheduleId: $scheduleId,
-            date: $date,
-            startTime: $startTime,
-            endTime: $endTime
-        )
-    }
-`;
-exports.updateOneOffScheduleMutation = updateOneOffScheduleMutation;
+var newOneOffScheduleMutation = "\n    mutation(\n        $scheduleId: String!,\n        $date: String!,\n        $startTime: String!,\n        $endTime: String!\n    ){\n        newOneOffSchedule(\n            scheduleId: $scheduleId,\n            date: $date,\n            startTime: $startTime,\n            endTime: $endTime\n        )\n            {\n                id\n            }\n    }\n";
+var updateOneOffScheduleMutation = "\n    mutation(\n        $id: String!,\n        $scheduleId: String!,\n        $date: String!,\n        $startTime: String!,\n        $endTime: String!\n    ){\n        updateOneOffSchedule(\n            id: $id,\n            scheduleId: $scheduleId,\n            date: $date,\n            startTime: $startTime,\n            endTime: $endTime\n        )\n    }\n";
+export { newOneOffScheduleMutation, updateOneOffScheduleMutation };
 //# sourceMappingURL=oneOffSchedule.js.map

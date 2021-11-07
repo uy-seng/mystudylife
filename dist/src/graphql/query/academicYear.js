@@ -1,35 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAcademicYearsQuery = void 0;
-const getAcademicYearsQuery = `
-    query{
-        getAcademicYears{
-            id
-            startDate
-            endDate
-            terms{
-                id
-                name
-                startDate
-                endDate
-            }
-            schedule{
-                id
-                type
-                dayRotation{
-                    id
-                    numOfDay
-                    startDay
-                    repeatDays
-                }
-                weekRotation{
-                    id
-                    numOfWeek
-                    startWeek
-                }
-            }
-        }
-    }
-`;
-exports.getAcademicYearsQuery = getAcademicYearsQuery;
+var getAcademicYearsQuery = "\n    query{\n        getAcademicYears{\n            id\n            startDate\n            endDate\n            terms{\n                id\n                name\n                startDate\n                endDate\n            }\n            schedule{\n                id\n                type\n                dayRotation{\n                    id\n                    numOfDay\n                    startDay\n                    repeatDays\n                }\n                weekRotation{\n                    id\n                    numOfWeek\n                    startWeek\n                }\n            }\n        }\n    }\n";
+export { getAcademicYearsQuery };
 //# sourceMappingURL=academicYear.js.map

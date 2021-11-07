@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,29 +7,30 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TermArgs = void 0;
-const type_graphql_1 = require("type-graphql");
-let TermArgs = class TermArgs {
-};
-__decorate([
-    (0, type_graphql_1.Field)(() => String),
-    __metadata("design:type", String)
-], TermArgs.prototype, "name", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => String),
-    __metadata("design:type", String)
-], TermArgs.prototype, "startDate", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => String),
-    __metadata("design:type", String)
-], TermArgs.prototype, "endDate", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => String),
-    __metadata("design:type", String)
-], TermArgs.prototype, "academicYearId", void 0);
-TermArgs = __decorate([
-    (0, type_graphql_1.ArgsType)()
-], TermArgs);
-exports.TermArgs = TermArgs;
+import { ArgsType, Field } from "type-graphql";
+var TermArgs = (function () {
+    function TermArgs() {
+    }
+    __decorate([
+        Field(function () { return String; }),
+        __metadata("design:type", String)
+    ], TermArgs.prototype, "name", void 0);
+    __decorate([
+        Field(function () { return String; }),
+        __metadata("design:type", String)
+    ], TermArgs.prototype, "startDate", void 0);
+    __decorate([
+        Field(function () { return String; }),
+        __metadata("design:type", String)
+    ], TermArgs.prototype, "endDate", void 0);
+    __decorate([
+        Field(function () { return String; }),
+        __metadata("design:type", String)
+    ], TermArgs.prototype, "academicYearId", void 0);
+    TermArgs = __decorate([
+        ArgsType()
+    ], TermArgs);
+    return TermArgs;
+}());
+export { TermArgs };
 //# sourceMappingURL=Term.js.map

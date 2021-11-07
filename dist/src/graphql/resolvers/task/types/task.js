@@ -1,4 +1,18 @@
-"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,51 +22,57 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateTaskArgs = exports.TaskArgs = void 0;
-const types_1 = require("../../../../entity/types");
-const type_graphql_1 = require("type-graphql");
-(0, type_graphql_1.registerEnumType)(types_1.TaskType, {
+import { TaskType } from "../../../../entity/types";
+import { ArgsType, Field, registerEnumType } from "type-graphql";
+registerEnumType(TaskType, {
     name: "TaskType",
 });
-let TaskArgs = class TaskArgs {
-};
-__decorate([
-    (0, type_graphql_1.Field)(() => String),
-    __metadata("design:type", String)
-], TaskArgs.prototype, "subjectId", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => String, { nullable: true }),
-    __metadata("design:type", String)
-], TaskArgs.prototype, "academicYearId", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => types_1.TaskType),
-    __metadata("design:type", String)
-], TaskArgs.prototype, "type", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => String),
-    __metadata("design:type", String)
-], TaskArgs.prototype, "due_date", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => String, { defaultValue: "" }),
-    __metadata("design:type", String)
-], TaskArgs.prototype, "title", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => String, { defaultValue: "" }),
-    __metadata("design:type", String)
-], TaskArgs.prototype, "detail", void 0);
-TaskArgs = __decorate([
-    (0, type_graphql_1.ArgsType)()
-], TaskArgs);
-exports.TaskArgs = TaskArgs;
-let UpdateTaskArgs = class UpdateTaskArgs extends TaskArgs {
-};
-__decorate([
-    (0, type_graphql_1.Field)(() => String),
-    __metadata("design:type", String)
-], UpdateTaskArgs.prototype, "id", void 0);
-UpdateTaskArgs = __decorate([
-    (0, type_graphql_1.ArgsType)()
-], UpdateTaskArgs);
-exports.UpdateTaskArgs = UpdateTaskArgs;
+var TaskArgs = (function () {
+    function TaskArgs() {
+    }
+    __decorate([
+        Field(function () { return String; }),
+        __metadata("design:type", String)
+    ], TaskArgs.prototype, "subjectId", void 0);
+    __decorate([
+        Field(function () { return String; }, { nullable: true }),
+        __metadata("design:type", String)
+    ], TaskArgs.prototype, "academicYearId", void 0);
+    __decorate([
+        Field(function () { return TaskType; }),
+        __metadata("design:type", String)
+    ], TaskArgs.prototype, "type", void 0);
+    __decorate([
+        Field(function () { return String; }),
+        __metadata("design:type", String)
+    ], TaskArgs.prototype, "due_date", void 0);
+    __decorate([
+        Field(function () { return String; }, { defaultValue: "" }),
+        __metadata("design:type", String)
+    ], TaskArgs.prototype, "title", void 0);
+    __decorate([
+        Field(function () { return String; }, { defaultValue: "" }),
+        __metadata("design:type", String)
+    ], TaskArgs.prototype, "detail", void 0);
+    TaskArgs = __decorate([
+        ArgsType()
+    ], TaskArgs);
+    return TaskArgs;
+}());
+export { TaskArgs };
+var UpdateTaskArgs = (function (_super) {
+    __extends(UpdateTaskArgs, _super);
+    function UpdateTaskArgs() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    __decorate([
+        Field(function () { return String; }),
+        __metadata("design:type", String)
+    ], UpdateTaskArgs.prototype, "id", void 0);
+    UpdateTaskArgs = __decorate([
+        ArgsType()
+    ], UpdateTaskArgs);
+    return UpdateTaskArgs;
+}(TaskArgs));
+export { UpdateTaskArgs };
 //# sourceMappingURL=task.js.map

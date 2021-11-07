@@ -1,12 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ClassScheduleType = exports.AcademicYearScheduleType = exports.DayOfWeek = exports.TaskType = void 0;
-const Task_1 = require("./Task");
-Object.defineProperty(exports, "TaskType", { enumerable: true, get: function () { return Task_1.TaskType; } });
-const AcademicSchedule_1 = require("./AcademicSchedule");
-Object.defineProperty(exports, "AcademicYearScheduleType", { enumerable: true, get: function () { return AcademicSchedule_1.AcademicYearScheduleType; } });
-const ClassSchedule_1 = require("./ClassSchedule");
-Object.defineProperty(exports, "ClassScheduleType", { enumerable: true, get: function () { return ClassSchedule_1.ClassScheduleType; } });
+import { TaskType } from "./Task";
+import { AcademicYearScheduleType } from "./AcademicSchedule";
+import { ClassScheduleType } from "./ClassSchedule";
 var DayOfWeek;
 (function (DayOfWeek) {
     DayOfWeek[DayOfWeek["monday"] = 1] = "monday";
@@ -17,5 +11,5 @@ var DayOfWeek;
     DayOfWeek[DayOfWeek["saturday"] = 6] = "saturday";
     DayOfWeek[DayOfWeek["sunday"] = 0] = "sunday";
 })(DayOfWeek || (DayOfWeek = {}));
-exports.DayOfWeek = DayOfWeek;
+export { TaskType, DayOfWeek, AcademicYearScheduleType, ClassScheduleType };
 //# sourceMappingURL=index.js.map

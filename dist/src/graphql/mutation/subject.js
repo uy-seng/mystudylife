@@ -1,43 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateSubjectMutation = exports.deleteSubjectMutation = exports.newSubjectMutation = void 0;
-const newSubjectMutation = `
-    mutation(
-        $name: String!,
-        $academicYearId: String,
-    ){
-        newSubject(
-            name: $name,
-            academicYearId: $academicYearId,
-        )
-            {
-                id
-            }
-    }
-`;
-exports.newSubjectMutation = newSubjectMutation;
-const deleteSubjectMutation = `
-    mutation(
-        $id: String!,
-    ){
-        deleteSubject(
-            id: $id,
-        )
-    }
-`;
-exports.deleteSubjectMutation = deleteSubjectMutation;
-const updateSubjectMutation = `
-    mutation(
-        $id: String!, 
-        $name: String!, 
-        $academicYearId: String
-    ) {
-        updateSubject(
-            id: $id,
-            name: $name,
-            academicYearId: $academicYearId
-        )
-    }
-`;
-exports.updateSubjectMutation = updateSubjectMutation;
+var newSubjectMutation = "\n    mutation(\n        $name: String!,\n        $academicYearId: String,\n    ){\n        newSubject(\n            name: $name,\n            academicYearId: $academicYearId,\n        )\n            {\n                id\n            }\n    }\n";
+var deleteSubjectMutation = "\n    mutation(\n        $id: String!,\n    ){\n        deleteSubject(\n            id: $id,\n        )\n    }\n";
+var updateSubjectMutation = "\n    mutation(\n        $id: String!, \n        $name: String!, \n        $academicYearId: String\n    ) {\n        updateSubject(\n            id: $id,\n            name: $name,\n            academicYearId: $academicYearId\n        )\n    }\n";
+export { newSubjectMutation, deleteSubjectMutation, updateSubjectMutation };
 //# sourceMappingURL=subject.js.map

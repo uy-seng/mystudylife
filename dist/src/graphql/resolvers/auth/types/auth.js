@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,17 +7,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoginResponse = void 0;
-const type_graphql_1 = require("type-graphql");
-let LoginResponse = class LoginResponse {
-};
-__decorate([
-    (0, type_graphql_1.Field)(() => String),
-    __metadata("design:type", String)
-], LoginResponse.prototype, "accessToken", void 0);
-LoginResponse = __decorate([
-    (0, type_graphql_1.ObjectType)()
-], LoginResponse);
-exports.LoginResponse = LoginResponse;
+import { Field, ObjectType } from "type-graphql";
+var LoginResponse = (function () {
+    function LoginResponse() {
+    }
+    __decorate([
+        Field(function () { return String; }),
+        __metadata("design:type", String)
+    ], LoginResponse.prototype, "accessToken", void 0);
+    LoginResponse = __decorate([
+        ObjectType()
+    ], LoginResponse);
+    return LoginResponse;
+}());
+export { LoginResponse };
 //# sourceMappingURL=auth.js.map

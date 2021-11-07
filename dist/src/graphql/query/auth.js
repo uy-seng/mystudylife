@@ -1,13 +1,2 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.meQuery = void 0;
-exports.meQuery = `
-    query {
-        me {
-            id
-            username
-            email
-        }
-    }
-`;
+export var meQuery = "\n    query {\n        me {\n            id\n            username\n            email\n        }\n    }\n";
 //# sourceMappingURL=auth.js.map

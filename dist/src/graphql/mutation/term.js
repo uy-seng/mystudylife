@@ -1,23 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.newTermMutation = void 0;
-const newTermMutation = `
-    mutation(
-        $name: String!,
-        $startDate: String!,
-        $endDate: String!,
-        $academicYearId: String!
-    ){
-        newTerm(
-            name: $name,
-            startDate: $startDate,
-            endDate: $endDate,
-            academicYearId: $academicYearId
-        )
-            {
-                id
-            }
-    }
-`;
-exports.newTermMutation = newTermMutation;
+var newTermMutation = "\n    mutation(\n        $name: String!,\n        $startDate: String!,\n        $endDate: String!,\n        $academicYearId: String!\n    ){\n        newTerm(\n            name: $name,\n            startDate: $startDate,\n            endDate: $endDate,\n            academicYearId: $academicYearId\n        )\n            {\n                id\n            }\n    }\n";
+export { newTermMutation };
 //# sourceMappingURL=term.js.map

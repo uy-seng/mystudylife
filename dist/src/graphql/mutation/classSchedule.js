@@ -1,19 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.newClassScheduleMutation = void 0;
-const newClassScheduleMutation = `
-    mutation(
-        $classId: String!,
-        $type: ClassScheduleType!,
-    ){
-        newClassSchedule(
-            classId: $classId,
-            type: $type,
-        )
-            {
-                id
-            }
-    }
-`;
-exports.newClassScheduleMutation = newClassScheduleMutation;
+var newClassScheduleMutation = "\n    mutation(\n        $classId: String!,\n        $type: ClassScheduleType!,\n    ){\n        newClassSchedule(\n            classId: $classId,\n            type: $type,\n        )\n            {\n                id\n            }\n    }\n";
+export { newClassScheduleMutation };
 //# sourceMappingURL=classSchedule.js.map

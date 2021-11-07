@@ -1,55 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.newPartialWeekRotationMutation = exports.newScheduleMutation = exports.newPartialDayRotationMutation = void 0;
-const newScheduleMutation = `
-    mutation(
-        $type: AcademicYearScheduleType!,
-        $academicYearId: String!
-    ){
-        newSchedule(
-            type: $type,
-            academicYearId: $academicYearId
-        )
-            {
-                id
-            }
-    }
-`;
-exports.newScheduleMutation = newScheduleMutation;
-const newPartialDayRotationMutation = `
-    mutation(
-        $startDay: Int!,
-        $numOfDay: Int!,
-        $repeatDays: [Int!]!,
-        $scheduleId: String!
-    ){
-        newPartialDayRotation(
-            startDay: $startDay,
-            numOfDay: $numOfDay,
-            repeatDays: $repeatDays,
-            scheduleId: $scheduleId
-        )
-            {
-                id
-            }
-    }
-`;
-exports.newPartialDayRotationMutation = newPartialDayRotationMutation;
-const newPartialWeekRotationMutation = `
-    mutation(
-        $numOfWeek: Int!,
-        $startWeek: Int!,
-        $scheduleId: String!
-    ){
-        newPartialWeekRotation(
-            numOfWeek: $numOfWeek,
-            startWeek: $startWeek,
-            scheduleId: $scheduleId
-        )
-            {
-                id
-            }
-    }
-`;
-exports.newPartialWeekRotationMutation = newPartialWeekRotationMutation;
+var newScheduleMutation = "\n    mutation(\n        $type: AcademicYearScheduleType!,\n        $academicYearId: String!\n    ){\n        newSchedule(\n            type: $type,\n            academicYearId: $academicYearId\n        )\n            {\n                id\n            }\n    }\n";
+var newPartialDayRotationMutation = "\n    mutation(\n        $startDay: Int!,\n        $numOfDay: Int!,\n        $repeatDays: [Int!]!,\n        $scheduleId: String!\n    ){\n        newPartialDayRotation(\n            startDay: $startDay,\n            numOfDay: $numOfDay,\n            repeatDays: $repeatDays,\n            scheduleId: $scheduleId\n        )\n            {\n                id\n            }\n    }\n";
+var newPartialWeekRotationMutation = "\n    mutation(\n        $numOfWeek: Int!,\n        $startWeek: Int!,\n        $scheduleId: String!\n    ){\n        newPartialWeekRotation(\n            numOfWeek: $numOfWeek,\n            startWeek: $startWeek,\n            scheduleId: $scheduleId\n        )\n            {\n                id\n            }\n    }\n";
+export { newPartialDayRotationMutation, newScheduleMutation, newPartialWeekRotationMutation, };
 //# sourceMappingURL=academicYearSchedule.js.map

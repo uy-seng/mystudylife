@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,25 +7,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.WeekRotationScheduleArgs = void 0;
-const type_graphql_1 = require("type-graphql");
-let WeekRotationScheduleArgs = class WeekRotationScheduleArgs {
-};
-__decorate([
-    (0, type_graphql_1.Field)(() => type_graphql_1.Int),
-    __metadata("design:type", Number)
-], WeekRotationScheduleArgs.prototype, "numOfWeek", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => type_graphql_1.Int),
-    __metadata("design:type", Number)
-], WeekRotationScheduleArgs.prototype, "startWeek", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => String),
-    __metadata("design:type", String)
-], WeekRotationScheduleArgs.prototype, "scheduleId", void 0);
-WeekRotationScheduleArgs = __decorate([
-    (0, type_graphql_1.ArgsType)()
-], WeekRotationScheduleArgs);
-exports.WeekRotationScheduleArgs = WeekRotationScheduleArgs;
+import { ArgsType, Field, Int } from "type-graphql";
+var WeekRotationScheduleArgs = (function () {
+    function WeekRotationScheduleArgs() {
+    }
+    __decorate([
+        Field(function () { return Int; }),
+        __metadata("design:type", Number)
+    ], WeekRotationScheduleArgs.prototype, "numOfWeek", void 0);
+    __decorate([
+        Field(function () { return Int; }),
+        __metadata("design:type", Number)
+    ], WeekRotationScheduleArgs.prototype, "startWeek", void 0);
+    __decorate([
+        Field(function () { return String; }),
+        __metadata("design:type", String)
+    ], WeekRotationScheduleArgs.prototype, "scheduleId", void 0);
+    WeekRotationScheduleArgs = __decorate([
+        ArgsType()
+    ], WeekRotationScheduleArgs);
+    return WeekRotationScheduleArgs;
+}());
+export { WeekRotationScheduleArgs };
 //# sourceMappingURL=WeekRotationScheduleInput.js.map
