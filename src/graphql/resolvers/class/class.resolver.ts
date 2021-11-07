@@ -7,12 +7,12 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { AcademicYear, Class, Subject, User } from "src/entity";
+import { AcademicYear, Class, Subject, User } from "../../../entity";
 import { ClassArgs } from "./types";
 import { getConnection } from "typeorm";
 import { ValidationError, ApolloError } from "apollo-server-errors";
-import { authenticationGate } from "src/middleware";
-import { Context } from "src/interface";
+import { authenticationGate } from "../../../middleware";
+import { Context } from "../../../interface";
 import { UpdateClassArgs } from "./types/class";
 
 @Resolver()

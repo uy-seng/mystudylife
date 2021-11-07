@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { sign } from "jsonwebtoken";
-import { User } from "src/entity";
+import { User } from "../entity";
 
 export const createAccessToken = (user: Partial<User>) => {
   return sign({ user: user }, process.env.ACCESS_TOKEN_SECRET!, {

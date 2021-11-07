@@ -1,6 +1,6 @@
-import { AcademicYear, Subject, Task, User } from "src/entity";
-import { Context } from "src/interface";
-import { authenticationGate } from "src/middleware";
+import { AcademicYear, Subject, Task, User } from "../../../entity";
+import { Context } from "../../../interface";
+import { authenticationGate } from "../../../middleware";
 import {
   Arg,
   Args,
@@ -14,7 +14,7 @@ import { getConnection } from "typeorm";
 import { TaskArgs, UpdateTaskArgs } from "./types";
 import { ValidationError } from "apollo-server-errors";
 import { ApolloError } from "apollo-server-errors";
-import { TaskType } from "src/entity/types";
+import { TaskType } from "../../../entity/types";
 
 @Resolver()
 export class TaskResolver {

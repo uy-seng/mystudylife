@@ -1,8 +1,8 @@
 import { AuthenticationError } from "apollo-server-errors";
 
 import { verify } from "jsonwebtoken";
-import { User } from "src/entity";
-import { Context } from "src/interface";
+import { User } from "../entity";
+import { Context } from "../interface";
 import { MiddlewareFn } from "type-graphql";
 import { getConnection } from "typeorm";
 

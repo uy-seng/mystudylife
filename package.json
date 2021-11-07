@@ -54,7 +54,7 @@
       "server": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
       "web": "npm run start --prefix web",
       "build": "tsc",
-      "prod": "node -r ts-node/register/transpile-only -r tsconfig-paths/register dist/index.js",
+      "prod": "node -r ts-node/register/transpile-only -r tsconfig-paths/register dist/src/index.js",
       "dev": "concurrently \"npm run server\" \"npm run web\"",
       "test": "jest --verbose --runInBand",
       "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix web && npm run build --prefix web"

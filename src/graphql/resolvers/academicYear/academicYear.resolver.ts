@@ -1,4 +1,4 @@
-import { AcademicYear, User } from "src/entity";
+import { AcademicYear, User } from "../../../entity";
 import {
   Arg,
   Args,
@@ -11,8 +11,8 @@ import {
 import { getConnection } from "typeorm";
 import { AcademicYearArgs } from "./types";
 import { ForbiddenError, ValidationError } from "apollo-server-errors";
-import { authenticationGate } from "src/middleware";
-import { Context } from "src/interface";
+import { authenticationGate } from "../../../middleware";
+import { Context } from "../../../interface";
 
 @Resolver()
 export class AcademicYearResolver {

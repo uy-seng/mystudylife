@@ -1,4 +1,4 @@
-import { Term } from "src/entity";
+import { Term } from "../../../entity";
 import { Args, Mutation, Resolver } from "type-graphql";
 import { getConnection } from "typeorm";
 import { TermArgs } from "./types";

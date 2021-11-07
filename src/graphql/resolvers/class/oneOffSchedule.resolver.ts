@@ -1,9 +1,9 @@
 import { Args, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
-import { OneOffSchedule } from "src/entity";
+import { OneOffSchedule } from "../../../entity";
 import { OneOffScheduleArgs } from "./types";
 import { getConnection } from "typeorm";
-import { authenticationGate } from "src/middleware";
-import { Context } from "src/interface";
+import { authenticationGate } from "../../../middleware";
+import { Context } from "../../../interface";
 import { ValidationError } from "apollo-server-express";
 import { UpdateOneOffScheduleArgs } from "./types/oneOffSchedule";
 

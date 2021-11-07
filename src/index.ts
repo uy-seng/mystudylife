@@ -18,8 +18,8 @@ import {
   RepeatScheduleResolver,
 } from "./graphql/resolvers";
 import { DatabaseService } from "./services";
-import { TaskResolver } from "src/graphql/resolvers/task/task.resolver";
 import path from "path";
+import { TaskResolver } from "./graphql/resolvers/task/task.resolver";
 
 (async () => {
   const app = express();

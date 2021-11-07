@@ -10,7 +10,7 @@ import bcrypt from "bcryptjs";
 import { AuthenticationError, ValidationError } from "apollo-server-errors";
 import { getConnection, QueryFailedError } from "typeorm";
 import { LoginResponse } from "./types/auth";
-import { User } from "src/entity";
+import { User } from "../../../entity";
 import {
   createAccessToken,
   sendRefreshToken,

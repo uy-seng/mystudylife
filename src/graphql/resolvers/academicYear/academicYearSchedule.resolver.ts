@@ -2,7 +2,7 @@ import {
   AcademicYearSchedule,
   DayRotationSchedule,
   WeekRotationSchedule,
-} from "src/entity";
+} from "../../../entity";
 import { Args, Mutation, Resolver } from "type-graphql";
 import { getConnection } from "typeorm";
 import {

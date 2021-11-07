@@ -1,8 +1,8 @@
 import { Args, Mutation, Resolver, UseMiddleware } from "type-graphql";
-import { ClassSchedule } from "src/entity";
+import { ClassSchedule } from "../../../entity";
 import { ClassScheduleArgs } from "./types";
 import { getConnection } from "typeorm";
-import { authenticationGate } from "src/middleware";
+import { authenticationGate } from "../../../middleware";
 
 @Resolver()
 export class ClassScheduleResolver {

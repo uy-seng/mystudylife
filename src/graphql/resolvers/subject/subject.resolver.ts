@@ -3,8 +3,8 @@ import {
   ValidationError,
   ApolloError,
 } from "apollo-server-errors";
-import { Subject, AcademicYear, User } from "src/entity";
-import { Context } from "src/interface";
+import { Subject, AcademicYear, User } from "../../../entity";
+import { Context } from "../../../interface";
 import {
   Arg,
   Ctx,
@@ -14,7 +14,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
-import { authenticationGate } from "src/middleware";
+import { authenticationGate } from "../../../middleware";
 
 @Resolver()
 export class SubjectResolver {

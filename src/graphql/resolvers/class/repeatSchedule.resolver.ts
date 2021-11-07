@@ -6,11 +6,11 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { RepeatSchedule } from "src/entity";
+import { RepeatSchedule } from "../../../entity";
 import { RepeatScheduleArgs } from "./types";
 import { getConnection } from "typeorm";
-import { authenticationGate } from "src/middleware";
-import { Context } from "src/interface";
+import { authenticationGate } from "../../../middleware";
+import { Context } from "../../../interface";
 import { ValidationError } from "apollo-server-express";
 
 @Resolver()

@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { decode } from "jsonwebtoken";
 import passport from "passport";
-import { User } from "src/entity";
+import { User } from "../entity";
 import {
   createAccessToken,
   createRefreshToken,
   sendRefreshToken,
-} from "src/helper";
+} from "../helper";
 import { getConnection } from "typeorm";
 
 export const authRoute = Router();

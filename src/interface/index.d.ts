@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { User } from "src/entity";
+import { User } from "../entity";
 
 export interface Context {
   req: Request;
