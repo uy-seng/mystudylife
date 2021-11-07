@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getClassByIdQuery = exports.getClassesQuery = exports.getClassesByDateQuery = void 0;
 const getClassesByDateQuery = `
     query($date: DateTime!){
         getClassesByDate(date: $date){
@@ -30,7 +27,6 @@ const getClassesByDateQuery = `
         }
     }
 `;
-exports.getClassesByDateQuery = getClassesByDateQuery;
 const getClassesQuery = `
     query{
         getClasses{
@@ -69,7 +65,6 @@ const getClassesQuery = `
         }
     }
 `;
-exports.getClassesQuery = getClassesQuery;
 const getClassByIdQuery = `
     query($id: String!){
         getClassById(id: $id){
@@ -108,5 +103,5 @@ const getClassByIdQuery = `
         }
     }
 `;
-exports.getClassByIdQuery = getClassByIdQuery;
+export { getClassesByDateQuery, getClassesQuery, getClassByIdQuery };
 //# sourceMappingURL=class.js.map

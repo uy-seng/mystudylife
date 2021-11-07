@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ClassScheduleType = void 0;
-var ClassScheduleType;
+export var ClassScheduleType;
 (function (ClassScheduleType) {
     ClassScheduleType["repeat"] = "repeat";
     ClassScheduleType["oneOff"] = "oneOff";
-})(ClassScheduleType = exports.ClassScheduleType || (exports.ClassScheduleType = {}));
+})(ClassScheduleType || (ClassScheduleType = {}));
 //# sourceMappingURL=ClassSchedule.js.map

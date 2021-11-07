@@ -1,26 +1,21 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-require("reflect-metadata");
-const express_1 = __importDefault(require("express"));
-const body_parser_1 = __importDefault(require("body-parser"));
-const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const apollo_server_express_1 = require("apollo-server-express");
-const type_graphql_1 = require("type-graphql");
-const cors_1 = __importDefault(require("cors"));
-const routes_1 = require("./routes");
-const resolvers_1 = require("./graphql/resolvers");
-const services_1 = require("./services");
-const path_1 = __importDefault(require("path"));
-const task_resolver_1 = require("./graphql/resolvers/task/task.resolver");
+import "reflect-metadata";
+import express from "express";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import { ApolloServer } from "apollo-server-express";
+import { buildSchema } from "type-graphql";
+import cors from "cors";
+import { apiRoute } from "./routes";
+import { AuthResolver, AcademicYearResolver, AcademicYearScheduleResolver, TermResolver, SubjectResolver, ClassResolver, ClassScheduleResolver, OneOffScheduleResolver, RepeatScheduleResolver, } from "./graphql/resolvers";
+import { DatabaseService } from "./services";
+import path from "path";
+import { TaskResolver } from "./graphql/resolvers/task/task.resolver";
 (async () => {
-    const app = (0, express_1.default)();
-    app.use(body_parser_1.default.urlencoded({ extended: true }));
-    app.use(express_1.default.json());
-    app.use((0, cookie_parser_1.default)());
-    app.use((0, cors_1.default)({
+    const app = express();
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(express.json());
+    app.use(cookieParser());
+    app.use(cors({
         credentials: true,
         origin: [
             "https://studio.apollographql.com",
@@ -28,22 +23,22 @@ const task_resolver_1 = require("./graphql/resolvers/task/task.resolver");
             "http://localhost:3001",
         ],
     }));
-    const databaseService = new services_1.DatabaseService();
+    const databaseService = new DatabaseService();
     await databaseService.init();
-    app.use("/api", routes_1.apiRoute);
-    const apolloServer = new apollo_server_express_1.ApolloServer({
-        schema: await (0, type_graphql_1.buildSchema)({
+    app.use("/api", apiRoute);
+    const apolloServer = new ApolloServer({
+        schema: await buildSchema({
             resolvers: [
-                resolvers_1.AuthResolver,
-                resolvers_1.AcademicYearResolver,
-                resolvers_1.AcademicYearScheduleResolver,
-                resolvers_1.TermResolver,
-                resolvers_1.SubjectResolver,
-                resolvers_1.ClassResolver,
-                resolvers_1.ClassScheduleResolver,
-                resolvers_1.OneOffScheduleResolver,
-                resolvers_1.RepeatScheduleResolver,
-                task_resolver_1.TaskResolver,
+                AuthResolver,
+                AcademicYearResolver,
+                AcademicYearScheduleResolver,
+                TermResolver,
+                SubjectResolver,
+                ClassResolver,
+                ClassScheduleResolver,
+                OneOffScheduleResolver,
+                RepeatScheduleResolver,
+                TaskResolver,
             ],
         }),
         context: ({ req, res }) => ({ req, res }),
@@ -52,9 +47,9 @@ const task_resolver_1 = require("./graphql/resolvers/task/task.resolver");
     apolloServer.applyMiddleware({ app, cors: false });
     const PORT = process.env.PORT || 8000;
     if (process.env.NODE_ENV === "production") {
-        app.use(express_1.default.static("web/build"));
+        app.use(express.static("web/build"));
         app.get("*", (_req, res) => {
-            return res.sendFile(path_1.default.resolve(__dirname, "web", "build", "index.html"));
+            return res.sendFile(path.resolve(__dirname, "web", "build", "index.html"));
         });
     }
     app.listen(PORT, () => {

@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateTaskMutation = exports.deleteTaskMutation = exports.newTaskMutation = void 0;
 const newTaskMutation = `
     mutation(
         $subjectId: String!,
@@ -23,7 +20,6 @@ const newTaskMutation = `
             }
     }
 `;
-exports.newTaskMutation = newTaskMutation;
 const deleteTaskMutation = `
     mutation(
         $id: String!,
@@ -33,7 +29,6 @@ const deleteTaskMutation = `
         )
     }
 `;
-exports.deleteTaskMutation = deleteTaskMutation;
 const updateTaskMutation = `
     mutation(
         $id: String!,
@@ -55,5 +50,5 @@ const updateTaskMutation = `
         )
     }
 `;
-exports.updateTaskMutation = updateTaskMutation;
+export { newTaskMutation, deleteTaskMutation, updateTaskMutation };
 //# sourceMappingURL=task.js.map

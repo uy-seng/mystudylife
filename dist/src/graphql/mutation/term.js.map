@@ -1,1 +1,1 @@
-{"version":3,"file":"term.js","sourceRoot":"","sources":["../../../../src/graphql/mutation/term.ts"],"names":[],"mappings":";;;AAAA,MAAM,eAAe,GAAG;;;;;;;;;;;;;;;;;CAiBvB,CAAC;AAEO,0CAAe"}
+{"version":3,"file":"term.js","sourceRoot":"","sources":["../../../../src/graphql/mutation/term.ts"],"names":[],"mappings":"AAAA,MAAM,eAAe,GAAG;;;;;;;;;;;;;;;;;CAiBvB,CAAC;AAEF,OAAO,EAAE,eAAe,EAAE,CAAC"}

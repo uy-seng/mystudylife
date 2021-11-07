@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11,16 +10,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ClassScheduleResolver = void 0;
-const type_graphql_1 = require("type-graphql");
-const entity_1 = require("../../../entity");
-const types_1 = require("./types");
-const typeorm_1 = require("typeorm");
-const middleware_1 = require("../../../middleware");
+import { Args, Mutation, Resolver, UseMiddleware } from "type-graphql";
+import { ClassSchedule } from "../../../entity";
+import { ClassScheduleArgs } from "./types";
+import { getConnection } from "typeorm";
+import { authenticationGate } from "../../../middleware";
 let ClassScheduleResolver = class ClassScheduleResolver {
     constructor() {
-        this.classScheduleRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.ClassSchedule);
+        this.classScheduleRepository = getConnection(process.env.NODE_ENV).getRepository(ClassSchedule);
     }
     async newClassSchedule({ type, classId }) {
         const newClassSchedule = this.classScheduleRepository.create({
@@ -31,15 +28,15 @@ let ClassScheduleResolver = class ClassScheduleResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Mutation)(() => entity_1.ClassSchedule),
-    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
-    __param(0, (0, type_graphql_1.Args)()),
+    Mutation(() => ClassSchedule),
+    UseMiddleware(authenticationGate),
+    __param(0, Args()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [types_1.ClassScheduleArgs]),
+    __metadata("design:paramtypes", [ClassScheduleArgs]),
     __metadata("design:returntype", Promise)
 ], ClassScheduleResolver.prototype, "newClassSchedule", null);
 ClassScheduleResolver = __decorate([
-    (0, type_graphql_1.Resolver)()
+    Resolver()
 ], ClassScheduleResolver);
-exports.ClassScheduleResolver = ClassScheduleResolver;
+export { ClassScheduleResolver };
 //# sourceMappingURL=classSchedule.resolver.js.map

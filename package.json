@@ -53,7 +53,7 @@
       "start": "node dist/src/index.js",
       "server": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
       "web": "npm run start --prefix web",
-      "build": "tsc",
+      "build": "tsc -p tsconfig.json",
       "prod": "node -r ts-node/register/transpile-only -r tsconfig-paths/register dist/src/index.js",
       "dev": "concurrently \"npm run server\" \"npm run web\"",
       "test": "jest --verbose --runInBand",

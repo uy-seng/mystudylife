@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11,18 +10,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SubjectResolver = void 0;
-const apollo_server_errors_1 = require("apollo-server-errors");
-const entity_1 = require("../../../entity");
-const type_graphql_1 = require("type-graphql");
-const typeorm_1 = require("typeorm");
-const middleware_1 = require("../../../middleware");
+import { ForbiddenError, ValidationError, ApolloError, } from "apollo-server-errors";
+import { Subject, AcademicYear, User } from "../../../entity";
+import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware, } from "type-graphql";
+import { getConnection } from "typeorm";
+import { authenticationGate } from "../../../middleware";
 let SubjectResolver = class SubjectResolver {
     constructor() {
-        this.subjectRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.Subject);
-        this.academicYearRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.AcademicYear);
-        this.userRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.User);
+        this.subjectRepository = getConnection(process.env.NODE_ENV).getRepository(Subject);
+        this.academicYearRepository = getConnection(process.env.NODE_ENV).getRepository(AcademicYear);
+        this.userRepository = getConnection(process.env.NODE_ENV).getRepository(User);
     }
     async newSubject(name, academicYearId, { user }) {
         const partialSubject = this.subjectRepository.create({
@@ -32,7 +29,7 @@ let SubjectResolver = class SubjectResolver {
         if (academicYearId) {
             const academicYear = await this.academicYearRepository.findOne(academicYearId);
             if (!academicYear)
-                throw new apollo_server_errors_1.ValidationError("invalid academic year id");
+                throw new ValidationError("invalid academic year id");
             newSubject.academicYear = academicYear;
         }
         const currentUser = (await this.userRepository.findOne(user.id));
@@ -44,9 +41,9 @@ let SubjectResolver = class SubjectResolver {
             relations: ["user"],
         });
         if (!subject)
-            throw new apollo_server_errors_1.ValidationError("invalid id");
+            throw new ValidationError("invalid id");
         if (subject.user.id !== user.id)
-            throw new apollo_server_errors_1.ForbiddenError("subject not found for this user");
+            throw new ForbiddenError("subject not found for this user");
         await this.subjectRepository.delete(subject);
         return true;
     }
@@ -66,9 +63,9 @@ let SubjectResolver = class SubjectResolver {
             relations: ["academicYear"],
         });
         if (!subject)
-            throw new apollo_server_errors_1.ValidationError("invalid subject id");
+            throw new ValidationError("invalid subject id");
         if ((subject === null || subject === void 0 ? void 0 : subject.user.id) !== user.id)
-            throw new apollo_server_errors_1.ForbiddenError("academic year not found for this user");
+            throw new ForbiddenError("academic year not found for this user");
         return subject;
     }
     async updateSubject(id, name, academicYearId, { user }) {
@@ -81,13 +78,13 @@ let SubjectResolver = class SubjectResolver {
             },
         });
         if (!q)
-            throw new apollo_server_errors_1.ApolloError("item not found. please provide a valid id");
+            throw new ApolloError("item not found. please provide a valid id");
         q.name = name;
         if (academicYearId &&
             (!q.academicYear || q.academicYear.id !== academicYearId)) {
             const toBeUpdatedAcademicYear = await this.academicYearRepository.findOne(academicYearId);
             if (!toBeUpdatedAcademicYear)
-                throw new apollo_server_errors_1.ApolloError("item not found. pleaase provide a valid academic year id");
+                throw new ApolloError("item not found. pleaase provide a valid academic year id");
             q.academicYear = toBeUpdatedAcademicYear;
         }
         await this.subjectRepository.save(q);
@@ -95,54 +92,54 @@ let SubjectResolver = class SubjectResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Mutation)(() => entity_1.Subject),
-    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
-    __param(0, (0, type_graphql_1.Arg)("name")),
-    __param(1, (0, type_graphql_1.Arg)("academicYearId", { nullable: true })),
-    __param(2, (0, type_graphql_1.Ctx)()),
+    Mutation(() => Subject),
+    UseMiddleware(authenticationGate),
+    __param(0, Arg("name")),
+    __param(1, Arg("academicYearId", { nullable: true })),
+    __param(2, Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String, Object]),
     __metadata("design:returntype", Promise)
 ], SubjectResolver.prototype, "newSubject", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => Boolean),
-    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
-    __param(0, (0, type_graphql_1.Arg)("id")),
-    __param(1, (0, type_graphql_1.Ctx)()),
+    Mutation(() => Boolean),
+    UseMiddleware(authenticationGate),
+    __param(0, Arg("id")),
+    __param(1, Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], SubjectResolver.prototype, "deleteSubject", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [entity_1.Subject]),
-    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
-    __param(0, (0, type_graphql_1.Ctx)()),
+    Query(() => [Subject]),
+    UseMiddleware(authenticationGate),
+    __param(0, Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], SubjectResolver.prototype, "getSubjects", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => entity_1.Subject),
-    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
-    __param(0, (0, type_graphql_1.Arg)("id")),
-    __param(1, (0, type_graphql_1.Ctx)()),
+    Query(() => Subject),
+    UseMiddleware(authenticationGate),
+    __param(0, Arg("id")),
+    __param(1, Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], SubjectResolver.prototype, "getSubject", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => Boolean),
-    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
-    __param(0, (0, type_graphql_1.Arg)("id", () => String)),
-    __param(1, (0, type_graphql_1.Arg)("name")),
-    __param(2, (0, type_graphql_1.Arg)("academicYearId", { nullable: true })),
-    __param(3, (0, type_graphql_1.Ctx)()),
+    Mutation(() => Boolean),
+    UseMiddleware(authenticationGate),
+    __param(0, Arg("id", () => String)),
+    __param(1, Arg("name")),
+    __param(2, Arg("academicYearId", { nullable: true })),
+    __param(3, Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String, String, Object]),
     __metadata("design:returntype", Promise)
 ], SubjectResolver.prototype, "updateSubject", null);
 SubjectResolver = __decorate([
-    (0, type_graphql_1.Resolver)()
+    Resolver()
 ], SubjectResolver);
-exports.SubjectResolver = SubjectResolver;
+export { SubjectResolver };
 //# sourceMappingURL=subject.resolver.js.map

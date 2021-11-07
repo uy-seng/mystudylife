@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,51 +7,49 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateTaskArgs = exports.TaskArgs = void 0;
-const types_1 = require("../../../../entity/types");
-const type_graphql_1 = require("type-graphql");
-(0, type_graphql_1.registerEnumType)(types_1.TaskType, {
+import { TaskType } from "../../../../entity/types";
+import { ArgsType, Field, registerEnumType } from "type-graphql";
+registerEnumType(TaskType, {
     name: "TaskType",
 });
 let TaskArgs = class TaskArgs {
 };
 __decorate([
-    (0, type_graphql_1.Field)(() => String),
+    Field(() => String),
     __metadata("design:type", String)
 ], TaskArgs.prototype, "subjectId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => String, { nullable: true }),
+    Field(() => String, { nullable: true }),
     __metadata("design:type", String)
 ], TaskArgs.prototype, "academicYearId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => types_1.TaskType),
+    Field(() => TaskType),
     __metadata("design:type", String)
 ], TaskArgs.prototype, "type", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => String),
+    Field(() => String),
     __metadata("design:type", String)
 ], TaskArgs.prototype, "due_date", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => String, { defaultValue: "" }),
+    Field(() => String, { defaultValue: "" }),
     __metadata("design:type", String)
 ], TaskArgs.prototype, "title", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => String, { defaultValue: "" }),
+    Field(() => String, { defaultValue: "" }),
     __metadata("design:type", String)
 ], TaskArgs.prototype, "detail", void 0);
 TaskArgs = __decorate([
-    (0, type_graphql_1.ArgsType)()
+    ArgsType()
 ], TaskArgs);
-exports.TaskArgs = TaskArgs;
+export { TaskArgs };
 let UpdateTaskArgs = class UpdateTaskArgs extends TaskArgs {
 };
 __decorate([
-    (0, type_graphql_1.Field)(() => String),
+    Field(() => String),
     __metadata("design:type", String)
 ], UpdateTaskArgs.prototype, "id", void 0);
 UpdateTaskArgs = __decorate([
-    (0, type_graphql_1.ArgsType)()
+    ArgsType()
 ], UpdateTaskArgs);
-exports.UpdateTaskArgs = UpdateTaskArgs;
+export { UpdateTaskArgs };
 //# sourceMappingURL=task.js.map

@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,30 +7,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserProvider = void 0;
-const type_graphql_1 = require("type-graphql");
-const typeorm_1 = require("typeorm");
-const __1 = require("..");
+import { Field, ObjectType } from "type-graphql";
+import { Column, Entity, OneToOne, PrimaryColumn } from "typeorm";
+import { User } from "..";
 let UserProvider = class UserProvider {
 };
 __decorate([
-    (0, typeorm_1.PrimaryColumn)("uuid"),
-    (0, type_graphql_1.Field)(() => String),
+    PrimaryColumn("uuid"),
+    Field(() => String),
     __metadata("design:type", String)
 ], UserProvider.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
-    (0, type_graphql_1.Field)(() => String),
+    Column(),
+    Field(() => String),
     __metadata("design:type", String)
 ], UserProvider.prototype, "name", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => __1.User),
-    __metadata("design:type", __1.User)
+    OneToOne(() => User),
+    __metadata("design:type", User)
 ], UserProvider.prototype, "user", void 0);
 UserProvider = __decorate([
-    (0, typeorm_1.Entity)("user_provider"),
-    (0, type_graphql_1.ObjectType)()
+    Entity("user_provider"),
+    ObjectType()
 ], UserProvider);
-exports.UserProvider = UserProvider;
+export { UserProvider };
 //# sourceMappingURL=UserProvider.js.map

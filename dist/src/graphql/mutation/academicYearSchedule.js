@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.newPartialWeekRotationMutation = exports.newScheduleMutation = exports.newPartialDayRotationMutation = void 0;
 const newScheduleMutation = `
     mutation(
         $type: AcademicYearScheduleType!,
@@ -15,7 +12,6 @@ const newScheduleMutation = `
             }
     }
 `;
-exports.newScheduleMutation = newScheduleMutation;
 const newPartialDayRotationMutation = `
     mutation(
         $startDay: Int!,
@@ -34,7 +30,6 @@ const newPartialDayRotationMutation = `
             }
     }
 `;
-exports.newPartialDayRotationMutation = newPartialDayRotationMutation;
 const newPartialWeekRotationMutation = `
     mutation(
         $numOfWeek: Int!,
@@ -51,5 +46,5 @@ const newPartialWeekRotationMutation = `
             }
     }
 `;
-exports.newPartialWeekRotationMutation = newPartialWeekRotationMutation;
+export { newPartialDayRotationMutation, newScheduleMutation, newPartialWeekRotationMutation, };
 //# sourceMappingURL=academicYearSchedule.js.map

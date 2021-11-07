@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAcademicYearsQuery = void 0;
 const getAcademicYearsQuery = `
     query{
         getAcademicYears{
@@ -31,5 +28,5 @@ const getAcademicYearsQuery = `
         }
     }
 `;
-exports.getAcademicYearsQuery = getAcademicYearsQuery;
+export { getAcademicYearsQuery };
 //# sourceMappingURL=academicYear.js.map

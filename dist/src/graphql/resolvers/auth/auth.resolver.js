@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11,24 +10,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthResolver = void 0;
-const type_graphql_1 = require("type-graphql");
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const apollo_server_errors_1 = require("apollo-server-errors");
-const typeorm_1 = require("typeorm");
-const auth_1 = require("./types/auth");
-const entity_1 = require("../../../entity");
-const helper_1 = require("../../../helper");
-const middleware_1 = require("../../../middleware");
+import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware, } from "type-graphql";
+import bcrypt from "bcryptjs";
+import { AuthenticationError, ValidationError } from "apollo-server-errors";
+import { getConnection, QueryFailedError } from "typeorm";
+import { LoginResponse } from "./types/auth";
+import { User } from "../../../entity";
+import { createAccessToken, sendRefreshToken, createRefreshToken, } from "../../../helper";
+import { authenticationGate } from "../../../middleware";
 let AuthResolver = class AuthResolver {
     async register(username, email, password) {
-        const hashedPassword = await bcryptjs_1.default.hash(password, 12);
+        const hashedPassword = await bcrypt.hash(password, 12);
         try {
-            const userRepository = await (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.User);
+            const userRepository = await getConnection(process.env.NODE_ENV).getRepository(User);
             const user = userRepository.create({
                 email: email,
                 username: username,
@@ -39,9 +33,9 @@ let AuthResolver = class AuthResolver {
         }
         catch (e) {
             switch (e.constructor) {
-                case typeorm_1.QueryFailedError:
+                case QueryFailedError:
                     if (e.code === "23505")
-                        return new apollo_server_errors_1.ValidationError("email or username already exist");
+                        return new ValidationError("email or username already exist");
                     else
                         return e;
                 default:
@@ -51,17 +45,17 @@ let AuthResolver = class AuthResolver {
         }
     }
     async login(email, password, { res }) {
-        const userRepository = await (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.User);
+        const userRepository = await getConnection(process.env.NODE_ENV).getRepository(User);
         const user = await userRepository.findOne({
             where: {
                 email: email,
             },
         });
         if (!user)
-            return new apollo_server_errors_1.AuthenticationError("invalid credentials");
-        const validPassword = await bcryptjs_1.default.compare(password, user.password);
+            return new AuthenticationError("invalid credentials");
+        const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword)
-            throw new apollo_server_errors_1.AuthenticationError("invalid credentails");
+            throw new AuthenticationError("invalid credentails");
         const userPayload = {
             id: user.id,
             email: user.email,
@@ -69,55 +63,55 @@ let AuthResolver = class AuthResolver {
             tokenVersion: user.tokenVersion,
         };
         const response = {
-            accessToken: (0, helper_1.createAccessToken)(userPayload),
+            accessToken: createAccessToken(userPayload),
         };
-        (0, helper_1.sendRefreshToken)(res, (0, helper_1.createRefreshToken)(userPayload));
+        sendRefreshToken(res, createRefreshToken(userPayload));
         return response;
     }
     me({ user }) {
         return user;
     }
     async logout({ res }) {
-        (0, helper_1.sendRefreshToken)(res, "");
+        sendRefreshToken(res, "");
         return true;
     }
 };
 __decorate([
-    (0, type_graphql_1.Mutation)(() => Boolean, { nullable: true }),
-    __param(0, (0, type_graphql_1.Arg)("username")),
-    __param(1, (0, type_graphql_1.Arg)("email")),
-    __param(2, (0, type_graphql_1.Arg)("password")),
+    Mutation(() => Boolean, { nullable: true }),
+    __param(0, Arg("username")),
+    __param(1, Arg("email")),
+    __param(2, Arg("password")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String, String]),
     __metadata("design:returntype", Promise)
 ], AuthResolver.prototype, "register", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => auth_1.LoginResponse),
-    __param(0, (0, type_graphql_1.Arg)("email")),
-    __param(1, (0, type_graphql_1.Arg)("password")),
-    __param(2, (0, type_graphql_1.Ctx)()),
+    Mutation(() => LoginResponse),
+    __param(0, Arg("email")),
+    __param(1, Arg("password")),
+    __param(2, Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String, Object]),
     __metadata("design:returntype", Promise)
 ], AuthResolver.prototype, "login", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => entity_1.User),
-    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
-    __param(0, (0, type_graphql_1.Ctx)()),
+    Query(() => User),
+    UseMiddleware(authenticationGate),
+    __param(0, Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", entity_1.User)
+    __metadata("design:returntype", User)
 ], AuthResolver.prototype, "me", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => Boolean),
-    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
-    __param(0, (0, type_graphql_1.Ctx)()),
+    Mutation(() => Boolean),
+    UseMiddleware(authenticationGate),
+    __param(0, Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthResolver.prototype, "logout", null);
 AuthResolver = __decorate([
-    (0, type_graphql_1.Resolver)()
+    Resolver()
 ], AuthResolver);
-exports.AuthResolver = AuthResolver;
+export { AuthResolver };
 //# sourceMappingURL=auth.resolver.js.map

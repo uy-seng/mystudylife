@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSubjectsQuery = void 0;
 const getSubjectsQuery = `
     query{
         getSubjects{
@@ -14,5 +11,5 @@ const getSubjectsQuery = `
         }
     }
 `;
-exports.getSubjectsQuery = getSubjectsQuery;
+export { getSubjectsQuery };
 //# sourceMappingURL=subject.js.map

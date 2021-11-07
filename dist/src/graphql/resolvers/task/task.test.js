@@ -1,26 +1,21 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const mutation_1 = require("../../../graphql/mutation");
-const query_1 = require("../../../graphql/query");
-const graphqlTestClient_1 = require("../../../../test/graphqlTestClient");
-const faker_1 = __importDefault(require("faker"));
-const typeorm_1 = require("typeorm");
-const entity_1 = require("../../../entity");
-const task_1 = require("../../../graphql/mutation/task");
-const task_2 = require("../../../graphql/query/task");
+import { loginMutation, newAcademicYearMutation, newScheduleMutation, newSubjectMutation, registerMutation, } from "../../../graphql/mutation";
+import { meQuery } from "../../../graphql/query";
+import { testClient } from "../../../../test/graphqlTestClient";
+import faker from "faker";
+import { getConnection } from "typeorm";
+import { AcademicYear, Subject, Task } from "../../../entity";
+import { deleteTaskMutation, newTaskMutation, updateTaskMutation, } from "../../../graphql/mutation/task";
+import { getTasksByDateQuery, getTasksQuery, } from "../../../graphql/query/task";
 const testUser = {
-    email: faker_1.default.internet.email(),
-    username: faker_1.default.internet.userName(),
-    password: faker_1.default.internet.password(),
+    email: faker.internet.email(),
+    username: faker.internet.userName(),
+    password: faker.internet.password(),
 };
 let accessToken;
 describe("setting up user account", () => {
     it("should create new account for user", async () => {
-        const response = await (0, graphqlTestClient_1.testClient)({
-            source: mutation_1.registerMutation,
+        const response = await testClient({
+            source: registerMutation,
             variableValues: {
                 email: testUser.email,
                 username: testUser.username,
@@ -31,8 +26,8 @@ describe("setting up user account", () => {
         expect(response.data).not.toBeNull();
     });
     it("should login user", async () => {
-        const response = await (0, graphqlTestClient_1.testClient)({
-            source: mutation_1.loginMutation,
+        const response = await testClient({
+            source: loginMutation,
             variableValues: {
                 email: testUser.email,
                 password: testUser.password,
@@ -44,8 +39,8 @@ describe("setting up user account", () => {
     });
     it("should show authenticated user", async () => {
         expect(accessToken).toBeDefined();
-        const response = await (0, graphqlTestClient_1.testClient)({
-            source: query_1.meQuery,
+        const response = await testClient({
+            source: meQuery,
             headers: {
                 authorization: `Bearer ${accessToken}`,
             },
@@ -57,8 +52,8 @@ describe("setting up user account", () => {
 let academicYearId;
 describe("create academic year with fixed schedule and no term", () => {
     it("should create empty academic year", async () => {
-        const response = await (0, graphqlTestClient_1.testClient)({
-            source: mutation_1.newAcademicYearMutation,
+        const response = await testClient({
+            source: newAcademicYearMutation,
             variableValues: {
                 startDate: "September 12 2021",
                 endDate: "March 12 2022",
@@ -73,8 +68,8 @@ describe("create academic year with fixed schedule and no term", () => {
     });
     let scheduleId;
     it("should create fixed schedule", async () => {
-        const response = await (0, graphqlTestClient_1.testClient)({
-            source: mutation_1.newScheduleMutation,
+        const response = await testClient({
+            source: newScheduleMutation,
             variableValues: {
                 type: "fixed",
                 academicYearId: academicYearId,
@@ -85,7 +80,7 @@ describe("create academic year with fixed schedule and no term", () => {
         scheduleId = response.data.newSchedule.id;
     });
     it("should show academic year with fixed schedule", async () => {
-        const academicYearRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.AcademicYear);
+        const academicYearRepository = getConnection(process.env.NODE_ENV).getRepository(AcademicYear);
         const academicYear = (await academicYearRepository.findOne(academicYearId, {
             relations: ["schedule"],
         }));
@@ -97,8 +92,8 @@ describe("create academic year with fixed schedule and no term", () => {
 let subjectId;
 describe("create subject with academic year", () => {
     it("should create subject with academic year: subject 1", async () => {
-        const response = await (0, graphqlTestClient_1.testClient)({
-            source: mutation_1.newSubjectMutation,
+        const response = await testClient({
+            source: newSubjectMutation,
             variableValues: {
                 name: "Subject 1",
                 academicYearId: academicYearId,
@@ -111,8 +106,8 @@ describe("create subject with academic year", () => {
         expect(response.data).not.toBeNull();
     });
     it("should create subject with academic year: subject 2", async () => {
-        const response = await (0, graphqlTestClient_1.testClient)({
-            source: mutation_1.newSubjectMutation,
+        const response = await testClient({
+            source: newSubjectMutation,
             variableValues: {
                 name: "Subject 2",
                 academicYearId: academicYearId,
@@ -126,7 +121,7 @@ describe("create subject with academic year", () => {
         subjectId = response.data.newSubject.id;
     });
     it("should display subject with academic year", async () => {
-        const subjectRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.Subject);
+        const subjectRepository = getConnection(process.env.NODE_ENV).getRepository(Subject);
         const subject = await subjectRepository.findOne(subjectId, {
             relations: ["academicYear"],
         });
@@ -135,8 +130,8 @@ describe("create subject with academic year", () => {
 });
 describe("test case 1: create task with no academic year", () => {
     it("should create task with no academic year", async () => {
-        const response = await (0, graphqlTestClient_1.testClient)({
-            source: task_1.newTaskMutation,
+        const response = await testClient({
+            source: newTaskMutation,
             variableValues: {
                 subjectId: subjectId,
                 type: "assignment",
@@ -150,8 +145,8 @@ describe("test case 1: create task with no academic year", () => {
         });
         expect(response.errors).toBeUndefined();
         expect(response.data).not.toBeNull();
-        const newTask = await (0, typeorm_1.getConnection)(process.env.NODE_ENV)
-            .getRepository(entity_1.Task)
+        const newTask = await getConnection(process.env.NODE_ENV)
+            .getRepository(Task)
             .findOne(response.data.newTask.id, {
             relations: ["subject", "academicYear"],
         });
@@ -163,8 +158,8 @@ describe("test case 1: create task with no academic year", () => {
 });
 describe("test case 2: create task with no academic year", () => {
     it("should create task with academic year", async () => {
-        const response = await (0, graphqlTestClient_1.testClient)({
-            source: task_1.newTaskMutation,
+        const response = await testClient({
+            source: newTaskMutation,
             variableValues: {
                 subjectId: subjectId,
                 academicYearId: academicYearId,
@@ -179,8 +174,8 @@ describe("test case 2: create task with no academic year", () => {
         });
         expect(response.errors).toBeUndefined();
         expect(response.data).not.toBeNull();
-        const newTask = await (0, typeorm_1.getConnection)(process.env.NODE_ENV)
-            .getRepository(entity_1.Task)
+        const newTask = await getConnection(process.env.NODE_ENV)
+            .getRepository(Task)
             .findOne(response.data.newTask.id, {
             relations: ["subject", "academicYear"],
         });
@@ -192,8 +187,8 @@ describe("test case 2: create task with no academic year", () => {
 });
 describe("test case 3: query all tasks", () => {
     it("should query all tasks", async () => {
-        const response = await (0, graphqlTestClient_1.testClient)({
-            source: task_2.getTasksQuery,
+        const response = await testClient({
+            source: getTasksQuery,
             headers: {
                 authorization: `Bearer ${accessToken}`,
             },
@@ -205,8 +200,8 @@ describe("test case 3: query all tasks", () => {
 });
 describe("test case 4: query task by date", () => {
     it("should query task by date", async () => {
-        const response = await (0, graphqlTestClient_1.testClient)({
-            source: task_2.getTasksByDateQuery,
+        const response = await testClient({
+            source: getTasksByDateQuery,
             variableValues: {
                 date: new Date("2021-11-04").toISOString().split("T")[0],
             },
@@ -222,8 +217,8 @@ describe("test case 4: query task by date", () => {
 describe("test case 5: delete task", () => {
     let taskId;
     it("should query all tasks", async () => {
-        const response = await (0, graphqlTestClient_1.testClient)({
-            source: task_2.getTasksQuery,
+        const response = await testClient({
+            source: getTasksQuery,
             headers: {
                 authorization: `Bearer ${accessToken}`,
             },
@@ -235,8 +230,8 @@ describe("test case 5: delete task", () => {
         expect(taskId).toBeDefined();
     });
     it("should delete task", async () => {
-        const response = await (0, graphqlTestClient_1.testClient)({
-            source: task_1.deleteTaskMutation,
+        const response = await testClient({
+            source: deleteTaskMutation,
             variableValues: {
                 id: taskId,
             },
@@ -247,8 +242,8 @@ describe("test case 5: delete task", () => {
         expect(response.errors).toBeUndefined();
         expect(response.data).not.toBeNull();
         expect(response.data.deleteTask).toBeTruthy();
-        const task = await (0, typeorm_1.getConnection)(process.env.NODE_ENV)
-            .getRepository(entity_1.Task)
+        const task = await getConnection(process.env.NODE_ENV)
+            .getRepository(Task)
             .findOne(taskId);
         expect(task).toBeUndefined();
     });
@@ -256,8 +251,8 @@ describe("test case 5: delete task", () => {
 describe("test case 6: update task", () => {
     let taskId;
     it("should query all tasks", async () => {
-        const response = await (0, graphqlTestClient_1.testClient)({
-            source: task_2.getTasksQuery,
+        const response = await testClient({
+            source: getTasksQuery,
             headers: {
                 authorization: `Bearer ${accessToken}`,
             },
@@ -268,8 +263,8 @@ describe("test case 6: update task", () => {
         taskId = response.data.getTasks[0].id;
     });
     it("should update task", async () => {
-        const response = await (0, graphqlTestClient_1.testClient)({
-            source: task_1.updateTaskMutation,
+        const response = await testClient({
+            source: updateTaskMutation,
             variableValues: {
                 id: taskId,
                 title: "Task 1",
@@ -286,8 +281,8 @@ describe("test case 6: update task", () => {
         expect(response.errors).toBeUndefined();
         expect(response.data).not.toBeNull();
         expect(response.data.updateTask).toBeTruthy();
-        const task = await (0, typeorm_1.getConnection)(process.env.NODE_ENV)
-            .getRepository(entity_1.Task)
+        const task = await getConnection(process.env.NODE_ENV)
+            .getRepository(Task)
             .findOne(taskId);
         expect(task).not.toBeNull();
         expect(task.title).toBe("Task 1");

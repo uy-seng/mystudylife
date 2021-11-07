@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11,21 +10,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TaskResolver = void 0;
-const entity_1 = require("../../../entity");
-const middleware_1 = require("../../../middleware");
-const type_graphql_1 = require("type-graphql");
-const typeorm_1 = require("typeorm");
-const types_1 = require("./types");
-const apollo_server_errors_1 = require("apollo-server-errors");
-const apollo_server_errors_2 = require("apollo-server-errors");
+import { AcademicYear, Subject, Task, User } from "../../../entity";
+import { authenticationGate } from "../../../middleware";
+import { Arg, Args, Ctx, Mutation, Query, Resolver, UseMiddleware, } from "type-graphql";
+import { getConnection } from "typeorm";
+import { TaskArgs, UpdateTaskArgs } from "./types";
+import { ValidationError } from "apollo-server-errors";
+import { ApolloError } from "apollo-server-errors";
 let TaskResolver = class TaskResolver {
     constructor() {
-        this.taskRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.Task);
-        this.subjectRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.Subject);
-        this.userRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.User);
-        this.academicYearRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.AcademicYear);
+        this.taskRepository = getConnection(process.env.NODE_ENV).getRepository(Task);
+        this.subjectRepository = getConnection(process.env.NODE_ENV).getRepository(Subject);
+        this.userRepository = getConnection(process.env.NODE_ENV).getRepository(User);
+        this.academicYearRepository = getConnection(process.env.NODE_ENV).getRepository(AcademicYear);
     }
     async newTask({ subjectId, due_date, detail, title, type, academicYearId }, { user }) {
         const newTask = this.taskRepository.create({
@@ -36,12 +33,12 @@ let TaskResolver = class TaskResolver {
         });
         const subject = await this.subjectRepository.findOne(subjectId);
         if (!subject)
-            throw new apollo_server_errors_1.ValidationError("invalid subject id");
+            throw new ValidationError("invalid subject id");
         newTask.subject = subject;
         if (academicYearId) {
             const academicYear = await this.academicYearRepository.findOne(academicYearId);
             if (!academicYear)
-                throw new apollo_server_errors_1.ValidationError("invalid academic year id");
+                throw new ValidationError("invalid academic year id");
             newTask.academicYear = academicYear;
         }
         const qUser = (await this.userRepository.findOne(user.id));
@@ -69,7 +66,7 @@ let TaskResolver = class TaskResolver {
             },
         });
         if (!q || q.user.id !== user.id)
-            throw new apollo_server_errors_2.ApolloError("result not found");
+            throw new ApolloError("result not found");
         return q;
     }
     async getTasksByDate(date, { user }) {
@@ -92,7 +89,7 @@ let TaskResolver = class TaskResolver {
             },
         });
         if (!c)
-            throw new apollo_server_errors_1.ValidationError("class not found for this user, please check id again");
+            throw new ValidationError("class not found for this user, please check id again");
         await this.taskRepository.remove(c);
         return true;
     }
@@ -103,7 +100,7 @@ let TaskResolver = class TaskResolver {
         const updatedSubject = await this.subjectRepository.findOne(updateContext.subjectId);
         const updatedAcademicYear = await this.academicYearRepository.findOne(updateContext.academicYearId);
         if (!q || q.user.id !== user.id || !updatedSubject || !updatedAcademicYear)
-            throw new apollo_server_errors_1.ValidationError("item not found. please provide a valid id");
+            throw new ValidationError("item not found. please provide a valid id");
         q.detail = updateContext.detail;
         q.due_date = updateContext.due_date;
         q.title = updateContext.title;
@@ -115,60 +112,60 @@ let TaskResolver = class TaskResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Mutation)(() => entity_1.Task),
-    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
-    __param(0, (0, type_graphql_1.Args)()),
-    __param(1, (0, type_graphql_1.Ctx)()),
+    Mutation(() => Task),
+    UseMiddleware(authenticationGate),
+    __param(0, Args()),
+    __param(1, Ctx()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [types_1.TaskArgs, Object]),
+    __metadata("design:paramtypes", [TaskArgs, Object]),
     __metadata("design:returntype", Promise)
 ], TaskResolver.prototype, "newTask", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [entity_1.Task]),
-    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
-    __param(0, (0, type_graphql_1.Ctx)()),
+    Query(() => [Task]),
+    UseMiddleware(authenticationGate),
+    __param(0, Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TaskResolver.prototype, "getTasks", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => entity_1.Task),
-    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
-    __param(0, (0, type_graphql_1.Arg)("id", () => String)),
-    __param(1, (0, type_graphql_1.Ctx)()),
+    Query(() => Task),
+    UseMiddleware(authenticationGate),
+    __param(0, Arg("id", () => String)),
+    __param(1, Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], TaskResolver.prototype, "getTaskById", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [entity_1.Task]),
-    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
-    __param(0, (0, type_graphql_1.Arg)("date", () => Date)),
-    __param(1, (0, type_graphql_1.Ctx)()),
+    Query(() => [Task]),
+    UseMiddleware(authenticationGate),
+    __param(0, Arg("date", () => Date)),
+    __param(1, Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Date, Object]),
     __metadata("design:returntype", Promise)
 ], TaskResolver.prototype, "getTasksByDate", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => Boolean),
-    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
-    __param(0, (0, type_graphql_1.Arg)("id", () => String)),
-    __param(1, (0, type_graphql_1.Ctx)()),
+    Mutation(() => Boolean),
+    UseMiddleware(authenticationGate),
+    __param(0, Arg("id", () => String)),
+    __param(1, Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], TaskResolver.prototype, "deleteTask", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => Boolean),
-    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
-    __param(0, (0, type_graphql_1.Args)()),
-    __param(1, (0, type_graphql_1.Ctx)()),
+    Mutation(() => Boolean),
+    UseMiddleware(authenticationGate),
+    __param(0, Args()),
+    __param(1, Ctx()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [types_1.UpdateTaskArgs, Object]),
+    __metadata("design:paramtypes", [UpdateTaskArgs, Object]),
     __metadata("design:returntype", Promise)
 ], TaskResolver.prototype, "updateTask", null);
 TaskResolver = __decorate([
-    (0, type_graphql_1.Resolver)()
+    Resolver()
 ], TaskResolver);
-exports.TaskResolver = TaskResolver;
+export { TaskResolver };
 //# sourceMappingURL=task.resolver.js.map

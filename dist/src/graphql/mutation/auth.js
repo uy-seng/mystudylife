@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginMutation = exports.registerMutation = void 0;
-exports.registerMutation = `
+export const registerMutation = `
     mutation(
         $password: String!
         $email: String!
@@ -14,7 +11,7 @@ exports.registerMutation = `
         )
     }
 `;
-exports.loginMutation = `
+export const loginMutation = `
     mutation ($password: String!, $email: String!) {
         login(password: $password, email: $email) {
             accessToken

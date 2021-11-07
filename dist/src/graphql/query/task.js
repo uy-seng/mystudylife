@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTaskByIdQuery = exports.getTasksQuery = exports.getTasksByDateQuery = void 0;
 const getTasksByDateQuery = `
     query($date: DateTime!){
         getTasksByDate(date: $date){
@@ -21,7 +18,6 @@ const getTasksByDateQuery = `
         }
     }
 `;
-exports.getTasksByDateQuery = getTasksByDateQuery;
 const getTasksQuery = `
     query{
         getTasks{
@@ -42,7 +38,6 @@ const getTasksQuery = `
         }
     }
 `;
-exports.getTasksQuery = getTasksQuery;
 const getTaskByIdQuery = `
     query($id: String!){
         getTaskById(id: $id){
@@ -63,5 +58,5 @@ const getTaskByIdQuery = `
         }
     }
 `;
-exports.getTaskByIdQuery = getTaskByIdQuery;
+export { getTasksByDateQuery, getTasksQuery, getTaskByIdQuery };
 //# sourceMappingURL=task.js.map

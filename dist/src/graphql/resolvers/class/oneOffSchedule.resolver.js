@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11,18 +10,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.OneOffScheduleResolver = void 0;
-const type_graphql_1 = require("type-graphql");
-const entity_1 = require("../../../entity");
-const types_1 = require("./types");
-const typeorm_1 = require("typeorm");
-const middleware_1 = require("../../../middleware");
-const apollo_server_express_1 = require("apollo-server-express");
-const oneOffSchedule_1 = require("./types/oneOffSchedule");
+import { Args, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
+import { OneOffSchedule } from "../../../entity";
+import { OneOffScheduleArgs } from "./types";
+import { getConnection } from "typeorm";
+import { authenticationGate } from "../../../middleware";
+import { ValidationError } from "apollo-server-express";
+import { UpdateOneOffScheduleArgs } from "./types/oneOffSchedule";
 let OneOffScheduleResolver = class OneOffScheduleResolver {
     constructor() {
-        this.oneOffScheduleRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.OneOffSchedule);
+        this.oneOffScheduleRepository = getConnection(process.env.NODE_ENV).getRepository(OneOffSchedule);
     }
     async newOneOffSchedule({ startTime, endTime, date, scheduleId }) {
         const oneOffSchedule = this.oneOffScheduleRepository.create({
@@ -38,7 +35,7 @@ let OneOffScheduleResolver = class OneOffScheduleResolver {
             relations: ["schedule", "schedule.class", "schedule.class.user"],
         });
         if ((q === null || q === void 0 ? void 0 : q.schedule.class.user.id) !== user.id || !q)
-            throw new apollo_server_express_1.ValidationError("items not found, please provide a valid id");
+            throw new ValidationError("items not found, please provide a valid id");
         q.date = updateContext.date;
         q.endTime = updateContext.endTime;
         q.startTime = updateContext.startTime;
@@ -47,24 +44,24 @@ let OneOffScheduleResolver = class OneOffScheduleResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Mutation)(() => entity_1.OneOffSchedule),
-    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
-    __param(0, (0, type_graphql_1.Args)()),
+    Mutation(() => OneOffSchedule),
+    UseMiddleware(authenticationGate),
+    __param(0, Args()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [types_1.OneOffScheduleArgs]),
+    __metadata("design:paramtypes", [OneOffScheduleArgs]),
     __metadata("design:returntype", Promise)
 ], OneOffScheduleResolver.prototype, "newOneOffSchedule", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => Boolean),
-    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
-    __param(0, (0, type_graphql_1.Args)()),
-    __param(1, (0, type_graphql_1.Ctx)()),
+    Mutation(() => Boolean),
+    UseMiddleware(authenticationGate),
+    __param(0, Args()),
+    __param(1, Ctx()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [oneOffSchedule_1.UpdateOneOffScheduleArgs, Object]),
+    __metadata("design:paramtypes", [UpdateOneOffScheduleArgs, Object]),
     __metadata("design:returntype", Promise)
 ], OneOffScheduleResolver.prototype, "updateOneOffSchedule", null);
 OneOffScheduleResolver = __decorate([
-    (0, type_graphql_1.Resolver)()
+    Resolver()
 ], OneOffScheduleResolver);
-exports.OneOffScheduleResolver = OneOffScheduleResolver;
+export { OneOffScheduleResolver };
 //# sourceMappingURL=oneOffSchedule.resolver.js.map

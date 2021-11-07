@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,59 +7,57 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Term = void 0;
-const type_graphql_1 = require("type-graphql");
-const typeorm_1 = require("typeorm");
-const __1 = require("..");
+import { Field, ObjectType } from "type-graphql";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, } from "typeorm";
+import { Task, Subject, Class, AcademicYear } from "..";
 let Term = class Term {
 };
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)("uuid"),
-    (0, type_graphql_1.Field)(() => String),
+    PrimaryGeneratedColumn("uuid"),
+    Field(() => String),
     __metadata("design:type", String)
 ], Term.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
-    (0, type_graphql_1.Field)(() => String),
+    Column(),
+    Field(() => String),
     __metadata("design:type", String)
 ], Term.prototype, "name", void 0);
 __decorate([
-    (0, typeorm_1.Column)("date"),
-    (0, type_graphql_1.Field)(() => String),
+    Column("date"),
+    Field(() => String),
     __metadata("design:type", String)
 ], Term.prototype, "startDate", void 0);
 __decorate([
-    (0, typeorm_1.Column)("date"),
-    (0, type_graphql_1.Field)(() => String),
+    Column("date"),
+    Field(() => String),
     __metadata("design:type", String)
 ], Term.prototype, "endDate", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => __1.Task, (task) => task.term),
+    OneToMany(() => Task, (task) => task.term),
     __metadata("design:type", Array)
 ], Term.prototype, "tasks", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => __1.Subject, (subject) => subject.term),
+    OneToMany(() => Subject, (subject) => subject.term),
     __metadata("design:type", Array)
 ], Term.prototype, "subjects", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => __1.Class, (_class) => _class.term),
+    OneToMany(() => Class, (_class) => _class.term),
     __metadata("design:type", Array)
 ], Term.prototype, "classes", void 0);
 __decorate([
-    (0, typeorm_1.Column)("uuid"),
+    Column("uuid"),
     __metadata("design:type", String)
 ], Term.prototype, "academicYearId", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => __1.AcademicYear, (academicYear) => academicYear.terms, {
+    ManyToOne(() => AcademicYear, (academicYear) => academicYear.terms, {
         onDelete: "CASCADE",
     }),
-    (0, typeorm_1.JoinColumn)({ name: "academicYearId", referencedColumnName: "id" }),
-    __metadata("design:type", __1.AcademicYear)
+    JoinColumn({ name: "academicYearId", referencedColumnName: "id" }),
+    __metadata("design:type", AcademicYear)
 ], Term.prototype, "academicYear", void 0);
 Term = __decorate([
-    (0, typeorm_1.Entity)("academic_year_terms"),
-    (0, type_graphql_1.ObjectType)()
+    Entity("academic_year_terms"),
+    ObjectType()
 ], Term);
-exports.Term = Term;
+export { Term };
 //# sourceMappingURL=Term.js.map

@@ -1,11 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.timeTransformer = exports.dateTransformer = void 0;
-exports.dateTransformer = {
+export const dateTransformer = {
     to: (value) => value,
     from: (value) => value.toLocaleDateString(),
 };
-exports.timeTransformer = {
+export const timeTransformer = {
     to: (value) => value,
     from: (value) => value.toLocaleTimeString(),
 };

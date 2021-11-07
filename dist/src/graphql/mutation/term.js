@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.newTermMutation = void 0;
 const newTermMutation = `
     mutation(
         $name: String!,
@@ -19,5 +16,5 @@ const newTermMutation = `
             }
     }
 `;
-exports.newTermMutation = newTermMutation;
+export { newTermMutation };
 //# sourceMappingURL=term.js.map

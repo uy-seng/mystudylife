@@ -1,13 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.apiRoute = void 0;
-const express_1 = require("express");
-const auth_route_1 = require("./auth.route");
-exports.apiRoute = (0, express_1.Router)();
-exports.apiRoute.get("/", (_req, res) => {
+import { Router } from "express";
+import { authRoute } from "./auth.route";
+export const apiRoute = Router();
+apiRoute.get("/", (_req, res) => {
     return res.status(200).json({
         message: "My Study Life API",
     });
 });
-exports.apiRoute.use("/auth", auth_route_1.authRoute);
+apiRoute.use("/auth", authRoute);
 //# sourceMappingURL=index.js.map

@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.meQuery = void 0;
-exports.meQuery = `
+export const meQuery = `
     query {
         me {
             id
