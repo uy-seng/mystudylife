@@ -19,6 +19,7 @@ import {
 } from "./graphql/resolvers";
 import { DatabaseService } from "./services";
 import { TaskResolver } from "src/graphql/resolvers/task/task.resolver";
+import path from "path";
 
 (async () => {
   const app = express();
@@ -65,7 +66,6 @@ import { TaskResolver } from "src/graphql/resolvers/task/task.resolver";
 
   if (process.env.NODE_ENV === "production") {
     app.use(express.static("web/build"));
-    const path = require("path");
     app.get("*", (_req, res) => {
       res.sendFile(path.resolve(__dirname, "web", "build", "index.html"));
     });
