@@ -63,6 +63,7 @@ import path from "path";
   await apolloServer.start();
 
   apolloServer.applyMiddleware({ app, cors: false });
+  const PORT = process.env.PORT || 8000;
 
   if (process.env.NODE_ENV === "production") {
     app.use(express.static("web/build"));
@@ -71,11 +72,10 @@ import path from "path";
         path.resolve(__dirname, "web", "build", "index.html")
       );
     });
-  } else {
-    app.listen(8000, () => {
-      console.log(
-        `Server running at http://localhost:8000\nGraphql running at http://localhost:8000/graphql`
-      );
-    });
   }
+  app.listen(PORT, () => {
+    console.log(
+      `Server running at http://localhost:8000\nGraphql running at http://localhost:8000/graphql`
+    );
+  });
 })();
