@@ -21,7 +21,7 @@ class DatabaseService {
         }
     }
     async init() {
-        this.connection = await (0, typeorm_1.createConnection)("development");
+        this.connection = await (0, typeorm_1.createConnection)(`${process.env.NODE_ENV}`);
         console.log("Database initialized...");
         const CLEAN_DB = false;
         const entities = await this.getEntities();
