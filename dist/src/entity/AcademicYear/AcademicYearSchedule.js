@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,49 +8,54 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Field, ObjectType } from "type-graphql";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, } from "typeorm";
-import { AcademicYear, DayRotationSchedule, WeekRotationSchedule } from "..";
-import { AcademicYearScheduleType } from "../types";
-var AcademicYearSchedule = (function () {
-    function AcademicYearSchedule() {
-    }
-    __decorate([
-        PrimaryGeneratedColumn("uuid"),
-        Field(function () { return String; }),
-        __metadata("design:type", String)
-    ], AcademicYearSchedule.prototype, "id", void 0);
-    __decorate([
-        Column("text"),
-        Field(function () { return AcademicYearScheduleType; }),
-        __metadata("design:type", String)
-    ], AcademicYearSchedule.prototype, "type", void 0);
-    __decorate([
-        OneToOne(function () { return DayRotationSchedule; }, function (dayRotationSchedule) { return dayRotationSchedule.schedule; }),
-        Field(function () { return DayRotationSchedule; }, { nullable: true }),
-        __metadata("design:type", DayRotationSchedule)
-    ], AcademicYearSchedule.prototype, "dayRotation", void 0);
-    __decorate([
-        OneToOne(function () { return WeekRotationSchedule; }, function (weekRotationSchedule) { return weekRotationSchedule.schedule; }),
-        Field(function () { return WeekRotationSchedule; }, { nullable: true }),
-        __metadata("design:type", WeekRotationSchedule)
-    ], AcademicYearSchedule.prototype, "weekRotation", void 0);
-    __decorate([
-        Column("uuid"),
-        __metadata("design:type", String)
-    ], AcademicYearSchedule.prototype, "academicYearId", void 0);
-    __decorate([
-        OneToOne(function () { return AcademicYear; }, function (academicYear) { return academicYear.schedule; }, {
-            onDelete: "CASCADE",
-        }),
-        JoinColumn({ name: "academicYearId", referencedColumnName: "id" }),
-        __metadata("design:type", AcademicYear)
-    ], AcademicYearSchedule.prototype, "academicYear", void 0);
-    AcademicYearSchedule = __decorate([
-        ObjectType(),
-        Entity("academic_year_schedules")
-    ], AcademicYearSchedule);
-    return AcademicYearSchedule;
-}());
-export { AcademicYearSchedule };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AcademicYearSchedule = void 0;
+const type_graphql_1 = require("type-graphql");
+const typeorm_1 = require("typeorm");
+const __1 = require("..");
+const types_1 = require("../types");
+let AcademicYearSchedule = class AcademicYearSchedule {
+    id;
+    type;
+    dayRotation;
+    weekRotation;
+    academicYearId;
+    academicYear;
+};
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)("uuid"),
+    (0, type_graphql_1.Field)(() => String),
+    __metadata("design:type", String)
+], AcademicYearSchedule.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)("text"),
+    (0, type_graphql_1.Field)(() => types_1.AcademicYearScheduleType),
+    __metadata("design:type", String)
+], AcademicYearSchedule.prototype, "type", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => __1.DayRotationSchedule, (dayRotationSchedule) => dayRotationSchedule.schedule),
+    (0, type_graphql_1.Field)(() => __1.DayRotationSchedule, { nullable: true }),
+    __metadata("design:type", __1.DayRotationSchedule)
+], AcademicYearSchedule.prototype, "dayRotation", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => __1.WeekRotationSchedule, (weekRotationSchedule) => weekRotationSchedule.schedule),
+    (0, type_graphql_1.Field)(() => __1.WeekRotationSchedule, { nullable: true }),
+    __metadata("design:type", __1.WeekRotationSchedule)
+], AcademicYearSchedule.prototype, "weekRotation", void 0);
+__decorate([
+    (0, typeorm_1.Column)("uuid"),
+    __metadata("design:type", String)
+], AcademicYearSchedule.prototype, "academicYearId", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => __1.AcademicYear, (academicYear) => academicYear.schedule, {
+        onDelete: "CASCADE",
+    }),
+    (0, typeorm_1.JoinColumn)({ name: "academicYearId", referencedColumnName: "id" }),
+    __metadata("design:type", __1.AcademicYear)
+], AcademicYearSchedule.prototype, "academicYear", void 0);
+AcademicYearSchedule = __decorate([
+    (0, type_graphql_1.ObjectType)(),
+    (0, typeorm_1.Entity)("academic_year_schedules")
+], AcademicYearSchedule);
+exports.AcademicYearSchedule = AcademicYearSchedule;
 //# sourceMappingURL=AcademicYearSchedule.js.map

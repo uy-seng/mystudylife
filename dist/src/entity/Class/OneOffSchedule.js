@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,48 +8,53 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Field, ObjectType } from "type-graphql";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, } from "typeorm";
-import { ClassSchedule } from "..";
-var OneOffSchedule = (function () {
-    function OneOffSchedule() {
-    }
-    __decorate([
-        PrimaryGeneratedColumn("uuid"),
-        Field(function () { return String; }),
-        __metadata("design:type", String)
-    ], OneOffSchedule.prototype, "id", void 0);
-    __decorate([
-        Column("date"),
-        Field(function () { return String; }),
-        __metadata("design:type", String)
-    ], OneOffSchedule.prototype, "date", void 0);
-    __decorate([
-        Column("time"),
-        Field(function () { return String; }),
-        __metadata("design:type", String)
-    ], OneOffSchedule.prototype, "startTime", void 0);
-    __decorate([
-        Column("time"),
-        Field(function () { return String; }),
-        __metadata("design:type", String)
-    ], OneOffSchedule.prototype, "endTime", void 0);
-    __decorate([
-        Column("uuid"),
-        __metadata("design:type", String)
-    ], OneOffSchedule.prototype, "scheduleId", void 0);
-    __decorate([
-        OneToOne(function () { return ClassSchedule; }, function (schedule) { return schedule.oneOff; }, {
-            onDelete: "CASCADE",
-        }),
-        JoinColumn({ name: "scheduleId", referencedColumnName: "id" }),
-        __metadata("design:type", ClassSchedule)
-    ], OneOffSchedule.prototype, "schedule", void 0);
-    OneOffSchedule = __decorate([
-        Entity("class_one_off_schedule"),
-        ObjectType()
-    ], OneOffSchedule);
-    return OneOffSchedule;
-}());
-export { OneOffSchedule };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.OneOffSchedule = void 0;
+const type_graphql_1 = require("type-graphql");
+const typeorm_1 = require("typeorm");
+const __1 = require("..");
+let OneOffSchedule = class OneOffSchedule {
+    id;
+    date;
+    startTime;
+    endTime;
+    scheduleId;
+    schedule;
+};
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)("uuid"),
+    (0, type_graphql_1.Field)(() => String),
+    __metadata("design:type", String)
+], OneOffSchedule.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)("date"),
+    (0, type_graphql_1.Field)(() => String),
+    __metadata("design:type", String)
+], OneOffSchedule.prototype, "date", void 0);
+__decorate([
+    (0, typeorm_1.Column)("time"),
+    (0, type_graphql_1.Field)(() => String),
+    __metadata("design:type", String)
+], OneOffSchedule.prototype, "startTime", void 0);
+__decorate([
+    (0, typeorm_1.Column)("time"),
+    (0, type_graphql_1.Field)(() => String),
+    __metadata("design:type", String)
+], OneOffSchedule.prototype, "endTime", void 0);
+__decorate([
+    (0, typeorm_1.Column)("uuid"),
+    __metadata("design:type", String)
+], OneOffSchedule.prototype, "scheduleId", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => __1.ClassSchedule, (schedule) => schedule.oneOff, {
+        onDelete: "CASCADE",
+    }),
+    (0, typeorm_1.JoinColumn)({ name: "scheduleId", referencedColumnName: "id" }),
+    __metadata("design:type", __1.ClassSchedule)
+], OneOffSchedule.prototype, "schedule", void 0);
+OneOffSchedule = __decorate([
+    (0, typeorm_1.Entity)("class_one_off_schedule"),
+    (0, type_graphql_1.ObjectType)()
+], OneOffSchedule);
+exports.OneOffSchedule = OneOffSchedule;
 //# sourceMappingURL=OneOffSchedule.js.map

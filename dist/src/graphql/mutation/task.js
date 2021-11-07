@@ -1,5 +1,59 @@
-var newTaskMutation = "\n    mutation(\n        $subjectId: String!,\n        $academicYearId: String,\n        $type: TaskType!,\n        $due_date: String!,\n        $title: String,\n        $detail: String\n    ){\n        newTask(\n            subjectId: $subjectId,\n            academicYearId: $academicYearId,\n            type: $type,\n            due_date: $due_date,\n            title: $title,\n            detail: $detail\n        )\n            {\n                id\n            }\n    }\n";
-var deleteTaskMutation = "\n    mutation(\n        $id: String!,\n    ){\n        deleteTask(\n            id: $id,\n        )\n    }\n";
-var updateTaskMutation = "\n    mutation(\n        $id: String!,\n        $subjectId: String!,\n        $academicYearId: String,\n        $type: TaskType!,\n        $due_date: String!,\n        $title: String,\n        $detail: String\n    ){\n        updateTask(\n            id: $id,\n            subjectId: $subjectId,\n            academicYearId: $academicYearId,\n            type: $type,\n            due_date: $due_date,\n            title: $title,\n            detail: $detail\n        )\n    }\n";
-export { newTaskMutation, deleteTaskMutation, updateTaskMutation };
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateTaskMutation = exports.deleteTaskMutation = exports.newTaskMutation = void 0;
+const newTaskMutation = `
+    mutation(
+        $subjectId: String!,
+        $academicYearId: String,
+        $type: TaskType!,
+        $due_date: String!,
+        $title: String,
+        $detail: String
+    ){
+        newTask(
+            subjectId: $subjectId,
+            academicYearId: $academicYearId,
+            type: $type,
+            due_date: $due_date,
+            title: $title,
+            detail: $detail
+        )
+            {
+                id
+            }
+    }
+`;
+exports.newTaskMutation = newTaskMutation;
+const deleteTaskMutation = `
+    mutation(
+        $id: String!,
+    ){
+        deleteTask(
+            id: $id,
+        )
+    }
+`;
+exports.deleteTaskMutation = deleteTaskMutation;
+const updateTaskMutation = `
+    mutation(
+        $id: String!,
+        $subjectId: String!,
+        $academicYearId: String,
+        $type: TaskType!,
+        $due_date: String!,
+        $title: String,
+        $detail: String
+    ){
+        updateTask(
+            id: $id,
+            subjectId: $subjectId,
+            academicYearId: $academicYearId,
+            type: $type,
+            due_date: $due_date,
+            title: $title,
+            detail: $detail
+        )
+    }
+`;
+exports.updateTaskMutation = updateTaskMutation;
 //# sourceMappingURL=task.js.map

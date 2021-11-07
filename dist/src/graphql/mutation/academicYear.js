@@ -1,4 +1,29 @@
-var newAcademicYearMutation = "\n    mutation(\n        $startDate: String!,\n        $endDate: String!,\n    ){\n        newAcademicYear(\n            startDate: $startDate,\n            endDate: $endDate,\n        )\n            {\n                id\n            }\n    }\n";
-var deleteAcademicYearMutation = "\n    mutation(\n        $id: String!,\n    ){\n        deleteAcademicYear(\n            id: $id,\n        )\n    }\n";
-export { newAcademicYearMutation, deleteAcademicYearMutation };
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteAcademicYearMutation = exports.newAcademicYearMutation = void 0;
+const newAcademicYearMutation = `
+    mutation(
+        $startDate: String!,
+        $endDate: String!,
+    ){
+        newAcademicYear(
+            startDate: $startDate,
+            endDate: $endDate,
+        )
+            {
+                id
+            }
+    }
+`;
+exports.newAcademicYearMutation = newAcademicYearMutation;
+const deleteAcademicYearMutation = `
+    mutation(
+        $id: String!,
+    ){
+        deleteAcademicYear(
+            id: $id,
+        )
+    }
+`;
+exports.deleteAcademicYearMutation = deleteAcademicYearMutation;
 //# sourceMappingURL=academicYear.js.map

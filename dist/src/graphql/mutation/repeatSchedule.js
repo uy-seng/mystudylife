@@ -1,4 +1,49 @@
-var newRepeatScheduleMutation = "\n    mutation(\n        $scheduleId: String!,\n        $startTime: String!,\n        $endTime: String!,\n        $repeatDays: [DayOfWeek!]!,\n        $startDate: String,\n        $endDate: String\n    ){\n        newRepeatSchedule(\n            scheduleId: $scheduleId,\n            startTime: $startTime,\n            endTime: $endTime,\n            repeatDays: $repeatDays,\n            startDate: $startDate,\n            endDate: $endDate\n        )\n            {\n                id\n            }\n    }\n";
-var updateRepeatScheduleMutation = "\n    mutation(\n        $id: String!,\n        $scheduleId: String!,\n        $startTime: String!,\n        $endTime: String!,\n        $repeatDays: [DayOfWeek!]!,\n        $startDate: String,\n        $endDate: String\n    ){\n        updateRepeatSchedule(\n            id: $id,\n            scheduleId: $scheduleId,\n            startTime: $startTime,\n            endTime: $endTime,\n            repeatDays: $repeatDays,\n            startDate: $startDate,\n            endDate: $endDate\n        )\n    }\n";
-export { newRepeatScheduleMutation, updateRepeatScheduleMutation };
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateRepeatScheduleMutation = exports.newRepeatScheduleMutation = void 0;
+const newRepeatScheduleMutation = `
+    mutation(
+        $scheduleId: String!,
+        $startTime: String!,
+        $endTime: String!,
+        $repeatDays: [DayOfWeek!]!,
+        $startDate: String,
+        $endDate: String
+    ){
+        newRepeatSchedule(
+            scheduleId: $scheduleId,
+            startTime: $startTime,
+            endTime: $endTime,
+            repeatDays: $repeatDays,
+            startDate: $startDate,
+            endDate: $endDate
+        )
+            {
+                id
+            }
+    }
+`;
+exports.newRepeatScheduleMutation = newRepeatScheduleMutation;
+const updateRepeatScheduleMutation = `
+    mutation(
+        $id: String!,
+        $scheduleId: String!,
+        $startTime: String!,
+        $endTime: String!,
+        $repeatDays: [DayOfWeek!]!,
+        $startDate: String,
+        $endDate: String
+    ){
+        updateRepeatSchedule(
+            id: $id,
+            scheduleId: $scheduleId,
+            startTime: $startTime,
+            endTime: $endTime,
+            repeatDays: $repeatDays,
+            startDate: $startDate,
+            endDate: $endDate
+        )
+    }
+`;
+exports.updateRepeatScheduleMutation = updateRepeatScheduleMutation;
 //# sourceMappingURL=repeatSchedule.js.map

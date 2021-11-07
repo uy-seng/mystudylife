@@ -1,9 +1,12 @@
-export var dateTransformer = {
-    to: function (value) { return value; },
-    from: function (value) { return value.toLocaleDateString(); },
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.timeTransformer = exports.dateTransformer = void 0;
+exports.dateTransformer = {
+    to: (value) => value,
+    from: (value) => value.toLocaleDateString(),
 };
-export var timeTransformer = {
-    to: function (value) { return value; },
-    from: function (value) { return value.toLocaleTimeString(); },
+exports.timeTransformer = {
+    to: (value) => value,
+    from: (value) => value.toLocaleTimeString(),
 };
 //# sourceMappingURL=date.utils.js.map

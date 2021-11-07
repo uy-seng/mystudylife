@@ -1,1 +1,1 @@
-{"version":3,"file":"ClassSchedule.js","sourceRoot":"","sources":["../../../../src/entity/types/ClassSchedule.ts"],"names":[],"mappings":"AAAA,MAAM,CAAN,IAAY,iBAGX;AAHD,WAAY,iBAAiB;IAC3B,sCAAiB,CAAA;IACjB,sCAAiB,CAAA;AACnB,CAAC,EAHW,iBAAiB,KAAjB,iBAAiB,QAG5B"}
+{"version":3,"file":"ClassSchedule.js","sourceRoot":"","sources":["../../../../src/entity/types/ClassSchedule.ts"],"names":[],"mappings":";;;AAAA,IAAY,iBAGX;AAHD,WAAY,iBAAiB;IAC3B,sCAAiB,CAAA;IACjB,sCAAiB,CAAA;AACnB,CAAC,EAHW,iBAAiB,GAAjB,yBAAiB,KAAjB,yBAAiB,QAG5B"}

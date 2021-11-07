@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,47 +8,52 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, } from "typeorm";
-import { RepeatSchedule, OneOffSchedule, Class } from "..";
-import { Field, ObjectType } from "type-graphql";
-import { ClassScheduleType } from "../types";
-var ClassSchedule = (function () {
-    function ClassSchedule() {
-    }
-    __decorate([
-        PrimaryGeneratedColumn("uuid"),
-        Field(function () { return String; }),
-        __metadata("design:type", String)
-    ], ClassSchedule.prototype, "id", void 0);
-    __decorate([
-        Column("text"),
-        Field(function () { return ClassScheduleType; }),
-        __metadata("design:type", String)
-    ], ClassSchedule.prototype, "type", void 0);
-    __decorate([
-        OneToOne(function () { return OneOffSchedule; }, function (oneoff) { return oneoff.schedule; }),
-        Field(function () { return OneOffSchedule; }, { nullable: true }),
-        __metadata("design:type", OneOffSchedule)
-    ], ClassSchedule.prototype, "oneOff", void 0);
-    __decorate([
-        OneToMany(function () { return RepeatSchedule; }, function (repeat) { return repeat.schedule; }),
-        Field(function () { return [RepeatSchedule]; }, { nullable: true }),
-        __metadata("design:type", Array)
-    ], ClassSchedule.prototype, "repeat", void 0);
-    __decorate([
-        Column("uuid"),
-        __metadata("design:type", String)
-    ], ClassSchedule.prototype, "classId", void 0);
-    __decorate([
-        OneToOne(function () { return Class; }, { onDelete: "CASCADE" }),
-        JoinColumn({ name: "classId", referencedColumnName: "id" }),
-        __metadata("design:type", Class)
-    ], ClassSchedule.prototype, "class", void 0);
-    ClassSchedule = __decorate([
-        Entity("class_schedules"),
-        ObjectType()
-    ], ClassSchedule);
-    return ClassSchedule;
-}());
-export { ClassSchedule };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ClassSchedule = void 0;
+const typeorm_1 = require("typeorm");
+const __1 = require("..");
+const type_graphql_1 = require("type-graphql");
+const types_1 = require("../types");
+let ClassSchedule = class ClassSchedule {
+    id;
+    type;
+    oneOff;
+    repeat;
+    classId;
+    class;
+};
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)("uuid"),
+    (0, type_graphql_1.Field)(() => String),
+    __metadata("design:type", String)
+], ClassSchedule.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)("text"),
+    (0, type_graphql_1.Field)(() => types_1.ClassScheduleType),
+    __metadata("design:type", String)
+], ClassSchedule.prototype, "type", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => __1.OneOffSchedule, (oneoff) => oneoff.schedule),
+    (0, type_graphql_1.Field)(() => __1.OneOffSchedule, { nullable: true }),
+    __metadata("design:type", __1.OneOffSchedule)
+], ClassSchedule.prototype, "oneOff", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => __1.RepeatSchedule, (repeat) => repeat.schedule),
+    (0, type_graphql_1.Field)(() => [__1.RepeatSchedule], { nullable: true }),
+    __metadata("design:type", Array)
+], ClassSchedule.prototype, "repeat", void 0);
+__decorate([
+    (0, typeorm_1.Column)("uuid"),
+    __metadata("design:type", String)
+], ClassSchedule.prototype, "classId", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => __1.Class, { onDelete: "CASCADE" }),
+    (0, typeorm_1.JoinColumn)({ name: "classId", referencedColumnName: "id" }),
+    __metadata("design:type", __1.Class)
+], ClassSchedule.prototype, "class", void 0);
+ClassSchedule = __decorate([
+    (0, typeorm_1.Entity)("class_schedules"),
+    (0, type_graphql_1.ObjectType)()
+], ClassSchedule);
+exports.ClassSchedule = ClassSchedule;
 //# sourceMappingURL=ClassSchedule.js.map

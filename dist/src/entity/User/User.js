@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,70 +8,80 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Field, Int, ObjectType } from "type-graphql";
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn, } from "typeorm";
-import { Task, Exam, Subject, Class, AcademicYear, UserProvider } from "..";
-var User = (function () {
-    function User() {
-    }
-    __decorate([
-        PrimaryGeneratedColumn("uuid"),
-        Field(function () { return String; }),
-        __metadata("design:type", String)
-    ], User.prototype, "id", void 0);
-    __decorate([
-        Column({ unique: true }),
-        Field(function () { return String; }),
-        __metadata("design:type", String)
-    ], User.prototype, "username", void 0);
-    __decorate([
-        Column({ unique: true, nullable: true }),
-        Field(function () { return String; }, { nullable: true }),
-        __metadata("design:type", String)
-    ], User.prototype, "email", void 0);
-    __decorate([
-        Column({ nullable: true }),
-        Field(function () { return String; }, { nullable: true }),
-        __metadata("design:type", String)
-    ], User.prototype, "password", void 0);
-    __decorate([
-        OneToOne(function () { return UserProvider; }),
-        JoinColumn(),
-        Field(function () { return UserProvider; }),
-        __metadata("design:type", UserProvider)
-    ], User.prototype, "provider", void 0);
-    __decorate([
-        Column({ default: 0 }),
-        Field(function () { return Int; }),
-        __metadata("design:type", Number)
-    ], User.prototype, "tokenVersion", void 0);
-    __decorate([
-        OneToMany(function () { return Task; }, function (task) { return task.user; }, { onDelete: "CASCADE" }),
-        __metadata("design:type", Array)
-    ], User.prototype, "tasks", void 0);
-    __decorate([
-        OneToMany(function () { return Exam; }, function (exam) { return exam.user; }, { onDelete: "CASCADE" }),
-        __metadata("design:type", Array)
-    ], User.prototype, "exams", void 0);
-    __decorate([
-        OneToMany(function () { return Subject; }, function (subject) { return subject.user; }, { onDelete: "CASCADE" }),
-        __metadata("design:type", Array)
-    ], User.prototype, "subjects", void 0);
-    __decorate([
-        OneToMany(function () { return Class; }, function (_class) { return _class.user; }, { onDelete: "CASCADE" }),
-        __metadata("design:type", Array)
-    ], User.prototype, "classes", void 0);
-    __decorate([
-        OneToMany(function () { return AcademicYear; }, function (academicYear) { return academicYear.user; }, {
-            onDelete: "CASCADE",
-        }),
-        __metadata("design:type", Array)
-    ], User.prototype, "academicYears", void 0);
-    User = __decorate([
-        Entity("users"),
-        ObjectType()
-    ], User);
-    return User;
-}());
-export { User };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.User = void 0;
+const type_graphql_1 = require("type-graphql");
+const typeorm_1 = require("typeorm");
+const __1 = require("..");
+let User = class User {
+    id;
+    username;
+    email;
+    password;
+    provider;
+    tokenVersion;
+    tasks;
+    exams;
+    subjects;
+    classes;
+    academicYears;
+};
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)("uuid"),
+    (0, type_graphql_1.Field)(() => String),
+    __metadata("design:type", String)
+], User.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ unique: true }),
+    (0, type_graphql_1.Field)(() => String),
+    __metadata("design:type", String)
+], User.prototype, "username", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ unique: true, nullable: true }),
+    (0, type_graphql_1.Field)(() => String, { nullable: true }),
+    __metadata("design:type", String)
+], User.prototype, "email", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    (0, type_graphql_1.Field)(() => String, { nullable: true }),
+    __metadata("design:type", String)
+], User.prototype, "password", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => __1.UserProvider),
+    (0, typeorm_1.JoinColumn)(),
+    (0, type_graphql_1.Field)(() => __1.UserProvider),
+    __metadata("design:type", __1.UserProvider)
+], User.prototype, "provider", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: 0 }),
+    (0, type_graphql_1.Field)(() => type_graphql_1.Int),
+    __metadata("design:type", Number)
+], User.prototype, "tokenVersion", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => __1.Task, (task) => task.user, { onDelete: "CASCADE" }),
+    __metadata("design:type", Array)
+], User.prototype, "tasks", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => __1.Exam, (exam) => exam.user, { onDelete: "CASCADE" }),
+    __metadata("design:type", Array)
+], User.prototype, "exams", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => __1.Subject, (subject) => subject.user, { onDelete: "CASCADE" }),
+    __metadata("design:type", Array)
+], User.prototype, "subjects", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => __1.Class, (_class) => _class.user, { onDelete: "CASCADE" }),
+    __metadata("design:type", Array)
+], User.prototype, "classes", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => __1.AcademicYear, (academicYear) => academicYear.user, {
+        onDelete: "CASCADE",
+    }),
+    __metadata("design:type", Array)
+], User.prototype, "academicYears", void 0);
+User = __decorate([
+    (0, typeorm_1.Entity)("users"),
+    (0, type_graphql_1.ObjectType)()
+], User);
+exports.User = User;
 //# sourceMappingURL=User.js.map
