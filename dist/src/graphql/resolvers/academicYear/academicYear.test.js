@@ -1,20 +1,25 @@
-import { AcademicYear, AcademicYearSchedule, Term, WeekRotationSchedule, } from "../../../entity";
-import { loginMutation, newAcademicYearMutation, newPartialDayRotationMutation, newPartialWeekRotationMutation, newScheduleMutation, newTermMutation, registerMutation, } from "../../../graphql/mutation";
-import { deleteAcademicYearMutation } from "../../../graphql/mutation/academicYear";
-import { getAcademicYearsQuery, meQuery } from "../../../graphql/query";
-import { getConnection } from "typeorm";
-import { testClient } from "../../../../test/graphqlTestClient";
-import faker from "faker";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const entity_1 = require("../../../entity");
+const mutation_1 = require("../../../graphql/mutation");
+const academicYear_1 = require("../../../graphql/mutation/academicYear");
+const query_1 = require("../../../graphql/query");
+const typeorm_1 = require("typeorm");
+const graphqlTestClient_1 = require("../../../../test/graphqlTestClient");
+const faker_1 = __importDefault(require("faker"));
 const testUser = {
-    email: faker.internet.email(),
-    username: faker.internet.userName(),
-    password: faker.internet.password(),
+    email: faker_1.default.internet.email(),
+    username: faker_1.default.internet.userName(),
+    password: faker_1.default.internet.password(),
 };
 let accessToken;
 describe("setting up user account", () => {
     it("should create new account for user", async () => {
-        const response = await testClient({
-            source: registerMutation,
+        const response = await (0, graphqlTestClient_1.testClient)({
+            source: mutation_1.registerMutation,
             variableValues: {
                 email: testUser.email,
                 username: testUser.username,
@@ -25,8 +30,8 @@ describe("setting up user account", () => {
         expect(response.data).not.toBeNull();
     });
     it("should login user", async () => {
-        const response = await testClient({
-            source: loginMutation,
+        const response = await (0, graphqlTestClient_1.testClient)({
+            source: mutation_1.loginMutation,
             variableValues: {
                 email: testUser.email,
                 password: testUser.password,
@@ -38,8 +43,8 @@ describe("setting up user account", () => {
     });
     it("should show authenticated user", async () => {
         expect(accessToken).toBeDefined();
-        const response = await testClient({
-            source: meQuery,
+        const response = await (0, graphqlTestClient_1.testClient)({
+            source: query_1.meQuery,
             headers: {
                 authorization: `Bearer ${accessToken}`,
             },
@@ -51,8 +56,8 @@ describe("setting up user account", () => {
 describe("test case 1: create academic year with fixed schedule and term", () => {
     let academicYearId;
     it("should create empty academic year", async () => {
-        const response = await testClient({
-            source: newAcademicYearMutation,
+        const response = await (0, graphqlTestClient_1.testClient)({
+            source: mutation_1.newAcademicYearMutation,
             variableValues: {
                 startDate: "September 12 2021",
                 endDate: "March 12 2022",
@@ -67,8 +72,8 @@ describe("test case 1: create academic year with fixed schedule and term", () =>
     });
     let scheduleId;
     it("should create fixed schedule", async () => {
-        const response = await testClient({
-            source: newScheduleMutation,
+        const response = await (0, graphqlTestClient_1.testClient)({
+            source: mutation_1.newScheduleMutation,
             variableValues: {
                 type: "fixed",
                 academicYearId: academicYearId,
@@ -103,8 +108,8 @@ describe("test case 1: create academic year with fixed schedule and term", () =>
             },
         ];
         termIds = await Promise.all(terms.map(async (term) => {
-            const response = await testClient({
-                source: newTermMutation,
+            const response = await (0, graphqlTestClient_1.testClient)({
+                source: mutation_1.newTermMutation,
                 variableValues: {
                     name: term.name,
                     startDate: term.startDate,
@@ -119,7 +124,7 @@ describe("test case 1: create academic year with fixed schedule and term", () =>
         expect(termIds.every((termId) => typeof termId === "string")).toEqual(true);
     });
     it("should show academic year with fixed schedule and terms", async () => {
-        const academicYearRepository = getConnection(process.env.NODE_ENV).getRepository(AcademicYear);
+        const academicYearRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.AcademicYear);
         const academicYear = (await academicYearRepository.findOne(academicYearId, {
             relations: ["schedule", "terms"],
         }));
@@ -133,8 +138,8 @@ describe("test case 1: create academic year with fixed schedule and term", () =>
         });
     });
     it("should delete academic year along with fixed schedule and term", async () => {
-        const response = await testClient({
-            source: deleteAcademicYearMutation,
+        const response = await (0, graphqlTestClient_1.testClient)({
+            source: academicYear_1.deleteAcademicYearMutation,
             variableValues: {
                 id: academicYearId,
             },
@@ -144,13 +149,13 @@ describe("test case 1: create academic year with fixed schedule and term", () =>
         });
         expect(response.errors).toBeUndefined();
         expect(response.data).not.toBeNull();
-        const academicYearRepository = getConnection(process.env.NODE_ENV).getRepository(AcademicYear);
+        const academicYearRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.AcademicYear);
         const academicYear = await academicYearRepository.findOne(academicYearId);
         expect(academicYear).toBeUndefined();
-        const scheduleRepository = getConnection(process.env.NODE_ENV).getRepository(AcademicYearSchedule);
+        const scheduleRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.AcademicYearSchedule);
         const schedule = await scheduleRepository.findOne(scheduleId);
         expect(schedule).toBeUndefined();
-        const termRepository = getConnection(process.env.NODE_ENV).getRepository(Term);
+        const termRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.Term);
         termIds.forEach(async (termId) => {
             const term = await termRepository.findOne(termId);
             expect(term).toBeUndefined();
@@ -160,8 +165,8 @@ describe("test case 1: create academic year with fixed schedule and term", () =>
 describe("test case 2: create academic year with week rotation schedule", () => {
     let academicYearId;
     it("should create empty academic year", async () => {
-        const response = await testClient({
-            source: newAcademicYearMutation,
+        const response = await (0, graphqlTestClient_1.testClient)({
+            source: mutation_1.newAcademicYearMutation,
             variableValues: {
                 startDate: "September 12 2021",
                 endDate: "March 12 2022",
@@ -176,8 +181,8 @@ describe("test case 2: create academic year with week rotation schedule", () => 
     });
     let scheduleId;
     it("should create week rotation schedule", async () => {
-        const response = await testClient({
-            source: newScheduleMutation,
+        const response = await (0, graphqlTestClient_1.testClient)({
+            source: mutation_1.newScheduleMutation,
             variableValues: {
                 type: "weekRotation",
                 academicYearId: academicYearId,
@@ -189,8 +194,8 @@ describe("test case 2: create academic year with week rotation schedule", () => 
     });
     let weekRotationScheduleId;
     it("should create partial week rotation schedule and assign it to week rotation schedule", async () => {
-        const response = await testClient({
-            source: newPartialWeekRotationMutation,
+        const response = await (0, graphqlTestClient_1.testClient)({
+            source: mutation_1.newPartialWeekRotationMutation,
             variableValues: {
                 numOfWeek: 2,
                 startWeek: 1,
@@ -202,7 +207,7 @@ describe("test case 2: create academic year with week rotation schedule", () => 
         weekRotationScheduleId = response.data.newPartialWeekRotation.id;
     });
     it("should show academic year with week rotation schedule", async () => {
-        const academicYearRepository = getConnection(process.env.NODE_ENV).getRepository(AcademicYear);
+        const academicYearRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.AcademicYear);
         const academicYear = (await academicYearRepository.findOne(academicYearId, {
             relations: ["schedule", "schedule.dayRotation", "schedule.weekRotation"],
         }));
@@ -213,8 +218,8 @@ describe("test case 2: create academic year with week rotation schedule", () => 
         expect(academicYear.schedule.weekRotation.id).toEqual(weekRotationScheduleId);
     });
     it("should delete academic year along with week rotation schedule", async () => {
-        const response = await testClient({
-            source: deleteAcademicYearMutation,
+        const response = await (0, graphqlTestClient_1.testClient)({
+            source: academicYear_1.deleteAcademicYearMutation,
             variableValues: {
                 id: academicYearId,
             },
@@ -224,13 +229,13 @@ describe("test case 2: create academic year with week rotation schedule", () => 
         });
         expect(response.errors).toBeUndefined();
         expect(response.data).not.toBeNull();
-        const academicYearRepository = getConnection(process.env.NODE_ENV).getRepository(AcademicYear);
+        const academicYearRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.AcademicYear);
         const academicYear = await academicYearRepository.findOne(academicYearId);
         expect(academicYear).toBeUndefined();
-        const scheduleRepository = getConnection(process.env.NODE_ENV).getRepository(AcademicYearSchedule);
+        const scheduleRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.AcademicYearSchedule);
         const schedule = await scheduleRepository.findOne(scheduleId);
         expect(schedule).toBeUndefined();
-        const weekRotationScheduleRepository = getConnection(process.env.NODE_ENV).getRepository(WeekRotationSchedule);
+        const weekRotationScheduleRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.WeekRotationSchedule);
         const weekRotationSchedule = await weekRotationScheduleRepository.findOne(weekRotationScheduleId);
         expect(weekRotationSchedule).toBeUndefined();
     });
@@ -238,8 +243,8 @@ describe("test case 2: create academic year with week rotation schedule", () => 
 describe("test case 3: create academic year with day rotation schedule", () => {
     let academicYearId;
     it("should create empty academic year", async () => {
-        const response = await testClient({
-            source: newAcademicYearMutation,
+        const response = await (0, graphqlTestClient_1.testClient)({
+            source: mutation_1.newAcademicYearMutation,
             variableValues: {
                 startDate: "September 12 2021",
                 endDate: "March 12 2022",
@@ -254,8 +259,8 @@ describe("test case 3: create academic year with day rotation schedule", () => {
     });
     let scheduleId;
     it("should create day rotation schedule", async () => {
-        const response = await testClient({
-            source: newScheduleMutation,
+        const response = await (0, graphqlTestClient_1.testClient)({
+            source: mutation_1.newScheduleMutation,
             variableValues: {
                 type: "dayRotation",
                 academicYearId: academicYearId,
@@ -267,8 +272,8 @@ describe("test case 3: create academic year with day rotation schedule", () => {
     });
     let dayRotationScheduleId;
     it("should create partial day rotation schedule and assign it to day rotation schedule", async () => {
-        const response = await testClient({
-            source: newPartialDayRotationMutation,
+        const response = await (0, graphqlTestClient_1.testClient)({
+            source: mutation_1.newPartialDayRotationMutation,
             variableValues: {
                 startDay: 2,
                 numOfDay: 1,
@@ -281,7 +286,7 @@ describe("test case 3: create academic year with day rotation schedule", () => {
         dayRotationScheduleId = response.data.newPartialDayRotation.id;
     });
     it("should show academic year with week rotation schedule", async () => {
-        const academicYearRepository = getConnection(process.env.NODE_ENV).getRepository(AcademicYear);
+        const academicYearRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.AcademicYear);
         const academicYear = (await academicYearRepository.findOne(academicYearId, {
             relations: ["schedule", "schedule.dayRotation", "schedule.weekRotation"],
         }));
@@ -294,8 +299,8 @@ describe("test case 3: create academic year with day rotation schedule", () => {
 });
 describe("test case 4: fetching academic years", () => {
     it("should fetch all academic years", async () => {
-        const response = await testClient({
-            source: getAcademicYearsQuery,
+        const response = await (0, graphqlTestClient_1.testClient)({
+            source: query_1.getAcademicYearsQuery,
             headers: {
                 authorization: `Bearer ${accessToken}`,
             },

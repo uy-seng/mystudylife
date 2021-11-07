@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,15 +11,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { Arg, Args, Ctx, Mutation, Resolver, UseMiddleware, } from "type-graphql";
-import { RepeatSchedule } from "../../../entity";
-import { RepeatScheduleArgs } from "./types";
-import { getConnection } from "typeorm";
-import { authenticationGate } from "../../../middleware";
-import { ValidationError } from "apollo-server-express";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RepeatScheduleResolver = void 0;
+const type_graphql_1 = require("type-graphql");
+const entity_1 = require("../../../entity");
+const types_1 = require("./types");
+const typeorm_1 = require("typeorm");
+const middleware_1 = require("../../../middleware");
+const apollo_server_express_1 = require("apollo-server-express");
 let RepeatScheduleResolver = class RepeatScheduleResolver {
     constructor() {
-        this.repeatScheduleRepository = getConnection(process.env.NODE_ENV).getRepository(RepeatSchedule);
+        this.repeatScheduleRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.RepeatSchedule);
     }
     async newRepeatSchedule({ startTime, endTime, repeatDays, scheduleId, startDate, endDate, rotationWeek, }) {
         const repeatSchedule = this.repeatScheduleRepository.create({
@@ -37,7 +40,7 @@ let RepeatScheduleResolver = class RepeatScheduleResolver {
             relations: ["schedule", "schedule.class", "schedule.class.user"],
         });
         if ((q === null || q === void 0 ? void 0 : q.schedule.class.user.id) !== user.id || !q)
-            throw new ValidationError("items not found, please provide a valid id");
+            throw new apollo_server_express_1.ValidationError("items not found, please provide a valid id");
         q.startDate = updateContext.startDate;
         q.startTime = updateContext.startTime;
         q.endDate = updateContext.endDate;
@@ -61,40 +64,40 @@ let RepeatScheduleResolver = class RepeatScheduleResolver {
             },
         });
         if (!q)
-            throw new ValidationError("item not found, please provide a valid id");
+            throw new apollo_server_express_1.ValidationError("item not found, please provide a valid id");
         this.repeatScheduleRepository.remove(q);
         return true;
     }
 };
 __decorate([
-    Mutation(() => RepeatSchedule),
-    UseMiddleware(authenticationGate),
-    __param(0, Args()),
+    (0, type_graphql_1.Mutation)(() => entity_1.RepeatSchedule),
+    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
+    __param(0, (0, type_graphql_1.Args)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [RepeatScheduleArgs]),
+    __metadata("design:paramtypes", [types_1.RepeatScheduleArgs]),
     __metadata("design:returntype", Promise)
 ], RepeatScheduleResolver.prototype, "newRepeatSchedule", null);
 __decorate([
-    Mutation(() => Boolean),
-    UseMiddleware(authenticationGate),
-    __param(0, Arg("id", () => String)),
-    __param(1, Args()),
-    __param(2, Ctx()),
+    (0, type_graphql_1.Mutation)(() => Boolean),
+    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
+    __param(0, (0, type_graphql_1.Arg)("id", () => String)),
+    __param(1, (0, type_graphql_1.Args)()),
+    __param(2, (0, type_graphql_1.Ctx)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, RepeatScheduleArgs, Object]),
+    __metadata("design:paramtypes", [String, types_1.RepeatScheduleArgs, Object]),
     __metadata("design:returntype", Promise)
 ], RepeatScheduleResolver.prototype, "updateRepeatSchedule", null);
 __decorate([
-    Mutation(() => Boolean),
-    UseMiddleware(authenticationGate),
-    __param(0, Arg("id", () => String)),
-    __param(1, Ctx()),
+    (0, type_graphql_1.Mutation)(() => Boolean),
+    (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
+    __param(0, (0, type_graphql_1.Arg)("id", () => String)),
+    __param(1, (0, type_graphql_1.Ctx)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], RepeatScheduleResolver.prototype, "deleteRepeatSchedule", null);
 RepeatScheduleResolver = __decorate([
-    Resolver()
+    (0, type_graphql_1.Resolver)()
 ], RepeatScheduleResolver);
-export { RepeatScheduleResolver };
+exports.RepeatScheduleResolver = RepeatScheduleResolver;
 //# sourceMappingURL=repeatSchedule.resolver.js.map

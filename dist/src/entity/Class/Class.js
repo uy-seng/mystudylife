@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,71 +8,73 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Field, ObjectType } from "type-graphql";
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn, } from "typeorm";
-import { Subject, AcademicYear, Term, User, ClassSchedule } from "..";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Class = void 0;
+const type_graphql_1 = require("type-graphql");
+const typeorm_1 = require("typeorm");
+const __1 = require("..");
 let Class = class Class {
 };
 __decorate([
-    PrimaryGeneratedColumn("uuid"),
-    Field(() => String),
+    (0, typeorm_1.PrimaryGeneratedColumn)("uuid"),
+    (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], Class.prototype, "id", void 0);
 __decorate([
-    Column(),
-    Field(() => String),
+    (0, typeorm_1.Column)(),
+    (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], Class.prototype, "module", void 0);
 __decorate([
-    Column(),
-    Field(() => String),
+    (0, typeorm_1.Column)(),
+    (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], Class.prototype, "room", void 0);
 __decorate([
-    Column(),
-    Field(() => String),
+    (0, typeorm_1.Column)(),
+    (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], Class.prototype, "building", void 0);
 __decorate([
-    Column(),
-    Field(() => String),
+    (0, typeorm_1.Column)(),
+    (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], Class.prototype, "teacher", void 0);
 __decorate([
-    ManyToOne(() => Subject, (subject) => subject.classes),
-    Field(() => Subject),
-    __metadata("design:type", Subject)
+    (0, typeorm_1.ManyToOne)(() => __1.Subject, (subject) => subject.classes),
+    (0, type_graphql_1.Field)(() => __1.Subject),
+    __metadata("design:type", __1.Subject)
 ], Class.prototype, "subject", void 0);
 __decorate([
-    OneToOne(() => ClassSchedule, (classSchedule) => classSchedule.class),
-    Field(() => ClassSchedule),
-    __metadata("design:type", ClassSchedule)
+    (0, typeorm_1.OneToOne)(() => __1.ClassSchedule, (classSchedule) => classSchedule.class),
+    (0, type_graphql_1.Field)(() => __1.ClassSchedule),
+    __metadata("design:type", __1.ClassSchedule)
 ], Class.prototype, "schedule", void 0);
 __decorate([
-    ManyToOne(() => AcademicYear, (academicYear) => academicYear.classes),
-    Field(() => AcademicYear, { nullable: true }),
-    __metadata("design:type", AcademicYear)
+    (0, typeorm_1.ManyToOne)(() => __1.AcademicYear, (academicYear) => academicYear.classes),
+    (0, type_graphql_1.Field)(() => __1.AcademicYear, { nullable: true }),
+    __metadata("design:type", __1.AcademicYear)
 ], Class.prototype, "academicYear", void 0);
 __decorate([
-    ManyToOne(() => Term, (term) => term.classes),
-    __metadata("design:type", Term)
+    (0, typeorm_1.ManyToOne)(() => __1.Term, (term) => term.classes),
+    __metadata("design:type", __1.Term)
 ], Class.prototype, "term", void 0);
 __decorate([
-    ManyToOne(() => User, (user) => user.classes),
-    Field(() => User),
-    __metadata("design:type", User)
+    (0, typeorm_1.ManyToOne)(() => __1.User, (user) => user.classes),
+    (0, type_graphql_1.Field)(() => __1.User),
+    __metadata("design:type", __1.User)
 ], Class.prototype, "user", void 0);
 __decorate([
-    CreateDateColumn({ default: () => "NOW()" }),
+    (0, typeorm_1.CreateDateColumn)({ default: () => "NOW()" }),
     __metadata("design:type", Date)
 ], Class.prototype, "createdAt", void 0);
 Class = __decorate([
-    Entity("classes", {
+    (0, typeorm_1.Entity)("classes", {
         orderBy: {
             createdAt: "ASC",
         },
     }),
-    ObjectType()
+    (0, type_graphql_1.ObjectType)()
 ], Class);
-export { Class };
+exports.Class = Class;
 //# sourceMappingURL=Class.js.map

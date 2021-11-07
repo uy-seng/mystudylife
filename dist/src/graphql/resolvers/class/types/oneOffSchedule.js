@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,37 +8,39 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { ArgsType, Field } from "type-graphql";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UpdateOneOffScheduleArgs = exports.OneOffScheduleArgs = void 0;
+const type_graphql_1 = require("type-graphql");
 let OneOffScheduleArgs = class OneOffScheduleArgs {
 };
 __decorate([
-    Field(() => String),
+    (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], OneOffScheduleArgs.prototype, "date", void 0);
 __decorate([
-    Field(() => String),
+    (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], OneOffScheduleArgs.prototype, "startTime", void 0);
 __decorate([
-    Field(() => String),
+    (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], OneOffScheduleArgs.prototype, "endTime", void 0);
 __decorate([
-    Field(() => String),
+    (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], OneOffScheduleArgs.prototype, "scheduleId", void 0);
 OneOffScheduleArgs = __decorate([
-    ArgsType()
+    (0, type_graphql_1.ArgsType)()
 ], OneOffScheduleArgs);
-export { OneOffScheduleArgs };
+exports.OneOffScheduleArgs = OneOffScheduleArgs;
 let UpdateOneOffScheduleArgs = class UpdateOneOffScheduleArgs extends OneOffScheduleArgs {
 };
 __decorate([
-    Field(() => String),
+    (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], UpdateOneOffScheduleArgs.prototype, "id", void 0);
 UpdateOneOffScheduleArgs = __decorate([
-    ArgsType()
+    (0, type_graphql_1.ArgsType)()
 ], UpdateOneOffScheduleArgs);
-export { UpdateOneOffScheduleArgs };
+exports.UpdateOneOffScheduleArgs = UpdateOneOffScheduleArgs;
 //# sourceMappingURL=oneOffSchedule.js.map

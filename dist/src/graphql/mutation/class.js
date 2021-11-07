@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateClassMutation = exports.deleteClassMutation = exports.newClassMutation = void 0;
 const newClassMutation = `
     mutation(
         $subjectId: String!,
@@ -20,6 +23,7 @@ const newClassMutation = `
             }
     }
 `;
+exports.newClassMutation = newClassMutation;
 const deleteClassMutation = `
     mutation(
         $id: String!,
@@ -29,6 +33,7 @@ const deleteClassMutation = `
         )
     }
 `;
+exports.deleteClassMutation = deleteClassMutation;
 const updateClassMutation = `
     mutation(
         $id: String!,
@@ -50,5 +55,5 @@ const updateClassMutation = `
         )
     }
 `;
-export { newClassMutation, deleteClassMutation, updateClassMutation };
+exports.updateClassMutation = updateClassMutation;
 //# sourceMappingURL=class.js.map

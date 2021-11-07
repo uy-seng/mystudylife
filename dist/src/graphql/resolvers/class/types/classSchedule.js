@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,23 +8,25 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { ClassScheduleType } from "../../../../entity/types";
-import { ArgsType, Field, registerEnumType } from "type-graphql";
-registerEnumType(ClassScheduleType, {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ClassScheduleArgs = void 0;
+const types_1 = require("../../../../entity/types");
+const type_graphql_1 = require("type-graphql");
+(0, type_graphql_1.registerEnumType)(types_1.ClassScheduleType, {
     name: "ClassScheduleType",
 });
 let ClassScheduleArgs = class ClassScheduleArgs {
 };
 __decorate([
-    Field(() => ClassScheduleType),
+    (0, type_graphql_1.Field)(() => types_1.ClassScheduleType),
     __metadata("design:type", String)
 ], ClassScheduleArgs.prototype, "type", void 0);
 __decorate([
-    Field(() => String),
+    (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], ClassScheduleArgs.prototype, "classId", void 0);
 ClassScheduleArgs = __decorate([
-    ArgsType()
+    (0, type_graphql_1.ArgsType)()
 ], ClassScheduleArgs);
-export { ClassScheduleArgs };
+exports.ClassScheduleArgs = ClassScheduleArgs;
 //# sourceMappingURL=classSchedule.js.map

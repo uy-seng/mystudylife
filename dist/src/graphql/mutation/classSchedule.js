@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.newClassScheduleMutation = void 0;
 const newClassScheduleMutation = `
     mutation(
         $classId: String!,
@@ -12,5 +15,5 @@ const newClassScheduleMutation = `
             }
     }
 `;
-export { newClassScheduleMutation };
+exports.newClassScheduleMutation = newClassScheduleMutation;
 //# sourceMappingURL=classSchedule.js.map

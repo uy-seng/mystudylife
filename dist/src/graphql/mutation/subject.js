@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateSubjectMutation = exports.deleteSubjectMutation = exports.newSubjectMutation = void 0;
 const newSubjectMutation = `
     mutation(
         $name: String!,
@@ -12,6 +15,7 @@ const newSubjectMutation = `
             }
     }
 `;
+exports.newSubjectMutation = newSubjectMutation;
 const deleteSubjectMutation = `
     mutation(
         $id: String!,
@@ -21,6 +25,7 @@ const deleteSubjectMutation = `
         )
     }
 `;
+exports.deleteSubjectMutation = deleteSubjectMutation;
 const updateSubjectMutation = `
     mutation(
         $id: String!, 
@@ -34,5 +39,5 @@ const updateSubjectMutation = `
         )
     }
 `;
-export { newSubjectMutation, deleteSubjectMutation, updateSubjectMutation };
+exports.updateSubjectMutation = updateSubjectMutation;
 //# sourceMappingURL=subject.js.map

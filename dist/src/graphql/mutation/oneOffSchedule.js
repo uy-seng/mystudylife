@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateOneOffScheduleMutation = exports.newOneOffScheduleMutation = void 0;
 const newOneOffScheduleMutation = `
     mutation(
         $scheduleId: String!,
@@ -16,6 +19,7 @@ const newOneOffScheduleMutation = `
             }
     }
 `;
+exports.newOneOffScheduleMutation = newOneOffScheduleMutation;
 const updateOneOffScheduleMutation = `
     mutation(
         $id: String!,
@@ -33,5 +37,5 @@ const updateOneOffScheduleMutation = `
         )
     }
 `;
-export { newOneOffScheduleMutation, updateOneOffScheduleMutation };
+exports.updateOneOffScheduleMutation = updateOneOffScheduleMutation;
 //# sourceMappingURL=oneOffSchedule.js.map

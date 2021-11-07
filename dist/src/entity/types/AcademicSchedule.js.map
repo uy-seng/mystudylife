@@ -1,1 +1,1 @@
-{"version":3,"file":"AcademicSchedule.js","sourceRoot":"","sources":["../../../../src/entity/types/AcademicSchedule.ts"],"names":[],"mappings":"AAAA,MAAM,CAAN,IAAY,wBAIX;AAJD,WAAY,wBAAwB;IAClC,2CAAe,CAAA;IACf,yDAA6B,CAAA;IAC7B,uDAA2B,CAAA;AAC7B,CAAC,EAJW,wBAAwB,KAAxB,wBAAwB,QAInC"}
+{"version":3,"file":"AcademicSchedule.js","sourceRoot":"","sources":["../../../../src/entity/types/AcademicSchedule.ts"],"names":[],"mappings":";;;AAAA,IAAY,wBAIX;AAJD,WAAY,wBAAwB;IAClC,2CAAe,CAAA;IACf,yDAA6B,CAAA;IAC7B,uDAA2B,CAAA;AAC7B,CAAC,EAJW,wBAAwB,GAAxB,gCAAwB,KAAxB,gCAAwB,QAInC"}

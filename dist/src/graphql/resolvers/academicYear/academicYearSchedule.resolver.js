@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,15 +11,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { AcademicYearSchedule, DayRotationSchedule, WeekRotationSchedule, } from "../../../entity";
-import { Args, Mutation, Resolver } from "type-graphql";
-import { getConnection } from "typeorm";
-import { AcademicYearScheduleArgs, DayRotationScheduleArgs, WeekRotationScheduleArgs, } from "./types";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AcademicYearScheduleResolver = void 0;
+const entity_1 = require("../../../entity");
+const type_graphql_1 = require("type-graphql");
+const typeorm_1 = require("typeorm");
+const types_1 = require("./types");
 let AcademicYearScheduleResolver = class AcademicYearScheduleResolver {
     constructor() {
-        this.scheduleRepository = getConnection(process.env.NODE_ENV).getRepository(AcademicYearSchedule);
-        this.weekRotationScheduleRepository = getConnection(process.env.NODE_ENV).getRepository(WeekRotationSchedule);
-        this.dayRotationScheduleRepository = getConnection(process.env.NODE_ENV).getRepository(DayRotationSchedule);
+        this.scheduleRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.AcademicYearSchedule);
+        this.weekRotationScheduleRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.WeekRotationSchedule);
+        this.dayRotationScheduleRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.DayRotationSchedule);
     }
     async newSchedule({ type, academicYearId }) {
         const newSchedule = await this.scheduleRepository.create({
@@ -46,28 +49,28 @@ let AcademicYearScheduleResolver = class AcademicYearScheduleResolver {
     }
 };
 __decorate([
-    Mutation(() => AcademicYearSchedule),
-    __param(0, Args()),
+    (0, type_graphql_1.Mutation)(() => entity_1.AcademicYearSchedule),
+    __param(0, (0, type_graphql_1.Args)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [AcademicYearScheduleArgs]),
+    __metadata("design:paramtypes", [types_1.AcademicYearScheduleArgs]),
     __metadata("design:returntype", Promise)
 ], AcademicYearScheduleResolver.prototype, "newSchedule", null);
 __decorate([
-    Mutation(() => WeekRotationSchedule),
-    __param(0, Args()),
+    (0, type_graphql_1.Mutation)(() => entity_1.WeekRotationSchedule),
+    __param(0, (0, type_graphql_1.Args)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [WeekRotationScheduleArgs]),
+    __metadata("design:paramtypes", [types_1.WeekRotationScheduleArgs]),
     __metadata("design:returntype", Promise)
 ], AcademicYearScheduleResolver.prototype, "newPartialWeekRotation", null);
 __decorate([
-    Mutation(() => DayRotationSchedule),
-    __param(0, Args()),
+    (0, type_graphql_1.Mutation)(() => entity_1.DayRotationSchedule),
+    __param(0, (0, type_graphql_1.Args)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [DayRotationScheduleArgs]),
+    __metadata("design:paramtypes", [types_1.DayRotationScheduleArgs]),
     __metadata("design:returntype", Promise)
 ], AcademicYearScheduleResolver.prototype, "newPartialDayRotation", null);
 AcademicYearScheduleResolver = __decorate([
-    Resolver()
+    (0, type_graphql_1.Resolver)()
 ], AcademicYearScheduleResolver);
-export { AcademicYearScheduleResolver };
+exports.AcademicYearScheduleResolver = AcademicYearScheduleResolver;
 //# sourceMappingURL=academicYearSchedule.resolver.js.map

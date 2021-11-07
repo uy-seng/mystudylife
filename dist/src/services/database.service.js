@@ -1,5 +1,8 @@
-import { createConnection } from "typeorm";
-export class DatabaseService {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DatabaseService = void 0;
+const typeorm_1 = require("typeorm");
+class DatabaseService {
     async getEntities() {
         const entities = [];
         (await this.connection.entityMetadatas).forEach((x) => entities.push({ name: x.name, tableName: x.tableName }));
@@ -18,7 +21,7 @@ export class DatabaseService {
         }
     }
     async init() {
-        this.connection = await createConnection(`${process.env.NODE_ENV}`);
+        this.connection = await (0, typeorm_1.createConnection)(`${process.env.NODE_ENV}`);
         console.log("Database initialized...");
         const CLEAN_DB = false;
         const entities = await this.getEntities();
@@ -28,4 +31,5 @@ export class DatabaseService {
         }
     }
 }
+exports.DatabaseService = DatabaseService;
 //# sourceMappingURL=database.service.js.map

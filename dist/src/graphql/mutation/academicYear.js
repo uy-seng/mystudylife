@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteAcademicYearMutation = exports.newAcademicYearMutation = void 0;
 const newAcademicYearMutation = `
     mutation(
         $startDate: String!,
@@ -12,6 +15,7 @@ const newAcademicYearMutation = `
             }
     }
 `;
+exports.newAcademicYearMutation = newAcademicYearMutation;
 const deleteAcademicYearMutation = `
     mutation(
         $id: String!,
@@ -21,5 +25,5 @@ const deleteAcademicYearMutation = `
         )
     }
 `;
-export { newAcademicYearMutation, deleteAcademicYearMutation };
+exports.deleteAcademicYearMutation = deleteAcademicYearMutation;
 //# sourceMappingURL=academicYear.js.map

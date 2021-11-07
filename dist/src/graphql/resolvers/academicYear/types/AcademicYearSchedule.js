@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,23 +8,25 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { AcademicYearScheduleType } from "../../../../entity/types";
-import { ArgsType, Field, registerEnumType } from "type-graphql";
-registerEnumType(AcademicYearScheduleType, {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AcademicYearScheduleArgs = void 0;
+const types_1 = require("../../../../entity/types");
+const type_graphql_1 = require("type-graphql");
+(0, type_graphql_1.registerEnumType)(types_1.AcademicYearScheduleType, {
     name: "AcademicYearScheduleType",
 });
 let AcademicYearScheduleArgs = class AcademicYearScheduleArgs {
 };
 __decorate([
-    Field(() => AcademicYearScheduleType),
+    (0, type_graphql_1.Field)(() => types_1.AcademicYearScheduleType),
     __metadata("design:type", String)
 ], AcademicYearScheduleArgs.prototype, "type", void 0);
 __decorate([
-    Field(() => String),
+    (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], AcademicYearScheduleArgs.prototype, "academicYearId", void 0);
 AcademicYearScheduleArgs = __decorate([
-    ArgsType()
+    (0, type_graphql_1.ArgsType)()
 ], AcademicYearScheduleArgs);
-export { AcademicYearScheduleArgs };
+exports.AcademicYearScheduleArgs = AcademicYearScheduleArgs;
 //# sourceMappingURL=AcademicYearSchedule.js.map

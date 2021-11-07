@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateRepeatScheduleMutation = exports.newRepeatScheduleMutation = void 0;
 const newRepeatScheduleMutation = `
     mutation(
         $scheduleId: String!,
@@ -20,6 +23,7 @@ const newRepeatScheduleMutation = `
             }
     }
 `;
+exports.newRepeatScheduleMutation = newRepeatScheduleMutation;
 const updateRepeatScheduleMutation = `
     mutation(
         $id: String!,
@@ -41,5 +45,5 @@ const updateRepeatScheduleMutation = `
         )
     }
 `;
-export { newRepeatScheduleMutation, updateRepeatScheduleMutation };
+exports.updateRepeatScheduleMutation = updateRepeatScheduleMutation;
 //# sourceMappingURL=repeatSchedule.js.map

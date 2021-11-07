@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,70 +8,72 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, } from "typeorm";
-import { Subject, Exam, AcademicYear, Term, User } from "..";
-import { TaskType } from "../types";
-import { Field, ObjectType } from "type-graphql";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Task = void 0;
+const typeorm_1 = require("typeorm");
+const __1 = require("..");
+const types_1 = require("../types");
+const type_graphql_1 = require("type-graphql");
 let Task = class Task {
 };
 __decorate([
-    PrimaryGeneratedColumn("uuid"),
-    Field(() => String),
+    (0, typeorm_1.PrimaryGeneratedColumn)("uuid"),
+    (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], Task.prototype, "id", void 0);
 __decorate([
-    Column("text"),
-    Field(() => String),
+    (0, typeorm_1.Column)("text"),
+    (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], Task.prototype, "type", void 0);
 __decorate([
-    Column("date"),
-    Field(() => String),
+    (0, typeorm_1.Column)("date"),
+    (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], Task.prototype, "due_date", void 0);
 __decorate([
-    Column(),
-    Field(() => String),
+    (0, typeorm_1.Column)(),
+    (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], Task.prototype, "title", void 0);
 __decorate([
-    Column(),
-    Field(() => String),
+    (0, typeorm_1.Column)(),
+    (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], Task.prototype, "detail", void 0);
 __decorate([
-    CreateDateColumn({ default: () => "NOW()" }),
+    (0, typeorm_1.CreateDateColumn)({ default: () => "NOW()" }),
     __metadata("design:type", Date)
 ], Task.prototype, "createdAt", void 0);
 __decorate([
-    ManyToOne(() => Subject, (subject) => subject.tasks),
-    Field(() => Subject),
-    __metadata("design:type", Subject)
+    (0, typeorm_1.ManyToOne)(() => __1.Subject, (subject) => subject.tasks),
+    (0, type_graphql_1.Field)(() => __1.Subject),
+    __metadata("design:type", __1.Subject)
 ], Task.prototype, "subject", void 0);
 __decorate([
-    ManyToOne(() => AcademicYear, (academicYear) => academicYear.tasks),
-    Field(() => AcademicYear, { nullable: true }),
-    __metadata("design:type", AcademicYear)
+    (0, typeorm_1.ManyToOne)(() => __1.AcademicYear, (academicYear) => academicYear.tasks),
+    (0, type_graphql_1.Field)(() => __1.AcademicYear, { nullable: true }),
+    __metadata("design:type", __1.AcademicYear)
 ], Task.prototype, "academicYear", void 0);
 __decorate([
-    ManyToOne(() => Exam, (exam) => exam.tasks),
-    __metadata("design:type", Exam)
+    (0, typeorm_1.ManyToOne)(() => __1.Exam, (exam) => exam.tasks),
+    __metadata("design:type", __1.Exam)
 ], Task.prototype, "exam", void 0);
 __decorate([
-    ManyToOne(() => Term, (term) => term.tasks),
-    __metadata("design:type", Term)
+    (0, typeorm_1.ManyToOne)(() => __1.Term, (term) => term.tasks),
+    __metadata("design:type", __1.Term)
 ], Task.prototype, "term", void 0);
 __decorate([
-    ManyToOne(() => User, (user) => user.tasks),
-    __metadata("design:type", User)
+    (0, typeorm_1.ManyToOne)(() => __1.User, (user) => user.tasks),
+    __metadata("design:type", __1.User)
 ], Task.prototype, "user", void 0);
 Task = __decorate([
-    Entity("tasks", {
+    (0, typeorm_1.Entity)("tasks", {
         orderBy: {
             createdAt: "ASC",
         },
     }),
-    ObjectType()
+    (0, type_graphql_1.ObjectType)()
 ], Task);
-export { Task };
+exports.Task = Task;
 //# sourceMappingURL=Task.js.map
