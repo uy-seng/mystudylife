@@ -1,11 +1,12 @@
 {
-    "name": "development",
+    "name": "production",
     "type": "postgres",
-    "host": "localhost",
+    "host": "ec2-3-214-121-14.compute-1.amazonaws.com",
     "port": 5432,
-    "username": "ashura",
-    "password": "Nova_44056",
-    "database": "mystudylife",
+    "url": "postgres://kybauesmheuchg:009a26c6d4a1ca15b262b65e03a7eab4c896b4b56d0aab013e0297cf29394106@ec2-3-214-121-14.compute-1.amazonaws.com:5432/d7p3ovdtv1m5nu",
+    "username": "kybauesmheuchg",
+    "password": "009a26c6d4a1ca15b262b65e03a7eab4c896b4b56d0aab013e0297cf29394106",
+    "database": "d7p3ovdtv1m5nu",
     "synchronize": true,
     "logging": false,
     "entities": [
