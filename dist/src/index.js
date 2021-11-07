@@ -30,9 +30,6 @@ const path_1 = __importDefault(require("path"));
     }));
     const databaseService = new services_1.DatabaseService();
     await databaseService.init();
-    app.get("/", (_req, res) => {
-        res.redirect("/graphql");
-    });
     app.use("/api", routes_1.apiRoute);
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: await (0, type_graphql_1.buildSchema)({
