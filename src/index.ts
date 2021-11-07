@@ -63,9 +63,17 @@ import { TaskResolver } from "src/graphql/resolvers/task/task.resolver";
 
   apolloServer.applyMiddleware({ app, cors: false });
 
-  app.listen(8000, () => {
-    console.log(
-      `Server running at http://localhost:8000\nGraphql running at http://localhost:8000/graphql`
-    );
-  });
+  if (process.env.NODE_ENV === "production") {
+    app.use(express.static("web/build"));
+    const path = require("path");
+    app.get("*", (_req, res) => {
+      res.sendFile(path.resolve(__dirname, "web", "build", "index.html"));
+    });
+  } else {
+    app.listen(8000, () => {
+      console.log(
+        `Server running at http://localhost:8000\nGraphql running at http://localhost:8000/graphql`
+      );
+    });
+  }
 })();
