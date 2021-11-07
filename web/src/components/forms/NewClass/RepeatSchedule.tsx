@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { DayOfWeek, useGetAcademicYearQuery } from "../../../generated/graphql";
@@ -40,6 +41,16 @@ export const RepeatScheduleForm: React.FC<Props> = ({ setShow }) => {
     ],
     []
   );
+
+  React.useEffect(() => {
+    setEndTime(
+      moment(startTime, "HH:mm")
+        .add(1, "hours")
+        .add(50, "minutes")
+        .format("HH:mm")
+    );
+  }, [startTime]);
+
   if (academicYear)
     return (
       <div>

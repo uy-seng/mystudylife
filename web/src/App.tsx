@@ -19,6 +19,7 @@ import { PrivateRoute, PublicRoute } from "./routes";
 import { useMeQuery } from "./generated/graphql";
 import { PageLoader } from "./components/loading";
 import { ManageCalendar } from "./pages/ManageCalendar";
+import { Setting } from "./pages/Setting";
 
 function App() {
   const { data, loading, error } = useMeQuery();
@@ -61,6 +62,7 @@ function App() {
                 path="/playground"
                 component={Playground}
               />
+              <PrivateRoute data={data} path="/setting" component={Setting} />
             </div>
           </React.Fragment>
         </Switch>

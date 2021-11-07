@@ -9,6 +9,7 @@ import {
 import { Button, LoaderButton } from "../../button";
 import BaseModal from "../BaseModal";
 import css from "./DeleteSubject.module.css";
+import ctx from "classnames";
 
 interface Props {
   subjectId: string;
@@ -27,16 +28,7 @@ export const DeleteSubject: React.FC<Props> = ({
 
   return (
     <React.Fragment>
-      <div
-        style={{
-          top: "80%",
-          left: "1.5rem",
-          width: "fit-content",
-          color: "black",
-        }}
-        className="delete"
-        onClick={() => setShow(true)}
-      >
+      <div className={ctx("delete", css.delete)} onClick={() => setShow(true)}>
         <AiFillDelete />
         <div style={{ marginLeft: "0.5rem" }}>Delete</div>
       </div>

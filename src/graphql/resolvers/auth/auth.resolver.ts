@@ -92,5 +92,8 @@ export class AuthResolver {
 
   @Mutation(() => Boolean)
   @UseMiddleware(authenticationGate)
-  async logout() {}
+  async logout(@Ctx() { res }: Context): Promise<boolean> {
+    sendRefreshToken(res, "");
+    return true;
+  }
 }

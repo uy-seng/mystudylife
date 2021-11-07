@@ -82,14 +82,10 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
     if (subjects)
       setTaskPayload({
         key: "subjectId",
-        value: subjects.getSubjects[0].id,
+        value: subjects?.getSubjects[0]?.id,
       });
-  }, []);
+  }, [subjects]);
 
-  // const validateName = (value: string) => {
-  //   if (value.length === 0) return "Required";
-  //   return null;
-  // };
   if (subjects)
     return (
       <Form className={css.form}>

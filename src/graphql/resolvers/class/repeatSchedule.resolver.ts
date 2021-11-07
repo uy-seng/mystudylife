@@ -66,4 +66,28 @@ export class RepeatScheduleResolver {
     await this.repeatScheduleRepository.save(q);
     return true;
   }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(authenticationGate)
+  async deleteRepeatSchedule(
+    @Arg("id", () => String) id: string,
+    @Ctx() { user }: Context
+  ) {
+    const q = await this.repeatScheduleRepository.findOne(id, {
+      relations: ["schedule", "schedule.class", "schedule.class.user"],
+      where: {
+        schedule: {
+          class: {
+            user: {
+              id: user!.id,
+            },
+          },
+        },
+      },
+    });
+    if (!q)
+      throw new ValidationError("item not found, please provide a valid id");
+    this.repeatScheduleRepository.remove(q);
+    return true;
+  }
 }

@@ -7,6 +7,7 @@ import {
 } from "../../../shared/EditClass.slice";
 import { RepeatSchedulePayload } from "../../../shared/NewClass.slice";
 import { EditRepeatSchedule, NewRepeatSchedule } from "../../modal";
+import { EditNewRepeatSchedule } from "../../modal/EditClass/EditNewRepeatSchedule";
 import css from "./RepeatSchedule.module.css";
 
 interface Props {}
@@ -39,15 +40,21 @@ export const RepeatSchedule: React.FC<Props> = () => {
               <div className={css.option}>
                 <div>
                   <div>
-                    {moment(repeatSchedule.startTime, "HH:mm").format("hh:mm")}{" "}
+                    {moment(repeatSchedule.startTime, "HH:mm").format(
+                      "hh:mm a"
+                    )}{" "}
                     {" - "}
-                    {moment(repeatSchedule.endTime, "HH:mm").format("hh:mm")}
+                    {moment(repeatSchedule.endTime, "HH:mm").format("hh:mm a")}
                   </div>
-                  <div>
+                  <div
+                    className="txt-sm txt-thin"
+                    style={{ textTransform: "capitalize" }}
+                  >
                     {repeatSchedule.days
                       .map(
                         (day) =>
-                          dayOfWeekOptions.filter((d) => d.value === day)[0].key
+                          dayOfWeekOptions.filter((d) => d.value === day)[0]
+                            .value
                       )
                       .join(",")}
                   </div>
@@ -59,24 +66,35 @@ export const RepeatSchedule: React.FC<Props> = () => {
         ))}
 
         {newRepeatSchedules.map((repeatSchedule) => (
-          <div className={css.option}>
-            <div>
-              <div>
-                {moment(repeatSchedule.startTime, "HH:mm").format("hh:mm")}{" "}
-                {" - "}
-                {moment(repeatSchedule.endTime, "HH:mm").format("hh:mm")}
+          <EditNewRepeatSchedule
+            data={repeatSchedule}
+            childController={
+              <div className={css.option}>
+                <div>
+                  <div>
+                    {moment(repeatSchedule.startTime, "HH:mm").format(
+                      "hh:mm a"
+                    )}{" "}
+                    {" - "}
+                    {moment(repeatSchedule.endTime, "HH:mm").format("hh:mm a")}
+                  </div>
+                  <div
+                    className="txt-sm txt-thin"
+                    style={{ textTransform: "capitalize" }}
+                  >
+                    {repeatSchedule.days
+                      .map(
+                        (day) =>
+                          dayOfWeekOptions.filter((d) => d.value === day)[0]
+                            .value
+                      )
+                      .join(",")}
+                  </div>
+                </div>
+                <div></div>
               </div>
-              <div>
-                {repeatSchedule.days
-                  .map(
-                    (day) =>
-                      dayOfWeekOptions.filter((d) => d.value === day)[0].key
-                  )
-                  .join(",")}
-              </div>
-            </div>
-            <div></div>
-          </div>
+            }
+          />
         ))}
         <NewRepeatSchedule />
       </div>

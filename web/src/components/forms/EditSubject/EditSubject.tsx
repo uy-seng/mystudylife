@@ -32,9 +32,9 @@ import {
   selectToBeUpdatedSubjectPayload,
   setToBeUpdatedSubjectPayload,
 } from "../../../shared/EditSubject.slice";
+import { formatDate } from "../../../utils";
 const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
   const { touched, errors, setToBeUpdatedSubjectPayload, isSubmitting } = props;
-  const [advanceMenu, setAdvanceMenu] = React.useState<boolean>(false);
   const toBeUpdatedSubjectPayload = useAppSelector(
     selectToBeUpdatedSubjectPayload
   );
@@ -77,16 +77,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
         </div>
       </div>
       <div className={css.group}>
-        {advanceMenu ? (
-          <AdvancedMenu />
-        ) : (
-          <span
-            onClick={() => setAdvanceMenu(true)}
-            className={css.advanced + " txt-sm"}
-          >
-            Advanced
-          </span>
-        )}
+        <AdvancedMenu />
       </div>
 
       <div className={css.group}>
@@ -151,7 +142,25 @@ const AdvancedMenu: React.FC = () => {
           className="txt-sm"
           style={{ paddingBottom: "0.5rem", paddingLeft: "0.5rem" }}
         >
-          In timetable indefinitely
+          {toBeUpdatedSubjectPayload?.academicYearId
+            ? `In timetable from ${formatDate(
+                new Date(
+                  academicYears.filter(
+                    (academicYear) =>
+                      academicYear.id ===
+                      toBeUpdatedSubjectPayload?.academicYearId
+                  )[0]?.startDate
+                )
+              )} to ${formatDate(
+                new Date(
+                  academicYears.filter(
+                    (academicYear) =>
+                      academicYear.id ===
+                      toBeUpdatedSubjectPayload?.academicYearId
+                  )[0]?.endDate
+                )
+              )}`
+            : `In timetable indefinitely`}
         </div>
       </div>
       <div className="txt-sm">

@@ -1,3 +1,5 @@
+import { MeQuery } from "../../generated/graphql";
+
 export interface SidebarMenuProps {
   icon: React.ReactNode;
   active?: boolean;

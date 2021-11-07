@@ -24,3 +24,14 @@
 .wrapper > :last-child > :not(:last-child) {
   margin-right: 1rem;
 }
+
+.delete {
+  top: 85%;
+  left: 1.5rem;
+  width: fit-content;
+  color: black;
+}
+
+.delete:hover {
+  color: var(--error);
+}

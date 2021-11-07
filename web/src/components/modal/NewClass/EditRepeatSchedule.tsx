@@ -3,25 +3,17 @@ import React from "react";
 import { AiFillDelete, AiOutlineClose } from "react-icons/ai";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import {
-  selectToBeDeletedRepeatSchedules,
-  selectToBeUpdatedRepeatSchedules,
-  setToBeDeletedRepeatSchedules,
-  setToBeUpdatedRepeatSchedules,
-} from "../../../shared/EditClass.slice";
-import {
   RepeatSchedulePayload,
   selectRepeatSchedules,
+  setRepeatSchedules,
 } from "../../../shared/NewClass.slice";
-import { Button } from "../../button";
-import { EditRepeatScheduleForm } from "../../forms/EditClass/EditRepeatSchedule";
-import { NewRepeatScheduleForm } from "../../forms/EditClass/NewRepeatSchedule";
-import { RepeatScheduleForm } from "../../forms/NewClass/RepeatSchedule";
+import { EditRepeatScheduleForm } from "../../forms/NewClass/EditRepeatSchedule";
 import BaseModal from "../BaseModal";
-
 import css from "./EditRepeatSchedule.module.css";
+
 interface Props {
   childController: React.ReactNode;
-  data: RepeatSchedulePayload & { id: string };
+  data: RepeatSchedulePayload;
 }
 
 export const EditRepeatSchedule: React.FC<Props> = ({
@@ -29,15 +21,10 @@ export const EditRepeatSchedule: React.FC<Props> = ({
   data,
 }) => {
   const [show, setShow] = React.useState(false);
-  const toBeUpdatedRepeatSchedules = useAppSelector(
-    selectToBeUpdatedRepeatSchedules
-  );
-  const toBeDeletedRepeatSchedules = useAppSelector(
-    selectToBeDeletedRepeatSchedules
-  );
+  const repeatSchedules = useAppSelector(selectRepeatSchedules);
   const dispatch = useAppDispatch();
 
-  if (toBeUpdatedRepeatSchedules && data)
+  if (repeatSchedules && data)
     return (
       <React.Fragment>
         <div className={css.wrapper}>
@@ -47,15 +34,10 @@ export const EditRepeatSchedule: React.FC<Props> = ({
           <div
             onClick={() => {
               dispatch(
-                setToBeDeletedRepeatSchedules([
-                  ...toBeDeletedRepeatSchedules,
-                  data,
-                ])
-              );
-              dispatch(
-                setToBeUpdatedRepeatSchedules([
-                  ...toBeUpdatedRepeatSchedules.filter(
-                    (repeatSchedule) => repeatSchedule.id !== data.id
+                setRepeatSchedules([
+                  ...repeatSchedules.filter(
+                    (repeatSchedule) =>
+                      JSON.stringify(repeatSchedule) !== JSON.stringify(data)
                   ),
                 ])
               );

@@ -183,7 +183,10 @@ const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
                     )}
                     {c.schedule.type === "repeat" &&
                       c.schedule.repeat.map((r: any) => (
-                        <div className="txt-sm txt-thin">
+                        <div
+                          style={{ textTransform: "capitalize" }}
+                          className="txt-sm txt-thin"
+                        >
                           {`${formatTime(r.startTime)} - ${formatTime(
                             r.endTime
                           )} ${r.repeatDays.join(",")}`}

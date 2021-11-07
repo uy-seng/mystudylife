@@ -110,6 +110,7 @@ export type Mutation = {
   updateOneOffSchedule: Scalars['Boolean'];
   newRepeatSchedule: RepeatSchedule;
   updateRepeatSchedule: Scalars['Boolean'];
+  deleteRepeatSchedule: Scalars['Boolean'];
   newTask: Task;
   deleteTask: Scalars['Boolean'];
   updateTask: Scalars['Boolean'];
@@ -255,6 +256,11 @@ export type MutationUpdateRepeatScheduleArgs = {
   startDate?: Maybe<Scalars['String']>;
   endDate?: Maybe<Scalars['String']>;
   rotationWeek?: Maybe<Scalars['Int']>;
+  id: Scalars['String'];
+};
+
+
+export type MutationDeleteRepeatScheduleArgs = {
   id: Scalars['String'];
 };
 
@@ -416,6 +422,13 @@ export type DeleteClassMutationVariables = Exact<{
 
 export type DeleteClassMutation = { __typename?: 'Mutation', deleteClass: boolean };
 
+export type DeleteRepeatScheduleMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeleteRepeatScheduleMutation = { __typename?: 'Mutation', deleteRepeatSchedule: boolean };
+
 export type DeleteSubjectMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -471,6 +484,11 @@ export type LoginMutationVariables = Exact<{
 
 
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', accessToken: string } };
+
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -716,6 +734,37 @@ export function useDeleteClassMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeleteClassMutationHookResult = ReturnType<typeof useDeleteClassMutation>;
 export type DeleteClassMutationResult = Apollo.MutationResult<DeleteClassMutation>;
 export type DeleteClassMutationOptions = Apollo.BaseMutationOptions<DeleteClassMutation, DeleteClassMutationVariables>;
+export const DeleteRepeatScheduleDocument = gql`
+    mutation DeleteRepeatSchedule($id: String!) {
+  deleteRepeatSchedule(id: $id)
+}
+    `;
+export type DeleteRepeatScheduleMutationFn = Apollo.MutationFunction<DeleteRepeatScheduleMutation, DeleteRepeatScheduleMutationVariables>;
+
+/**
+ * __useDeleteRepeatScheduleMutation__
+ *
+ * To run a mutation, you first call `useDeleteRepeatScheduleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteRepeatScheduleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteRepeatScheduleMutation, { data, loading, error }] = useDeleteRepeatScheduleMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteRepeatScheduleMutation(baseOptions?: Apollo.MutationHookOptions<DeleteRepeatScheduleMutation, DeleteRepeatScheduleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteRepeatScheduleMutation, DeleteRepeatScheduleMutationVariables>(DeleteRepeatScheduleDocument, options);
+      }
+export type DeleteRepeatScheduleMutationHookResult = ReturnType<typeof useDeleteRepeatScheduleMutation>;
+export type DeleteRepeatScheduleMutationResult = Apollo.MutationResult<DeleteRepeatScheduleMutation>;
+export type DeleteRepeatScheduleMutationOptions = Apollo.BaseMutationOptions<DeleteRepeatScheduleMutation, DeleteRepeatScheduleMutationVariables>;
 export const DeleteSubjectDocument = gql`
     mutation DeleteSubject($id: String!) {
   deleteSubject(id: $id)
@@ -1125,6 +1174,36 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const LogoutDocument = gql`
+    mutation logout {
+  logout
+}
+    `;
+export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMutationVariables>;
+
+/**
+ * __useLogoutMutation__
+ *
+ * To run a mutation, you first call `useLogoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLogoutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [logoutMutation, { data, loading, error }] = useLogoutMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options);
+      }
+export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
+export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
+export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const MeDocument = gql`
     query me {
   me {

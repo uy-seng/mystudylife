@@ -19,7 +19,7 @@ code {
 :root {
   --primary: rgba(0, 150, 121, 1);
   --secondary: rgba(0, 185, 145, 1);
-  --error: #c90019;
+  --error: #c0392b;
   --bg-light-gray: #f9f9f9;
   --border-gray: #cdd4d4;
   --txt-primary: #464646;

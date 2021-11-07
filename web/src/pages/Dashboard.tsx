@@ -2,6 +2,7 @@ import React from "react";
 import { Counter } from "../components/counter";
 import { NewTask } from "../components/modal";
 import { useGetTasksQuery } from "../generated/graphql";
+import { formatDate } from "../utils";
 
 import css from "./Dashboard.module.css";
 
@@ -18,7 +19,11 @@ export const Dashboard: React.FC<Props> = () => {
             {/* title */}
             <div>Today</div>
             {/* subtitle */}
-            <div>Wednesday, September 1</div>
+            <div>
+              {`${new Date().toLocaleDateString("en-US", {
+                weekday: "long",
+              })} ${formatDate(new Date())}`}
+            </div>
           </div>
           <div>
             {/* doughnut 1 */}

@@ -1,8 +1,11 @@
 import React from "react";
 import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
-import { useAppDispatch } from "../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { useGetAcademicYearsQuery } from "../../../generated/graphql";
-import { setTaskPayload } from "../../../shared/NewTask.slice";
+import {
+  selectTaskPayload,
+  setTaskPayload,
+} from "../../../shared/NewTask.slice";
 import { IconButton } from "../../button";
 import { NewTaskForm } from "../../forms/NewTask";
 import { HeaderSelect } from "../../select";
@@ -14,6 +17,17 @@ export const NewTask: React.FC<Props> = () => {
   const [show, setShow] = React.useState<boolean>(false);
   const { data: academicYears } = useGetAcademicYearsQuery();
   const dispatch = useAppDispatch();
+  const taskPayload = useAppSelector(selectTaskPayload);
+
+  React.useEffect(() => {
+    if (academicYears)
+      dispatch(
+        setTaskPayload({
+          key: "academicYearId",
+          value: academicYears?.getAcademicYears[0]?.id || undefined,
+        })
+      );
+  }, [academicYears]);
 
   if (academicYears)
     return (
@@ -34,7 +48,7 @@ export const NewTask: React.FC<Props> = () => {
         >
           <BaseModal.Header>
             <HeaderSelect
-              defaultValue={null}
+              defaultValue={taskPayload.academicYearId || null}
               setState={(value: string) => {
                 dispatch(
                   setTaskPayload({

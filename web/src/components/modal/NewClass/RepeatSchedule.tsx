@@ -6,6 +6,7 @@ import { selectRepeatSchedules } from "../../../shared/NewClass.slice";
 import { Button } from "../../button";
 import { RepeatScheduleForm } from "../../forms/NewClass/RepeatSchedule";
 import BaseModal from "../BaseModal";
+import { EditRepeatSchedule } from "./EditRepeatSchedule";
 
 import css from "./RepeatSchedule.module.css";
 interface Props {}
@@ -29,24 +30,29 @@ export const RepeatSchedule: React.FC<Props> = () => {
   return (
     <React.Fragment>
       {repeatSchedules.map((repeatSchedule) => (
-        <div className={css.option}>
-          <div>
-            <div>
-              {moment(repeatSchedule.startTime, "HH:mm").format("hh:mm")}{" "}
-              {" - "}
-              {moment(repeatSchedule.endTime, "HH:mm").format("hh:mm")}
+        <EditRepeatSchedule
+          data={repeatSchedule}
+          childController={
+            <div className={css.option}>
+              <div>
+                <div style={{ textTransform: "uppercase" }}>
+                  {moment(repeatSchedule.startTime, "HH:mm").format("hh:mm a")}{" "}
+                  {" - "}
+                  {moment(repeatSchedule.endTime, "HH:mm").format("hh:mm a")}
+                </div>
+                <div className="txt-sm txt-thin">
+                  {repeatSchedule.days
+                    .map(
+                      (day) =>
+                        dayOfWeekOptions.filter((d) => d.value === day)[0].key
+                    )
+                    .join(", ")}
+                </div>
+              </div>
+              <div></div>
             </div>
-            <div>
-              {repeatSchedule.days
-                .map(
-                  (day) =>
-                    dayOfWeekOptions.filter((d) => d.value === day)[0].key
-                )
-                .join(",")}
-            </div>
-          </div>
-          <div></div>
-        </div>
+          }
+        />
       ))}
       <Button
         type="button"
@@ -64,7 +70,7 @@ export const RepeatSchedule: React.FC<Props> = () => {
         <BaseModal.Body style={{ paddingTop: "2rem" }}>
           <div
             style={{
-              top: "1rem",
+              top: "0.5rem",
               color: "black",
             }}
             onClick={() => {

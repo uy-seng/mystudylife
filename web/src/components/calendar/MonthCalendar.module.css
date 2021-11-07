@@ -88,6 +88,11 @@
   color: #c9c8c8;
 }
 
+.classItem {
+  max-height: 0.5rem;
+  overflow: hidden;
+}
+
 .class {
   position: absolute;
   width: calc(100% - 1.75rem);

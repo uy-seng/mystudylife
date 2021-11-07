@@ -7,9 +7,9 @@ import { GiTeacher } from "react-icons/gi";
 import css from "./ViewClass.module.css";
 import moment from "moment";
 import ctx from "classnames";
-import { AiOutlineClose } from "react-icons/ai";
+import { AiFillClockCircle, AiOutlineClose } from "react-icons/ai";
 import { MdEdit } from "react-icons/md";
-import { BsCalendar } from "react-icons/bs";
+import { BsCalendar, BsPersonFill } from "react-icons/bs";
 import { formatDate, formatTime } from "../../../utils";
 import { DeleteClass, EditClass } from "..";
 
@@ -46,7 +46,10 @@ export const ViewClass: React.FC<Props> = ({ childController, data }) => {
                 fontSize: "20px",
                 maxWidth: "300px",
               }}
-            >{`${data?.subject.name}: ${data?.module} Class`}</BaseModal.Title>
+            >
+              {`${data?.subject.name}`}
+              {`${data.module ? " : " + data.module : ""}`}
+            </BaseModal.Title>
             <BaseModal.Extra>
               {data.academicYear
                 ? `${data?.academicYear?.startDate.split("-")[0]}-${
@@ -90,20 +93,54 @@ export const ViewClass: React.FC<Props> = ({ childController, data }) => {
                   </div>
                 </div>
               )}
-              <div className={css.row}>
-                <div>
-                  <HiLocationMarker />
+              {data.academicYear?.schedule.type === "fixed" &&
+                data.schedule?.repeat &&
+                data.schedule?.repeat.length > 0 && (
+                  <div className={css.row}>
+                    <div>
+                      <AiFillClockCircle />
+                    </div>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr 1fr",
+                      }}
+                    >
+                      {data.schedule?.repeat?.map((day, i) => (
+                        <div>
+                          <div
+                            style={{
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            {day.repeatDays.join(", ")}
+                          </div>
+                          <div className="txt-sm ">
+                            {formatTime(day.startTime)} -{" "}
+                            {formatTime(day.endTime)}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              {data.room && (
+                <div className={css.row}>
+                  <div>
+                    <HiLocationMarker />
+                  </div>
+                  <div>{data?.room}</div>
                 </div>
-                <div>{data?.room}</div>
-              </div>
+              )}
               <div className={css.row}>
                 <div>
-                  <GiTeacher />
+                  <BsPersonFill />
                 </div>
                 <div>{data?.teacher || "Not specified"}</div>
               </div>
               {/* //! need to fix for multiple repeat schedule render in the same week */}
-              {data?.schedule.repeat &&
+              {data.academicYear?.schedule.type === "weekRotation" &&
+                data?.schedule.repeat &&
                 data.schedule.repeat.map((d) => (
                   <div className={css.rotationWeek}>
                     <div className={ctx(css.weekNumber, css.levelOne)}>

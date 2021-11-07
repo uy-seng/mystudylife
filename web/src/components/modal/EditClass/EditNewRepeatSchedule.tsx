@@ -3,41 +3,33 @@ import React from "react";
 import { AiFillDelete, AiOutlineClose } from "react-icons/ai";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import {
-  selectToBeDeletedRepeatSchedules,
-  selectToBeUpdatedRepeatSchedules,
-  setToBeDeletedRepeatSchedules,
-  setToBeUpdatedRepeatSchedules,
+  selectNewRepeatSchedules,
+  setNewRepeatSchedules,
 } from "../../../shared/EditClass.slice";
 import {
   RepeatSchedulePayload,
   selectRepeatSchedules,
+  setRepeatSchedules,
 } from "../../../shared/NewClass.slice";
-import { Button } from "../../button";
-import { EditRepeatScheduleForm } from "../../forms/EditClass/EditRepeatSchedule";
-import { NewRepeatScheduleForm } from "../../forms/EditClass/NewRepeatSchedule";
-import { RepeatScheduleForm } from "../../forms/NewClass/RepeatSchedule";
-import BaseModal from "../BaseModal";
-
+import { EditNewRepeatScheduleForm } from "../../forms/EditClass/EditNewRepeatSchedule";
+import { EditRepeatScheduleForm } from "../../forms/NewClass/EditRepeatSchedule";
+import BaseModal from "../../modal/BaseModal";
 import css from "./EditRepeatSchedule.module.css";
+
 interface Props {
   childController: React.ReactNode;
-  data: RepeatSchedulePayload & { id: string };
+  data: RepeatSchedulePayload;
 }
 
-export const EditRepeatSchedule: React.FC<Props> = ({
+export const EditNewRepeatSchedule: React.FC<Props> = ({
   childController,
   data,
 }) => {
   const [show, setShow] = React.useState(false);
-  const toBeUpdatedRepeatSchedules = useAppSelector(
-    selectToBeUpdatedRepeatSchedules
-  );
-  const toBeDeletedRepeatSchedules = useAppSelector(
-    selectToBeDeletedRepeatSchedules
-  );
+  const newRepeatSchedules = useAppSelector(selectNewRepeatSchedules);
   const dispatch = useAppDispatch();
 
-  if (toBeUpdatedRepeatSchedules && data)
+  if (newRepeatSchedules && data)
     return (
       <React.Fragment>
         <div className={css.wrapper}>
@@ -47,15 +39,10 @@ export const EditRepeatSchedule: React.FC<Props> = ({
           <div
             onClick={() => {
               dispatch(
-                setToBeDeletedRepeatSchedules([
-                  ...toBeDeletedRepeatSchedules,
-                  data,
-                ])
-              );
-              dispatch(
-                setToBeUpdatedRepeatSchedules([
-                  ...toBeUpdatedRepeatSchedules.filter(
-                    (repeatSchedule) => repeatSchedule.id !== data.id
+                setNewRepeatSchedules([
+                  ...newRepeatSchedules.filter(
+                    (repeatSchedule) =>
+                      JSON.stringify(repeatSchedule) !== JSON.stringify(data)
                   ),
                 ])
               );
@@ -82,7 +69,7 @@ export const EditRepeatSchedule: React.FC<Props> = ({
             >
               <AiOutlineClose />
             </div>
-            <EditRepeatScheduleForm data={data} setShow={setShow} />
+            <EditNewRepeatScheduleForm data={data} setShow={setShow} />
           </BaseModal.Body>
         </BaseModal>
       </React.Fragment>

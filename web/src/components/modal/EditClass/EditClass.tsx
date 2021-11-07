@@ -100,6 +100,7 @@ export const EditClass: React.FC<Props> = ({ c }) => {
           <MdEdit />
         </div>
         <BaseModal
+          hide={() => setShow(false)}
           className="editClass"
           parent={document.querySelector(".App") as Element}
           show={show}
@@ -145,7 +146,11 @@ export const EditClass: React.FC<Props> = ({ c }) => {
               <AiOutlineClose />
             </div>
           </BaseModal.Header>
-          <BaseModal.Body>
+          <BaseModal.Body
+            style={{
+              maxWidth: "550px",
+            }}
+          >
             {c.schedule.type === "repeat" && (
               <div className={css.reminder}>
                 {toBeUpdatedClassPayload?.academicYearId

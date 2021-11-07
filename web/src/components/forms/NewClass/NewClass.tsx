@@ -51,7 +51,6 @@ import { ApolloQueryResult } from "@apollo/client";
 
 const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
   const { touched, errors, setClassPayload, isSubmitting } = props;
-  const [advanceMenu, setAdvanceMenu] = React.useState<boolean>(false);
   const { data: subjects } = useGetSubjectsQuery();
   const { type: activeTab } = useAppSelector(selectClassSchedulePayload);
   const classPayload = useAppSelector(selectClassPayload);
@@ -66,10 +65,14 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
   }, [touched.name, errors.name]);
 
   React.useEffect(() => {
-    if (subjects)
+    if (subjects && classPayload.academicYearId)
       setClassPayload({
         key: "subjectId",
-        value: subjects.getSubjects[0].id,
+        value: subjects.getSubjects.filter(
+          (subject) =>
+            !subject.academicYear ||
+            subject?.academicYear?.id === classPayload.academicYearId
+        )[0].id,
       });
   }, []);
 

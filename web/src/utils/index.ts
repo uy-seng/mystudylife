@@ -85,72 +85,7 @@ export const generateClassByDate = (
   state: GetClassesQuery | undefined,
   currentDate: Date
 ) => {
-  return state?.getClasses.filter((c) => {
-    //! one off schedule not working in monthly calendar
-    // class is one off schedule
-    if (c.schedule.type === "oneOff") {
-      // if it contains academic year
-      if (c.academicYear) {
-        return (
-          +currentDate >= +new Date(c.academicYear.startDate) &&
-          +currentDate <= +new Date(c.academicYear.endDate) &&
-          +currentDate === +new Date(c.schedule.oneOff!.date)
-        );
-      }
-      // if it does not contain academic year
-      return +currentDate === +new Date(c.schedule.oneOff!.date);
-    }
-    // class is repeat schedule
-    else {
-      if (c.academicYear) {
-        // fixed schedule
-        if (c.academicYear.schedule.type === "fixed")
-          return (
-            +currentDate >= +new Date(c.academicYear.startDate) &&
-            +currentDate <= +new Date(c.academicYear.endDate) &&
-            c!.schedule!.repeat!.some((r) =>
-              r.repeatDays.includes(daysOfWeek[currentDate.getDay()])
-            )
-          );
-        // week rotation
-        else if (c.academicYear.schedule.type === "weekRotation") {
-          if (
-            c!.schedule!.repeat!.some((r) => r.rotationWeek) &&
-            getWeekNumberForWeekRotation(
-              new Date(c.academicYear.startDate),
-              currentDate
-            )
-          ) {
-            return (
-              +currentDate >= +new Date(c.academicYear.startDate) &&
-              +currentDate <= +new Date(c.academicYear.endDate) &&
-              c.schedule.repeat?.some((r) =>
-                r.repeatDays.includes(daysOfWeek[currentDate.getDay()])
-              ) &&
-              c.schedule.repeat.some(
-                (r) =>
-                  r.rotationWeek ===
-                  c!.academicYear!.schedule.weekRotation!.numOfWeek -
-                    ((getWeekNumberForWeekRotation(
-                      new Date(c!.academicYear!.startDate),
-                      currentDate
-                    ) as number) %
-                      c!.academicYear!.schedule.weekRotation!.numOfWeek)
-              )
-            );
-          }
-        }
-        // day rotation
-      }
-      // fixed schedule
-      if (!c.schedule.repeat?.some((r) => r.rotationWeek))
-        return c.schedule.repeat?.some((r) =>
-          r.repeatDays.includes(daysOfWeek[currentDate.getDay()])
-        );
-      // week rotation
-      // day rotation
-    }
-  });
+  return state?.getClasses.filter((c) => {});
 };
 
 export const mod = (number: number, modulo: number) => {

@@ -10,6 +10,10 @@ import {
   selectClassPayload,
   selectClassSchedulePayload,
   setClassPayload,
+  setClassPayloadToDefault,
+  setClassSchedulePayloadToDefault,
+  setOneOffSchedulePayloadToDefault,
+  setRepeatSchedulesToDefault,
 } from "../../../shared/NewClass.slice";
 import { selectScheduleComponentState } from "../../../shared/Schedule.slice";
 import { Button } from "../../button";
@@ -32,6 +36,14 @@ export const NewClass: React.FC<Props> = () => {
   const { data: subjects, loading: fetchingSubject } = useGetSubjectsQuery();
 
   const { selectedYear } = useAppSelector(selectScheduleComponentState);
+
+  const close = () => {
+    dispatch(setClassPayloadToDefault());
+    dispatch(setClassSchedulePayloadToDefault());
+    dispatch(setOneOffSchedulePayloadToDefault());
+    dispatch(setRepeatSchedulesToDefault());
+    setShow(false);
+  };
 
   React.useEffect(() => {
     if (selectedYear) {
@@ -56,6 +68,7 @@ export const NewClass: React.FC<Props> = () => {
           onClick={() => setShow(true)}
         />
         <BaseModal
+          hide={close}
           className="newClass"
           parent={document.querySelector(".App") as Element}
           show={show}
@@ -100,9 +113,7 @@ export const NewClass: React.FC<Props> = () => {
               />
             )}
             <div
-              onClick={() => {
-                setShow(false);
-              }}
+              onClick={close}
               className="close"
               style={{
                 top: subjects.getSubjects.length > 0 ? "2rem" : "1rem",
@@ -111,8 +122,14 @@ export const NewClass: React.FC<Props> = () => {
               <AiOutlineClose />
             </div>
           </BaseModal.Header>
-          <BaseModal.Body>
-            {subjects.getSubjects.length > 0 && (
+          <BaseModal.Body
+            style={{
+              maxWidth: "550px",
+            }}
+          >
+            {subjects.getSubjects.filter(
+              (subject) => subject.academicYear?.id === academicYearId
+            ).length > 0 && (
               <React.Fragment>
                 {classScheduleType === "repeat" && (
                   <div className={css.reminder}>
@@ -140,11 +157,17 @@ export const NewClass: React.FC<Props> = () => {
                 <NewClassForm setShow={setShow} />
               </React.Fragment>
             )}
-            {subjects.getSubjects.length === 0 && (
+            {subjects.getSubjects.filter(
+              (subject) => subject.academicYear?.id === academicYearId
+            ).length === 0 && (
               <>
                 <div>
                   <span className="txt-sm">
-                    You have't create any subject yet,&nbsp;
+                    You have't create any subject{" "}
+                    {subjects.getSubjects.length > 0
+                      ? " for this academic year "
+                      : ""}
+                    yet,&nbsp;
                   </span>
                   <NewSubject controller="link" />
                 </div>

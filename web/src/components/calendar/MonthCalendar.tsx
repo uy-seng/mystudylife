@@ -147,32 +147,19 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                               )?.map((c, index, t) => {
                                 if (index < 2) {
                                   return (
-                                    <div className={css.classItem}>
-                                      {c.subject.name} - {c.module}
-                                    </div>
+                                    <ViewClass
+                                      data={c}
+                                      childController={
+                                        <div className={css.classItem}>
+                                          {c.subject.name} - {c.module}
+                                        </div>
+                                      }
+                                    />
                                   );
                                 } else {
                                   if (index === 2 && index < t.length - 1) {
                                     return (
-                                      <div
-                                        onMouseEnter={(e) => {
-                                          e.currentTarget.parentElement?.parentElement
-                                            ?.querySelector(
-                                              `.${css.expandedClass}`
-                                            )
-                                            ?.classList.add(css.active);
-                                          (
-                                            e.currentTarget.parentElement?.parentElement?.querySelector(
-                                              `.${css.expandedClass}`
-                                            ) as HTMLElement
-                                          ).style.height = `${
-                                            e.currentTarget.parentElement?.parentElement?.querySelector(
-                                              `.${css.expandedClass}`
-                                            )?.scrollHeight
-                                          }px`;
-                                        }}
-                                        className={css.more}
-                                      >
+                                      <div className={css.more}>
                                         {t.length - 2} more
                                       </div>
                                     );
@@ -181,28 +168,7 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                                 }
                               })}
                             </div>
-                            {/* full class list */}
-                            <div
-                              onMouseLeave={(e) => {
-                                e.currentTarget.classList.remove(css.active);
-                              }}
-                              className={css.expandedClass}
-                            >
-                              <div className={css.class}>
-                                {generateClassByDate(
-                                  classes,
-                                  new Date(
-                                    `${currentDate.getFullYear()}-${
-                                      currentDate.getMonth() + 1
-                                    }-${daysInMonth[0]}`
-                                  )
-                                )?.map((c) => (
-                                  <div className={css.classItem}>
-                                    {c.subject.name} - {c.module}
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
+
                             <div className={css.cell}>
                               <div>...</div>
                               <div>{daysInMonth.splice(0, 1)[0]}</div>
@@ -302,23 +268,7 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                             } else {
                               if (index === 2 && index < t.length - 1) {
                                 return (
-                                  <div
-                                    onMouseEnter={(e) => {
-                                      e.currentTarget.parentElement?.parentElement
-                                        ?.querySelector(`.${css.expandedClass}`)
-                                        ?.classList.add(css.active);
-                                      (
-                                        e.currentTarget.parentElement?.parentElement?.querySelector(
-                                          `.${css.expandedClass}`
-                                        ) as HTMLElement
-                                      ).style.height = `${
-                                        e.currentTarget.parentElement?.parentElement?.querySelector(
-                                          `.${css.expandedClass}`
-                                        )?.scrollHeight
-                                      }px`;
-                                    }}
-                                    className={css.more}
-                                  >
+                                  <div className={css.more}>
                                     {t.length - 2} more
                                   </div>
                                 );
@@ -327,33 +277,7 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                             }
                           })}
                         </div>
-                        {/* full class list */}
-                        <div
-                          onMouseLeave={(e) => {
-                            e.currentTarget.classList.remove(css.active);
-                          }}
-                          className={css.expandedClass}
-                        >
-                          <div className={css.class}>
-                            {generateClassByDate(
-                              classes,
-                              new Date(
-                                `${currentDate.getFullYear()}-${
-                                  currentDate.getMonth() + 1
-                                }-${daysInMonth[0]}`
-                              )
-                            )?.map((c) => (
-                              <ViewClass
-                                data={c}
-                                childController={
-                                  <div className={css.classItem}>
-                                    {c.subject.name} - {c.module}
-                                  </div>
-                                }
-                              />
-                            ))}
-                          </div>
-                        </div>
+
                         <div className={css.cell}>
                           <div>...</div>
                           <div>{daysInMonth.splice(0, 1)[0]}</div>

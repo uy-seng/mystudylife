@@ -58,7 +58,7 @@ export const ManageSubject: React.FC<Props> = () => {
           <HeaderSelect
             defaultValue={selectedAcademicYearId}
             setState={(value: string) => setSelectedAcademicYearId(value)}
-            label="New Subject"
+            label="Manage Subject"
             data={[
               {
                 key: "None",

@@ -19,6 +19,7 @@ export interface EditClassGlobalState {
   toBeUpdatedRepeatSchedules:
     | (RepeatSchedulePayload & { id: string })[]
     | undefined;
+  toBeDeletedRepeatSchedules: (RepeatSchedulePayload & { id: string })[];
   newRepeatSchedules: RepeatSchedulePayload[];
 }
 
@@ -28,6 +29,7 @@ const initialState: EditClassGlobalState = {
   toBeUpdatedOneOffSchedulePayload: undefined,
   toBeUpdatedRepeatSchedules: undefined,
   newRepeatSchedules: [],
+  toBeDeletedRepeatSchedules: [],
 };
 
 export const EditClassSlice = createSlice({
@@ -100,6 +102,24 @@ export const EditClassSlice = createSlice({
     ) => {
       state.toBeUpdatedRepeatSchedules = params.payload;
     },
+    setDefaultToBeDeletedRepeatSchedules: (
+      state,
+      params: {
+        type: String;
+        payload: (RepeatSchedulePayload & { id: string })[];
+      }
+    ) => {
+      state.toBeDeletedRepeatSchedules = params.payload;
+    },
+    setToBeDeletedRepeatSchedules: (
+      state,
+      params: {
+        type: String;
+        payload: (RepeatSchedulePayload & { id: string })[];
+      }
+    ) => {
+      state.toBeDeletedRepeatSchedules = params.payload;
+    },
     setNewRepeatSchedules: (
       state,
       params: {
@@ -120,6 +140,8 @@ export const selectToBeUpdatedOneOffSchedulePayload = (state: RootState) =>
   state.editclass.toBeUpdatedOneOffSchedulePayload;
 export const selectToBeUpdatedRepeatSchedules = (state: RootState) =>
   state.editclass.toBeUpdatedRepeatSchedules;
+export const selectToBeDeletedRepeatSchedules = (state: RootState) =>
+  state.editclass.toBeDeletedRepeatSchedules;
 export const selectNewRepeatSchedules = (state: RootState) =>
   state.editclass.newRepeatSchedules;
 
@@ -133,6 +155,8 @@ export const {
   setDefaultToBeUpdatedClassSchedulePayload,
   setDefaultToBeUpdatedOneOffSchedulePayload,
   setDefaultToBeUpdatedRepeatSchedules,
+  setDefaultToBeDeletedRepeatSchedules,
+  setToBeDeletedRepeatSchedules,
 } = EditClassSlice.actions;
 
 export default EditClassSlice.reducer;

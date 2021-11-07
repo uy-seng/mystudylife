@@ -43,7 +43,7 @@ export const NewRepeatSchedule: React.FC<Props> = () => {
           <BaseModal.Body style={{ paddingTop: "2rem" }}>
             <div
               style={{
-                top: "1rem",
+                top: "0.5rem",
                 color: "black",
               }}
               onClick={() => {

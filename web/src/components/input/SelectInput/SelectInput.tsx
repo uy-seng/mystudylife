@@ -99,7 +99,10 @@ export const SelectInput: React.FC<SelectInputProps> = ({
         </div>
         {searchTarget.length > 0 && (
           <Button
-            onClick={() => setSearchTarget("")}
+            onClick={() => {
+              setSearchTarget("");
+              setState(undefined);
+            }}
             style={{
               margin: "4px",
               padding: "0.5rem",

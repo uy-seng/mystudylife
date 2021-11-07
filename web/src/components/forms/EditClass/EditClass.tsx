@@ -44,6 +44,8 @@ import {
   UpdateOneOffScheduleMutationFn,
   useUpdateRepeatScheduleMutation,
   UpdateRepeatScheduleMutationFn,
+  useDeleteRepeatScheduleMutation,
+  DeleteRepeatScheduleMutationFn,
 } from "../../../generated/graphql";
 import { FormikBasicSelectInput } from "../../input/BasicSelectInput";
 import { NewClass, NewSubject } from "../../modal";
@@ -51,11 +53,14 @@ import { asyncForEach } from "../../../utils";
 import { ApolloQueryResult } from "@apollo/client";
 import {
   selectNewRepeatSchedules,
+  selectToBeDeletedRepeatSchedules,
   selectToBeUpdatedClassPayload,
   selectToBeUpdatedClassSchedulePayload,
   selectToBeUpdatedOneOffSchedulePayload,
   selectToBeUpdatedRepeatSchedules,
   setDefaultToBeUpdatedClassPayload,
+  setNewRepeatSchedules,
+  setToBeDeletedRepeatSchedules,
   setToBeUpdatedClassPayload,
 } from "../../../shared/EditClass.slice";
 import { OneOffSchedule } from "./OneOffSchedule";
@@ -243,6 +248,12 @@ const MyForm = withFormik<any, ClassPayload>({
       props.toBeUpdatedRepeatSchedules as (RepeatSchedulePayload & {
         id: string;
       })[];
+    const toBeDeletedRepeatSchedules =
+      props.toBeDeletedRepeatSchedules as (RepeatSchedulePayload & {
+        id: string;
+      })[];
+    const setToBeDeletedRepeatSchedulesToDefault =
+      props.setToBeDeletedRepeatSchedulesToDefault;
     const newRepeatSchedules =
       props.newRepeatSchedules as RepeatSchedulePayload[];
 
@@ -253,6 +264,8 @@ const MyForm = withFormik<any, ClassPayload>({
       props.updateRepeatSchedule as UpdateRepeatScheduleMutationFn;
     const newRepeatSchedule =
       props.newRepeatSchedule as NewRepeatScheduleMutationFn;
+    const deleteRepeatSchedule =
+      props.deleteRepeatSchedule as DeleteRepeatScheduleMutationFn;
 
     const setShow = props.setShow;
     const refetchClasses = props.refetch as (
@@ -264,6 +277,7 @@ const MyForm = withFormik<any, ClassPayload>({
           >
         | undefined
     ) => Promise<ApolloQueryResult<GetClassesQuery>>;
+    const setNewRepeatSchedulesToDefault = props.setNewRepeatSchedulesToDefault;
 
     updateClass({
       variables: {
@@ -288,20 +302,32 @@ const MyForm = withFormik<any, ClassPayload>({
             },
           });
         } else if (toBeUpdatedClassSchedulePayload.type === "repeat") {
-          await asyncForEach(
-            toBeUpdatedRepeatSchedules,
-            async (toBeUpdatedRepeatSchedulePayload) => {
-              await updateRepeatSchedule({
-                variables: {
-                  id: toBeUpdatedRepeatSchedulePayload.id,
-                  startTime: toBeUpdatedRepeatSchedulePayload.startTime,
-                  endTime: toBeUpdatedRepeatSchedulePayload.endTime,
-                  scheduleId: toBeUpdatedClassSchedulePayload.id,
-                  repeatDays: toBeUpdatedRepeatSchedulePayload.days,
-                },
-              });
-            }
-          );
+          if (toBeDeletedRepeatSchedules.length > 0)
+            await asyncForEach(
+              toBeDeletedRepeatSchedules,
+              async (repeatSchedule) => {
+                await deleteRepeatSchedule({
+                  variables: {
+                    id: repeatSchedule.id,
+                  },
+                });
+              }
+            );
+          if (toBeUpdatedRepeatSchedules.length > 0)
+            await asyncForEach(
+              toBeUpdatedRepeatSchedules,
+              async (toBeUpdatedRepeatSchedulePayload) => {
+                await updateRepeatSchedule({
+                  variables: {
+                    id: toBeUpdatedRepeatSchedulePayload.id,
+                    startTime: toBeUpdatedRepeatSchedulePayload.startTime,
+                    endTime: toBeUpdatedRepeatSchedulePayload.endTime,
+                    scheduleId: toBeUpdatedClassSchedulePayload.id,
+                    repeatDays: toBeUpdatedRepeatSchedulePayload.days,
+                  },
+                });
+              }
+            );
           if (newRepeatSchedules.length > 0) {
             await asyncForEach(newRepeatSchedules, async (repeatSchedule) => {
               await newRepeatSchedule({
@@ -315,6 +341,8 @@ const MyForm = withFormik<any, ClassPayload>({
             });
           }
         }
+        setToBeDeletedRepeatSchedulesToDefault();
+        setNewRepeatSchedulesToDefault();
         await refetchClasses();
         setShow(false);
       })
@@ -367,14 +395,19 @@ export const EditClassForm: React.FC<EditClassProps> = ({ setShow }) => {
   const toBeUpdatedRepeatSchedules = useAppSelector(
     selectToBeUpdatedRepeatSchedules
   );
+  const toBeDeletedRepeatSchedules = useAppSelector(
+    selectToBeDeletedRepeatSchedules
+  );
   const newRepeatSchedules = useAppSelector(selectNewRepeatSchedules);
 
   const [updateClass] = useUpdateClassMutation();
   const [updateOneOffSchedule] = useUpdateOneOffScheduleMutation();
   const [updateRepeatSchedule] = useUpdateRepeatScheduleMutation();
   const [newRepeatSchedule] = useNewRepeatScheduleMutation();
+  const [deleteRepeatSchedule] = useDeleteRepeatScheduleMutation();
 
   const { refetch } = useGetClassesQuery();
+  const dispatch = useAppDispatch();
 
   return (
     <ConnectedForm
@@ -383,12 +416,20 @@ export const EditClassForm: React.FC<EditClassProps> = ({ setShow }) => {
       toBeUpdatedOneOffSchedulePayload={toBeUpdatedOneOffSchedulePayload}
       toBeUpdatedRepeatSchedules={toBeUpdatedRepeatSchedules}
       newRepeatSchedules={newRepeatSchedules}
+      toBeDeletedRepeatSchedules={toBeDeletedRepeatSchedules}
       updateClass={updateClass}
       updateOneOffSchedule={updateOneOffSchedule}
       updateRepeatSchedule={updateRepeatSchedule}
       newRepeatSchedule={newRepeatSchedule}
+      deleteRepeatSchedule={deleteRepeatSchedule}
       setShow={setShow}
       refetch={refetch}
+      setToBeDeletedRepeatSchedulesToDefault={() => {
+        dispatch(setToBeDeletedRepeatSchedules([]));
+      }}
+      setNewRepeatSchedulesToDefault={() => {
+        dispatch(setNewRepeatSchedules([]));
+      }}
     />
   );
 };
