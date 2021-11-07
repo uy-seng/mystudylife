@@ -15,9 +15,9 @@ import {
   createAccessToken,
   sendRefreshToken,
   createRefreshToken,
-} from "src/helper";
-import { authenticationGate } from "src/middleware";
-import { Context } from "src/interface";
+} from "../../../helper";
+import { authenticationGate } from "../../../middleware";
+import { Context } from "../../../interface";
 
 @Resolver()
 export class AuthResolver {

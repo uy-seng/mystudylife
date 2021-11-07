@@ -22,8 +22,8 @@ const apollo_server_errors_1 = require("apollo-server-errors");
 const typeorm_1 = require("typeorm");
 const auth_1 = require("./types/auth");
 const entity_1 = require("../../../entity");
-const helper_1 = require("src/helper");
-const middleware_1 = require("src/middleware");
+const helper_1 = require("../../../helper");
+const middleware_1 = require("../../../middleware");
 let AuthResolver = class AuthResolver {
     async register(username, email, password) {
         const hashedPassword = await bcryptjs_1.default.hash(password, 12);
