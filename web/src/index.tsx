@@ -55,7 +55,7 @@ const authLink = new TokenRefreshLink({
   },
   fetchAccessToken: () => {
     return fetch(
-      `${process.env.REACT_APP_API_ENDPOINT_URL}/auth/refresh-token`,
+      `${process.env.REACT_APP_API_ENDPOINT_URL}/api/auth/refresh-token`,
       {
         method: "GET",
         credentials: "include",
