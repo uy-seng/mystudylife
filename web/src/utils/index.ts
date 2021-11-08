@@ -85,7 +85,25 @@ export const generateClassByDate = (
   state: GetClassesQuery | undefined,
   currentDate: Date
 ) => {
-  return state?.getClasses.filter((c) => {});
+  return state?.getClasses.filter((c) => {
+    // check for academic year schedule type
+    if (c.academicYear?.schedule.type === "fixed") {
+      if (c.schedule.type === "oneOff") {
+        // one off schedule
+      } else if (c.schedule.type === "repeat") {
+        // repeat schedule
+        // class must be between academic year start date and end date
+        // class must be on current date
+        // if (c.subject.name.includes("Security"))
+        //   console.log(
+        //     c.schedule!.repeat?.some((r) => r.repeatDays.includes("monday"))
+        //   );
+        return c.schedule!.repeat?.some((r) => r.repeatDays.includes("monday"));
+      }
+    } else if (c.academicYear?.schedule.type === "dayRotation") {
+    } else if (c.academicYear?.schedule.type === "weekRotation") {
+    }
+  });
 };
 
 export const mod = (number: number, modulo: number) => {

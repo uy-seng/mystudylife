@@ -7,7 +7,7 @@ interface Props {}
 export const ManageCalendar: React.FC<Props> = () => {
   return (
     <div className={css.managecalendar}>
-      <h2
+      {/* <h2
         className="title"
         style={{
           borderBottom: "1px solid #cdd4d4",
@@ -17,7 +17,7 @@ export const ManageCalendar: React.FC<Props> = () => {
         }}
       >
         Calendar
-      </h2>
+      </h2> */}
       <Calendar />
     </div>
   );

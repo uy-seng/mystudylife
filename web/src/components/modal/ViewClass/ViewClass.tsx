@@ -25,7 +25,9 @@ export const ViewClass: React.FC<Props> = ({ childController, data }) => {
     return (
       <React.Fragment>
         {childController ? (
-          <div onClick={() => setShow(true)}>{childController}</div>
+          <div data-type="modal" onClick={() => setShow(true)}>
+            {childController}
+          </div>
         ) : (
           <Button
             as="neutral"
