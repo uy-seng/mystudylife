@@ -59,5 +59,9 @@
       "dev": "concurrently \"npm run server\" \"npm run web\"",
       "test": "jest --verbose --runInBand",
       "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix web && npm run build --prefix web"
+   },
+   "engines": {
+      "node": ">=8.0.0",
+      "npm": ">=6.0.0"
    }
 }
