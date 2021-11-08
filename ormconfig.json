@@ -5,18 +5,18 @@
     "port": 5432,
     "url": "postgres://roczhvwlmfukgo:0e06ae3415cc734c98c2dd6cff7a9f95694f6aaf24a15c769e95d56c1ef0c75a@ec2-3-214-121-14.compute-1.amazonaws.com:5432/d10icc433rv7mq",
     "username": "roczhvwlmfukgo",
-    "password": "0e06ae3415cc734c98c2dd6cff7a9f95694f6aaf24a15c769e95d56c1ef0c75a",
+    "password": "0ec06ae3415cc734c98c2dd6cff7a9f95694f6aaf24a15c769e95d56c1ef0c75a",
     "database": "d10icc433rv7mq",
     "synchronize": true,
     "logging": false,
     "entities": [
-        "src/entity/**/*.ts"
+        "dist/entity/**/*.ts"
     ],
     "migrations": [
-        "src/migration/**/*.ts"
+        "dist/migration/**/*.ts"
     ],
     "subscribers": [
-        "src/subscriber/**/*.ts"
+        "dist/subscriber/**/*.ts"
     ],
     "cli": {
         "entitiesDir": "src/entity",
