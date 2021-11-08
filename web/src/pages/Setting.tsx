@@ -1,12 +1,15 @@
 import React from "react";
 import css from "./Setting.module.css";
 import ctx from "classnames";
-import { Button, LoaderButton } from "../components/button";
+import { LoaderButton } from "../components/button";
 import { useLogoutMutation } from "../generated/graphql";
+import { useHistory } from "react-router-dom";
 interface Props {}
 
 export const Setting: React.FC<Props> = () => {
   const [logout, { loading }] = useLogoutMutation();
+  const history = useHistory();
+
   return (
     <div>
       <div className={css.header}>
@@ -16,7 +19,7 @@ export const Setting: React.FC<Props> = () => {
           text="Log out"
           as="neutral"
           onClick={() => {
-            logout().then(() => window.location.reload());
+            logout().then(() => history.push("/"));
           }}
           style={{ maxWidth: "100px", margin: "0.5rem" }}
         />
