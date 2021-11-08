@@ -76,7 +76,7 @@ const authLink = new TokenRefreshLink({
 });
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:8000/graphql",
+  uri: "https://mystudylife-clone-useng.herokuapp.com/graphql",
   credentials: "include",
 });
 
