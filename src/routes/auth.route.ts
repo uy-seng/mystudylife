@@ -12,9 +12,7 @@ import { getConnection } from "typeorm";
 export const authRoute = Router();
 authRoute.get("/refresh-token", async (req, res) => {
   const cookie = req.cookies.jid;
-  const userRepository = getConnection(process.env.NODE_ENV).getRepository(
-    User
-  );
+  const userRepository = getConnection("production").getRepository(User);
   const NULL_TOKEN = {
     accessToken: "",
   };
