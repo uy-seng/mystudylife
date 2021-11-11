@@ -18,7 +18,7 @@ export const Setting: React.FC<Props> = () => {
           text="Log out"
           as="neutral"
           onClick={() => {
-            logout().then(() => history.push("/"));
+            logout().then(() => window.location.reload());
           }}
           style={{ maxWidth: "100px", margin: "0.5rem" }}
         />

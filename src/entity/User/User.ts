@@ -28,8 +28,11 @@ export class User {
   @Field(() => String, { nullable: true })
   password: string;
 
+  @Column({ nullable: true })
+  userProviderId: string;
+
   @OneToOne(() => UserProvider)
-  @JoinColumn()
+  @JoinColumn({ name: "userProviderId", referencedColumnName: "id" })
   @Field(() => UserProvider)
   provider: UserProvider;
 

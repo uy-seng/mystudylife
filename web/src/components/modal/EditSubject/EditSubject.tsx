@@ -33,6 +33,7 @@ export const EditSubject: React.FC<Props> = ({ childController, data }) => {
           id: data.id,
           academicYearId: data.academicYear?.id,
           name: data.name,
+          termId: data.term?.id,
         })
       );
     }

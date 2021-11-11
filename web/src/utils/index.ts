@@ -92,13 +92,16 @@ export const generateClassByDate = (
         // one off schedule
       } else if (c.schedule.type === "repeat") {
         // repeat schedule
+        //! need to check if class have term or not
         // class must be between academic year start date and end date
         // class must be on current date
-        // if (c.subject.name.includes("Security"))
-        //   console.log(
-        //     c.schedule!.repeat?.some((r) => r.repeatDays.includes("monday"))
-        //   );
-        return c.schedule!.repeat?.some((r) => r.repeatDays.includes("monday"));
+        return (
+          c.schedule!.repeat?.some((r) =>
+            r.repeatDays.includes(daysOfWeek[currentDate.getDay()])
+          ) &&
+          +new Date(c.academicYear!.startDate) <= +currentDate &&
+          +currentDate <= +new Date(c.academicYear!.endDate)
+        );
       }
     } else if (c.academicYear?.schedule.type === "dayRotation") {
     } else if (c.academicYear?.schedule.type === "weekRotation") {

@@ -118,45 +118,78 @@ const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
       <div className={css.scheduleListing}>
         <div>
           {schedules.map((schedule) => (
-            <div
-              key={schedule.id}
-              onClick={() =>
-                dispatch(
-                  setScheduleComponentState({
-                    key: "selectedYear",
-                    value: schedule,
-                  })
-                )
-              }
-              className={
-                selectedYear?.id === schedule.id ? css.active : undefined
-              }
-            >
-              <div className="txt-md">
-                {schedule.startDate.split("-")[0]}
-                {" - "}
-                {schedule.endDate.split("-")[0]}
+            <React.Fragment>
+              <div
+                key={schedule.id}
+                onClick={() =>
+                  dispatch(
+                    setScheduleComponentState({
+                      key: "selectedYear",
+                      value: schedule,
+                    })
+                  )
+                }
+                className={
+                  selectedYear?.id === schedule.id ? css.active : undefined
+                }
+              >
+                <div className="txt-md">
+                  {schedule.startDate.split("-")[0]}
+                  {" - "}
+                  {schedule.endDate.split("-")[0]}
+                </div>
+                <div className="txt-xs">
+                  {new Date(schedule.startDate)
+                    .toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "2-digit",
+                      year: "numeric",
+                    })
+                    .split(",")
+                    .join("")}
+                  {" - "}
+                  {new Date(schedule.endDate)
+                    .toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "2-digit",
+                      year: "numeric",
+                    })
+                    .split(",")
+                    .join("")}
+                </div>
               </div>
-              <div className="txt-xs">
-                {new Date(schedule.startDate)
-                  .toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "2-digit",
-                    year: "numeric",
+              {schedule.terms.length > 0 &&
+                [...schedule.terms]
+                  .sort((a, b) => {
+                    return new Date(a.startDate) > new Date(b.startDate)
+                      ? 1
+                      : -1;
                   })
-                  .split(",")
-                  .join("")}
-                {" - "}
-                {new Date(schedule.endDate)
-                  .toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "2-digit",
-                    year: "numeric",
-                  })
-                  .split(",")
-                  .join("")}
-              </div>
-            </div>
+                  .map((term) => (
+                    <div className={css.term}>
+                      <div className="txt-sm txt-thin">{term.name}</div>
+                      <div className="txt-sm txt-thin">
+                        {new Date(term.startDate)
+                          .toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "2-digit",
+                            year: "numeric",
+                          })
+                          .split(",")
+                          .join("")}
+                        {" - "}
+                        {new Date(term.endDate)
+                          .toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "2-digit",
+                            year: "numeric",
+                          })
+                          .split(",")
+                          .join("")}
+                      </div>
+                    </div>
+                  ))}
+            </React.Fragment>
           ))}
         </div>
         <div>

@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { decode } from "jsonwebtoken";
-import passport from "passport";
 import { User } from "src/entity";
 import {
   createAccessToken,
@@ -38,32 +37,3 @@ authRoute.get("/refresh-token", async (req, res) => {
     accessToken: createAccessToken(userPayload.user),
   });
 });
-
-authRoute.get(
-  "/google",
-  passport.authenticate("google", {
-    scope: ["profile", "email"],
-  })
-);
-
-authRoute.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    session: false,
-  }),
-  (_req, res) => {
-    return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
-  }
-);
-
-authRoute.get("/facebook", passport.authenticate("facebook"));
-
-authRoute.get(
-  "/facebook/callback",
-  passport.authenticate("facebook", {
-    session: false,
-  }),
-  (_req, res) => {
-    return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
-  }
-);

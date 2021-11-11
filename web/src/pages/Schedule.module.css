@@ -121,3 +121,11 @@
   justify-content: space-between;
   margin-bottom: 4px;
 }
+
+.term:hover {
+  background-color: #e5e5e5;
+}
+
+.term {
+  margin-left: 1rem;
+}

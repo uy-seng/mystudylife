@@ -5,5 +5,8 @@ query GetSubjects {
     academicYear {
       id
     }
+    term {
+      id
+    }
   }
 }

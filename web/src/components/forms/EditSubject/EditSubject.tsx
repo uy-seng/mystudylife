@@ -212,6 +212,7 @@ const MyForm = withFormik<any, SubjectPayload>({
     return {
       name: props.name,
       academicYearId: props.academicYearId,
+      termId: props.termId,
     };
   },
 })(InnerForm);

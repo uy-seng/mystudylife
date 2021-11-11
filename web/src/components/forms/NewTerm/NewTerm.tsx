@@ -3,12 +3,14 @@ import { withFormik, FormikProps, Form } from "formik";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
-import { useAppSelector } from "../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { RootState } from "../../../app/store";
 import {
   TermPayload,
   selectCreateTermComponentState,
   setTermPayload,
+  setTerms,
+  setTermPayloadToDefault,
 } from "../../../shared/NewAcademicYear.slice";
 
 import { Pair } from "../../../types";
@@ -18,6 +20,7 @@ import { FormikBasicTextInput, FormikDatepicker } from "../../input";
 import { CgDanger } from "react-icons/cg";
 
 import css from "./NewTerm.module.css";
+import { v4 } from "uuid";
 
 const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
   const { touched, errors, setTermPayload } = props;
@@ -159,11 +162,22 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
 const MyForm = withFormik<any, TermPayload>({
   handleSubmit: (values, { props }) => {
     // do submitting things
-    console.log(props);
+    const setShow = props.setShow as React.Dispatch<
+      React.SetStateAction<boolean>
+    >;
+    const id = v4();
+    const setTerms = props.setTerms;
+    const terms = props.terms as TermPayload[];
+    const setTermPayloadToDefault = props.setTermPayloadToDefault;
+
+    setTerms([...terms, { ...values, id }]);
+    setTermPayloadToDefault();
+    setShow(false);
   },
   enableReinitialize: true,
   mapPropsToValues: (props) => {
     return {
+      id: props.id,
       name: props.name,
       startDate: props.startDate,
       endDate: props.endDate,
@@ -185,4 +199,27 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchMap => ({
   },
 });
 
-export const NewTermForm = connect(mapStateToProps, mapDispatchToProps)(MyForm);
+const ConnectedForm = connect(mapStateToProps, mapDispatchToProps)(MyForm);
+
+interface Props {
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const NewTermForm: React.FC<Props> = ({ setShow }) => {
+  const dispatch = useAppDispatch();
+  const { terms } = useAppSelector(selectCreateTermComponentState);
+  const setTermsAction = (term: TermPayload[]) => {
+    dispatch(setTerms(term));
+  };
+  const setTermPayloadToDefaultAction = () => {
+    dispatch(setTermPayloadToDefault());
+  };
+  return (
+    <ConnectedForm
+      setShow={setShow}
+      terms={terms}
+      setTermPayloadToDefault={setTermPayloadToDefaultAction}
+      setTerms={setTermsAction}
+    />
+  );
+};

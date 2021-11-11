@@ -1,15 +1,17 @@
 import React from "react";
-import { AiOutlineClose } from "react-icons/ai";
+import { AiFillDelete, AiOutlineClose } from "react-icons/ai";
 import { Button } from "../../button";
 import BaseModal from "../BaseModal";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import {
   rerenderNewAcademicYearComponent,
   selectCreateTermComponentState,
+  setTerms,
 } from "../../../shared/NewAcademicYear.slice";
 import { NewTermForm } from "../../forms";
 
 import css from "./NewTerm.module.css";
+import { EditTerm } from "../EditTerm";
 
 interface Props {}
 
@@ -21,12 +23,33 @@ export const NewTerm: React.FC<Props> = () => {
   return (
     <React.Fragment>
       {terms.map((term) => (
-        <div>
-          <div className="txt-lg">{term.name}</div>
-          <div className="txt-md">
-            {term.startDate} - {term.endDate}
-          </div>
-        </div>
+        <EditTerm
+          data={term}
+          childController={
+            <div className={css.term}>
+              <div style={{ cursor: "pointer", width: "100%" }}>
+                <div className="txt-md">{term.name}</div>
+                <div className="txt-sm txt-thin">
+                  {term.startDate} - {term.endDate}
+                </div>
+              </div>
+              <div
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  dispatch(
+                    setTerms([
+                      ...terms.filter(
+                        (t) => JSON.stringify(t) !== JSON.stringify(term)
+                      ),
+                    ])
+                  );
+                }}
+              >
+                <AiFillDelete />
+              </div>
+            </div>
+          }
+        />
       ))}
       <Button
         type="button"
@@ -34,7 +57,10 @@ export const NewTerm: React.FC<Props> = () => {
           color: "var(--primary)",
           backgroundColor: "white",
           fontWeight: 600,
-          padding: 0,
+          padding: "0.5rem 0 0 0",
+          width: "100%",
+          borderTop: "1px solid var(--border-gray)",
+          marginTop: "1rem",
         }}
         as="primary"
         text="New Term"
@@ -54,7 +80,7 @@ export const NewTerm: React.FC<Props> = () => {
           >
             <AiOutlineClose />
           </div>
-          <NewTermForm />
+          <NewTermForm setShow={setShow} />
         </BaseModal.Body>
       </BaseModal>
     </React.Fragment>

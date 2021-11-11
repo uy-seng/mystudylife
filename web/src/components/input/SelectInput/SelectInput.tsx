@@ -5,6 +5,7 @@ import { SelectInputProps } from "../../types/input";
 
 import css from "./SelectInput.module.css";
 import { Button } from "../../button";
+import ctx from "classnames";
 
 export const SelectInput: React.FC<SelectInputProps> = ({
   label,
@@ -13,7 +14,10 @@ export const SelectInput: React.FC<SelectInputProps> = ({
   options,
   value,
   defaultValue,
+  subValue,
+  setSubState,
   setState,
+  defaultSubValue,
   ...props
 }) => {
   const [searchTarget, setSearchTarget] = React.useState<string>("");
@@ -26,7 +30,8 @@ export const SelectInput: React.FC<SelectInputProps> = ({
     setFilteredOptions(() => {
       return options.filter(
         (option) =>
-          option.key.includes(searchTarget) && !"None".includes(searchTarget)
+          option.key.includes(searchTarget.split(" | ")[0]) &&
+          !"None".includes(searchTarget.split(" | ")[0])
       );
     });
   }, [searchTarget]);
@@ -83,17 +88,40 @@ export const SelectInput: React.FC<SelectInputProps> = ({
             )
           ) : (
             options.map((option) => (
-              <div
-                key={option.key}
-                onMouseDown={() => {
-                  setState(option.value);
-                  if (option.key === "None") setSearchTarget("");
-                  else setSearchTarget(option.key);
-                }}
-                className={css.dropdownOption}
-              >
-                {option.key}
-              </div>
+              <React.Fragment>
+                <div
+                  key={option.key}
+                  onMouseDown={() => {
+                    setState(option.value);
+                    if (option.key === "None") {
+                      setSearchTarget("");
+                      if (setSubState) setSubState(undefined);
+                    } else setSearchTarget(option.key);
+                  }}
+                  className={css.dropdownOption}
+                >
+                  {option.key}
+                </div>
+                {option.children && (
+                  <div className={css.children}>
+                    {option.children.map((child) => (
+                      <div
+                        onMouseDown={() => {
+                          setState(option.value);
+                          if (setSubState) setSubState(child.value);
+                          else throw Error("setSubState is not defined");
+
+                          setSearchTarget(`${option.key} | ${child.key}`);
+                        }}
+                        className={css.dropdownOption}
+                        key={child.key}
+                      >
+                        {child.key}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </React.Fragment>
             ))
           )}
         </div>
@@ -102,6 +130,7 @@ export const SelectInput: React.FC<SelectInputProps> = ({
             onClick={() => {
               setSearchTarget("");
               setState(undefined);
+              if (setSubState) setSubState(undefined);
             }}
             style={{
               margin: "4px",
@@ -125,8 +154,6 @@ const onFocusHandler = () => {
 
 const onBlurHandler = (e: React.FocusEvent<HTMLInputElement>) => {
   if (e.target === e.currentTarget) {
-    // console.log(e.target);
-    // console.log(e.currentTarget);
     document.querySelector(`.${css.dropdown}`)?.classList.remove(css.active);
     document.querySelector(`.${css.input}`)?.classList.remove(css.active);
   }

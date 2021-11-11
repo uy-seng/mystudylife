@@ -89,7 +89,12 @@ export const NewTask: React.FC<Props> = () => {
               <AiOutlineClose />
             </div>
           </BaseModal.Header>
-          <BaseModal.Body>
+          <BaseModal.Body
+            style={{
+              maxHeight: "550px",
+              overflowY: "scroll",
+            }}
+          >
             <NewTaskForm setShow={setShow} />
           </BaseModal.Body>
         </BaseModal>

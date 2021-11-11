@@ -13,7 +13,6 @@ import {
   selectDayRotationPayload,
   selectWeekRotationPayload,
   selectCreateTermComponentState,
-  Term,
   WeekRotationPayload,
   DayRotationPayload,
   AcademicYearSchedulePayload,

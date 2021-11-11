@@ -12,15 +12,17 @@ export interface CreateNewAcademicYearGlobalState {
   createTermComponentState: {
     active: boolean;
     payload: TermPayload;
-    terms: Term[];
+    terms: TermPayload[];
   };
   refreshCounter: number;
+  editTermPayload: TermPayload | undefined;
 }
 
 const initialState: CreateNewAcademicYearGlobalState = {
   createTermComponentState: {
     active: false,
     payload: {
+      id: undefined,
       name: "",
       startDate: formatDate(new Date()),
       endDate: formatDate(
@@ -29,6 +31,7 @@ const initialState: CreateNewAcademicYearGlobalState = {
     },
     terms: [],
   },
+  editTermPayload: undefined,
   academicYearSchedulePayload: {
     type: "fixed",
   },
@@ -85,8 +88,18 @@ export const NewAcademicYearSlice = createSlice({
       }
     },
     setTermPayload: (state, params: BatchParam<TermPayload>) => {
-      state.createTermComponentState.payload[params.payload.key] =
-        params.payload.value;
+      switch (params.payload.key) {
+        case "id":
+          state.createTermComponentState.payload[params.payload.key] =
+            params.payload.value;
+          break;
+        case "name":
+        case "startDate":
+        case "endDate":
+          state.createTermComponentState.payload[params.payload.key] =
+            params.payload.value;
+          break;
+      }
     },
     showCreateTermComponent: (state) => {
       state.createTermComponentState.active = true;
@@ -94,12 +107,13 @@ export const NewAcademicYearSlice = createSlice({
     hideCreateTermComponent: (state) => {
       state.createTermComponentState.active = false;
     },
-    addNewTerm: (state, newTerm: PayloadAction<Term>) => {
-      state.createTermComponentState.terms = [
-        ...state.createTermComponentState.terms,
-        newTerm.payload,
-      ];
-
+    setTerms: (state, newTerms: PayloadAction<TermPayload[]>) => {
+      state.createTermComponentState.terms = newTerms.payload;
+    },
+    setTermsToDefault: (state) => {
+      state.createTermComponentState.terms = [];
+    },
+    setTermPayloadToDefault: (state) => {
       state.createTermComponentState.payload.name = "";
       const endDate = new Date(state.createTermComponentState.payload.endDate);
       const newStartDate = new Date(endDate.setDate(endDate.getDate() + 15));
@@ -109,14 +123,28 @@ export const NewAcademicYearSlice = createSlice({
         new Date(newStartDate.setMonth(newStartDate.getMonth() + 1))
       );
     },
-    removeTerm: (state, index: PayloadAction<number>) => {
-      state.createTermComponentState.terms =
-        state.createTermComponentState.terms.filter(
-          (_, i) => i !== index.payload
-        );
-    },
     rerenderNewAcademicYearComponent: (state) => {
       state.refreshCounter += 1;
+    },
+    setDefaultEditTermPayload: (
+      state,
+      params: PayloadAction<TermPayload | undefined>
+    ) => {
+      state.editTermPayload = params.payload;
+    },
+    setEditTermPayload: (state, params: BatchParam<TermPayload>) => {
+      if (state.editTermPayload) {
+        switch (params.payload.key) {
+          case "id":
+            state.editTermPayload[params.payload.key] = params.payload.value;
+            break;
+          case "name":
+          case "startDate":
+          case "endDate":
+            state.editTermPayload[params.payload.key] = params.payload.value;
+            break;
+        }
+      }
     },
   },
 });
@@ -133,6 +161,8 @@ export const selectCreateTermComponentState = (state: RootState) =>
   state.newacademicyear.createTermComponentState;
 export const selectAcademicYearComponentRefreshCounter = (state: RootState) =>
   state.newacademicyear.refreshCounter;
+export const selectEditTermPayload = (state: RootState) =>
+  state.newacademicyear.editTermPayload;
 
 export const {
   showCreateTermComponent,
@@ -142,18 +172,15 @@ export const {
   setTermPayload,
   setDayRotationPayload,
   setWeekRotationPayload,
-  addNewTerm,
-  removeTerm,
   rerenderNewAcademicYearComponent,
+  setDefaultEditTermPayload,
+  setEditTermPayload,
+  setTermsToDefault,
+  setTerms,
+  setTermPayloadToDefault,
 } = NewAcademicYearSlice.actions;
 
 export default NewAcademicYearSlice.reducer;
-
-export interface Term {
-  name: string;
-  startDate: string;
-  endDate: string;
-}
 
 export interface AcademicYearPayload {
   startDate: string;
@@ -176,6 +203,7 @@ export interface DayRotationPayload {
 }
 
 export interface TermPayload {
+  id: string | undefined;
   name: string;
   startDate: string;
   endDate: string;

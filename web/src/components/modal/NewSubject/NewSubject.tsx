@@ -1,5 +1,7 @@
 import React from "react";
 import { FaPlus } from "react-icons/fa";
+import { useAppDispatch } from "../../../app/hooks";
+import { setSubjectPayloadToDefault } from "../../../shared/NewSubject.slice";
 import { Button } from "../../button";
 import { NewSubjectForm } from "../../forms";
 import BaseModal from "../BaseModal";
@@ -13,6 +15,7 @@ interface Props {
 
 export const NewSubject: React.FC<Props> = ({ controller }) => {
   const [show, setShow] = React.useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
   return (
     <React.Fragment>
@@ -40,7 +43,14 @@ export const NewSubject: React.FC<Props> = ({ controller }) => {
         <BaseModal.Body>
           <NewSubjectForm setShow={setShow} />
           <div className={css.footer}>
-            <Button onClick={() => setShow(false)} as="neutral" text="Cancel" />
+            <Button
+              onClick={() => {
+                dispatch(setSubjectPayloadToDefault());
+                setShow(false);
+              }}
+              as="neutral"
+              text="Cancel"
+            />
           </div>
         </BaseModal.Body>
       </BaseModal>

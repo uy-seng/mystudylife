@@ -171,6 +171,7 @@ export type MutationNewTermArgs = {
 
 
 export type MutationNewSubjectArgs = {
+  termId?: Maybe<Scalars['String']>;
   academicYearId?: Maybe<Scalars['String']>;
   name: Scalars['String'];
 };
@@ -359,6 +360,7 @@ export type Subject = {
   id: Scalars['String'];
   name: Scalars['String'];
   academicYear?: Maybe<AcademicYear>;
+  term?: Maybe<Term>;
 };
 
 export type Task = {
@@ -463,7 +465,7 @@ export type GetClassesQuery = { __typename?: 'Query', getClasses: Array<{ __type
 export type GetSubjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSubjectsQuery = { __typename?: 'Query', getSubjects: Array<{ __typename?: 'Subject', id: string, name: string, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string }> }> };
+export type GetSubjectsQuery = { __typename?: 'Query', getSubjects: Array<{ __typename?: 'Subject', id: string, name: string, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string }>, term?: Maybe<{ __typename?: 'Term', id: string }> }> };
 
 export type GetTasksQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -576,6 +578,7 @@ export type NewRepeatScheduleMutation = { __typename?: 'Mutation', newRepeatSche
 export type NewSubjectMutationVariables = Exact<{
   name: Scalars['String'];
   academicYearId?: Maybe<Scalars['String']>;
+  termId?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -1013,6 +1016,9 @@ export const GetSubjectsDocument = gql`
     id
     name
     academicYear {
+      id
+    }
+    term {
       id
     }
   }
@@ -1556,8 +1562,8 @@ export type NewRepeatScheduleMutationHookResult = ReturnType<typeof useNewRepeat
 export type NewRepeatScheduleMutationResult = Apollo.MutationResult<NewRepeatScheduleMutation>;
 export type NewRepeatScheduleMutationOptions = Apollo.BaseMutationOptions<NewRepeatScheduleMutation, NewRepeatScheduleMutationVariables>;
 export const NewSubjectDocument = gql`
-    mutation NewSubject($name: String!, $academicYearId: String) {
-  newSubject(name: $name, academicYearId: $academicYearId) {
+    mutation NewSubject($name: String!, $academicYearId: String, $termId: String) {
+  newSubject(name: $name, academicYearId: $academicYearId, termId: $termId) {
     id
   }
 }
@@ -1579,6 +1585,7 @@ export type NewSubjectMutationFn = Apollo.MutationFunction<NewSubjectMutation, N
  *   variables: {
  *      name: // value for 'name'
  *      academicYearId: // value for 'academicYearId'
+ *      termId: // value for 'termId'
  *   },
  * });
  */

@@ -4,6 +4,7 @@ import {
   newAcademicYearMutation,
   newScheduleMutation,
   newSubjectMutation,
+  newTermMutation,
   registerMutation,
 } from "src/graphql/mutation";
 import { getSubjectsQuery, meQuery } from "src/graphql/query";
@@ -65,10 +66,11 @@ describe("setting up user account", () => {
 });
 
 /**
- * creating academic year with fixed schedule and no term
+ * creating academic year with fixed schedule and with 1 term
  */
 let academicYearId: string;
-describe("create academic year with fixed schedule and no term", () => {
+let termId: string;
+describe("create academic year with fixed schedule and 1 term", () => {
   it("should create empty academic year", async () => {
     const response = await testClient({
       source: newAcademicYearMutation,
@@ -83,6 +85,24 @@ describe("create academic year with fixed schedule and no term", () => {
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
     academicYearId = response.data!.newAcademicYear!.id;
+  });
+
+  it("should create new term", async () => {
+    const response = await testClient({
+      source: newTermMutation,
+      variableValues: {
+        startDate: "September 12 2021",
+        endDate: "October 12 2022",
+        academicYearId: academicYearId,
+        name: "Term 1",
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+    termId = response.data!.newTerm!.id;
   });
 
   let scheduleId: string;
@@ -139,7 +159,7 @@ describe("test case 1: create subject with no academic year", () => {
   });
 });
 
-describe("test case 2: create subject with academic year", () => {
+describe("test case 2: create subject with academic year and term", () => {
   let subjectId: string;
   it("should create subject with academic year", async () => {
     const response = await testClient({
@@ -147,23 +167,27 @@ describe("test case 2: create subject with academic year", () => {
       variableValues: {
         name: "Subject 2",
         academicYearId: academicYearId,
+        termId: termId,
       },
       headers: {
         authorization: `Bearer ${accessToken}`,
       },
     });
+
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
     subjectId = response.data!.newSubject.id;
   });
+
   it("should display subject with academic year", async () => {
     const subjectRepository = getConnection(process.env.NODE_ENV).getRepository(
       Subject
     );
     const subject = await subjectRepository.findOne(subjectId, {
-      relations: ["academicYear"],
+      relations: ["academicYear", "term"],
     });
     expect(subject?.academicYear).not.toBeNull();
+    expect(subject?.term).not.toBeNull();
   });
 });
 

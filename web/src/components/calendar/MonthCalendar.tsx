@@ -76,10 +76,22 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                                   }-${
                                     mod(currentDate.getMonth() - 1, 12) + 1
                                   }-${
-                                    daysInPreviousMonth -
-                                    startDayOfMonth +
-                                    column +
-                                    1
+                                    (
+                                      daysInPreviousMonth -
+                                      startDayOfMonth +
+                                      column +
+                                      1
+                                    ).toString().length === 1
+                                      ? `0${
+                                          daysInPreviousMonth -
+                                          startDayOfMonth +
+                                          column +
+                                          1
+                                        }`
+                                      : daysInPreviousMonth -
+                                        startDayOfMonth +
+                                        column +
+                                        1
                                   }`
                                 )
                               )?.map((c, index, t) => {
@@ -114,10 +126,22 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                                                 12
                                               ) + 1
                                             }-${
-                                              daysInPreviousMonth -
-                                              startDayOfMonth +
-                                              column +
-                                              1
+                                              (
+                                                daysInPreviousMonth -
+                                                startDayOfMonth +
+                                                column +
+                                                1
+                                              ).toString().length === 1
+                                                ? `0${
+                                                    daysInPreviousMonth -
+                                                    startDayOfMonth +
+                                                    column +
+                                                    1
+                                                  }`
+                                                : daysInPreviousMonth -
+                                                  startDayOfMonth +
+                                                  column +
+                                                  1
                                             }`
                                           )
                                         )}
@@ -136,10 +160,22 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                                                 12
                                               ) + 1
                                             }-${
-                                              daysInPreviousMonth -
-                                              startDayOfMonth +
-                                              column +
-                                              1
+                                              (
+                                                daysInPreviousMonth -
+                                                startDayOfMonth +
+                                                column +
+                                                1
+                                              ).toString().length === 1
+                                                ? `0${
+                                                    daysInPreviousMonth -
+                                                    startDayOfMonth +
+                                                    column +
+                                                    1
+                                                  }`
+                                                : daysInPreviousMonth -
+                                                  startDayOfMonth +
+                                                  column +
+                                                  1
                                             }`
                                           )
                                         }
@@ -193,7 +229,11 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                                 new Date(
                                   `${currentDate.getFullYear()}-${
                                     currentDate.getMonth() + 1
-                                  }-${daysInMonth[0]}`
+                                  }-${
+                                    daysInMonth[0].toString().length === 1
+                                      ? `0${daysInMonth[0]}`
+                                      : daysInMonth[0]
+                                  }`
                                 )
                               )?.map((c, index, t) => {
                                 if (index < 2) {
@@ -215,7 +255,12 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                                           new Date(
                                             `${currentDate.getFullYear()}-${
                                               currentDate.getMonth() + 1
-                                            }-${daysInMonth[0]}`
+                                            }-${
+                                              daysInMonth[0].toString()
+                                                .length === 1
+                                                ? `0${daysInMonth[0]}`
+                                                : daysInMonth[0]
+                                            }`
                                           )
                                         }
                                         text={`${t.length - 2} more`}
@@ -224,7 +269,12 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                                           new Date(
                                             `${currentDate.getFullYear()}-${
                                               currentDate.getMonth() + 1
-                                            }-${daysInMonth[0]}`
+                                            }-${
+                                              daysInMonth[0].toString()
+                                                .length === 1
+                                                ? `0${daysInMonth[0]}`
+                                                : daysInMonth[0]
+                                            }`
                                           )
                                         )}
                                       />
@@ -237,6 +287,7 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
 
                             <div className={css.cell}>
                               <div>...</div>
+
                               <div>{daysInMonth.splice(0, 1)[0]}</div>
                             </div>
                           </td>
@@ -260,7 +311,12 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                                   mod(currentDate.getMonth() + 2, 12) === 0
                                     ? 12
                                     : mod(currentDate.getMonth() + 2, 12)
-                                }-${row * 7 + column - remainder + 1}`
+                                }-${
+                                  (row * 7 + column - remainder + 1).toString()
+                                    .length === 1
+                                    ? `0${row * 7 + column - remainder + 1}`
+                                    : row * 7 + column - remainder + 1
+                                }`
                               )
                             )?.map((c, index, t) => {
                               if (index < 2) {
@@ -297,7 +353,21 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                                                   currentDate.getMonth() + 2,
                                                   12
                                                 )
-                                          }-${row * 7 + column - remainder + 1}`
+                                          }-${
+                                            (
+                                              row * 7 +
+                                              column -
+                                              remainder +
+                                              1
+                                            ).toString().length === 1
+                                              ? `0${
+                                                  row * 7 +
+                                                  column -
+                                                  remainder +
+                                                  1
+                                                }`
+                                              : row * 7 + column - remainder + 1
+                                          }`
                                         )
                                       }
                                       data={generateClassByDate(
@@ -320,7 +390,21 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                                                   currentDate.getMonth() + 2,
                                                   12
                                                 )
-                                          }-${row * 7 + column - remainder + 1}`
+                                          }-${
+                                            (
+                                              row * 7 +
+                                              column -
+                                              remainder +
+                                              1
+                                            ).toString().length === 1
+                                              ? `0${
+                                                  row * 7 +
+                                                  column -
+                                                  remainder +
+                                                  1
+                                                }`
+                                              : row * 7 + column - remainder + 1
+                                          }`
                                         )
                                       )}
                                       text={`${t.length - 2} more`}

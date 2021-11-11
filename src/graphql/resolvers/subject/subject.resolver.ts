@@ -3,7 +3,7 @@ import {
   ValidationError,
   ApolloError,
 } from "apollo-server-errors";
-import { Subject, AcademicYear, User } from "src/entity";
+import { Subject, AcademicYear, User, Term } from "src/entity";
 import { Context } from "src/interface";
 import {
   Arg,
@@ -27,12 +27,16 @@ export class SubjectResolver {
   private readonly userRepository = getConnection(
     process.env.NODE_ENV
   ).getRepository(User);
+  private readonly termRepository = getConnection(
+    process.env.NODE_ENV
+  ).getRepository(Term);
 
   @Mutation(() => Subject)
   @UseMiddleware(authenticationGate)
   async newSubject(
     @Arg("name") name: string,
     @Arg("academicYearId", { nullable: true }) academicYearId: string,
+    @Arg("termId", { nullable: true }) termId: string,
     @Ctx() { user }: Context
   ) {
     const partialSubject = this.subjectRepository.create({
@@ -46,6 +50,13 @@ export class SubjectResolver {
       if (!academicYear) throw new ValidationError("invalid academic year id");
       newSubject.academicYear = academicYear;
     }
+
+    if (termId) {
+      const term = await this.termRepository.findOne(termId);
+      if (!term) throw new ValidationError("invalid term id");
+      newSubject.term = term;
+    }
+
     const currentUser = (await this.userRepository.findOne(user!.id)) as User;
     newSubject.user = currentUser;
     return await this.subjectRepository.save(newSubject);

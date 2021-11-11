@@ -17,8 +17,9 @@ import {
   OneOffScheduleResolver,
   RepeatScheduleResolver,
 } from "./graphql/resolvers";
-import { DatabaseService } from "./services";
+import { DatabaseService, PassportService } from "./services";
 import { TaskResolver } from "src/graphql/resolvers/task/task.resolver";
+import { oauthRoute } from "./routes/oauth.route";
 
 (async () => {
   const app = express();
@@ -37,9 +38,13 @@ import { TaskResolver } from "src/graphql/resolvers/task/task.resolver";
   );
   const databaseService = new DatabaseService();
   await databaseService.init();
+  const passportService = new PassportService(app);
+  passportService.initGoogleOAuthStrategy();
+  passportService.initFacebookOAuthStrategy();
   app.get("/", (_req, res) => {
     res.redirect("/graphql");
   });
+  app.use("/oauth", oauthRoute);
   app.use("/api", apiRoute);
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
