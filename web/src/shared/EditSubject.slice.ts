@@ -8,7 +8,7 @@ export interface EditSubjectGlobalState {
 }
 
 const initialState: EditSubjectGlobalState = {
-  toBeUpdatedSubjectPayload: undefined,
+  toBeUpdatedSubjectPayload: undefined
 };
 
 export const EditSubjectSlice = createSlice({
@@ -29,6 +29,10 @@ export const EditSubjectSlice = createSlice({
             state.toBeUpdatedSubjectPayload[params.payload.key] =
               params.payload.value;
             break;
+          case "termId":
+            state.toBeUpdatedSubjectPayload[params.payload.key] =
+              params.payload.value;
+            break;
           default:
             break;
         }
@@ -39,8 +43,8 @@ export const EditSubjectSlice = createSlice({
       params: { type: string; payload: SubjectPayload & { id: string } }
     ) => {
       state.toBeUpdatedSubjectPayload = params.payload;
-    },
-  },
+    }
+  }
 });
 
 export const selectToBeUpdatedSubjectPayload = (state: RootState) =>
@@ -48,7 +52,7 @@ export const selectToBeUpdatedSubjectPayload = (state: RootState) =>
 
 export const {
   setToBeUpdatedSubjectPayload,
-  setDefaultToBeUpdatedSubjectPayload,
+  setDefaultToBeUpdatedSubjectPayload
 } = EditSubjectSlice.actions;
 
 export default EditSubjectSlice.reducer;

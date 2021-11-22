@@ -26,7 +26,7 @@ import {
   setClassSchedulePayload,
   setClassSchedulePayloadToDefault,
   setOneOffSchedulePayloadToDefault,
-  setRepeatSchedulesToDefault,
+  setRepeatSchedulesToDefault
 } from "../../../shared/NewClass.slice";
 import {
   Exact,
@@ -41,7 +41,7 @@ import {
   useNewClassMutation,
   useNewClassScheduleMutation,
   useNewOneOffScheduleMutation,
-  useNewRepeatScheduleMutation,
+  useNewRepeatScheduleMutation
 } from "../../../generated/graphql";
 import { FormikBasicSelectInput } from "../../input/BasicSelectInput";
 import { OneOffSchedule } from "./OneOffSchedule";
@@ -65,21 +65,27 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
   }, [touched.name, errors.name]);
 
   React.useEffect(() => {
-    if (subjects && classPayload.academicYearId)
+    if (subjects && classPayload.academicYearId && !classPayload.subjectId)
       setClassPayload({
         key: "subjectId",
         value: subjects.getSubjects.filter(
           (subject) =>
             !subject.academicYear ||
             subject?.academicYear?.id === classPayload.academicYearId
-        )[0].id,
+        )[0].id
       });
-  }, []);
+  }, [
+    subjects,
+    classPayload.academicYearId,
+    setClassPayload,
+    classPayload.subjectId
+  ]);
 
   // const validateName = (value: string) => {
   //   if (value.length === 0) return "Required";
   //   return null;
   // };
+
   if (subjects)
     return (
       <Form className={css.form}>
@@ -89,7 +95,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
               <div
                 style={{
                   gridTemplateColumns: "1fr min-content",
-                  columnGap: 0,
+                  columnGap: 0
                 }}
                 className={css.row}
               >
@@ -106,13 +112,13 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
                       return {
                         key: subject.id,
                         value: subject.id,
-                        label: subject.name,
+                        label: subject.name
                       };
                     })}
                   onChange={(e) => {
                     setClassPayload({
                       key: "subjectId",
-                      value: e.target.value,
+                      value: e.target.value
                     });
                   }}
                 />
@@ -125,7 +131,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
                 onChange={(e) => {
                   setClassPayload({
                     key: "module",
-                    value: e.target.value,
+                    value: e.target.value
                   });
                 }}
                 label="Module"
@@ -142,7 +148,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
                 onChange={(e) => {
                   setClassPayload({
                     key: "room",
-                    value: e.target.value,
+                    value: e.target.value
                   });
                 }}
                 label="Room"
@@ -154,7 +160,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
                 onChange={(e) => {
                   setClassPayload({
                     key: "building",
-                    value: e.target.value,
+                    value: e.target.value
                   });
                 }}
                 label="Building"
@@ -168,7 +174,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
                 onChange={(e) => {
                   setClassPayload({
                     key: "teacher",
-                    value: e.target.value,
+                    value: e.target.value
                   });
                 }}
                 label="Teacher"
@@ -176,7 +182,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
             </div>
             <div
               style={{
-                marginTop: "2rem",
+                marginTop: "2rem"
               }}
             >
               <div className={css.tabs}>
@@ -212,7 +218,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
         <div className={css.btns}>
           <LoaderButton
             style={{
-              padding: "1rem 2rem",
+              padding: "1rem 2rem"
             }}
             loading={isSubmitting}
             type="submit"
@@ -265,16 +271,16 @@ const MyForm = withFormik<any, ClassPayload>({
       variables: {
         ...classPayload,
         subjectId: classPayload.subjectId as string,
-        academicYearId: classPayload.academicYearId as string,
-      },
+        academicYearId: classPayload.academicYearId as string
+      }
     })
       .then(async (response) => {
         const classId = response.data?.newClass.id;
         await newClassSchedule({
           variables: {
             classId: classId as string,
-            type: classSchedulePayload.type,
-          },
+            type: classSchedulePayload.type
+          }
         }).then(async (response) => {
           const classScheduleId = response.data?.newClassSchedule.id;
           if (classSchedulePayload.type === "oneOff") {
@@ -282,8 +288,8 @@ const MyForm = withFormik<any, ClassPayload>({
             await newOneOffSchedule({
               variables: {
                 scheduleId: classScheduleId as string,
-                ...oneOffSchedulePayload,
-              },
+                ...oneOffSchedulePayload
+              }
             });
           } else {
             // create repeat schedule
@@ -296,8 +302,8 @@ const MyForm = withFormik<any, ClassPayload>({
                   startTime: repeatSchedule.startTime,
                   endTime: repeatSchedule.endTime,
                   repeatDays: repeatSchedule.days,
-                  rotationWeek: repeatSchedule.rotationWeek,
-                },
+                  rotationWeek: repeatSchedule.rotationWeek
+                }
               });
             });
           }
@@ -320,9 +326,9 @@ const MyForm = withFormik<any, ClassPayload>({
       name: props.name,
       room: props.room,
       subjectId: props.subjectId,
-      teacher: props.teacher,
+      teacher: props.teacher
     };
-  },
+  }
 })(InnerForm);
 
 const mapStateToProps = (state: RootState) => {
@@ -336,7 +342,7 @@ interface DispatchMap {
 const mapDispatchToProps = (dispatch: Dispatch): DispatchMap => ({
   setClassPayload: (params: Pair<ClassPayload>) => {
     dispatch(setClassPayload(params));
-  },
+  }
 });
 
 const ConnectedForm = connect(mapStateToProps, mapDispatchToProps)(MyForm);
@@ -351,7 +357,7 @@ export const NewClassForm: React.FC<NewClassProps> = ({ setShow }) => {
   const [newOneOffSchedule] = useNewOneOffScheduleMutation();
   const [newRepeatSchedule] = useNewRepeatScheduleMutation();
   const { refetch } = useGetClassesQuery({
-    fetchPolicy: "network-only",
+    fetchPolicy: "network-only"
   });
 
   const classPayload = useAppSelector(selectClassPayload);

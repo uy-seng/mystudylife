@@ -183,6 +183,7 @@ export type MutationDeleteSubjectArgs = {
 
 
 export type MutationUpdateSubjectArgs = {
+  termId?: Maybe<Scalars['String']>;
   academicYearId?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   id: Scalars['String'];
@@ -465,7 +466,7 @@ export type GetClassesQuery = { __typename?: 'Query', getClasses: Array<{ __type
 export type GetSubjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSubjectsQuery = { __typename?: 'Query', getSubjects: Array<{ __typename?: 'Subject', id: string, name: string, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string }>, term?: Maybe<{ __typename?: 'Term', id: string }> }> };
+export type GetSubjectsQuery = { __typename?: 'Query', getSubjects: Array<{ __typename?: 'Subject', id: string, name: string, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string }>, term?: Maybe<{ __typename?: 'Term', id: string, startDate: string, endDate: string }> }> };
 
 export type GetTasksQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -656,6 +657,7 @@ export type UpdateSubjectMutationVariables = Exact<{
   id: Scalars['String'];
   name: Scalars['String'];
   academicYearId?: Maybe<Scalars['String']>;
+  termId?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -1020,6 +1022,8 @@ export const GetSubjectsDocument = gql`
     }
     term {
       id
+      startDate
+      endDate
     }
   }
 }
@@ -1851,8 +1855,13 @@ export type UpdateRepeatScheduleMutationHookResult = ReturnType<typeof useUpdate
 export type UpdateRepeatScheduleMutationResult = Apollo.MutationResult<UpdateRepeatScheduleMutation>;
 export type UpdateRepeatScheduleMutationOptions = Apollo.BaseMutationOptions<UpdateRepeatScheduleMutation, UpdateRepeatScheduleMutationVariables>;
 export const UpdateSubjectDocument = gql`
-    mutation UpdateSubject($id: String!, $name: String!, $academicYearId: String) {
-  updateSubject(id: $id, name: $name, academicYearId: $academicYearId)
+    mutation UpdateSubject($id: String!, $name: String!, $academicYearId: String, $termId: String) {
+  updateSubject(
+    id: $id
+    name: $name
+    academicYearId: $academicYearId
+    termId: $termId
+  )
 }
     `;
 export type UpdateSubjectMutationFn = Apollo.MutationFunction<UpdateSubjectMutation, UpdateSubjectMutationVariables>;
@@ -1873,6 +1882,7 @@ export type UpdateSubjectMutationFn = Apollo.MutationFunction<UpdateSubjectMutat
  *      id: // value for 'id'
  *      name: // value for 'name'
  *      academicYearId: // value for 'academicYearId'
+ *      termId: // value for 'termId'
  *   },
  * });
  */

@@ -22,7 +22,7 @@ export const RepeatSchedule: React.FC<Props> = () => {
       { key: "Wed", value: "wednesday" },
       { key: "Thu", value: "thursday" },
       { key: "Fri", value: "friday" },
-      { key: "Sat", value: "saturday" },
+      { key: "Sat", value: "saturday" }
     ],
     []
   );
@@ -61,17 +61,20 @@ export const RepeatSchedule: React.FC<Props> = () => {
           color: "var(--primary)",
           fontWeight: 600,
           border: "none",
-          padding: "0.5rem",
+          padding: "0.5rem"
         }}
         text="Add Time"
         onClick={() => setShow(true)}
       />
-      <BaseModal parent={document.querySelector(".App") as Element} show={show}>
+      <BaseModal
+        parent={document.querySelector(".newClass") as Element}
+        show={show}
+      >
         <BaseModal.Body style={{ paddingTop: "2rem" }}>
           <div
             style={{
               top: "0.5rem",
-              color: "black",
+              color: "black"
             }}
             onClick={() => {
               setShow(false);

@@ -41,7 +41,14 @@ export const SelectInput: React.FC<SelectInputProps> = ({
       const defaultKey = filteredOptions.filter(
         (option) => option.value === defaultValue
       )[0].key;
-      setSearchTarget(defaultKey);
+
+      if (!defaultSubValue) setSearchTarget(defaultKey);
+      else {
+        const defaultSubValueKey = filteredOptions
+          .filter((option) => option.value === defaultValue)[0]
+          .children?.filter((child) => child.value === defaultSubValue)[0].key;
+        setSearchTarget(`${defaultKey} | ${defaultSubValueKey}`);
+      }
     }
   }, []);
 
@@ -80,7 +87,7 @@ export const SelectInput: React.FC<SelectInputProps> = ({
                 className="txt-sm"
                 style={{
                   textAlign: "center",
-                  padding: "0.5rem",
+                  padding: "0.5rem"
                 }}
               >
                 Search result not found
@@ -136,7 +143,7 @@ export const SelectInput: React.FC<SelectInputProps> = ({
               margin: "4px",
               padding: "0.5rem",
               fontSize: "10px",
-              fontWeight: 600,
+              fontWeight: 600
             }}
             as="primary"
             text="RESET"

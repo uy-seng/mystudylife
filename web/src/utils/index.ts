@@ -10,7 +10,7 @@ export const formatDate = (date: Date) => {
     .toLocaleDateString("en-US", {
       month: "long",
       day: "2-digit",
-      year: "numeric",
+      year: "numeric"
     })
     .split(",")
     .join("");
@@ -37,7 +37,7 @@ export const getMonthName = (monthNumber: number) => {
     "September",
     "October",
     "November",
-    "December",
+    "December"
   ];
   return MONTH[monthNumber - 1];
 };
@@ -68,7 +68,7 @@ export const daysOfWeek: DayOfWeek[] = [
   "wednesday",
   "thursday",
   "friday",
-  "saturday",
+  "saturday"
 ];
 
 export const getWeekNumberForWeekRotation = (
@@ -90,6 +90,7 @@ export const generateClassByDate = (
     if (c.academicYear?.schedule.type === "fixed") {
       if (c.schedule.type === "oneOff") {
         // one off schedule
+        return +new Date(c.schedule.oneOff!.date) === +currentDate;
       } else if (c.schedule.type === "repeat") {
         // repeat schedule
         //! need to check if class have term or not

@@ -16,7 +16,7 @@ import { selectScheduleComponentState } from "../../../shared/Schedule.slice";
 import {
   selectSubjectPayload,
   setSubjectPayload,
-  SubjectPayload,
+  SubjectPayload
 } from "../../../shared/NewSubject.slice";
 import {
   Exact,
@@ -25,12 +25,12 @@ import {
   UpdateSubjectMutationFn,
   useGetSubjectsQuery,
   useNewSubjectMutation,
-  useUpdateSubjectMutation,
+  useUpdateSubjectMutation
 } from "../../../generated/graphql";
 import { ApolloQueryResult } from "@apollo/client";
 import {
   selectToBeUpdatedSubjectPayload,
-  setToBeUpdatedSubjectPayload,
+  setToBeUpdatedSubjectPayload
 } from "../../../shared/EditSubject.slice";
 import { formatDate } from "../../../utils";
 const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
@@ -65,7 +65,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
               onChange={(e) => {
                 setToBeUpdatedSubjectPayload({
                   key: "name",
-                  value: e.target.value,
+                  value: e.target.value
                 });
               }}
               label="Name"
@@ -90,7 +90,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
       <div className={css.btns}>
         <LoaderButton
           style={{
-            padding: "1rem 2rem",
+            padding: "1rem 2rem"
           }}
           loading={isSubmitting}
           type="submit"
@@ -114,11 +114,20 @@ const AdvancedMenu: React.FC = () => {
       <div style={{ display: "flex", alignItems: "flex-end" }}>
         <SelectInput
           defaultValue={toBeUpdatedSubjectPayload?.academicYearId}
+          defaultSubValue={toBeUpdatedSubjectPayload?.termId}
           setState={(value) => {
             dispatch(
               setToBeUpdatedSubjectPayload({
                 key: "academicYearId",
-                value: value,
+                value: value
+              })
+            );
+          }}
+          setSubState={(value) => {
+            dispatch(
+              setToBeUpdatedSubjectPayload({
+                key: "termId",
+                value: value
               })
             );
           }}
@@ -126,7 +135,7 @@ const AdvancedMenu: React.FC = () => {
           options={[
             {
               key: "None",
-              value: undefined,
+              value: undefined
             },
             ...academicYears.map((academicYear) => {
               return {
@@ -134,8 +143,20 @@ const AdvancedMenu: React.FC = () => {
                   academicYear.endDate.split("-")[0]
                 }`,
                 value: academicYear.id,
+                children: [...academicYear?.terms]
+                  .sort((a, b) => {
+                    return new Date(a.startDate) > new Date(b.startDate)
+                      ? 1
+                      : -1;
+                  })
+                  .map((term) => {
+                    return {
+                      key: term.name,
+                      value: term.id
+                    };
+                  })
               };
-            }),
+            })
           ]}
         />
         <div
@@ -201,7 +222,8 @@ const MyForm = withFormik<any, SubjectPayload>({
         id: toBeUpdatedSubjectPayload.id,
         name: toBeUpdatedSubjectPayload.name,
         academicYearId: toBeUpdatedSubjectPayload.academicYearId,
-      },
+        termId: toBeUpdatedSubjectPayload.termId
+      }
     }).then(async () => {
       await refetch();
       setShow(false);
@@ -212,9 +234,9 @@ const MyForm = withFormik<any, SubjectPayload>({
     return {
       name: props.name,
       academicYearId: props.academicYearId,
-      termId: props.termId,
+      termId: props.termId
     };
-  },
+  }
 })(InnerForm);
 
 const mapStateToProps = (state: RootState) => {
@@ -228,7 +250,7 @@ interface DispatchMap {
 const mapDispatchToProps = (dispatch: Dispatch): DispatchMap => ({
   setToBeUpdatedSubjectPayload: (params: Pair<SubjectPayload>) => {
     dispatch(setToBeUpdatedSubjectPayload(params));
-  },
+  }
 });
 
 const ConnectedForm = connect(mapStateToProps, mapDispatchToProps)(MyForm);
@@ -238,7 +260,7 @@ interface EditSubjectFormProps {
 }
 
 export const EditSubjectForm: React.FC<EditSubjectFormProps> = ({
-  setShow,
+  setShow
 }) => {
   const [updateSubject] = useUpdateSubjectMutation();
   const toBeUpdatedSubjectPayload = useAppSelector(
