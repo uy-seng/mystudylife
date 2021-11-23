@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { BatchParam } from "../types";
 import { RootState } from "../app/store";
 import { Maybe } from "type-graphql";
+import { Term } from "../generated/graphql";
 
 export interface ScheduleGlobalState {
   scheduleComponentState: ScheduleComponentState;
@@ -11,7 +12,8 @@ const initialState: ScheduleGlobalState = {
   scheduleComponentState: {
     selectedYear: null,
     academicYears: [],
-  },
+    selectedTerm: null
+  }
 };
 
 export const ScheduleSlice = createSlice({
@@ -27,6 +29,10 @@ export const ScheduleSlice = createSlice({
           state.scheduleComponentState[params.payload.key] =
             params.payload.value;
           break;
+        case "selectedTerm":
+          state.scheduleComponentState[params.payload.key] =
+            params.payload.value;
+          break;
         case "academicYears":
           state.scheduleComponentState[params.payload.key] =
             params.payload.value;
@@ -34,8 +40,8 @@ export const ScheduleSlice = createSlice({
         default:
           break;
       }
-    },
-  },
+    }
+  }
 });
 
 export const selectScheduleComponentState = (state: RootState) =>
@@ -47,6 +53,7 @@ export default ScheduleSlice.reducer;
 
 export interface ScheduleComponentState {
   selectedYear: AcademicYearResult | null;
+  selectedTerm: Term | null;
   academicYears: AcademicYearResult[];
 }
 
@@ -55,13 +62,7 @@ interface AcademicYearResult {
   id: string;
   startDate: string;
   endDate: string;
-  terms: Array<{
-    __typename?: "Term";
-    id: string;
-    name: string;
-    startDate: string;
-    endDate: string;
-  }>;
+  terms: Array<Term>;
   schedule: {
     __typename?: "AcademicYearSchedule";
     id: string;

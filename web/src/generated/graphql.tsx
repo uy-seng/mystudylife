@@ -50,6 +50,7 @@ export type Class = {
   subject: Subject;
   schedule: ClassSchedule;
   academicYear?: Maybe<AcademicYear>;
+  term?: Maybe<Term>;
   user: User;
 };
 
@@ -197,6 +198,7 @@ export type MutationNewClassArgs = {
   building?: Maybe<Scalars['String']>;
   teacher?: Maybe<Scalars['String']>;
   academicYearId?: Maybe<Scalars['String']>;
+  termId?: Maybe<Scalars['String']>;
 };
 
 
@@ -212,6 +214,7 @@ export type MutationUpdateClassArgs = {
   building?: Maybe<Scalars['String']>;
   teacher?: Maybe<Scalars['String']>;
   academicYearId?: Maybe<Scalars['String']>;
+  termId?: Maybe<Scalars['String']>;
   id: Scalars['String'];
 };
 
@@ -461,7 +464,7 @@ export type GetAcademicYearsQuery = { __typename?: 'Query', getAcademicYears: Ar
 export type GetClassesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetClassesQuery = { __typename?: 'Query', getClasses: Array<{ __typename?: 'Class', id: string, building: string, module: string, room: string, teacher: string, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string, schedule: { __typename?: 'AcademicYearSchedule', type: AcademicYearScheduleType, dayRotation?: Maybe<{ __typename?: 'DayRotationSchedule', id: string }>, weekRotation?: Maybe<{ __typename?: 'WeekRotationSchedule', id: string, numOfWeek: number }> } }>, subject: { __typename?: 'Subject', id: string, name: string }, schedule: { __typename?: 'ClassSchedule', id: string, type: ClassScheduleType, oneOff?: Maybe<{ __typename?: 'OneOffSchedule', id: string, date: string, startTime: string, endTime: string }>, repeat?: Maybe<Array<{ __typename?: 'RepeatSchedule', id: string, startTime: string, endTime: string, repeatDays: Array<DayOfWeek>, startDate?: Maybe<string>, endDate?: Maybe<string>, rotationWeek?: Maybe<number> }>> } }> };
+export type GetClassesQuery = { __typename?: 'Query', getClasses: Array<{ __typename?: 'Class', id: string, building: string, module: string, room: string, teacher: string, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string, schedule: { __typename?: 'AcademicYearSchedule', type: AcademicYearScheduleType, dayRotation?: Maybe<{ __typename?: 'DayRotationSchedule', id: string }>, weekRotation?: Maybe<{ __typename?: 'WeekRotationSchedule', id: string, numOfWeek: number, startWeek: number }> } }>, term?: Maybe<{ __typename?: 'Term', id: string, name: string, startDate: string, endDate: string }>, subject: { __typename?: 'Subject', id: string, name: string }, schedule: { __typename?: 'ClassSchedule', id: string, type: ClassScheduleType, oneOff?: Maybe<{ __typename?: 'OneOffSchedule', id: string, date: string, startTime: string, endTime: string }>, repeat?: Maybe<Array<{ __typename?: 'RepeatSchedule', id: string, startTime: string, endTime: string, repeatDays: Array<DayOfWeek>, startDate?: Maybe<string>, endDate?: Maybe<string>, rotationWeek?: Maybe<number> }>> } }> };
 
 export type GetSubjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -521,6 +524,7 @@ export type NewClassMutationVariables = Exact<{
   building?: Maybe<Scalars['String']>;
   teacher?: Maybe<Scalars['String']>;
   academicYearId?: Maybe<Scalars['String']>;
+  termId?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -956,8 +960,15 @@ export const GetClassesDocument = gql`
         weekRotation {
           id
           numOfWeek
+          startWeek
         }
       }
+    }
+    term {
+      id
+      name
+      startDate
+      endDate
     }
     subject {
       id
@@ -1319,7 +1330,7 @@ export type NewAcademicYearScheduleMutationHookResult = ReturnType<typeof useNew
 export type NewAcademicYearScheduleMutationResult = Apollo.MutationResult<NewAcademicYearScheduleMutation>;
 export type NewAcademicYearScheduleMutationOptions = Apollo.BaseMutationOptions<NewAcademicYearScheduleMutation, NewAcademicYearScheduleMutationVariables>;
 export const NewClassDocument = gql`
-    mutation newClass($subjectId: String!, $module: String, $room: String, $building: String, $teacher: String, $academicYearId: String) {
+    mutation newClass($subjectId: String!, $module: String, $room: String, $building: String, $teacher: String, $academicYearId: String, $termId: String) {
   newClass(
     subjectId: $subjectId
     module: $module
@@ -1327,6 +1338,7 @@ export const NewClassDocument = gql`
     building: $building
     teacher: $teacher
     academicYearId: $academicYearId
+    termId: $termId
   ) {
     id
   }
@@ -1353,6 +1365,7 @@ export type NewClassMutationFn = Apollo.MutationFunction<NewClassMutation, NewCl
  *      building: // value for 'building'
  *      teacher: // value for 'teacher'
  *      academicYearId: // value for 'academicYearId'
+ *      termId: // value for 'termId'
  *   },
  * });
  */

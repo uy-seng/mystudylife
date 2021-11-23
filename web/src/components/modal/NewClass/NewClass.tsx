@@ -28,14 +28,16 @@ interface Props {}
 export const NewClass: React.FC<Props> = () => {
   const [show, setShow] = React.useState<boolean>(false);
   const { data: academicYears } = useGetAcademicYearsQuery();
-  const { academicYearId } = useAppSelector(selectClassPayload);
+  const { academicYearId, termId } = useAppSelector(selectClassPayload);
   const dispatch = useAppDispatch();
   const { type: classScheduleType } = useAppSelector(
     selectClassSchedulePayload
   );
   const { data: subjects } = useGetSubjectsQuery();
 
-  const { selectedYear } = useAppSelector(selectScheduleComponentState);
+  const { selectedYear, selectedTerm } = useAppSelector(
+    selectScheduleComponentState
+  );
   const { subjectId } = useAppSelector(selectClassPayload);
 
   const close = () => {
@@ -55,7 +57,15 @@ export const NewClass: React.FC<Props> = () => {
         })
       );
     }
-  }, [selectedYear]);
+    if (selectedTerm) {
+      dispatch(
+        setClassPayload({
+          key: "termId",
+          value: selectedTerm.id
+        })
+      );
+    }
+  }, [selectedYear, selectedTerm]);
 
   if (academicYears && subjects)
     return (
@@ -92,6 +102,14 @@ export const NewClass: React.FC<Props> = () => {
                     })
                   )
                 }
+                setSubState={(value) => {
+                  dispatch(
+                    setClassPayload({
+                      key: "termId",
+                      value: value
+                    })
+                  );
+                }}
                 label="New Class"
                 data={[
                   {
@@ -107,7 +125,18 @@ export const NewClass: React.FC<Props> = () => {
                       label: `${academicYear.startDate.split("-")[0]} - ${
                         academicYear.endDate.split("-")[0]
                       }`,
-                      value: academicYear.id
+                      value: academicYear.id,
+                      children: [...academicYear?.terms]
+                        .sort((a, b) =>
+                          new Date(a.startDate) > new Date(b.startDate) ? 1 : -1
+                        )
+                        .map((term) => {
+                          return {
+                            key: term.name,
+                            value: term.id,
+                            label: term.name
+                          };
+                        })
                     };
                   })
                 ]}
@@ -136,7 +165,7 @@ export const NewClass: React.FC<Props> = () => {
                   <div className={css.reminder}>
                     {subjects.getSubjects.filter(
                       (subject) => subject.id === subjectId
-                    )[0].term?.id
+                    )[0]?.term?.id
                       ? `This class will exist in your timetable from ${new Date(
                           subjects.getSubjects.filter(
                             (subject) => subject.id === subjectId

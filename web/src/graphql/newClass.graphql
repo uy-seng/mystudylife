@@ -4,7 +4,8 @@ mutation newClass(
   $room: String
   $building: String
   $teacher: String
-  $academicYearId: String
+  $academicYearId: String,
+  $termId: String
 ) {
   newClass(
     subjectId: $subjectId
@@ -13,6 +14,7 @@ mutation newClass(
     building: $building
     teacher: $teacher
     academicYearId: $academicYearId
+    termId: $termId
   ) {
     id
   }

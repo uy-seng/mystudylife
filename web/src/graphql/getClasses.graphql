@@ -17,8 +17,15 @@ query GetClasses {
         weekRotation {
           id
           numOfWeek
+          startWeek
         }
       }
+    }
+    term{
+      id
+      name
+      startDate
+      endDate
     }
     subject {
       id

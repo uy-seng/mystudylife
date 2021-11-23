@@ -5,21 +5,24 @@ import {
   ManageSubject,
   NewAcademicYear,
   NewClass,
-  ViewClass,
+  ViewClass
 } from "../components/modal";
 import {
   GetAcademicYearsQuery,
+  GetClassesQuery,
+  GetClassesQueryResult,
   useGetAcademicYearsQuery,
-  useGetClassesQuery,
+  useGetClassesQuery
 } from "../generated/graphql";
 
 import css from "./Schedule.module.css";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
   selectScheduleComponentState,
-  setScheduleComponentState,
+  setScheduleComponentState
 } from "../shared/Schedule.slice";
 import { formatTime } from "../utils";
+import ctx from "classnames";
 
 interface Props {}
 
@@ -33,7 +36,7 @@ export const Schedule: React.FC<Props> = () => {
       dispatch(
         setScheduleComponentState({
           key: "academicYears",
-          value: data.getAcademicYears,
+          value: data.getAcademicYears
         })
       );
   }, [data]);
@@ -85,15 +88,19 @@ interface ScheduleListingProps {
 
 const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
   const dispatch = useAppDispatch();
-  const { selectedYear } = useAppSelector(selectScheduleComponentState);
+  const { selectedYear, selectedTerm } = useAppSelector(
+    selectScheduleComponentState
+  );
   var { data: classesQueryResult } = useGetClassesQuery();
-  const [classes, setClasses] = React.useState<any[]>([]);
+  const [classes, setClasses] = React.useState<GetClassesQuery["getClasses"]>(
+    []
+  );
 
   React.useEffect(() => {
     dispatch(
       setScheduleComponentState({
         key: "selectedYear",
-        value: schedules[0],
+        value: schedules[0]
       })
     );
   }, []);
@@ -108,10 +115,14 @@ const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
         ...classesQueryResult?.getClasses.filter(
           (c) =>
             c.academicYear?.id === selectedYear?.id || c.academicYear === null
-        ),
+        )
       ]);
     }
   }, [selectedYear, classesQueryResult]);
+
+  React.useEffect(() => {
+    if (classes) console.log(classes);
+  }, [classes]);
 
   if (classes)
     return (
@@ -121,16 +132,24 @@ const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
             <React.Fragment>
               <div
                 key={schedule.id}
-                onClick={() =>
+                onClick={() => {
                   dispatch(
                     setScheduleComponentState({
                       key: "selectedYear",
-                      value: schedule,
+                      value: schedule
                     })
-                  )
-                }
+                  );
+                  dispatch(
+                    setScheduleComponentState({
+                      key: "selectedTerm",
+                      value: null
+                    })
+                  );
+                }}
                 className={
-                  selectedYear?.id === schedule.id ? css.active : undefined
+                  selectedYear?.id === schedule.id && !selectedTerm
+                    ? css.active
+                    : undefined
                 }
               >
                 <div className="txt-md">
@@ -143,7 +162,7 @@ const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
                     .toLocaleDateString("en-US", {
                       month: "short",
                       day: "2-digit",
-                      year: "numeric",
+                      year: "numeric"
                     })
                     .split(",")
                     .join("")}
@@ -152,7 +171,7 @@ const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
                     .toLocaleDateString("en-US", {
                       month: "short",
                       day: "2-digit",
-                      year: "numeric",
+                      year: "numeric"
                     })
                     .split(",")
                     .join("")}
@@ -166,14 +185,27 @@ const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
                       : -1;
                   })
                   .map((term) => (
-                    <div className={css.term}>
+                    <div
+                      onClick={() => {
+                        dispatch(
+                          setScheduleComponentState({
+                            key: "selectedTerm",
+                            value: term
+                          })
+                        );
+                      }}
+                      className={ctx(
+                        css.term,
+                        selectedTerm?.id === term.id && css.active
+                      )}
+                    >
                       <div className="txt-sm txt-thin">{term.name}</div>
                       <div className="txt-sm txt-thin">
                         {new Date(term.startDate)
                           .toLocaleDateString("en-US", {
                             month: "short",
                             day: "2-digit",
-                            year: "numeric",
+                            year: "numeric"
                           })
                           .split(",")
                           .join("")}
@@ -182,7 +214,7 @@ const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
                           .toLocaleDateString("en-US", {
                             month: "short",
                             day: "2-digit",
-                            year: "numeric",
+                            year: "numeric"
                           })
                           .split(",")
                           .join("")}
@@ -198,37 +230,44 @@ const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
             <NewClass />
           </div>
           <div className={css.classListing}>
-            {classes.map((c) => (
-              <ViewClass
-                data={c}
-                childController={
-                  <div className={css.class}>
-                    <div>
-                      <div className="txt-md">{`${c.subject.name} ${
-                        c.module ? `: ${c.module}` : ``
-                      }`}</div>
-                      <div className="txt-sm">{c.teacher}</div>
-                    </div>
-                    {c.schedule.type === "oneOff" && (
-                      <div className="txt-sm txt-thin">{`${formatTime(
-                        c.schedule.oneOff?.startTime
-                      )} - ${formatTime(c.schedule.oneOff?.endTime)}`}</div>
-                    )}
-                    {c.schedule.type === "repeat" &&
-                      c.schedule.repeat.map((r: any) => (
-                        <div
-                          style={{ textTransform: "capitalize" }}
-                          className="txt-sm txt-thin"
-                        >
-                          {`${formatTime(r.startTime)} - ${formatTime(
-                            r.endTime
-                          )} ${r.repeatDays.join(",")}`}
-                        </div>
-                      ))}
-                  </div>
+            {classes
+              .filter((c) => {
+                if (selectedTerm) {
+                  return c.term?.id === selectedTerm?.id;
                 }
-              />
-            ))}
+                return c.academicYear?.id === selectedYear?.id;
+              })
+              .map((c) => (
+                <ViewClass
+                  data={c}
+                  childController={
+                    <div className={css.class}>
+                      <div>
+                        <div className="txt-md">{`${c.subject.name} ${
+                          c.module ? `: ${c.module}` : ``
+                        }`}</div>
+                        <div className="txt-sm">{c.teacher}</div>
+                      </div>
+                      {c.schedule.type === "oneOff" && (
+                        <div className="txt-sm txt-thin">{`${formatTime(
+                          c.schedule.oneOff?.startTime
+                        )} - ${formatTime(c.schedule.oneOff?.endTime)}`}</div>
+                      )}
+                      {c.schedule.type === "repeat" &&
+                        c!.schedule!.repeat!.map((r: any) => (
+                          <div
+                            style={{ textTransform: "capitalize" }}
+                            className="txt-sm txt-thin"
+                          >
+                            {`${formatTime(r.startTime)} - ${formatTime(
+                              r.endTime
+                            )} ${r.repeatDays.join(",")}`}
+                          </div>
+                        ))}
+                    </div>
+                  }
+                />
+              ))}
           </div>
         </div>
         <div></div>

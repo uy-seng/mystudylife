@@ -5,9 +5,9 @@ import {
   Mutation,
   Query,
   Resolver,
-  UseMiddleware,
+  UseMiddleware
 } from "type-graphql";
-import { AcademicYear, Class, Subject, User } from "src/entity";
+import { AcademicYear, Class, Subject, Term, User } from "src/entity";
 import { ClassArgs } from "./types";
 import { getConnection } from "typeorm";
 import { ValidationError, ApolloError } from "apollo-server-errors";
@@ -29,19 +29,30 @@ export class ClassResolver {
   private readonly academicYearRepository = getConnection(
     process.env.NODE_ENV
   ).getRepository(AcademicYear);
+  private readonly termRepository = getConnection(
+    process.env.NODE_ENV
+  ).getRepository(Term);
 
   @Mutation(() => Class)
   @UseMiddleware(authenticationGate)
   async newClass(
     @Args()
-    { subjectId, building, module, room, teacher, academicYearId }: ClassArgs,
+    {
+      subjectId,
+      building,
+      module,
+      room,
+      teacher,
+      academicYearId,
+      termId
+    }: ClassArgs,
     @Ctx() { user }: Context
   ) {
     const newClass = this.classRespository.create({
       building: building,
       module: module,
       room: room,
-      teacher: teacher,
+      teacher: teacher
     });
 
     const subject = await this.subjectRepository.findOne(subjectId);
@@ -54,6 +65,12 @@ export class ClassResolver {
       );
       if (!academicYear) throw new ValidationError("invalid academic year id");
       newClass.academicYear = academicYear;
+    }
+
+    if (termId) {
+      const term = await this.termRepository.findOne(termId);
+      if (!term) throw new ValidationError("invalid term id");
+      newClass.term = term;
     }
 
     const qUser = (await this.userRepository.findOne(user!.id)) as User;
@@ -76,12 +93,13 @@ export class ClassResolver {
         "academicYear.schedule",
         "academicYear.schedule.dayRotation",
         "academicYear.schedule.weekRotation",
+        "term"
       ],
       where: {
         user: {
-          id: user!.id,
-        },
-      },
+          id: user!.id
+        }
+      }
     });
     return classes;
   }
@@ -100,7 +118,8 @@ export class ClassResolver {
         "academicYear",
         "user",
         "subject",
-      ],
+        "term"
+      ]
     });
     if (!q || q.user.id !== user!.id) throw new ApolloError("result not found");
     return q;
@@ -119,12 +138,13 @@ export class ClassResolver {
         "schedule.repeat",
         "user",
         "academicYear",
+        "term"
       ],
       where: {
         user: {
-          id: user!.id,
-        },
-      },
+          id: user!.id
+        }
+      }
     });
     return classes.filter((c) => {
       // if class schedule is oneOff, check date
@@ -165,8 +185,8 @@ export class ClassResolver {
     const c = await this.classRespository.findOne(id, {
       relations: ["user"],
       where: {
-        user: user!.id,
-      },
+        user: user!.id
+      }
     });
     if (!c)
       throw new ValidationError(
@@ -183,7 +203,7 @@ export class ClassResolver {
     @Ctx() { user }: Context
   ) {
     const q = await this.classRespository.findOne(updateContext.id, {
-      relations: ["user", "schedule", "academicYear"],
+      relations: ["user", "schedule", "academicYear", "term"]
     });
     const updatedSubject = await this.subjectRepository.findOne(
       updateContext.subjectId
@@ -200,6 +220,13 @@ export class ClassResolver {
     q.teacher = updateContext.teacher as string;
     q.academicYear = updatedAcademicYear;
     q.subject = updatedSubject;
+    if (updateContext.termId && q.term) {
+      const updatedTerm = await this.termRepository.findOne(
+        updateContext.termId
+      );
+      if (!updatedTerm) throw new ValidationError("invalid term id");
+      q.term = updatedTerm;
+    }
 
     await this.classRespository.save(q);
     return true;

@@ -11,9 +11,10 @@ import css from "./NewSubject.module.css";
 type controller = "button" | "link" | "plus";
 interface Props {
   controller: controller;
+  parentClass?: string;
 }
 
-export const NewSubject: React.FC<Props> = ({ controller }) => {
+export const NewSubject: React.FC<Props> = ({ controller, parentClass }) => {
   const [show, setShow] = React.useState<boolean>(false);
   const dispatch = useAppDispatch();
 
@@ -36,7 +37,14 @@ export const NewSubject: React.FC<Props> = ({ controller }) => {
           <FaPlus />
         </button>
       )}
-      <BaseModal parent={document.querySelector(".App") as Element} show={show}>
+      <BaseModal
+        parent={
+          document.querySelector(
+            parentClass ? `.${parentClass}` : ".App"
+          ) as Element
+        }
+        show={show}
+      >
         <BaseModal.Header>
           <BaseModal.Title>New Subject</BaseModal.Title>
         </BaseModal.Header>

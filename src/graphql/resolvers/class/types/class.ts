@@ -20,6 +20,9 @@ export class ClassArgs implements Partial<Class> {
 
   @Field(() => String, { nullable: true })
   academicYearId: string;
+
+  @Field(() => String, { nullable: true })
+  termId: string;
 }
 
 @ArgsType()

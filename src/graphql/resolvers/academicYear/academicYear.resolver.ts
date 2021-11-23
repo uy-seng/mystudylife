@@ -6,7 +6,7 @@ import {
   Mutation,
   Query,
   Resolver,
-  UseMiddleware,
+  UseMiddleware
 } from "type-graphql";
 import { getConnection } from "typeorm";
 import { AcademicYearArgs } from "./types";
@@ -28,7 +28,7 @@ export class AcademicYearResolver {
   ) {
     const newAcademicYear = this.academicYearRepository.create({
       startDate: startDate,
-      endDate: endDate,
+      endDate: endDate
     });
     const userRepository = getConnection(process.env.NODE_ENV).getRepository(
       User
@@ -49,12 +49,13 @@ export class AcademicYearResolver {
         "schedule",
         "schedule.dayRotation",
         "schedule.weekRotation",
+        "holidays"
       ],
       where: {
         user: {
-          id: user!.id,
-        },
-      },
+          id: user!.id
+        }
+      }
     });
     return academicYears;
   }
@@ -72,8 +73,8 @@ export class AcademicYearResolver {
           "schedule",
           "schedule.dayRotation",
           "schedule.weekRotation",
-          "user",
-        ],
+          "user"
+        ]
       });
       if (!academicYear) throw new ValidationError("invalid academic year id");
       if (academicYear?.user.id !== user!.id)
@@ -87,7 +88,7 @@ export class AcademicYearResolver {
   @UseMiddleware(authenticationGate)
   async deleteAcademicYear(@Arg("id") id: string, @Ctx() { user }: Context) {
     const academicYear = await this.academicYearRepository.findOne(id, {
-      relations: ["user"],
+      relations: ["user"]
     });
     if (!academicYear) throw new ValidationError("invalid id");
     if (academicYear.user.id !== user!.id)

@@ -6,6 +6,7 @@ const newClassMutation = `
         $building: String,
         $teacher: String,
         $academicYearId: String,
+        $termId: String
     ){
         newClass(
             subjectId: $subjectId,
@@ -14,6 +15,7 @@ const newClassMutation = `
             building: $building,
             teacher: $teacher
             academicYearId: $academicYearId
+            termId: $termId
         )
             {
                 id
@@ -40,6 +42,7 @@ const updateClassMutation = `
         $building: String,
         $teacher: String,
         $academicYearId: String,
+        $termId: String
     ){
         updateClass(
             id: $id,
@@ -49,6 +52,7 @@ const updateClassMutation = `
             building: $building,
             teacher: $teacher
             academicYearId: $academicYearId
+            termId: $termId
         )
     }
 `;

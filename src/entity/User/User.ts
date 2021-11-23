@@ -5,9 +5,10 @@ import {
   Column,
   OneToMany,
   OneToOne,
-  JoinColumn,
+  JoinColumn
 } from "typeorm";
 import { Task, Exam, Subject, Class, AcademicYear, UserProvider } from "..";
+import { Holiday } from "src/entity";
 
 @Entity("users")
 @ObjectType()
@@ -53,7 +54,10 @@ export class User {
   classes: Class[];
 
   @OneToMany(() => AcademicYear, (academicYear) => academicYear.user, {
-    onDelete: "CASCADE",
+    onDelete: "CASCADE"
   })
   academicYears: AcademicYear[];
+
+  @OneToMany(() => Holiday, (holiday) => holiday.user, { onDelete: "CASCADE" })
+  holidays: Holiday[];
 }

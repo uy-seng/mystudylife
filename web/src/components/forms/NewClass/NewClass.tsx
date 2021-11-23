@@ -122,7 +122,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
                     });
                   }}
                 />
-                <NewSubject controller="plus" />
+                <NewSubject parentClass={"newClass"} controller="plus" />
               </div>
               <FormikBasicTextInput
                 className={css.name}
@@ -271,7 +271,8 @@ const MyForm = withFormik<any, ClassPayload>({
       variables: {
         ...classPayload,
         subjectId: classPayload.subjectId as string,
-        academicYearId: classPayload.academicYearId as string
+        academicYearId: classPayload.academicYearId as string,
+        termId: classPayload.termId as string
       }
     })
       .then(async (response) => {
@@ -326,7 +327,8 @@ const MyForm = withFormik<any, ClassPayload>({
       name: props.name,
       room: props.room,
       subjectId: props.subjectId,
-      teacher: props.teacher
+      teacher: props.teacher,
+      termId: props.termId
     };
   }
 })(InnerForm);

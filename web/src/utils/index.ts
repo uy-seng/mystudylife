@@ -106,6 +106,43 @@ export const generateClassByDate = (
       }
     } else if (c.academicYear?.schedule.type === "dayRotation") {
     } else if (c.academicYear?.schedule.type === "weekRotation") {
+      if (
+        getWeekNumberForWeekRotation(
+          new Date(c.academicYear!.startDate),
+          currentDate
+        )
+      ) {
+        const targetRepeatScheduleIndex = c.schedule.repeat?.findIndex((r) =>
+          r.repeatDays.includes(daysOfWeek[currentDate.getDay()])
+        );
+
+        if (
+          targetRepeatScheduleIndex !== -1 &&
+          c!.schedule!.repeat![targetRepeatScheduleIndex as number]!
+            .rotationWeek === 0
+        ) {
+          return (
+            +currentDate >= +new Date(c.academicYear!.startDate) &&
+            +currentDate <= +new Date(c.academicYear!.endDate)
+          );
+        }
+
+        return (
+          +currentDate >= +new Date(c.academicYear!.startDate) &&
+          +currentDate <= +new Date(c.academicYear!.endDate) &&
+          targetRepeatScheduleIndex !== -1 &&
+          c.academicYear.schedule.weekRotation!.numOfWeek -
+            (((getWeekNumberForWeekRotation(
+              new Date(c.academicYear.startDate),
+              currentDate
+            ) as number) +
+              c.academicYear.schedule.weekRotation!.startWeek +
+              1) %
+              c.academicYear.schedule.weekRotation!.numOfWeek) ===
+            c!.schedule!.repeat![targetRepeatScheduleIndex as number]!
+              .rotationWeek
+        );
+      }
     }
   });
 };

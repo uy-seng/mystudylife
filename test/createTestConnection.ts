@@ -15,12 +15,13 @@ import {
   Task,
   User,
   UserProvider,
+  Holiday
 } from "../src/entity";
 import {
   AcademicYearScheduleType,
   ClassScheduleType,
   DayOfWeek,
-  TaskType,
+  TaskType
 } from "../src/entity/types";
 
 beforeAll(async () => {
@@ -50,12 +51,13 @@ beforeAll(async () => {
       Task,
       User,
       UserProvider,
-    ],
+      Holiday
+    ]
   });
 
   registerEnumType(ClassScheduleType, { name: "ClassScheduleType" });
   registerEnumType(AcademicYearScheduleType, {
-    name: "AcademicYearScheduleType",
+    name: "AcademicYearScheduleType"
   });
   registerEnumType(DayOfWeek, { name: "DayOfWeek" });
   registerEnumType(TaskType, { name: "TaskType" });

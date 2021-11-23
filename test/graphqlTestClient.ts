@@ -5,12 +5,13 @@ import {
   AcademicYearResolver,
   AcademicYearScheduleResolver,
   TermResolver,
-  SubjectResolver,
+  SubjectResolver
 } from "src/graphql/resolvers";
 import { ClassResolver } from "src/graphql/resolvers/class/class.resolver";
 import { ClassScheduleResolver } from "src/graphql/resolvers/class/classSchedule.resolver";
 import { OneOffScheduleResolver } from "src/graphql/resolvers/class/oneOffSchedule.resolver";
 import { RepeatScheduleResolver } from "src/graphql/resolvers/class/repeatSchedule.resolver";
+import { HolidayResolver } from "src/graphql/resolvers/holiday/holiday.resolver";
 import { TaskResolver } from "src/graphql/resolvers/task/task.resolver";
 import { buildSchema, Maybe } from "type-graphql";
 
@@ -33,14 +34,14 @@ export const getCookies = () => {
 export const cookie = (key: string, value: string, options: CookieOptions) => {
   Object.assign(cookies, {
     ...cookies,
-    [key]: value,
+    [key]: value
   });
 };
 
 export const testClient = async ({
   source,
   variableValues,
-  headers,
+  headers
 }: Options) => {
   const schema = await buildSchema({
     resolvers: [
@@ -54,7 +55,8 @@ export const testClient = async ({
       OneOffScheduleResolver,
       RepeatScheduleResolver,
       TaskResolver,
-    ],
+      HolidayResolver
+    ]
   });
 
   return graphql({
@@ -64,11 +66,11 @@ export const testClient = async ({
     contextValue: {
       req: {
         headers: headers,
-        cookies: cookies,
+        cookies: cookies
       },
       res: {
-        cookie: cookie,
-      },
-    },
+        cookie: cookie
+      }
+    }
   });
 };

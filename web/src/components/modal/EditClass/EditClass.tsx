@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import {
   ClassScheduleType,
   GetClassesQuery,
-  useGetAcademicYearsQuery,
+  useGetAcademicYearsQuery
 } from "../../../generated/graphql";
 import {
   selectToBeUpdatedClassPayload,
@@ -15,7 +15,7 @@ import {
   setDefaultToBeUpdatedClassSchedulePayload,
   setDefaultToBeUpdatedOneOffSchedulePayload,
   setDefaultToBeUpdatedRepeatSchedules,
-  setToBeUpdatedClassPayload,
+  setToBeUpdatedClassPayload
 } from "../../../shared/EditClass.slice";
 import { EditClassForm } from "../../forms";
 import { HeaderSelect } from "../../select";
@@ -51,6 +51,7 @@ export const EditClass: React.FC<Props> = ({ c }) => {
           room: c.room,
           subjectId: c.subject.id,
           teacher: c.teacher,
+          termId: c?.term?.id
         })
       );
 
@@ -58,7 +59,7 @@ export const EditClass: React.FC<Props> = ({ c }) => {
       dispatch(
         setDefaultToBeUpdatedClassSchedulePayload({
           id: c.schedule.id,
-          type: c.schedule.type as ClassScheduleType,
+          type: c.schedule.type as ClassScheduleType
         })
       );
 
@@ -68,7 +69,7 @@ export const EditClass: React.FC<Props> = ({ c }) => {
             id: c.schedule.oneOff.id,
             date: c.schedule.oneOff.date,
             startTime: c.schedule.oneOff.startTime,
-            endTime: c.schedule.oneOff.endTime,
+            endTime: c.schedule.oneOff.endTime
           })
         );
       } else if (c.schedule.type === "repeat" && c.schedule.repeat) {
@@ -80,7 +81,7 @@ export const EditClass: React.FC<Props> = ({ c }) => {
                 days: r.repeatDays,
                 endTime: r.endTime,
                 startTime: r.startTime,
-                rotationWeek: r.rotationWeek as number,
+                rotationWeek: r.rotationWeek as number
               };
             })
           )
@@ -112,7 +113,7 @@ export const EditClass: React.FC<Props> = ({ c }) => {
                 dispatch(
                   setToBeUpdatedClassPayload({
                     key: "academicYearId",
-                    value: value,
+                    value: value
                   })
                 )
               }
@@ -121,7 +122,7 @@ export const EditClass: React.FC<Props> = ({ c }) => {
                 {
                   key: "None",
                   value: null,
-                  label: "No year/term",
+                  label: "No year/term"
                 },
                 ...academicYears.getAcademicYears.map((academicYear) => {
                   return {
@@ -131,9 +132,9 @@ export const EditClass: React.FC<Props> = ({ c }) => {
                     label: `${academicYear.startDate.split("-")[0]} - ${
                       academicYear.endDate.split("-")[0]
                     }`,
-                    value: academicYear.id,
+                    value: academicYear.id
                   };
-                }),
+                })
               ]}
             />
             <div
@@ -148,7 +149,7 @@ export const EditClass: React.FC<Props> = ({ c }) => {
           </BaseModal.Header>
           <BaseModal.Body
             style={{
-              maxWidth: "550px",
+              maxWidth: "550px"
             }}
           >
             {c.schedule.type === "repeat" && (
@@ -163,7 +164,7 @@ export const EditClass: React.FC<Props> = ({ c }) => {
                     ).toLocaleDateString("en-US", {
                       month: "short",
                       day: "2-digit",
-                      year: "numeric",
+                      year: "numeric"
                     })} - ${new Date(
                       academicYears.getAcademicYears.filter(
                         (academicYear) =>
@@ -173,7 +174,7 @@ export const EditClass: React.FC<Props> = ({ c }) => {
                     ).toLocaleDateString("en-US", {
                       month: "short",
                       day: "2-digit",
-                      year: "numeric",
+                      year: "numeric"
                     })} unless start/end dates are specified.`
                   : "This class will exist in your timetable indefinitely unless a year/term is set or start/end dates are specified."}
               </div>
