@@ -9,9 +9,11 @@ export const SidebarMenu: React.FC<SidebarMenuProps> = ({
   icon,
   active,
   pathname,
+  ...props
 }) => {
   return (
     <Link
+      style={props.style}
       to={`/${pathname}`}
       className={active ? [css.menu, css.active].join(" ") : css.menu}
     >

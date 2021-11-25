@@ -2,7 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import { BatchParam } from "../types";
 import { RootState } from "../app/store";
 import { Maybe } from "type-graphql";
-import { Term } from "../generated/graphql";
+import {
+  GetAcademicYearQueryResult,
+  GetAcademicYearsQuery,
+  Term
+} from "../generated/graphql";
 
 export interface ScheduleGlobalState {
   scheduleComponentState: ScheduleComponentState;
@@ -52,33 +56,7 @@ export const { setScheduleComponentState } = ScheduleSlice.actions;
 export default ScheduleSlice.reducer;
 
 export interface ScheduleComponentState {
-  selectedYear: AcademicYearResult | null;
+  selectedYear: GetAcademicYearsQuery["getAcademicYears"][0] | null;
   selectedTerm: Term | null;
-  academicYears: AcademicYearResult[];
-}
-
-interface AcademicYearResult {
-  __typename?: "AcademicYear";
-  id: string;
-  startDate: string;
-  endDate: string;
-  terms: Array<Term>;
-  schedule: {
-    __typename?: "AcademicYearSchedule";
-    id: string;
-    type: string;
-    dayRotation?: Maybe<{
-      __typename?: "DayRotationSchedule";
-      id: string;
-      numOfDay: number;
-      startDay: number;
-      repeatDays: Array<number>;
-    }>;
-    weekRotation?: Maybe<{
-      __typename?: "WeekRotationSchedule";
-      id: string;
-      numOfWeek: number;
-      startWeek: number;
-    }>;
-  };
+  academicYears: GetAcademicYearsQuery["getAcademicYears"];
 }

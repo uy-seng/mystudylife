@@ -7,7 +7,8 @@ import { SidebarProps } from "../../types/sidebar";
 
 import css from "./Sidebar.module.css";
 import { AiFillSetting } from "react-icons/ai";
-export const Sidebar: React.FC<SidebarProps> = ({ menu }) => {
+import { ProfileAvatar } from "./ProfileAvatar";
+export const Sidebar: React.FC<SidebarProps> = ({ menu, userName }) => {
   const location = useLocation();
   const path = location.pathname.split("/");
   const current = path[path.length - 1];
@@ -31,11 +32,28 @@ export const Sidebar: React.FC<SidebarProps> = ({ menu }) => {
           ))}
         </div>
       </div>
-      <SidebarMenu
-        pathname="setting"
-        active={current === "setting"}
-        icon={<AiFillSetting />}
-      />
+
+      {userName ? (
+        <SidebarMenu
+          style={{
+            textDecoration: "none"
+          }}
+          pathname="setting"
+          active={current === "setting"}
+          icon={
+            <ProfileAvatar userNameInitial={userName.charAt(0).toUpperCase()} />
+          }
+        />
+      ) : (
+        <SidebarMenu
+          style={{
+            textDecoration: "none"
+          }}
+          pathname="setting"
+          active={current === "setting"}
+          icon={<AiFillSetting />}
+        />
+      )}
     </div>
   );
 };

@@ -1,0 +1,7 @@
+mutation DeleteHoliday(
+    $id: String!,
+){
+    deleteHoliday(
+        id: $id,
+    )
+}

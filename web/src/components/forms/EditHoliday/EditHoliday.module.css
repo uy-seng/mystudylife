@@ -1,0 +1,41 @@
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.wrapper > * {
+  margin-right: 1rem;
+}
+
+.label {
+  font-weight: 300;
+}
+
+.actionBtnGroup {
+  display: flex;
+  margin-top: 1rem;
+}
+
+.actionBtnGroup > :not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+.actionBtnGroup::before {
+  content: "";
+  height: 100%;
+  width: 700%;
+  background-color: red;
+}
+
+.textGroup {
+  margin-top: 1rem;
+}
+
+.textGroup > * {
+  margin-bottom: 0.5rem;
+}
+
+.field {
+  display: flex;
+  margin-top: 1rem;
+}

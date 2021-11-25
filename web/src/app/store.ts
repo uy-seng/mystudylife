@@ -7,6 +7,8 @@ import NewClassReducer from "../shared/NewClass.slice";
 import EditClassReducer from "../shared/EditClass.slice";
 import EditSubjectReducer from "../shared/EditSubject.slice";
 import NewTaskReducer from "../shared/NewTask.slice";
+import NewHolidayReducer from "../shared/NewHoliday.slice";
+import EditHolidayReducer from "../shared/EditHoliday.slice";
 
 export const store = configureStore({
   reducer: {
@@ -18,7 +20,9 @@ export const store = configureStore({
     editclass: EditClassReducer,
     editsubject: EditSubjectReducer,
     newtask: NewTaskReducer,
-  },
+    newholiday: NewHolidayReducer,
+    editholiday: EditHolidayReducer
+  }
 });
 
 export type AppDispatch = typeof store.dispatch;

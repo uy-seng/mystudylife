@@ -9,6 +9,7 @@ import { ViewClass } from "./ViewClass";
 import { DeleteClass } from "./DeleteClass";
 import { EditClass, EditRepeatSchedule, NewRepeatSchedule } from "./EditClass";
 import { DeleteSubject } from "./DeleteSubject";
+import { NewHoliday } from "./NewHoliday";
 export {
   NewTask,
   NewSubject,
@@ -24,4 +25,5 @@ export {
   EditRepeatSchedule,
   NewRepeatSchedule,
   DeleteSubject,
+  NewHoliday
 };

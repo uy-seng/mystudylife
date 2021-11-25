@@ -15,11 +15,12 @@ import {
   ClassResolver,
   ClassScheduleResolver,
   OneOffScheduleResolver,
-  RepeatScheduleResolver,
+  RepeatScheduleResolver
 } from "./graphql/resolvers";
 import { DatabaseService, PassportService } from "./services";
 import { TaskResolver } from "src/graphql/resolvers/task/task.resolver";
 import { oauthRoute } from "./routes/oauth.route";
+import { HolidayResolver } from "./graphql/resolvers/holiday/holiday.resolver";
 
 (async () => {
   const app = express();
@@ -32,8 +33,8 @@ import { oauthRoute } from "./routes/oauth.route";
       origin: [
         "https://studio.apollographql.com",
         "http://localhost:3000",
-        "http://localhost:3001",
-      ],
+        "http://localhost:3001"
+      ]
     })
   );
   const databaseService = new DatabaseService();
@@ -59,9 +60,10 @@ import { oauthRoute } from "./routes/oauth.route";
         OneOffScheduleResolver,
         RepeatScheduleResolver,
         TaskResolver,
-      ],
+        HolidayResolver
+      ]
     }),
-    context: ({ req, res }) => ({ req, res }),
+    context: ({ req, res }) => ({ req, res })
   });
 
   await apolloServer.start();

@@ -25,6 +25,7 @@ export type AcademicYear = {
   schedule: AcademicYearSchedule;
   subjects: Array<Subject>;
   classes: Array<Class>;
+  holidays: Array<Holiday>;
 };
 
 export type AcademicYearSchedule = {
@@ -84,6 +85,14 @@ export type DayRotationSchedule = {
   repeatDays: Array<Scalars['Int']>;
 };
 
+export type Holiday = {
+  __typename?: 'Holiday';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  startDate: Scalars['String'];
+  endDate: Scalars['String'];
+};
+
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   accessToken: Scalars['String'];
@@ -115,6 +124,9 @@ export type Mutation = {
   newTask: Task;
   deleteTask: Scalars['Boolean'];
   updateTask: Scalars['Boolean'];
+  newHoliday: Holiday;
+  deleteHoliday: Scalars['Boolean'];
+  updateHoliday: Scalars['Boolean'];
 };
 
 
@@ -295,6 +307,28 @@ export type MutationUpdateTaskArgs = {
   id: Scalars['String'];
 };
 
+
+export type MutationNewHolidayArgs = {
+  academicYearId: Scalars['String'];
+  name: Scalars['String'];
+  startDate: Scalars['String'];
+  endDate: Scalars['String'];
+};
+
+
+export type MutationDeleteHolidayArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationUpdateHolidayArgs = {
+  academicYearId: Scalars['String'];
+  name: Scalars['String'];
+  startDate: Scalars['String'];
+  endDate: Scalars['String'];
+  id: Scalars['String'];
+};
+
 export type OneOffSchedule = {
   __typename?: 'OneOffSchedule';
   id: Scalars['String'];
@@ -428,6 +462,13 @@ export type DeleteClassMutationVariables = Exact<{
 
 export type DeleteClassMutation = { __typename?: 'Mutation', deleteClass: boolean };
 
+export type DeleteHolidayMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeleteHolidayMutation = { __typename?: 'Mutation', deleteHoliday: boolean };
+
 export type DeleteRepeatScheduleMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -459,7 +500,7 @@ export type GetAcademicYearQuery = { __typename?: 'Query', getAcademicYear?: May
 export type GetAcademicYearsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAcademicYearsQuery = { __typename?: 'Query', getAcademicYears: Array<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string, terms: Array<{ __typename?: 'Term', id: string, name: string, startDate: string, endDate: string }>, schedule: { __typename?: 'AcademicYearSchedule', id: string, type: AcademicYearScheduleType, dayRotation?: Maybe<{ __typename?: 'DayRotationSchedule', id: string, numOfDay: number, startDay: number, repeatDays: Array<number> }>, weekRotation?: Maybe<{ __typename?: 'WeekRotationSchedule', id: string, numOfWeek: number, startWeek: number }> } }> };
+export type GetAcademicYearsQuery = { __typename?: 'Query', getAcademicYears: Array<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string, terms: Array<{ __typename?: 'Term', id: string, name: string, startDate: string, endDate: string }>, schedule: { __typename?: 'AcademicYearSchedule', id: string, type: AcademicYearScheduleType, dayRotation?: Maybe<{ __typename?: 'DayRotationSchedule', id: string, numOfDay: number, startDay: number, repeatDays: Array<number> }>, weekRotation?: Maybe<{ __typename?: 'WeekRotationSchedule', id: string, numOfWeek: number, startWeek: number }> }, holidays: Array<{ __typename?: 'Holiday', id: string, name: string, startDate: string, endDate: string }> }> };
 
 export type GetClassesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -537,6 +578,16 @@ export type NewClassScheduleMutationVariables = Exact<{
 
 
 export type NewClassScheduleMutation = { __typename?: 'Mutation', newClassSchedule: { __typename?: 'ClassSchedule', id: string } };
+
+export type NewHolidayMutationVariables = Exact<{
+  academicYearId: Scalars['String'];
+  name: Scalars['String'];
+  startDate: Scalars['String'];
+  endDate: Scalars['String'];
+}>;
+
+
+export type NewHolidayMutation = { __typename?: 'Mutation', newHoliday: { __typename?: 'Holiday', id: string } };
 
 export type NewOneOffScheduleMutationVariables = Exact<{
   scheduleId: Scalars['String'];
@@ -632,6 +683,17 @@ export type UpdateClassMutationVariables = Exact<{
 
 
 export type UpdateClassMutation = { __typename?: 'Mutation', updateClass: boolean };
+
+export type UpdateHolidayMutationVariables = Exact<{
+  id: Scalars['String'];
+  name: Scalars['String'];
+  startDate: Scalars['String'];
+  endDate: Scalars['String'];
+  academicYearId: Scalars['String'];
+}>;
+
+
+export type UpdateHolidayMutation = { __typename?: 'Mutation', updateHoliday: boolean };
 
 export type UpdateOneOffScheduleMutationVariables = Exact<{
   id: Scalars['String'];
@@ -743,6 +805,37 @@ export function useDeleteClassMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeleteClassMutationHookResult = ReturnType<typeof useDeleteClassMutation>;
 export type DeleteClassMutationResult = Apollo.MutationResult<DeleteClassMutation>;
 export type DeleteClassMutationOptions = Apollo.BaseMutationOptions<DeleteClassMutation, DeleteClassMutationVariables>;
+export const DeleteHolidayDocument = gql`
+    mutation DeleteHoliday($id: String!) {
+  deleteHoliday(id: $id)
+}
+    `;
+export type DeleteHolidayMutationFn = Apollo.MutationFunction<DeleteHolidayMutation, DeleteHolidayMutationVariables>;
+
+/**
+ * __useDeleteHolidayMutation__
+ *
+ * To run a mutation, you first call `useDeleteHolidayMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteHolidayMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteHolidayMutation, { data, loading, error }] = useDeleteHolidayMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteHolidayMutation(baseOptions?: Apollo.MutationHookOptions<DeleteHolidayMutation, DeleteHolidayMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteHolidayMutation, DeleteHolidayMutationVariables>(DeleteHolidayDocument, options);
+      }
+export type DeleteHolidayMutationHookResult = ReturnType<typeof useDeleteHolidayMutation>;
+export type DeleteHolidayMutationResult = Apollo.MutationResult<DeleteHolidayMutation>;
+export type DeleteHolidayMutationOptions = Apollo.BaseMutationOptions<DeleteHolidayMutation, DeleteHolidayMutationVariables>;
 export const DeleteRepeatScheduleDocument = gql`
     mutation DeleteRepeatSchedule($id: String!) {
   deleteRepeatSchedule(id: $id)
@@ -909,6 +1002,12 @@ export const GetAcademicYearsDocument = gql`
         numOfWeek
         startWeek
       }
+    }
+    holidays {
+      id
+      name
+      startDate
+      endDate
     }
   }
 }
@@ -1410,6 +1509,47 @@ export function useNewClassScheduleMutation(baseOptions?: Apollo.MutationHookOpt
 export type NewClassScheduleMutationHookResult = ReturnType<typeof useNewClassScheduleMutation>;
 export type NewClassScheduleMutationResult = Apollo.MutationResult<NewClassScheduleMutation>;
 export type NewClassScheduleMutationOptions = Apollo.BaseMutationOptions<NewClassScheduleMutation, NewClassScheduleMutationVariables>;
+export const NewHolidayDocument = gql`
+    mutation NewHoliday($academicYearId: String!, $name: String!, $startDate: String!, $endDate: String!) {
+  newHoliday(
+    academicYearId: $academicYearId
+    name: $name
+    startDate: $startDate
+    endDate: $endDate
+  ) {
+    id
+  }
+}
+    `;
+export type NewHolidayMutationFn = Apollo.MutationFunction<NewHolidayMutation, NewHolidayMutationVariables>;
+
+/**
+ * __useNewHolidayMutation__
+ *
+ * To run a mutation, you first call `useNewHolidayMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNewHolidayMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [newHolidayMutation, { data, loading, error }] = useNewHolidayMutation({
+ *   variables: {
+ *      academicYearId: // value for 'academicYearId'
+ *      name: // value for 'name'
+ *      startDate: // value for 'startDate'
+ *      endDate: // value for 'endDate'
+ *   },
+ * });
+ */
+export function useNewHolidayMutation(baseOptions?: Apollo.MutationHookOptions<NewHolidayMutation, NewHolidayMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<NewHolidayMutation, NewHolidayMutationVariables>(NewHolidayDocument, options);
+      }
+export type NewHolidayMutationHookResult = ReturnType<typeof useNewHolidayMutation>;
+export type NewHolidayMutationResult = Apollo.MutationResult<NewHolidayMutation>;
+export type NewHolidayMutationOptions = Apollo.BaseMutationOptions<NewHolidayMutation, NewHolidayMutationVariables>;
 export const NewOneOffScheduleDocument = gql`
     mutation newOneOffSchedule($scheduleId: String!, $date: String!, $startTime: String!, $endTime: String!) {
   newOneOffSchedule(
@@ -1781,6 +1921,47 @@ export function useUpdateClassMutation(baseOptions?: Apollo.MutationHookOptions<
 export type UpdateClassMutationHookResult = ReturnType<typeof useUpdateClassMutation>;
 export type UpdateClassMutationResult = Apollo.MutationResult<UpdateClassMutation>;
 export type UpdateClassMutationOptions = Apollo.BaseMutationOptions<UpdateClassMutation, UpdateClassMutationVariables>;
+export const UpdateHolidayDocument = gql`
+    mutation UpdateHoliday($id: String!, $name: String!, $startDate: String!, $endDate: String!, $academicYearId: String!) {
+  updateHoliday(
+    id: $id
+    name: $name
+    startDate: $startDate
+    endDate: $endDate
+    academicYearId: $academicYearId
+  )
+}
+    `;
+export type UpdateHolidayMutationFn = Apollo.MutationFunction<UpdateHolidayMutation, UpdateHolidayMutationVariables>;
+
+/**
+ * __useUpdateHolidayMutation__
+ *
+ * To run a mutation, you first call `useUpdateHolidayMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateHolidayMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateHolidayMutation, { data, loading, error }] = useUpdateHolidayMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *      startDate: // value for 'startDate'
+ *      endDate: // value for 'endDate'
+ *      academicYearId: // value for 'academicYearId'
+ *   },
+ * });
+ */
+export function useUpdateHolidayMutation(baseOptions?: Apollo.MutationHookOptions<UpdateHolidayMutation, UpdateHolidayMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateHolidayMutation, UpdateHolidayMutationVariables>(UpdateHolidayDocument, options);
+      }
+export type UpdateHolidayMutationHookResult = ReturnType<typeof useUpdateHolidayMutation>;
+export type UpdateHolidayMutationResult = Apollo.MutationResult<UpdateHolidayMutation>;
+export type UpdateHolidayMutationOptions = Apollo.BaseMutationOptions<UpdateHolidayMutation, UpdateHolidayMutationVariables>;
 export const UpdateOneOffScheduleDocument = gql`
     mutation UpdateOneOffSchedule($id: String!, $scheduleId: String!, $date: String!, $startTime: String!, $endTime: String!) {
   updateOneOffSchedule(

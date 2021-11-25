@@ -1,10 +1,18 @@
-import { Args, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
+import {
+  Arg,
+  Args,
+  Ctx,
+  Mutation,
+  Resolver,
+  UseMiddleware
+} from "type-graphql";
 import { authenticationGate } from "src/middleware";
 import { HolidayArgs } from "./types";
 import { Context } from "src/interface";
 import { getConnection } from "typeorm";
 import { AcademicYear, Holiday, User } from "src/entity";
 import { ValidationError } from "apollo-server-errors";
+import { UpdateHolidayArgs } from "./types/Holiday";
 
 @Resolver()
 export class HolidayResolver {
@@ -38,5 +46,46 @@ export class HolidayResolver {
     if (!academicYear) throw new ValidationError("invalid academic year id");
     newHoliday.academicYear = academicYear;
     return await this.holidayRepository.save(newHoliday);
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(authenticationGate)
+  async deleteHoliday(
+    @Arg("id", () => String) id: string,
+    @Ctx() { user }: Context
+  ) {
+    const holiday = await this.holidayRepository.findOne(id, {
+      relations: ["user"],
+      where: {
+        user: {
+          id: user!.id
+        }
+      }
+    });
+    if (!holiday) throw new ValidationError("invalid holiday id");
+    await this.holidayRepository.remove(holiday);
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(authenticationGate)
+  async updateHoliday(
+    @Args() updateContext: UpdateHolidayArgs,
+    @Ctx() { user }: Context
+  ) {
+    const holiday = await this.holidayRepository.findOne(updateContext.id, {
+      relations: ["user"],
+      where: {
+        user: {
+          id: user!.id
+        }
+      }
+    });
+    if (!holiday) throw new ValidationError("invalid holiday id");
+    holiday.name = updateContext.name;
+    holiday.startDate = updateContext.startDate;
+    holiday.endDate = updateContext.endDate;
+    await this.holidayRepository.save(holiday);
+    return true;
   }
 }

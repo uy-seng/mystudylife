@@ -11,7 +11,7 @@ import {
   AiFillCheckSquare,
   AiFillSnippets,
   AiFillSchedule,
-  AiOutlineFileSearch,
+  AiOutlineFileSearch
 } from "react-icons/ai";
 import { Sidebar } from "./components/sidebar";
 import { Playground } from "./pages/Playground";
@@ -37,13 +37,14 @@ function App() {
           <React.Fragment>
             <div className={css.page}>
               <Sidebar
+                userName={data?.me?.username}
                 menu={[
                   { icon: <AiFillDashboard />, pathname: "dashboard" },
                   { icon: <AiFillCalendar />, pathname: "calendar" },
                   { icon: <AiFillCheckSquare />, pathname: "task" },
                   { icon: <AiFillSnippets />, pathname: "exam" },
                   { icon: <AiFillSchedule />, pathname: "schedule" },
-                  { icon: <AiOutlineFileSearch />, pathname: "search" },
+                  { icon: <AiOutlineFileSearch />, pathname: "search" }
                 ]}
               />
               <PrivateRoute

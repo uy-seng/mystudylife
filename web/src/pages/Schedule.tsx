@@ -5,6 +5,7 @@ import {
   ManageSubject,
   NewAcademicYear,
   NewClass,
+  NewHoliday,
   ViewClass
 } from "../components/modal";
 import {
@@ -21,8 +22,11 @@ import {
   selectScheduleComponentState,
   setScheduleComponentState
 } from "../shared/Schedule.slice";
-import { formatTime } from "../utils";
+import { formatDate, formatTime } from "../utils";
 import ctx from "classnames";
+import { setHolidayPayload } from "../shared/NewHoliday.slice";
+import { EditHoliday } from "../components/modal/EditHoliday";
+import { BsPencil } from "react-icons/bs";
 
 interface Props {}
 
@@ -103,7 +107,7 @@ const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
         value: schedules[0]
       })
     );
-  }, []);
+  }, [schedules]);
 
   React.useEffect(() => {
     if (classesQueryResult) setClasses([...classesQueryResult?.getClasses]);
@@ -121,8 +125,14 @@ const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
   }, [selectedYear, classesQueryResult]);
 
   React.useEffect(() => {
-    if (classes) console.log(classes);
-  }, [classes]);
+    if (selectedYear)
+      dispatch(
+        setHolidayPayload({
+          key: "academicYearId",
+          value: selectedYear.id
+        })
+      );
+  }, [selectedYear]);
 
   if (classes)
     return (
@@ -270,7 +280,35 @@ const ScheduleListing: React.FC<ScheduleListingProps> = ({ schedules }) => {
               ))}
           </div>
         </div>
-        <div></div>
+        <div>
+          <div>
+            <div className="txt-md">Holiday</div>
+            <NewHoliday />
+          </div>
+          <div className={css.holidayListing}>
+            {selectedYear?.holidays.map((h) => (
+              <EditHoliday
+                childController={
+                  <div className={css.holiday}>
+                    <div className={css.left}>
+                      <div>{h.name}</div>
+                      <div className="txt-thin txt-sm">
+                        {h.startDate === h.endDate
+                          ? formatDate(new Date(h.startDate))
+                          : `${formatDate(
+                              new Date(h.startDate)
+                            )} - ${formatDate(new Date(h.endDate))}`}
+                      </div>
+                    </div>
+                    <BsPencil />
+                  </div>
+                }
+                c={h}
+                academicYearId={selectedYear.id}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     );
   else return null;

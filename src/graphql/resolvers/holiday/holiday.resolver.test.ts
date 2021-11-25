@@ -8,8 +8,12 @@ import { meQuery } from "src/graphql/query";
 import { testClient } from "../../../../test/graphqlTestClient";
 import faker from "faker";
 import { getConnection } from "typeorm";
-import { AcademicYear } from "src/entity";
-import { newHolidayMutation } from "src/graphql/mutation/holiday";
+import { AcademicYear, Holiday } from "src/entity";
+import {
+  deleteHolidayMutation,
+  newHolidayMutation,
+  updateHolidayMutation
+} from "src/graphql/mutation/holiday";
 
 const testUser = {
   email: faker.internet.email(),
@@ -164,6 +168,8 @@ describe("create academic year with fixed schedule and term", () => {
 /**
  * create new holiday
  */
+let holidayIdOne: string;
+let holidayIdTwo: string;
 describe("create holiday", () => {
   it("should create new holiday for academic year one", async () => {
     const response = await testClient({
@@ -180,6 +186,7 @@ describe("create holiday", () => {
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
+    holidayIdOne = response.data!.newHoliday!.id;
   });
 
   it("should create new holiday for academic year two", async () => {
@@ -197,6 +204,7 @@ describe("create holiday", () => {
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
+    holidayIdTwo = response.data!.newHoliday!.id;
   });
 
   it("should have 1 holiday in academic year one", async () => {
@@ -227,5 +235,60 @@ describe("create holiday", () => {
     expect(academicYear).toHaveProperty("holidays");
     expect(academicYear.holidays).not.toBeNull();
     expect(academicYear.holidays.length).toEqual(1);
+  });
+});
+
+describe("delete holiday", () => {
+  it("should delete holiday one", async () => {
+    const response = await testClient({
+      source: deleteHolidayMutation,
+      variableValues: {
+        id: holidayIdOne
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`
+      }
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+  });
+
+  it("should not find holiday one", async () => {
+    const holidayRepository = getConnection(process.env.NODE_ENV).getRepository(
+      Holiday
+    );
+    const holiday = await holidayRepository.findOne(holidayIdOne);
+    expect(holiday).toBeUndefined();
+  });
+});
+
+describe("update holiday", () => {
+  it("should update holiday two", async () => {
+    const response = await testClient({
+      source: updateHolidayMutation,
+      variableValues: {
+        id: holidayIdTwo,
+        name: "Water Festival",
+        startDate: "April 14 2022",
+        endDate: "April 16 2022",
+        academicYearId: academicYearIdTwo
+      },
+      headers: {
+        authorization: `Bearer ${accessToken}`
+      }
+    });
+    expect(response.errors).toBeUndefined();
+    expect(response.data).not.toBeNull();
+  });
+
+  it("should have updated data for holiday two", async () => {
+    const holidayRepository = getConnection(process.env.NODE_ENV).getRepository(
+      Holiday
+    );
+    const holiday = (await holidayRepository.findOne(holidayIdTwo)) as Holiday;
+    expect(holiday).not.toBeNull();
+    expect(holiday.name).toEqual("Water Festival");
+    expect(holiday.startDate).toEqual("2022-04-14");
+    expect(holiday.endDate).toEqual("2022-04-16");
   });
 });

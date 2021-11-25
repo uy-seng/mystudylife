@@ -106,6 +106,18 @@
   border-bottom: 1px solid var(--border-gray);
 }
 
+.scheduleListing > :nth-child(3) {
+  border-right: 1px solid var(--border-gray);
+}
+
+.scheduleListing > :nth-child(3) > :first-child {
+  display: grid;
+  grid-template-columns: 1fr 100px;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-gray);
+}
+
 .class {
   padding: 0.5rem;
   cursor: pointer;
@@ -128,4 +140,15 @@
 
 .term {
   margin-left: 1rem;
+}
+
+.holiday {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.holiday:hover {
+  cursor: pointer;
+  background-color: #e5e5e5;
 }

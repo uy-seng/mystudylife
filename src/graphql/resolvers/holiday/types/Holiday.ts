@@ -15,3 +15,9 @@ export class HolidayArgs implements Partial<Holiday> {
   @Field(() => String)
   endDate: string;
 }
+
+@ArgsType()
+export class UpdateHolidayArgs extends HolidayArgs {
+  @Field(() => String)
+  id: string;
+}
