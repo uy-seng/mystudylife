@@ -1,11 +1,11 @@
 import { Args, Ctx, Mutation, Resolver, UseMiddleware } from "type-graphql";
+import { ValidationError } from "apollo-server-express";
 import { OneOffSchedule } from "src/entity";
-import { OneOffScheduleArgs } from "./types";
 import { getConnection } from "typeorm";
+
+import { OneOffScheduleArgs, UpdateOneOffScheduleArgs } from "./types";
 import { authenticationGate } from "src/middleware";
 import { Context } from "src/interface";
-import { ValidationError } from "apollo-server-express";
-import { UpdateOneOffScheduleArgs } from "./types/oneOffSchedule";
 
 @Resolver()
 export class OneOffScheduleResolver {
@@ -22,7 +22,7 @@ export class OneOffScheduleResolver {
       startTime: startTime,
       endTime: endTime,
       date: date,
-      scheduleId: scheduleId,
+      scheduleId: scheduleId
     });
     return await this.oneOffScheduleRepository.save(oneOffSchedule);
   }
@@ -34,7 +34,7 @@ export class OneOffScheduleResolver {
     @Ctx() { user }: Context
   ) {
     const q = await this.oneOffScheduleRepository.findOne(updateContext.id, {
-      relations: ["schedule", "schedule.class", "schedule.class.user"],
+      relations: ["schedule", "schedule.class", "schedule.class.user"]
     });
     if (q?.schedule.class.user.id !== user!.id || !q)
       throw new ValidationError("items not found, please provide a valid id");

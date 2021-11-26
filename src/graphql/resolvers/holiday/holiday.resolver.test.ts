@@ -1,19 +1,17 @@
 import {
+  deleteHolidayMutation,
   loginMutation,
   newAcademicYearMutation,
+  newHolidayMutation,
   newScheduleMutation,
-  registerMutation
+  registerMutation,
+  updateHolidayMutation
 } from "src/graphql/mutation";
 import { meQuery } from "src/graphql/query";
 import { testClient } from "../../../../test/graphqlTestClient";
 import faker from "faker";
 import { getConnection } from "typeorm";
 import { AcademicYear, Holiday } from "src/entity";
-import {
-  deleteHolidayMutation,
-  newHolidayMutation,
-  updateHolidayMutation
-} from "src/graphql/mutation/holiday";
 
 const testUser = {
   email: faker.internet.email(),

@@ -1,26 +1,23 @@
 import {
+  deleteTaskMutation,
   loginMutation,
   newAcademicYearMutation,
   newScheduleMutation,
   newSubjectMutation,
+  newTaskMutation,
   registerMutation,
+  updateTaskMutation
 } from "src/graphql/mutation";
-import { meQuery } from "src/graphql/query";
+import { getTasksByDateQuery, getTasksQuery, meQuery } from "src/graphql/query";
 import { testClient } from "../../../../test/graphqlTestClient";
 import faker from "faker";
 import { getConnection } from "typeorm";
 import { AcademicYear, Subject, Task } from "src/entity";
-import {
-  deleteTaskMutation,
-  newTaskMutation,
-  updateTaskMutation,
-} from "src/graphql/mutation/task";
-import { getTasksByDateQuery, getTasksQuery } from "src/graphql/query/task";
 
 const testUser = {
   email: faker.internet.email(),
   username: faker.internet.userName(),
-  password: faker.internet.password(),
+  password: faker.internet.password()
 };
 
 /**
@@ -34,8 +31,8 @@ describe("setting up user account", () => {
       variableValues: {
         email: testUser.email,
         username: testUser.username,
-        password: testUser.password,
-      },
+        password: testUser.password
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -45,8 +42,8 @@ describe("setting up user account", () => {
       source: loginMutation,
       variableValues: {
         email: testUser.email,
-        password: testUser.password,
-      },
+        password: testUser.password
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -57,8 +54,8 @@ describe("setting up user account", () => {
     const response = await testClient({
       source: meQuery,
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -75,11 +72,11 @@ describe("create academic year with fixed schedule and no term", () => {
       source: newAcademicYearMutation,
       variableValues: {
         startDate: "September 12 2021",
-        endDate: "March 12 2022",
+        endDate: "March 12 2022"
       },
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -92,8 +89,8 @@ describe("create academic year with fixed schedule and no term", () => {
       source: newScheduleMutation,
       variableValues: {
         type: "fixed",
-        academicYearId: academicYearId,
-      },
+        academicYearId: academicYearId
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -105,7 +102,7 @@ describe("create academic year with fixed schedule and no term", () => {
       process.env.NODE_ENV
     ).getRepository(AcademicYear);
     const academicYear = (await academicYearRepository.findOne(academicYearId, {
-      relations: ["schedule"],
+      relations: ["schedule"]
     })) as AcademicYear;
     expect(academicYear).toHaveProperty("schedule");
     expect(academicYear.schedule).not.toBeNull();
@@ -123,11 +120,11 @@ describe("create subject with academic year", () => {
       source: newSubjectMutation,
       variableValues: {
         name: "Subject 1",
-        academicYearId: academicYearId,
+        academicYearId: academicYearId
       },
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -138,11 +135,11 @@ describe("create subject with academic year", () => {
       source: newSubjectMutation,
       variableValues: {
         name: "Subject 2",
-        academicYearId: academicYearId,
+        academicYearId: academicYearId
       },
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -153,7 +150,7 @@ describe("create subject with academic year", () => {
       Subject
     );
     const subject = await subjectRepository.findOne(subjectId, {
-      relations: ["academicYear"],
+      relations: ["academicYear"]
     });
     expect(subject?.academicYear).not.toBeNull();
   });
@@ -169,18 +166,18 @@ describe("test case 1: create task with no academic year", () => {
         type: "assignment",
         due_date: "November 04 2021",
         title: "Task 1",
-        detail: "testing",
+        detail: "testing"
       },
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
     const newTask = await getConnection(process.env.NODE_ENV)
       .getRepository(Task)
       .findOne(response.data!.newTask.id, {
-        relations: ["subject", "academicYear"],
+        relations: ["subject", "academicYear"]
       });
     expect(newTask).toHaveProperty("subject");
     expect(newTask).toHaveProperty("academicYear");
@@ -200,18 +197,18 @@ describe("test case 2: create task with no academic year", () => {
         type: "review",
         due_date: "November 05 2021",
         title: "Task 2",
-        detail: "testing",
+        detail: "testing"
       },
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
     const newTask = await getConnection(process.env.NODE_ENV)
       .getRepository(Task)
       .findOne(response.data!.newTask.id, {
-        relations: ["subject", "academicYear"],
+        relations: ["subject", "academicYear"]
       });
     expect(newTask).toHaveProperty("subject");
     expect(newTask).toHaveProperty("academicYear");
@@ -226,8 +223,8 @@ describe("test case 3: query all tasks", () => {
     const response = await testClient({
       source: getTasksQuery,
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -241,11 +238,11 @@ describe("test case 4: query task by date", () => {
     const response = await testClient({
       source: getTasksByDateQuery,
       variableValues: {
-        date: new Date("2021-11-04").toISOString().split("T")[0],
+        date: new Date("2021-11-04").toISOString().split("T")[0]
       },
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -259,8 +256,8 @@ describe("test case 5: delete task", () => {
     const response = await testClient({
       source: getTasksQuery,
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -273,11 +270,11 @@ describe("test case 5: delete task", () => {
     const response = await testClient({
       source: deleteTaskMutation,
       variableValues: {
-        id: taskId,
+        id: taskId
       },
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -295,8 +292,8 @@ describe("test case 6: update task", () => {
     const response = await testClient({
       source: getTasksQuery,
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -313,11 +310,11 @@ describe("test case 6: update task", () => {
         subjectId: subjectId,
         academicYearId: academicYearId,
         type: "assignment",
-        due_date: "November 04 2021",
+        due_date: "November 04 2021"
       },
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();

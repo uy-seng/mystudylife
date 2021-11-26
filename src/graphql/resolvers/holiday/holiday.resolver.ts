@@ -7,12 +7,11 @@ import {
   UseMiddleware
 } from "type-graphql";
 import { authenticationGate } from "src/middleware";
-import { HolidayArgs } from "./types";
+import { HolidayArgs, UpdateHolidayArgs } from "./types";
 import { Context } from "src/interface";
 import { getConnection } from "typeorm";
 import { AcademicYear, Holiday, User } from "src/entity";
 import { ValidationError } from "apollo-server-errors";
-import { UpdateHolidayArgs } from "./types/Holiday";
 
 @Resolver()
 export class HolidayResolver {

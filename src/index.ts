@@ -6,6 +6,7 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import cors from "cors";
 import { apiRoute } from "./routes";
+import { oauthRoute } from "./routes/oauth.route";
 import {
   AuthResolver,
   AcademicYearResolver,
@@ -15,12 +16,11 @@ import {
   ClassResolver,
   ClassScheduleResolver,
   OneOffScheduleResolver,
-  RepeatScheduleResolver
+  RepeatScheduleResolver,
+  TaskResolver,
+  HolidayResolver
 } from "./graphql/resolvers";
 import { DatabaseService, PassportService } from "./services";
-import { TaskResolver } from "src/graphql/resolvers/task/task.resolver";
-import { oauthRoute } from "./routes/oauth.route";
-import { HolidayResolver } from "./graphql/resolvers/holiday/holiday.resolver";
 
 (async () => {
   const app = express();

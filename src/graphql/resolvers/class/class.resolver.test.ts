@@ -9,9 +9,17 @@ import {
   newScheduleMutation,
   newSubjectMutation,
   newTermMutation,
-  registerMutation
+  registerMutation,
+  updateClassMutation,
+  updateOneOffScheduleMutation,
+  updateRepeatScheduleMutation
 } from "src/graphql/mutation";
-import { getClassesByDateQuery, meQuery } from "src/graphql/query";
+import {
+  getClassByIdQuery,
+  getClassesByDateQuery,
+  getClassesQuery,
+  meQuery
+} from "src/graphql/query";
 import { testClient } from "../../../../test/graphqlTestClient";
 import faker from "faker";
 import { getConnection } from "typeorm";
@@ -23,10 +31,6 @@ import {
   RepeatSchedule,
   Subject
 } from "src/entity";
-import { getClassByIdQuery, getClassesQuery } from "src/graphql/query/class";
-import { updateClassMutation } from "src/graphql/mutation/class";
-import { updateOneOffScheduleMutation } from "src/graphql/mutation/oneOffSchedule";
-import { updateRepeatScheduleMutation } from "src/graphql/mutation/repeatSchedule";
 
 const testUser = {
   email: faker.internet.email(),

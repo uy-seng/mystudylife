@@ -5,14 +5,14 @@ import {
   AcademicYearResolver,
   AcademicYearScheduleResolver,
   TermResolver,
-  SubjectResolver
+  SubjectResolver,
+  ClassResolver,
+  ClassScheduleResolver,
+  OneOffScheduleResolver,
+  RepeatScheduleResolver,
+  TaskResolver,
+  HolidayResolver
 } from "src/graphql/resolvers";
-import { ClassResolver } from "src/graphql/resolvers/class/class.resolver";
-import { ClassScheduleResolver } from "src/graphql/resolvers/class/classSchedule.resolver";
-import { OneOffScheduleResolver } from "src/graphql/resolvers/class/oneOffSchedule.resolver";
-import { RepeatScheduleResolver } from "src/graphql/resolvers/class/repeatSchedule.resolver";
-import { HolidayResolver } from "src/graphql/resolvers/holiday/holiday.resolver";
-import { TaskResolver } from "src/graphql/resolvers/task/task.resolver";
 import { buildSchema, Maybe } from "type-graphql";
 
 interface Options {

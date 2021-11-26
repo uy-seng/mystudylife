@@ -1,26 +1,24 @@
 import { AcademicYear, Subject } from "src/entity";
 import {
+  deleteSubjectMutation,
   loginMutation,
   newAcademicYearMutation,
   newScheduleMutation,
   newSubjectMutation,
   newTermMutation,
   registerMutation,
+  updateSubjectMutation
 } from "src/graphql/mutation";
 import { getSubjectsQuery, meQuery } from "src/graphql/query";
 import { getConnection } from "typeorm";
 import { testClient } from "../../../../test/graphqlTestClient";
 import faker from "faker";
-import {
-  updateSubjectMutation,
-  deleteSubjectMutation,
-} from "src/graphql/mutation/subject";
 import { asyncForEach } from "src/helper";
 
 const testUser = {
   email: faker.internet.email(),
   username: faker.internet.userName(),
-  password: faker.internet.password(),
+  password: faker.internet.password()
 };
 
 /**
@@ -34,8 +32,8 @@ describe("setting up user account", () => {
       variableValues: {
         email: testUser.email,
         username: testUser.username,
-        password: testUser.password,
-      },
+        password: testUser.password
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -45,8 +43,8 @@ describe("setting up user account", () => {
       source: loginMutation,
       variableValues: {
         email: testUser.email,
-        password: testUser.password,
-      },
+        password: testUser.password
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -57,8 +55,8 @@ describe("setting up user account", () => {
     const response = await testClient({
       source: meQuery,
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -76,11 +74,11 @@ describe("create academic year with fixed schedule and 1 term", () => {
       source: newAcademicYearMutation,
       variableValues: {
         startDate: "September 12 2021",
-        endDate: "March 12 2022",
+        endDate: "March 12 2022"
       },
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -94,11 +92,11 @@ describe("create academic year with fixed schedule and 1 term", () => {
         startDate: "September 12 2021",
         endDate: "October 12 2022",
         academicYearId: academicYearId,
-        name: "Term 1",
+        name: "Term 1"
       },
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -111,8 +109,8 @@ describe("create academic year with fixed schedule and 1 term", () => {
       source: newScheduleMutation,
       variableValues: {
         type: "fixed",
-        academicYearId: academicYearId,
-      },
+        academicYearId: academicYearId
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -124,7 +122,7 @@ describe("create academic year with fixed schedule and 1 term", () => {
       process.env.NODE_ENV
     ).getRepository(AcademicYear);
     const academicYear = (await academicYearRepository.findOne(academicYearId, {
-      relations: ["schedule"],
+      relations: ["schedule"]
     })) as AcademicYear;
     expect(academicYear).toHaveProperty("schedule");
     expect(academicYear.schedule).not.toBeNull();
@@ -138,11 +136,11 @@ describe("test case 1: create subject with no academic year", () => {
     const response = await testClient({
       source: newSubjectMutation,
       variableValues: {
-        name: "Subject 1",
+        name: "Subject 1"
       },
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -153,7 +151,7 @@ describe("test case 1: create subject with no academic year", () => {
       Subject
     );
     const subject = await subjectRepository.findOne(subjectId, {
-      relations: ["academicYear"],
+      relations: ["academicYear"]
     });
     expect(subject?.academicYear).toBeNull();
   });
@@ -167,11 +165,11 @@ describe("test case 2: create subject with academic year and term", () => {
       variableValues: {
         name: "Subject 2",
         academicYearId: academicYearId,
-        termId: termId,
+        termId: termId
       },
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
 
     expect(response.errors).toBeUndefined();
@@ -184,7 +182,7 @@ describe("test case 2: create subject with academic year and term", () => {
       Subject
     );
     const subject = await subjectRepository.findOne(subjectId, {
-      relations: ["academicYear", "term"],
+      relations: ["academicYear", "term"]
     });
     expect(subject?.academicYear).not.toBeNull();
     expect(subject?.term).not.toBeNull();
@@ -196,8 +194,8 @@ describe("test case 3: should be able to fetch subjects", () => {
     const response = await testClient({
       source: getSubjectsQuery,
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -212,8 +210,8 @@ describe("test case 4: should be able to update subject", () => {
     const response = await testClient({
       source: getSubjectsQuery,
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -236,11 +234,11 @@ describe("test case 4: should be able to update subject", () => {
       variableValues: {
         id: subject?.id,
         academicYearId: subject?.academicYear?.id || null,
-        name: "meow",
+        name: "meow"
       },
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -259,11 +257,11 @@ describe("test case 4: should be able to update subject", () => {
       variableValues: {
         id: subject?.id,
         academicYearId: academicYearId,
-        name: subject?.name,
+        name: subject?.name
       },
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -280,8 +278,8 @@ describe("test case 5: deleting subject", () => {
     const response = await testClient({
       source: getSubjectsQuery,
       headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
+        authorization: `Bearer ${accessToken}`
+      }
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
@@ -289,11 +287,11 @@ describe("test case 5: deleting subject", () => {
       await testClient({
         source: deleteSubjectMutation,
         variableValues: {
-          id: subject!.id,
+          id: subject!.id
         },
         headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
+          authorization: `Bearer ${accessToken}`
+        }
       });
     });
     const subjects = await getConnection(process.env.NODE_ENV)

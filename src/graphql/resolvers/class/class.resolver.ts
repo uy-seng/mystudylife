@@ -8,12 +8,11 @@ import {
   UseMiddleware
 } from "type-graphql";
 import { AcademicYear, Class, Subject, Term, User } from "src/entity";
-import { ClassArgs } from "./types";
+import { ClassArgs, UpdateClassArgs } from "./types";
 import { getConnection } from "typeorm";
 import { ValidationError, ApolloError } from "apollo-server-errors";
 import { authenticationGate } from "src/middleware";
 import { Context } from "src/interface";
-import { UpdateClassArgs } from "./types/class";
 
 @Resolver()
 export class ClassResolver {

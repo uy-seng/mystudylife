@@ -1,5 +1,4 @@
 import { AuthenticationError } from "apollo-server-errors";
-
 import { verify } from "jsonwebtoken";
 import { User } from "src/entity";
 import { Context } from "src/interface";

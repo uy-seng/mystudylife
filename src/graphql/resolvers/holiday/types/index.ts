@@ -1,2 +1,2 @@
-import { HolidayArgs } from "./Holiday";
-export { HolidayArgs };
+import { HolidayArgs, UpdateHolidayArgs } from "./Holiday";
+export { HolidayArgs, UpdateHolidayArgs };

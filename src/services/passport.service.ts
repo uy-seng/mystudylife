@@ -30,7 +30,7 @@ export class PassportService {
         {
           clientID: process.env.GOOGLE_CLIENT_ID!,
           clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-          callbackURL: "/oauth/google/callback",
+          callbackURL: "/oauth/google/callback"
         },
         async (
           accessToken: string,
@@ -43,8 +43,8 @@ export class PassportService {
             .findOne({
               relations: ["provider"],
               where: {
-                email: profile.emails![0].value,
-              },
+                email: profile.emails![0].value
+              }
             });
           if (user) {
             if (!user.provider.id) {
@@ -60,7 +60,7 @@ export class PassportService {
               .getRepository(UserProvider)
               .create({
                 id: profile.id,
-                name: "google",
+                name: "google"
               });
             await getConnection(process.env.NODE_ENV)
               .getRepository(UserProvider)
@@ -71,7 +71,7 @@ export class PassportService {
               .create({
                 email: profile.emails![0].value,
                 username: profile.displayName.concat(v4().split("-")[0]),
-                userProviderId: profile.id,
+                userProviderId: profile.id
               });
 
             await getConnection(process.env.NODE_ENV)
@@ -85,13 +85,14 @@ export class PassportService {
     );
   }
 
+  //! app is still in development mode
   initFacebookOAuthStrategy() {
     this.passport.use(
       new FacebookOAuth.Strategy(
         {
           clientID: process.env.FACEBOOK_CLIENT_ID!,
           clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
-          callbackURL: "http://localhost:8000/oauth/facebook/callback",
+          callbackURL: "http://localhost:8000/oauth/facebook/callback"
         },
         async (
           _accessToken: string,
@@ -105,9 +106,9 @@ export class PassportService {
               relations: ["provider"],
               where: {
                 provider: {
-                  id: profile.id,
-                },
-              },
+                  id: profile.id
+                }
+              }
             });
           if (user) {
             done(null, user);
@@ -116,7 +117,7 @@ export class PassportService {
               .getRepository(UserProvider)
               .create({
                 id: profile.id,
-                name: "facebook",
+                name: "facebook"
               });
             await getConnection(process.env.NODE_ENV)
               .getRepository(UserProvider)
@@ -126,7 +127,7 @@ export class PassportService {
               .getRepository(User)
               .create({
                 username: profile.displayName.concat(v4().split("-")[0]),
-                userProviderId: profile.id,
+                userProviderId: profile.id
               });
 
             await await getConnection(process.env.NODE_ENV)
