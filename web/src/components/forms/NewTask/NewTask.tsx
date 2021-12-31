@@ -12,7 +12,7 @@ import { Button, LoaderButton } from "../../button";
 import {
   FormikBasicTextInput,
   FormikDatepicker,
-  SelectInput,
+  SelectInput
 } from "../../input";
 
 import css from "./NewTask.module.css";
@@ -30,7 +30,7 @@ import {
   setClassSchedulePayload,
   setClassSchedulePayloadToDefault,
   setOneOffSchedulePayloadToDefault,
-  setRepeatSchedulesToDefault,
+  setRepeatSchedulesToDefault
 } from "../../../shared/NewClass.slice";
 import {
   Exact,
@@ -50,7 +50,7 @@ import {
   useNewClassScheduleMutation,
   useNewOneOffScheduleMutation,
   useNewRepeatScheduleMutation,
-  useNewTaskMutation,
+  useNewTaskMutation
 } from "../../../generated/graphql";
 import { FormikBasicSelectInput } from "../../input/BasicSelectInput";
 import { NewClass, NewSubject, RepeatSchedule } from "../../modal";
@@ -60,7 +60,7 @@ import {
   selectTaskPayload,
   setTaskPayload,
   setTaskPayloadToDefault,
-  TaskPayload,
+  TaskPayload
 } from "../../../shared/NewTask.slice";
 import { FormikBasicTextAreaInput } from "../../input/BasicTextInput/FormikBasicTextAreaInput";
 
@@ -82,7 +82,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
     if (subjects)
       setTaskPayload({
         key: "subjectId",
-        value: subjects?.getSubjects[0]?.id,
+        value: subjects?.getSubjects[0]?.id
       });
   }, [subjects]);
 
@@ -95,7 +95,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
               <div
                 style={{
                   gridTemplateColumns: "1fr min-content",
-                  columnGap: 0,
+                  columnGap: 0
                 }}
                 className={css.row}
               >
@@ -112,17 +112,17 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
                       return {
                         key: subject.id,
                         value: subject.id,
-                        label: subject.name,
+                        label: subject.name
                       };
                     })}
                   onChange={(e) => {
                     setTaskPayload({
                       key: "subjectId",
-                      value: e.target.value,
+                      value: e.target.value
                     });
                   }}
                 />
-                <NewSubject controller="plus" />
+                <NewSubject parentClass={"newtask"} controller="plus" />
               </div>
               <FormikBasicSelectInput
                 label="Type"
@@ -131,13 +131,13 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
                   return {
                     key: type,
                     value: type,
-                    label: type.charAt(0).toUpperCase() + type.slice(1),
+                    label: type.charAt(0).toUpperCase() + type.slice(1)
                   };
                 })}
                 onChange={(e) => {
                   setTaskPayload({
                     key: "type",
-                    value: e.target.value as TaskType,
+                    value: e.target.value as TaskType
                   });
                 }}
               />
@@ -148,7 +148,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
                 dateHandler={(value) => {
                   setTaskPayload({
                     key: "due_date",
-                    value: value,
+                    value: value
                   });
                 }}
                 defaultValue={taskPayload.due_date}
@@ -162,7 +162,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
                 onChange={(e) => {
                   setTaskPayload({
                     key: "title",
-                    value: e.target.value,
+                    value: e.target.value
                   });
                 }}
                 label="Title"
@@ -175,7 +175,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
                 onChange={(e) => {
                   setTaskPayload({
                     key: "detail",
-                    value: e.target.value,
+                    value: e.target.value
                   });
                 }}
                 label="Detail"
@@ -186,7 +186,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
         <div style={{ marginTop: "1rem" }} className={css.btns}>
           <LoaderButton
             style={{
-              padding: "1rem 2rem",
+              padding: "1rem 2rem"
             }}
             loading={isSubmitting}
             type="submit"
@@ -228,15 +228,15 @@ const MyForm = withFormik<any, ClassPayload>({
         detail: taskPayload.detail,
         type: taskPayload.type,
         subjectId: taskPayload.subjectId as string,
-        academicYearId: taskPayload.academicYearId,
-      },
+        academicYearId: taskPayload.academicYearId
+      }
     }).then(() => {
       setTaskPayloadToDefault();
       setShow(false);
       refetchTasks();
     });
   },
-  enableReinitialize: true,
+  enableReinitialize: true
   //   mapPropsToValues: (props) => {
   //     return {
   //       academicYearId: props.academicYearId,
@@ -261,7 +261,7 @@ interface DispatchMap {
 const mapDispatchToProps = (dispatch: Dispatch): DispatchMap => ({
   setTaskPayload: (params: Pair<TaskPayload>) => {
     dispatch(setTaskPayload(params));
-  },
+  }
 });
 
 const ConnectedForm = connect(mapStateToProps, mapDispatchToProps)(MyForm);
@@ -273,7 +273,7 @@ interface NewTaskFormProps {
 export const NewTaskForm: React.FC<NewTaskFormProps> = ({ setShow }) => {
   const [newTask] = useNewTaskMutation();
   const { refetch } = useGetTasksQuery({
-    fetchPolicy: "network-only",
+    fetchPolicy: "network-only"
   });
 
   const taskPayload = useAppSelector(selectTaskPayload);

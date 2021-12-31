@@ -20,6 +20,7 @@ import { useMeQuery } from "./generated/graphql";
 import { PageLoader } from "./components/loading";
 import { ManageCalendar } from "./pages/ManageCalendar";
 import { Setting } from "./pages/Setting";
+import { ManageTask } from "./pages/ManageTask";
 
 function App() {
   const { data, loading, error } = useMeQuery();
@@ -58,6 +59,7 @@ function App() {
                 path="/calendar"
                 component={ManageCalendar}
               />
+              <PrivateRoute data={data} path="/task" component={ManageTask} />
               <PrivateRoute
                 data={data}
                 path="/playground"

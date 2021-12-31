@@ -8,35 +8,22 @@ import { RootState } from "../../../app/store";
 import { TermPayload } from "../../../shared/NewAcademicYear.slice";
 
 import { Pair } from "../../../types";
-import { Button, LoaderButton } from "../../button";
-import { FormikBasicTextInput, SelectInput } from "../../input";
+import { LoaderButton } from "../../button";
+import { FormikBasicTextInput } from "../../input";
 
 import css from "./EditClass.module.css";
 import {
   ClassPayload,
   ClassSchedulePayload,
   OneOffSchedulePayload,
-  RepeatSchedulePayload,
-  selectClassPayload,
-  selectClassSchedulePayload,
-  selectOneOffSchedulePayload,
-  selectRepeatSchedules,
-  setClassPayload,
-  setClassSchedulePayload
+  RepeatSchedulePayload
 } from "../../../shared/NewClass.slice";
 import {
   Exact,
   GetClassesQuery,
-  NewClassMutationFn,
-  NewClassScheduleMutationFn,
-  NewOneOffScheduleMutationFn,
   NewRepeatScheduleMutationFn,
-  useGetAcademicYearsQuery,
   useGetClassesQuery,
   useGetSubjectsQuery,
-  useNewClassMutation,
-  useNewClassScheduleMutation,
-  useNewOneOffScheduleMutation,
   useNewRepeatScheduleMutation,
   useUpdateClassMutation,
   useUpdateOneOffScheduleMutation,
@@ -48,7 +35,7 @@ import {
   DeleteRepeatScheduleMutationFn
 } from "../../../generated/graphql";
 import { FormikBasicSelectInput } from "../../input/BasicSelectInput";
-import { NewClass, NewSubject } from "../../modal";
+import { NewSubject } from "../../modal";
 import { asyncForEach } from "../../../utils";
 import { ApolloQueryResult } from "@apollo/client";
 import {
@@ -141,7 +128,6 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
               <FormikBasicTextInput
                 className={css.name}
                 name="module"
-                // validate={validateName}
                 value={toBeUpdatedClassPayload.module}
                 onChange={(e) => {
                   setToBeUpdatedClassPayload({
@@ -151,15 +137,11 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
                 }}
                 label="Module"
               />
-              {/* {touched.name && errors.name && (
-              <div className="error">{errors.name}</div>
-            )} */}
             </div>
             <div className={css.row}>
               <FormikBasicTextInput
                 className={css.name}
                 name="room"
-                // validate={validateName}
                 value={toBeUpdatedClassPayload.room}
                 onChange={(e) => {
                   setToBeUpdatedClassPayload({
@@ -172,7 +154,6 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
               <FormikBasicTextInput
                 className={css.name}
                 name="building"
-                // validate={validateName}
                 value={toBeUpdatedClassPayload.building}
                 onChange={(e) => {
                   setToBeUpdatedClassPayload({
@@ -187,7 +168,6 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
               <FormikBasicTextInput
                 className={css.name}
                 name="teacher"
-                // validate={validateName}
                 value={toBeUpdatedClassPayload.teacher}
                 onChange={(e) => {
                   setToBeUpdatedClassPayload({

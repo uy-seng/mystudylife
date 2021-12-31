@@ -1,8 +1,8 @@
 import React from "react";
 import { generateClassByDate } from "../../utils";
 import { ViewClass } from "../modal";
-import css from "./MonthCalendar.module.css";
 import { v4 as uuidv4 } from "uuid";
+import css from "./MonthCalendar.module.css";
 
 interface Props {
   currentDate: Date;
@@ -49,12 +49,12 @@ export const ShowMoreClass: React.FC<Props> = ({ currentDate, text, data }) => {
           <div className={css.title}>
             <div className="txt-thin txt-md">
               {currentDate.toLocaleString("en-US", {
-                weekday: "short",
+                weekday: "short"
               })}
             </div>
             <div className="txt-lg">
               {currentDate.toLocaleString("en-US", {
-                day: "2-digit",
+                day: "2-digit"
               })}
             </div>
           </div>

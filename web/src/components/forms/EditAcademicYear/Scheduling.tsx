@@ -3,7 +3,7 @@ import React from "react";
 import { useAppSelector, useAppDispatch } from "../../../app/hooks";
 import {
   selectAcademicYearSchedulePayload,
-  setAcademicYearSchedulePayload,
+  setAcademicYearSchedulePayload
 } from "../../../shared/NewAcademicYear.slice";
 
 import { DayRotation } from "./DayRotation";
@@ -26,7 +26,7 @@ export const Scheduling: React.FC<Props> = () => {
               dispatch(
                 setAcademicYearSchedulePayload({
                   key: "type",
-                  value: "fixed",
+                  value: "fixed"
                 })
               )
             }
@@ -41,11 +41,11 @@ export const Scheduling: React.FC<Props> = () => {
         <div className={css.group}>
           <input
             checked={type === "weekRotation"}
-            onChange={(e) =>
+            onChange={() =>
               dispatch(
                 setAcademicYearSchedulePayload({
                   key: "type",
-                  value: "weekRotation",
+                  value: "weekRotation"
                 })
               )
             }
@@ -60,11 +60,11 @@ export const Scheduling: React.FC<Props> = () => {
         <div className={css.group}>
           <input
             checked={type === "dayRotation"}
-            onChange={(e) =>
+            onChange={() =>
               dispatch(
                 setAcademicYearSchedulePayload({
                   key: "type",
-                  value: "dayRotation",
+                  value: "dayRotation"
                 })
               )
             }
@@ -78,9 +78,23 @@ export const Scheduling: React.FC<Props> = () => {
         </div>
       </div>
       <div>
-        {type === "weekRotation" && <WeekRotation />}
-        {type === "dayRotation" && <DayRotation />}
+        <SchedulingFactory type={type} />
       </div>
     </div>
   );
+};
+
+interface SchedulingFactoryProps {
+  type: string;
+}
+
+const SchedulingFactory: React.FC<SchedulingFactoryProps> = ({ type }) => {
+  switch (type) {
+    case "weekRotation":
+      return <WeekRotation />;
+    case "dayRotation":
+      return <DayRotation />;
+    default:
+      return null;
+  }
 };

@@ -2,6 +2,7 @@ import React from "react";
 import { FaCaretDown } from "react-icons/fa";
 
 import css from "./HeaderSelect.module.css";
+import ctx from "classnames";
 
 //! filter term
 interface Props {
@@ -16,6 +17,7 @@ interface Props {
   setSubState?: (value: any) => void;
   defaultValue?: any;
   defaultSubStateValue?: any;
+  classNames?: string;
 }
 
 export const HeaderSelect: React.FC<Props> = ({
@@ -24,6 +26,7 @@ export const HeaderSelect: React.FC<Props> = ({
   setState,
   defaultValue,
   setSubState,
+  classNames,
   defaultSubStateValue
 }) => {
   const [selected, setSelected] = React.useState(data[0]);
@@ -38,10 +41,10 @@ export const HeaderSelect: React.FC<Props> = ({
     if (defaultValue)
       setSelected(data.filter((d) => d.value === defaultValue)[0]);
     // ! defaultSubStateValue
-  }, []);
+  }, [defaultValue]);
 
   return (
-    <div className={css.wrapper}>
+    <div className={ctx(css.wrapper, classNames)}>
       <div onClick={() => setActive(!active)} className={css.select}>
         <div className={css.title}>{label}</div>
         <div className={css.meta}>

@@ -1,3 +1,5 @@
+//! not yet done
+
 import React from "react";
 import { withFormik, FormikProps, Form } from "formik";
 import { connect } from "react-redux";
@@ -15,7 +17,7 @@ import {
   selectCreateTermComponentState,
   WeekRotationPayload,
   DayRotationPayload,
-  AcademicYearSchedulePayload,
+  AcademicYearSchedulePayload
 } from "../../../shared/NewAcademicYear.slice";
 import { Pair } from "../../../types";
 import { isValidDateFormat, getMonthName } from "../../../utils";
@@ -36,7 +38,7 @@ import {
   useNewAcademicYearScheduleMutation,
   useNewPartialDayRotationMutation,
   useNewPartialWeekRotationMutation,
-  useNewTermMutation,
+  useNewTermMutation
 } from "../../../generated/graphql";
 import { selectScheduleComponentState } from "../../../shared/Schedule.slice";
 
@@ -80,7 +82,7 @@ const InnerForm = (props: FormikProps<AcademicYearPayload>) => {
               dateHandler={(value) => {
                 setAcademicYearPayload({
                   key: "startDate",
-                  value: value,
+                  value: value
                 });
               }}
               defaultValue={startDate}
@@ -101,7 +103,7 @@ const InnerForm = (props: FormikProps<AcademicYearPayload>) => {
               dateHandler={(value) => {
                 setAcademicYearPayload({
                   key: "endDate",
-                  value: value,
+                  value: value
                 });
               }}
               defaultValue={endDate}
@@ -118,7 +120,7 @@ const InnerForm = (props: FormikProps<AcademicYearPayload>) => {
         </div>
         <div
           style={{
-            marginTop: "2rem",
+            marginTop: "2rem"
           }}
         >
           <div className={css.tabs}>
@@ -150,7 +152,7 @@ const InnerForm = (props: FormikProps<AcademicYearPayload>) => {
         <div
           className="txt-sm"
           style={{
-            maxWidth: "500px",
+            maxWidth: "500px"
           }}
         >
           An academic year and its terms are used to represent your school year
@@ -160,7 +162,7 @@ const InnerForm = (props: FormikProps<AcademicYearPayload>) => {
       <div className={css.actionBtnGroup}>
         <LoaderButton
           style={{
-            padding: isSubmitting ? "0.7rem 2rem" : "1rem 2rem",
+            padding: isSubmitting ? "0.7rem 2rem" : "1rem 2rem"
           }}
           loading={isSubmitting}
           disabled={isSubmitting}
@@ -180,7 +182,7 @@ const MyForm = withFormik<any, AcademicYearPayload>({
   handleSubmit: (_values, { props, setSubmitting }) => {
     console.log(props);
   },
-  enableReinitialize: true,
+  enableReinitialize: true
 })(InnerForm);
 
 export const EditAcademicYearForm: React.FC<{}> = () => {
