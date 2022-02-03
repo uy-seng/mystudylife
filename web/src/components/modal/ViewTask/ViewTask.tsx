@@ -4,7 +4,7 @@ import { Button } from "../../button";
 import BaseModal from "../BaseModal";
 import { HiLocationMarker } from "react-icons/hi";
 import { GiTeacher } from "react-icons/gi";
-import css from "./ViewClass.module.css";
+import css from "./ViewTask.module.css";
 import moment from "moment";
 import ctx from "classnames";
 import { AiFillClockCircle, AiOutlineClose } from "react-icons/ai";
@@ -18,7 +18,7 @@ interface Props {
   data?: GetClassesQuery["getClasses"][0];
 }
 
-export const ViewClass: React.FC<Props> = ({ childController, data }) => {
+export const ViewTask: React.FC<Props> = ({ childController, data }) => {
   const [show, setShow] = React.useState(false);
 
   if (data)
@@ -46,7 +46,7 @@ export const ViewClass: React.FC<Props> = ({ childController, data }) => {
             <BaseModal.Title
               style={{
                 fontSize: "20px",
-                maxWidth: "300px"
+                maxWidth: "300px",
               }}
             >
               {`${data?.subject.name}`}
@@ -105,14 +105,14 @@ export const ViewClass: React.FC<Props> = ({ childController, data }) => {
                     <div
                       style={{
                         display: "grid",
-                        gridTemplateColumns: "1fr 1fr 1fr"
+                        gridTemplateColumns: "1fr 1fr 1fr",
                       }}
                     >
                       {data.schedule?.repeat?.map((day, i) => (
                         <div>
                           <div
                             style={{
-                              textTransform: "capitalize"
+                              textTransform: "capitalize",
                             }}
                           >
                             {day.repeatDays.join(", ")}
