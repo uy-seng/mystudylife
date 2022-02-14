@@ -7,7 +7,7 @@ import {
 } from "typeorm";
 import { Subject, Exam, AcademicYear, Term, User } from "..";
 import { TaskType } from "../types";
-import { Field, ObjectType } from "type-graphql";
+import { Field, Int, ObjectType } from "type-graphql";
 
 @Entity("tasks", {
   orderBy: {
@@ -35,6 +35,10 @@ export class Task {
   @Column()
   @Field(() => String)
   detail: string;
+
+  @Column()
+  @Field(() => Int, {defaultValue: 0})
+  completed: Number;
 
   @CreateDateColumn({ default: () => "NOW()" })
   createdAt: Date;

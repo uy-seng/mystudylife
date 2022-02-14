@@ -1,5 +1,5 @@
 import React from "react";
-import { GetClassesQuery } from "../../../generated/graphql";
+import { GetClassesQuery, GetTasksQuery } from "../../../generated/graphql";
 import { Button } from "../../button";
 import BaseModal from "../BaseModal";
 import { HiLocationMarker } from "react-icons/hi";
@@ -12,10 +12,13 @@ import { MdEdit } from "react-icons/md";
 import { BsCalendar, BsPersonFill } from "react-icons/bs";
 import { formatDate, formatTime } from "../../../utils";
 import { DeleteClass, EditClass } from "..";
+import { Slider } from "../../input/Slider";
+import { DeleteTask } from "../DeleteTask";
+import { GrInProgress } from "react-icons/gr";
 
 interface Props {
-  childController: React.ReactNode;
-  data?: GetClassesQuery["getClasses"][0];
+  childController?: React.ReactNode;
+  data?: GetTasksQuery["getTasks"][0];
 }
 
 export const ViewTask: React.FC<Props> = ({ childController, data }) => {
@@ -31,14 +34,14 @@ export const ViewTask: React.FC<Props> = ({ childController, data }) => {
         ) : (
           <Button
             as="neutral"
-            text={`View Class`}
+            text={`View Task`}
             onClick={() => setShow(true)}
           />
         )}
 
         <BaseModal
           hide={() => setShow(false)}
-          className="viewClass"
+          className="viewTask"
           parent={document.querySelector(".App") as Element}
           show={show}
         >
@@ -49,18 +52,16 @@ export const ViewTask: React.FC<Props> = ({ childController, data }) => {
                 maxWidth: "300px",
               }}
             >
-              {`${data?.subject.name}`}
-              {`${data.module ? " : " + data.module : ""}`}
+              <div>{`${data.title}`}</div>
+              <div className="txt-sm">{`${data.subject.name}`}</div>
             </BaseModal.Title>
-            <BaseModal.Extra>
-              {data.academicYear
-                ? `${data?.academicYear?.startDate.split("-")[0]}-${
-                    data?.academicYear?.endDate.split("-")[0]
-                  }`
-                : `No year/term`}
-            </BaseModal.Extra>
+            <DeleteTask
+              taskId={data!.id}
+              closeParent={() => setShow(false)}
+              parentClassName={"viewTask"}
+            />
 
-            <DeleteClass
+            {/* <DeleteClass
               classId={data!.id}
               closeParent={() => setShow(false)}
               parentClassName={"viewClass"}
@@ -74,95 +75,40 @@ export const ViewTask: React.FC<Props> = ({ childController, data }) => {
               style={{ top: "1.5rem" }}
             >
               <AiOutlineClose />
-            </div>
+            </div> */}
           </BaseModal.Header>
           <BaseModal.Body style={{ padding: "1.5rem" }}>
-            <div className={css.detail}>
-              {data?.schedule.oneOff && (
-                <div className={css.row}>
-                  <div>
-                    <BsCalendar />
-                  </div>
-                  <div>
-                    {`${formatTime(
-                      data.schedule.oneOff.startTime
-                    )} - ${formatTime(data.schedule.oneOff.endTime)} --${
-                      formatDate(new Date(data.schedule.oneOff.date)) ===
-                      formatDate(new Date())
-                        ? " Today"
-                        : ` ${formatDate(new Date(data.schedule.oneOff.date))}`
-                    }`}
-                  </div>
-                </div>
-              )}
-              {data.academicYear?.schedule.type === "fixed" &&
-                data.schedule?.repeat &&
-                data.schedule?.repeat.length > 0 && (
-                  <div className={css.row}>
-                    <div>
-                      <AiFillClockCircle />
-                    </div>
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 1fr 1fr",
-                      }}
+            <div className={css.section}>
+              <div className={css.icon}>
+                <BsCalendar />
+              </div>
+              <div className={css.info}>
+                <div>Due {formatDate(new Date(data.due_date))}</div>
+                {new Date(data.due_date) < new Date() && (
+                  <div className="txt-sm">
+                    <span
+                      style={{ color: "var(--error)" }}
+                      className="txt-bold"
                     >
-                      {data.schedule?.repeat?.map((day, i) => (
-                        <div>
-                          <div
-                            style={{
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            {day.repeatDays.join(", ")}
-                          </div>
-                          <div className="txt-sm ">
-                            {formatTime(day.startTime)} -{" "}
-                            {formatTime(day.endTime)}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                      Overdue by{" "}
+                      {Math.ceil(
+                        Math.abs(+new Date() - +new Date(data.due_date)) /
+                          (1000 * 60 * 60 * 24)
+                      )}{" "}
+                      days
+                    </span>
                   </div>
                 )}
-              {data.room && (
-                <div className={css.row}>
-                  <div>
-                    <HiLocationMarker />
-                  </div>
-                  <div>{data?.room}</div>
-                </div>
-              )}
-              <div className={css.row}>
-                <div>
-                  <BsPersonFill />
-                </div>
-                <div>{data?.teacher || "Not specified"}</div>
               </div>
-              {/* //! need to fix for multiple repeat schedule render in the same week */}
-              {data.academicYear?.schedule.type === "weekRotation" &&
-                data?.schedule.repeat &&
-                data.schedule.repeat.map((d) => (
-                  <div className={css.rotationWeek}>
-                    <div className={ctx(css.weekNumber, css.levelOne)}>
-                      <span>{`${
-                        d.rotationWeek === 0
-                          ? `Weekly`
-                          : `Week ${d.rotationWeek}`
-                      }`}</span>
-                      <div />
-                    </div>
-                    <div className={ctx(css.weekDetail, css.levelTwo)}>
-                      <div>{d.repeatDays.join(", ")}</div>
-                      <div>
-                        {`${formatTime(d.startTime)} - ${formatTime(
-                          d.endTime
-                        )}`}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+            </div>
+
+            <div className={css.section}>
+              <div className={css.icon}>
+                <GrInProgress />
+              </div>
+              <div className={css.info}>
+                <Slider min={0} max={100} />
+              </div>
             </div>
           </BaseModal.Body>
         </BaseModal>

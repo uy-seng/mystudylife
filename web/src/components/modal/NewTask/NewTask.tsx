@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { useGetAcademicYearsQuery } from "../../../generated/graphql";
 import {
   selectTaskPayload,
-  setTaskPayload
+  setTaskPayload,
 } from "../../../shared/NewTask.slice";
 import { IconButton } from "../../button";
 import { NewTaskForm } from "../../forms/NewTask";
@@ -29,7 +29,7 @@ export const NewTask: React.FC<Props> = ({ parentClass }) => {
       dispatch(
         setTaskPayload({
           key: "academicYearId",
-          value: academicYears?.getAcademicYears[0]?.id || undefined
+          value: academicYears?.getAcademicYears[0]?.id || undefined,
         })
       );
   }, [academicYears]);
@@ -43,13 +43,18 @@ export const NewTask: React.FC<Props> = ({ parentClass }) => {
             backgroundColor: "var(--primary)",
             color: "white",
             width: "max-content",
-            height: "max-content"
+            height: "max-content",
           }}
           onClick={() => setShow(true)}
           icon={<AiOutlinePlus />}
           text={"New Task"}
         />
-        <BaseModal className="newtask" parent={parent as Element} show={show}>
+        <BaseModal
+          className="newtask"
+          parent={parent as Element}
+          hide={() => setShow(false)}
+          show={show}
+        >
           <BaseModal.Header>
             <HeaderSelect
               defaultValue={taskPayload.academicYearId || null}
@@ -57,7 +62,7 @@ export const NewTask: React.FC<Props> = ({ parentClass }) => {
                 dispatch(
                   setTaskPayload({
                     key: "academicYearId",
-                    value: value
+                    value: value,
                   })
                 );
               }}
@@ -66,7 +71,7 @@ export const NewTask: React.FC<Props> = ({ parentClass }) => {
                 {
                   key: "None",
                   value: null,
-                  label: "No year/term"
+                  label: "No year/term",
                 },
                 ...academicYears.getAcademicYears.map((academicYear) => {
                   return {
@@ -76,9 +81,9 @@ export const NewTask: React.FC<Props> = ({ parentClass }) => {
                     label: `${academicYear.startDate.split("-")[0]} - ${
                       academicYear.endDate.split("-")[0]
                     }`,
-                    value: academicYear.id
+                    value: academicYear.id,
                   };
-                })
+                }),
               ]}
             />
             <div
@@ -87,7 +92,7 @@ export const NewTask: React.FC<Props> = ({ parentClass }) => {
               }}
               className="close"
               style={{
-                top: "2rem"
+                top: "2rem",
               }}
             >
               <AiOutlineClose />
@@ -96,7 +101,7 @@ export const NewTask: React.FC<Props> = ({ parentClass }) => {
           <BaseModal.Body
             style={{
               maxHeight: "550px",
-              overflowY: "scroll"
+              overflowY: "scroll",
             }}
           >
             <NewTaskForm setShow={setShow} />

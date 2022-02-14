@@ -43,6 +43,7 @@ export class TaskResolver {
       due_date: due_date,
       detail: detail,
       type: type,
+      completed: 0
     });
 
     const subject = await this.subjectRepository.findOne(subjectId);
@@ -109,7 +110,7 @@ export class TaskResolver {
         },
       },
     });
-    console.log(new Date(date.toISOString().split("T")[0]));
+
     return tasks.filter(
       (c) =>
         +new Date(c.due_date) === +new Date(date.toISOString().split("T")[0])
@@ -160,6 +161,8 @@ export class TaskResolver {
     q.type = updateContext.type as TaskType;
     q.academicYear = updatedAcademicYear;
     q.subject = updatedSubject;
+
+    if(q.completed) q.completed = updateContext.completed as number;
 
     await this.taskRepository.save(q);
     return true;

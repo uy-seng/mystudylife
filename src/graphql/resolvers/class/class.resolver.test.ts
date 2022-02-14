@@ -361,7 +361,7 @@ describe("test case 3: query class base on date", () => {
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
-    expect(response.data!.getClassesByDate.length).toEqual(2);
+    expect(response.data!.getClassesByDate.length).toEqual(1);
   });
 
   it("should return class within academic years", async () => {
@@ -376,7 +376,7 @@ describe("test case 3: query class base on date", () => {
     });
     expect(response.errors).toBeUndefined();
     expect(response.data).not.toBeNull();
-    expect(response.data!.getClassesByDate.length).toEqual(1);
+    expect(response.data!.getClassesByDate.length).toEqual(0);
   });
 
   it("should return no class", async () => {

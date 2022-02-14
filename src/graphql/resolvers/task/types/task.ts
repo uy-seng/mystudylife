@@ -25,10 +25,14 @@ export class TaskArgs implements Partial<Task> {
 
   @Field(() => String, { defaultValue: "" })
   detail?: string;
+
 }
 
 @ArgsType()
 export class UpdateTaskArgs extends TaskArgs {
   @Field(() => String)
   id: string;
+
+  @Field(() => Number, {nullable: true})
+  completed?: number;
 }

@@ -1,46 +1,10 @@
-.row {
+.section {
   display: grid;
   grid-template-columns: 2rem 1fr;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
 }
 
-.detail {
-  min-width: 500px;
-}
-
-.rotationWeek {
-  padding-top: 1rem;
-  border-top: 1px solid var(--border-gray);
-}
-
-.levelOne {
-  padding-left: 1rem;
-}
-
-.weekNumber {
-  display: flex;
-  align-items: center;
-}
-
-.weekNumber > span {
-  white-space: nowrap;
-  padding-right: 1rem;
-  font-weight: bold;
-  font-size: 14px;
-}
-
-.weekNumber > div {
-  height: 1px;
-  width: 100%;
-  background-color: var(--border-gray);
-}
-
-.levelTwo {
-  padding-left: 2rem;
-}
-
-.weekDetail {
-  margin-top: 1rem;
-  text-transform: capitalize;
-  margin-bottom: 2rem;
+.icon {
+  margin-right: 0.5rem;
+  padding-top: 4px;
 }

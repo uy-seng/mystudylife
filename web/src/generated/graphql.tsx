@@ -100,18 +100,15 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  register?: Maybe<Scalars['Boolean']>;
-  login: LoginResponse;
-  logout: Scalars['Boolean'];
   newAcademicYear: AcademicYear;
   deleteAcademicYear: Scalars['Boolean'];
   newSchedule: AcademicYearSchedule;
   newPartialWeekRotation: WeekRotationSchedule;
   newPartialDayRotation: DayRotationSchedule;
   newTerm: Term;
-  newSubject: Subject;
-  deleteSubject: Scalars['Boolean'];
-  updateSubject: Scalars['Boolean'];
+  register?: Maybe<Scalars['Boolean']>;
+  login: LoginResponse;
+  logout: Scalars['Boolean'];
   newClass: Class;
   deleteClass: Scalars['Boolean'];
   updateClass: Scalars['Boolean'];
@@ -121,25 +118,15 @@ export type Mutation = {
   newRepeatSchedule: RepeatSchedule;
   updateRepeatSchedule: Scalars['Boolean'];
   deleteRepeatSchedule: Scalars['Boolean'];
-  newTask: Task;
-  deleteTask: Scalars['Boolean'];
-  updateTask: Scalars['Boolean'];
   newHoliday: Holiday;
   deleteHoliday: Scalars['Boolean'];
   updateHoliday: Scalars['Boolean'];
-};
-
-
-export type MutationRegisterArgs = {
-  password: Scalars['String'];
-  email: Scalars['String'];
-  username: Scalars['String'];
-};
-
-
-export type MutationLoginArgs = {
-  password: Scalars['String'];
-  email: Scalars['String'];
+  newSubject: Subject;
+  deleteSubject: Scalars['Boolean'];
+  updateSubject: Scalars['Boolean'];
+  newTask: Task;
+  deleteTask: Scalars['Boolean'];
+  updateTask: Scalars['Boolean'];
 };
 
 
@@ -183,23 +170,16 @@ export type MutationNewTermArgs = {
 };
 
 
-export type MutationNewSubjectArgs = {
-  termId?: Maybe<Scalars['String']>;
-  academicYearId?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
+export type MutationRegisterArgs = {
+  password: Scalars['String'];
+  email: Scalars['String'];
+  username: Scalars['String'];
 };
 
 
-export type MutationDeleteSubjectArgs = {
-  id: Scalars['String'];
-};
-
-
-export type MutationUpdateSubjectArgs = {
-  termId?: Maybe<Scalars['String']>;
-  academicYearId?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
-  id: Scalars['String'];
+export type MutationLoginArgs = {
+  password: Scalars['String'];
+  email: Scalars['String'];
 };
 
 
@@ -282,6 +262,48 @@ export type MutationDeleteRepeatScheduleArgs = {
 };
 
 
+export type MutationNewHolidayArgs = {
+  academicYearId: Scalars['String'];
+  name: Scalars['String'];
+  startDate: Scalars['String'];
+  endDate: Scalars['String'];
+};
+
+
+export type MutationDeleteHolidayArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationUpdateHolidayArgs = {
+  academicYearId: Scalars['String'];
+  name: Scalars['String'];
+  startDate: Scalars['String'];
+  endDate: Scalars['String'];
+  id: Scalars['String'];
+};
+
+
+export type MutationNewSubjectArgs = {
+  termId?: Maybe<Scalars['String']>;
+  academicYearId?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+};
+
+
+export type MutationDeleteSubjectArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationUpdateSubjectArgs = {
+  termId?: Maybe<Scalars['String']>;
+  academicYearId?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  id: Scalars['String'];
+};
+
+
 export type MutationNewTaskArgs = {
   subjectId: Scalars['String'];
   academicYearId?: Maybe<Scalars['String']>;
@@ -305,28 +327,7 @@ export type MutationUpdateTaskArgs = {
   title?: Maybe<Scalars['String']>;
   detail?: Maybe<Scalars['String']>;
   id: Scalars['String'];
-};
-
-
-export type MutationNewHolidayArgs = {
-  academicYearId: Scalars['String'];
-  name: Scalars['String'];
-  startDate: Scalars['String'];
-  endDate: Scalars['String'];
-};
-
-
-export type MutationDeleteHolidayArgs = {
-  id: Scalars['String'];
-};
-
-
-export type MutationUpdateHolidayArgs = {
-  academicYearId: Scalars['String'];
-  name: Scalars['String'];
-  startDate: Scalars['String'];
-  endDate: Scalars['String'];
-  id: Scalars['String'];
+  completed?: Maybe<Scalars['Float']>;
 };
 
 export type OneOffSchedule = {
@@ -339,14 +340,14 @@ export type OneOffSchedule = {
 
 export type Query = {
   __typename?: 'Query';
-  me: User;
   getAcademicYears: Array<AcademicYear>;
   getAcademicYear?: Maybe<AcademicYear>;
-  getSubjects: Array<Subject>;
-  getSubject: Subject;
+  me: User;
   getClasses: Array<Class>;
   getClassById: Class;
   getClassesByDate: Array<Class>;
+  getSubjects: Array<Subject>;
+  getSubject: Subject;
   getTasks: Array<Task>;
   getTaskById: Task;
   getTasksByDate: Array<Task>;
@@ -358,11 +359,6 @@ export type QueryGetAcademicYearArgs = {
 };
 
 
-export type QueryGetSubjectArgs = {
-  id: Scalars['String'];
-};
-
-
 export type QueryGetClassByIdArgs = {
   id: Scalars['String'];
 };
@@ -370,6 +366,11 @@ export type QueryGetClassByIdArgs = {
 
 export type QueryGetClassesByDateArgs = {
   date: Scalars['DateTime'];
+};
+
+
+export type QueryGetSubjectArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -408,6 +409,7 @@ export type Task = {
   due_date: Scalars['String'];
   title: Scalars['String'];
   detail: Scalars['String'];
+  completed?: Maybe<Scalars['Int']>;
   subject: Subject;
   academicYear?: Maybe<AcademicYear>;
 };
@@ -515,14 +517,14 @@ export type GetSubjectsQuery = { __typename?: 'Query', getSubjects: Array<{ __ty
 export type GetTasksQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTasksQuery = { __typename?: 'Query', getTasks: Array<{ __typename?: 'Task', id: string, title: string, detail: string, type: string, due_date: string, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string }>, subject: { __typename?: 'Subject', id: string, name: string } }> };
+export type GetTasksQuery = { __typename?: 'Query', getTasks: Array<{ __typename?: 'Task', id: string, title: string, detail: string, type: string, due_date: string, completed?: Maybe<number>, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string }>, subject: { __typename?: 'Subject', id: string, name: string } }> };
 
 export type GetTasksByDateQueryVariables = Exact<{
   date: Scalars['DateTime'];
 }>;
 
 
-export type GetTasksByDateQuery = { __typename?: 'Query', getTasksByDate: Array<{ __typename?: 'Task', id: string, title: string, detail: string, type: string, due_date: string, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string }>, subject: { __typename?: 'Subject', id: string, name: string } }> };
+export type GetTasksByDateQuery = { __typename?: 'Query', getTasksByDate: Array<{ __typename?: 'Task', id: string, title: string, detail: string, type: string, due_date: string, completed?: Maybe<number>, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string }>, subject: { __typename?: 'Subject', id: string, name: string } }> };
 
 export type LoginMutationVariables = Exact<{
   loginPassword: Scalars['String'];
@@ -1182,6 +1184,7 @@ export const GetTasksDocument = gql`
       id
       name
     }
+    completed
   }
 }
     `;
@@ -1229,6 +1232,7 @@ export const GetTasksByDateDocument = gql`
       id
       name
     }
+    completed
   }
 }
     `;

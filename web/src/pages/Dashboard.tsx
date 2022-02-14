@@ -1,8 +1,11 @@
 import React from "react";
 import { Counter } from "../components/counter";
 import { NewTask } from "../components/modal";
+import { ViewTask } from "../components/modal/ViewTask";
 import { useGetTasksQuery } from "../generated/graphql";
 import { formatDate } from "../utils";
+
+import { GrInProgress } from "react-icons/gr";
 
 import css from "./Dashboard.module.css";
 
@@ -68,7 +71,31 @@ export const Dashboard: React.FC<Props> = () => {
       <div className={css.body}>
         <div className={css.bodySection}></div>
         <div className={css.bodySection}>
-          {tasks && tasks.getTasks.map((task) => <div>{task.title}</div>)}
+          {tasks &&
+            tasks.getTasks.map((task) => (
+              <ViewTask
+                childController={
+                  <div className={css.task}>
+                    <div className={css.left}>
+                      <div>{task.title}</div>
+                      <div>{task.subject.name}</div>
+                    </div>
+                    <div className={css.right}>
+                      <div>
+                        <div>
+                          {formatDate(new Date(task.due_date))
+                            .split(" ")
+                            .slice(0, 2)
+                            .join(" ")}
+                        </div>
+                        <div>{task.completed}%</div>
+                      </div>
+                    </div>
+                  </div>
+                }
+                data={task}
+              />
+            ))}
         </div>
         <div className={css.bodySection}></div>
       </div>
