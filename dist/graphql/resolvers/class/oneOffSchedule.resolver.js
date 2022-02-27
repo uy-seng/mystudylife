@@ -29,13 +29,13 @@ let OneOffScheduleResolver = class OneOffScheduleResolver {
             startTime: startTime,
             endTime: endTime,
             date: date,
-            scheduleId: scheduleId,
+            scheduleId: scheduleId
         });
         return await this.oneOffScheduleRepository.save(oneOffSchedule);
     }
     async updateOneOffSchedule(updateContext, { user }) {
         const q = await this.oneOffScheduleRepository.findOne(updateContext.id, {
-            relations: ["schedule", "schedule.class", "schedule.class.user"],
+            relations: ["schedule", "schedule.class", "schedule.class.user"]
         });
         if ((q === null || q === void 0 ? void 0 : q.schedule.class.user.id) !== user.id || !q)
             throw new apollo_server_express_1.ValidationError("items not found, please provide a valid id");

@@ -51,6 +51,10 @@ __decorate([
     (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], UpdateTaskArgs.prototype, "id", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => Number, { nullable: true }),
+    __metadata("design:type", Number)
+], UpdateTaskArgs.prototype, "completed", void 0);
 UpdateTaskArgs = __decorate([
     (0, type_graphql_1.ArgsType)()
 ], UpdateTaskArgs);

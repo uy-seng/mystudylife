@@ -37,6 +37,10 @@ __decorate([
     (0, type_graphql_1.Field)(() => String, { nullable: true }),
     __metadata("design:type", String)
 ], ClassArgs.prototype, "academicYearId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => String, { nullable: true }),
+    __metadata("design:type", String)
+], ClassArgs.prototype, "termId", void 0);
 ClassArgs = __decorate([
     (0, type_graphql_1.ArgsType)()
 ], ClassArgs);

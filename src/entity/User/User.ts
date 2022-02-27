@@ -7,7 +7,15 @@ import {
   OneToOne,
   JoinColumn,
 } from "typeorm";
-import { Task, Exam, Subject, Class, AcademicYear, UserProvider } from "..";
+import {
+  Task,
+  Exam,
+  Subject,
+  Class,
+  AcademicYear,
+  UserProvider,
+  Holiday,
+} from "..";
 
 @Entity("users")
 @ObjectType()
@@ -28,8 +36,11 @@ export class User {
   @Field(() => String, { nullable: true })
   password: string;
 
+  @Column({ nullable: true })
+  userProviderId: string;
+
   @OneToOne(() => UserProvider)
-  @JoinColumn()
+  @JoinColumn({ name: "userProviderId", referencedColumnName: "id" })
   @Field(() => UserProvider)
   provider: UserProvider;
 
@@ -53,4 +64,7 @@ export class User {
     onDelete: "CASCADE",
   })
   academicYears: AcademicYear[];
+
+  @OneToMany(() => Holiday, (holiday) => holiday.user, { onDelete: "CASCADE" })
+  holidays: Holiday[];
 }

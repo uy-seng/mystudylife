@@ -24,5 +24,11 @@ query GetAcademicYears {
         startWeek
       }
     }
+    holidays{
+      id
+      name
+      startDate
+      endDate
+    }
   }
 }

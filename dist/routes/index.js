@@ -6,7 +6,7 @@ const auth_route_1 = require("./auth.route");
 exports.apiRoute = (0, express_1.Router)();
 exports.apiRoute.get("/", (_req, res) => {
     return res.status(200).json({
-        message: "My Study Life API",
+        message: "My Study Life API"
     });
 });
 exports.apiRoute.use("/auth", auth_route_1.authRoute);

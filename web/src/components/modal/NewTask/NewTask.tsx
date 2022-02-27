@@ -11,13 +11,18 @@ import { NewTaskForm } from "../../forms/NewTask";
 import { HeaderSelect } from "../../select";
 import BaseModal from "../BaseModal";
 
-interface Props {}
+interface Props {
+  parentClass?: string;
+}
 
-export const NewTask: React.FC<Props> = () => {
+export const NewTask: React.FC<Props> = ({ parentClass }) => {
   const [show, setShow] = React.useState<boolean>(false);
   const { data: academicYears } = useGetAcademicYearsQuery();
   const dispatch = useAppDispatch();
   const taskPayload = useAppSelector(selectTaskPayload);
+  const parent = parentClass
+    ? document.querySelector(`.${parentClass}`)
+    : document.querySelector(".App");
 
   React.useEffect(() => {
     if (academicYears)
@@ -37,13 +42,17 @@ export const NewTask: React.FC<Props> = () => {
           style={{
             backgroundColor: "var(--primary)",
             color: "white",
+            width: "max-content",
+            height: "max-content",
           }}
           onClick={() => setShow(true)}
           icon={<AiOutlinePlus />}
           text={"New Task"}
         />
         <BaseModal
-          parent={document.querySelector(".App") as Element}
+          className="newtask"
+          parent={parent as Element}
+          hide={() => setShow(false)}
           show={show}
         >
           <BaseModal.Header>
@@ -89,7 +98,12 @@ export const NewTask: React.FC<Props> = () => {
               <AiOutlineClose />
             </div>
           </BaseModal.Header>
-          <BaseModal.Body>
+          <BaseModal.Body
+            style={{
+              maxHeight: "550px",
+              overflowY: "scroll",
+            }}
+          >
             <NewTaskForm setShow={setShow} />
           </BaseModal.Body>
         </BaseModal>

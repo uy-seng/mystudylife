@@ -1,24 +1,22 @@
 import {
+  deleteTaskMutation,
   loginMutation,
   newAcademicYearMutation,
   newScheduleMutation,
   newSubjectMutation,
+  newTaskMutation,
   registerMutation,
+  updateTaskMutation,
 } from "../../../graphql/mutation";
-import { meQuery } from "../../../graphql/query";
+import {
+  meQuery,
+  getTasksByDateQuery,
+  getTasksQuery,
+} from "../../../graphql/query";
 import { testClient } from "../../../../test/graphqlTestClient";
 import faker from "faker";
 import { getConnection } from "typeorm";
 import { AcademicYear, Subject, Task } from "../../../entity";
-import {
-  deleteTaskMutation,
-  newTaskMutation,
-  updateTaskMutation,
-} from "../../../graphql/mutation/task";
-import {
-  getTasksByDateQuery,
-  getTasksQuery,
-} from "../../../graphql/query/task";
 
 const testUser = {
   email: faker.internet.email(),

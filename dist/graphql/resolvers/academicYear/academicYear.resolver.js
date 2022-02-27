@@ -26,7 +26,7 @@ let AcademicYearResolver = class AcademicYearResolver {
     async newAcademicYear({ startDate, endDate }, { user }) {
         const newAcademicYear = this.academicYearRepository.create({
             startDate: startDate,
-            endDate: endDate,
+            endDate: endDate
         });
         const userRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.User);
         const qUser = await userRepository.findOne(user.id);
@@ -43,12 +43,13 @@ let AcademicYearResolver = class AcademicYearResolver {
                 "schedule",
                 "schedule.dayRotation",
                 "schedule.weekRotation",
+                "holidays"
             ],
             where: {
                 user: {
-                    id: user.id,
-                },
-            },
+                    id: user.id
+                }
+            }
         });
         return academicYears;
     }
@@ -60,8 +61,8 @@ let AcademicYearResolver = class AcademicYearResolver {
                     "schedule",
                     "schedule.dayRotation",
                     "schedule.weekRotation",
-                    "user",
-                ],
+                    "user"
+                ]
             });
             if (!academicYear)
                 throw new apollo_server_errors_1.ValidationError("invalid academic year id");
@@ -73,7 +74,7 @@ let AcademicYearResolver = class AcademicYearResolver {
     }
     async deleteAcademicYear(id, { user }) {
         const academicYear = await this.academicYearRepository.findOne(id, {
-            relations: ["user"],
+            relations: ["user"]
         });
         if (!academicYear)
             throw new apollo_server_errors_1.ValidationError("invalid id");

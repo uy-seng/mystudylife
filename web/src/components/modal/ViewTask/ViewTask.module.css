@@ -1,0 +1,14 @@
+.section {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  margin-bottom: 0.5rem;
+}
+
+.icon {
+  margin-right: 0.5rem;
+  padding-top: 4px;
+}
+
+.viewTask {
+  min-width: 500px;
+}

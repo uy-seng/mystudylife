@@ -33,6 +33,7 @@ let TaskResolver = class TaskResolver {
             due_date: due_date,
             detail: detail,
             type: type,
+            completed: 0
         });
         const subject = await this.subjectRepository.findOne(subjectId);
         if (!subject)
@@ -57,7 +58,7 @@ let TaskResolver = class TaskResolver {
                 },
             },
         });
-        return tasks;
+        return tasks.filter(task => task.completed !== 100);
     }
     async getTaskById(id, { user }) {
         const q = await this.taskRepository.findOne(id, {
@@ -81,7 +82,6 @@ let TaskResolver = class TaskResolver {
                 },
             },
         });
-        console.log(new Date(date.toISOString().split("T")[0]));
         return tasks.filter((c) => +new Date(c.due_date) === +new Date(date.toISOString().split("T")[0]));
     }
     async deleteTask(id, { user }) {
@@ -101,15 +101,20 @@ let TaskResolver = class TaskResolver {
             relations: ["user", "subject", "academicYear"],
         });
         const updatedSubject = await this.subjectRepository.findOne(updateContext.subjectId);
-        const updatedAcademicYear = await this.academicYearRepository.findOne(updateContext.academicYearId);
-        if (!q || q.user.id !== user.id || !updatedSubject || !updatedAcademicYear)
+        const updatedAcademicYear = updateContext.academicYearId ? await this.academicYearRepository.findOne(updateContext.academicYearId) : null;
+        if (!q || q.user.id !== user.id || (updateContext.subjectId && !updatedSubject) || (updateContext.academicYearId && !updatedAcademicYear))
             throw new apollo_server_errors_1.ValidationError("item not found. please provide a valid id");
         q.detail = updateContext.detail;
         q.due_date = updateContext.due_date;
         q.title = updateContext.title;
         q.type = updateContext.type;
-        q.academicYear = updatedAcademicYear;
-        q.subject = updatedSubject;
+        if (updatedAcademicYear)
+            q.academicYear = updatedAcademicYear;
+        if (updatedSubject)
+            q.subject = updatedSubject;
+        if (updateContext.completed) {
+            q.completed = updateContext.completed;
+        }
         await this.taskRepository.save(q);
         return true;
     }

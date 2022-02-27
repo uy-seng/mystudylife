@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch } from "react-router-dom";
 import { Guest } from "./pages/Guest";
 import { Dashboard } from "./pages/Dashboard";
 import { SignUp } from "./pages/SignUp";
@@ -11,7 +11,7 @@ import {
   AiFillCheckSquare,
   AiFillSnippets,
   AiFillSchedule,
-  AiOutlineFileSearch,
+  AiOutlineFileSearch
 } from "react-icons/ai";
 import { Sidebar } from "./components/sidebar";
 import { Playground } from "./pages/Playground";
@@ -20,6 +20,7 @@ import { useMeQuery } from "./generated/graphql";
 import { PageLoader } from "./components/loading";
 import { ManageCalendar } from "./pages/ManageCalendar";
 import { Setting } from "./pages/Setting";
+import { ManageTask } from "./pages/ManageTask";
 
 function App() {
   const { data, loading, error } = useMeQuery();
@@ -37,13 +38,14 @@ function App() {
           <React.Fragment>
             <div className={css.page}>
               <Sidebar
+                userName={data?.me?.username}
                 menu={[
                   { icon: <AiFillDashboard />, pathname: "dashboard" },
                   { icon: <AiFillCalendar />, pathname: "calendar" },
                   { icon: <AiFillCheckSquare />, pathname: "task" },
                   { icon: <AiFillSnippets />, pathname: "exam" },
                   { icon: <AiFillSchedule />, pathname: "schedule" },
-                  { icon: <AiOutlineFileSearch />, pathname: "search" },
+                  { icon: <AiOutlineFileSearch />, pathname: "search" }
                 ]}
               />
               <PrivateRoute
@@ -57,6 +59,7 @@ function App() {
                 path="/calendar"
                 component={ManageCalendar}
               />
+              <PrivateRoute data={data} path="/task" component={ManageTask} />
               <PrivateRoute
                 data={data}
                 path="/playground"

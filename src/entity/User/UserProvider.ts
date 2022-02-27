@@ -5,7 +5,7 @@ import { User } from "..";
 @Entity("user_provider")
 @ObjectType()
 export class UserProvider {
-  @PrimaryColumn("uuid")
+  @PrimaryColumn()
   @Field(() => String)
   id: string;
 

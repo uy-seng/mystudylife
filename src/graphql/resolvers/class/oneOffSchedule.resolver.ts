@@ -22,7 +22,7 @@ export class OneOffScheduleResolver {
       startTime: startTime,
       endTime: endTime,
       date: date,
-      scheduleId: scheduleId,
+      scheduleId: scheduleId
     });
     return await this.oneOffScheduleRepository.save(oneOffSchedule);
   }
@@ -34,7 +34,7 @@ export class OneOffScheduleResolver {
     @Ctx() { user }: Context
   ) {
     const q = await this.oneOffScheduleRepository.findOne(updateContext.id, {
-      relations: ["schedule", "schedule.class", "schedule.class.user"],
+      relations: ["schedule", "schedule.class", "schedule.class.user"]
     });
     if (q?.schedule.class.user.id !== user!.id || !q)
       throw new ValidationError("items not found, please provide a valid id");

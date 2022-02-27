@@ -10,7 +10,7 @@ export const formatDate = (date: Date) => {
     .toLocaleDateString("en-US", {
       month: "long",
       day: "2-digit",
-      year: "numeric",
+      year: "numeric"
     })
     .split(",")
     .join("");
@@ -37,7 +37,7 @@ export const getMonthName = (monthNumber: number) => {
     "September",
     "October",
     "November",
-    "December",
+    "December"
   ];
   return MONTH[monthNumber - 1];
 };
@@ -68,7 +68,7 @@ export const daysOfWeek: DayOfWeek[] = [
   "wednesday",
   "thursday",
   "friday",
-  "saturday",
+  "saturday"
 ];
 
 export const getWeekNumberForWeekRotation = (
@@ -85,7 +85,66 @@ export const generateClassByDate = (
   state: GetClassesQuery | undefined,
   currentDate: Date
 ) => {
-  return state?.getClasses.filter((c) => {});
+  return state?.getClasses.filter((c) => {
+    // check for academic year schedule type
+    if (c.academicYear?.schedule.type === "fixed") {
+      if (c.schedule.type === "oneOff") {
+        // one off schedule
+        return +new Date(c.schedule.oneOff!.date) === +currentDate;
+      } else if (c.schedule.type === "repeat") {
+        // repeat schedule
+        //! need to check if class have term or not
+        // class must be between academic year start date and end date
+        // class must be on current date
+        return (
+          c.schedule!.repeat?.some((r) =>
+            r.repeatDays.includes(daysOfWeek[currentDate.getDay()])
+          ) &&
+          +new Date(c.academicYear!.startDate) <= +currentDate &&
+          +currentDate <= +new Date(c.academicYear!.endDate)
+        );
+      }
+    } else if (c.academicYear?.schedule.type === "dayRotation") {
+    } else if (c.academicYear?.schedule.type === "weekRotation") {
+      if (
+        getWeekNumberForWeekRotation(
+          new Date(c.academicYear!.startDate),
+          currentDate
+        )
+      ) {
+        const targetRepeatScheduleIndex = c.schedule.repeat?.findIndex((r) =>
+          r.repeatDays.includes(daysOfWeek[currentDate.getDay()])
+        );
+
+        if (
+          targetRepeatScheduleIndex !== -1 &&
+          c!.schedule!.repeat![targetRepeatScheduleIndex as number]!
+            .rotationWeek === 0
+        ) {
+          return (
+            +currentDate >= +new Date(c.academicYear!.startDate) &&
+            +currentDate <= +new Date(c.academicYear!.endDate)
+          );
+        }
+
+        return (
+          +currentDate >= +new Date(c.academicYear!.startDate) &&
+          +currentDate <= +new Date(c.academicYear!.endDate) &&
+          targetRepeatScheduleIndex !== -1 &&
+          c.academicYear.schedule.weekRotation!.numOfWeek -
+            (((getWeekNumberForWeekRotation(
+              new Date(c.academicYear.startDate),
+              currentDate
+            ) as number) +
+              c.academicYear.schedule.weekRotation!.startWeek +
+              1) %
+              c.academicYear.schedule.weekRotation!.numOfWeek) ===
+            c!.schedule!.repeat![targetRepeatScheduleIndex as number]!
+              .rotationWeek
+        );
+      }
+    }
+  });
 };
 
 export const mod = (number: number, modulo: number) => {

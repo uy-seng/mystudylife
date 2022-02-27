@@ -4,13 +4,11 @@ import { DayOfWeek, useGetAcademicYearQuery } from "../../../generated/graphql";
 import {
   selectNewRepeatSchedules,
   selectToBeUpdatedClassPayload,
-  selectToBeUpdatedRepeatSchedules,
-  setNewRepeatSchedules,
-  setToBeUpdatedRepeatSchedules,
+  setNewRepeatSchedules
 } from "../../../shared/EditClass.slice";
 import {
   ClassPayload,
-  RepeatSchedulePayload,
+  RepeatSchedulePayload
 } from "../../../shared/NewClass.slice";
 import { generateArrayBetween, mutateItemInArray } from "../../../utils";
 import { Button } from "../../button";
@@ -27,7 +25,7 @@ interface Props {
 
 export const EditNewRepeatScheduleForm: React.FC<Props> = ({
   setShow,
-  data,
+  data
 }) => {
   const dispatch = useAppDispatch();
   const { academicYearId } = useAppSelector(
@@ -35,10 +33,10 @@ export const EditNewRepeatScheduleForm: React.FC<Props> = ({
   ) as ClassPayload;
   const [
     toBeUpdatedRepeatSchedulePayload,
-    setToBeUpdatedRepeatSchedulePayload,
+    setToBeUpdatedRepeatSchedulePayload
   ] = React.useState<RepeatSchedulePayload>();
   const { data: academicYear } = useGetAcademicYearQuery({
-    variables: { id: academicYearId },
+    variables: { id: academicYearId }
   });
   const newRepeatSchedules = useAppSelector(selectNewRepeatSchedules);
 
@@ -50,7 +48,7 @@ export const EditNewRepeatScheduleForm: React.FC<Props> = ({
       { key: "Wed", value: "wednesday" },
       { key: "Thu", value: "thursday" },
       { key: "Fri", value: "friday" },
-      { key: "Sat", value: "saturday" },
+      { key: "Sat", value: "saturday" }
     ],
     []
   );
@@ -72,7 +70,7 @@ export const EditNewRepeatScheduleForm: React.FC<Props> = ({
         endTime: moment(toBeUpdatedRepeatSchedulePayload?.startTime, "HH:mm")
           .add(1, "hours")
           .add(50, "minutes")
-          .format("HH:mm"),
+          .format("HH:mm")
       });
     }
   }, [toBeUpdatedRepeatSchedulePayload?.startTime]);
@@ -88,13 +86,13 @@ export const EditNewRepeatScheduleForm: React.FC<Props> = ({
               onChange={(e) => {
                 setToBeUpdatedRepeatSchedulePayload({
                   ...toBeUpdatedRepeatSchedulePayload,
-                  rotationWeek: parseInt(e.target.value),
+                  rotationWeek: parseInt(e.target.value)
                 });
               }}
               options={[
                 {
                   key: "Every week",
-                  value: 0,
+                  value: 0
                 },
                 ...generateArrayBetween(
                   1,
@@ -103,9 +101,9 @@ export const EditNewRepeatScheduleForm: React.FC<Props> = ({
                 ).map((number) => {
                   return {
                     key: number,
-                    value: number,
+                    value: number
                   };
-                }),
+                })
               ]}
             />
           </div>
@@ -129,8 +127,8 @@ export const EditNewRepeatScheduleForm: React.FC<Props> = ({
                     ...toBeUpdatedRepeatSchedulePayload,
                     days: [
                       ...toBeUpdatedRepeatSchedulePayload.days,
-                      day.value as DayOfWeek,
-                    ],
+                      day.value as DayOfWeek
+                    ]
                   });
                 } else {
                   // remove
@@ -139,8 +137,8 @@ export const EditNewRepeatScheduleForm: React.FC<Props> = ({
                     days: [
                       ...toBeUpdatedRepeatSchedulePayload.days.filter(
                         (d) => d !== day.value
-                      ),
-                    ],
+                      )
+                    ]
                   });
                 }
                 e.currentTarget.classList.toggle(css.active);
@@ -156,7 +154,7 @@ export const EditNewRepeatScheduleForm: React.FC<Props> = ({
             onChange={(e) => {
               setToBeUpdatedRepeatSchedulePayload({
                 ...toBeUpdatedRepeatSchedulePayload,
-                startTime: e.target.value,
+                startTime: e.target.value
               });
             }}
             value={toBeUpdatedRepeatSchedulePayload.startTime}
@@ -168,7 +166,7 @@ export const EditNewRepeatScheduleForm: React.FC<Props> = ({
             onChange={(e) => {
               setToBeUpdatedRepeatSchedulePayload({
                 ...toBeUpdatedRepeatSchedulePayload,
-                endTime: e.target.value,
+                endTime: e.target.value
               });
             }}
             label="End Time"
@@ -190,7 +188,7 @@ export const EditNewRepeatScheduleForm: React.FC<Props> = ({
             setShow(false);
           }}
           style={{
-            padding: "8px",
+            padding: "8px"
           }}
           as="primary"
           text="Save"

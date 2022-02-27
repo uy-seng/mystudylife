@@ -122,7 +122,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
                     });
                   }}
                 />
-                <NewSubject controller="plus" />
+                <NewSubject parentClass={"newtask"} controller="plus" />
               </div>
               <FormikBasicSelectInput
                 label="Type"
@@ -146,6 +146,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
               <FormikDatepicker
                 name="due_date"
                 dateHandler={(value) => {
+                  console.log(value);
                   setTaskPayload({
                     key: "due_date",
                     value: value,
@@ -219,7 +220,6 @@ const MyForm = withFormik<any, ClassPayload>({
           >
         | undefined
     ) => Promise<ApolloQueryResult<GetTasksQuery>>;
-
     // create new task operations here
     newTask({
       variables: {

@@ -35,9 +35,13 @@ export interface SelectInputProps extends BaseInputFieldProps {
   options: {
     key: string;
     value: string | undefined;
+    children?: { key: string; value: string | undefined }[];
   }[];
   setState: (value: any) => void;
+  setSubState?: (subValue: any) => void;
+  subValue?: any;
   defaultValue?: any;
+  defaultSubValue?: any;
 }
 
 export interface DatepickerProps extends BasicTextInputProps {

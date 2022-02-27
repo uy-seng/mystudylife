@@ -9,5 +9,5 @@ export {
   TermArgs,
   AcademicYearScheduleArgs,
   DayRotationScheduleArgs,
-  WeekRotationScheduleArgs,
+  WeekRotationScheduleArgs
 };

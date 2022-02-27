@@ -5,6 +5,7 @@ import cx from "classnames";
 import { useGetClassesQuery } from "../../generated/graphql";
 import { generateClassByDate, mod } from "../../utils";
 import { ViewClass } from "../modal";
+import { ShowMoreClass } from "./ShowMoreClass";
 interface Props {
   currentDate: Date;
 }
@@ -75,25 +76,111 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                                   }-${
                                     mod(currentDate.getMonth() - 1, 12) + 1
                                   }-${
-                                    daysInPreviousMonth -
-                                    startDayOfMonth +
-                                    column +
-                                    1
+                                    (
+                                      daysInPreviousMonth -
+                                      startDayOfMonth +
+                                      column +
+                                      1
+                                    ).toString().length === 1
+                                      ? `0${
+                                          daysInPreviousMonth -
+                                          startDayOfMonth +
+                                          column +
+                                          1
+                                        }`
+                                      : daysInPreviousMonth -
+                                        startDayOfMonth +
+                                        column +
+                                        1
                                   }`
                                 )
                               )?.map((c, index, t) => {
                                 if (index < 2) {
                                   return (
-                                    <div className={css.classItem}>
-                                      {c.subject.name} - {c.module}
-                                    </div>
+                                    <ViewClass
+                                      data={c}
+                                      childController={
+                                        <div className={css.classItem}>
+                                          {c.subject.name} - {c.module}
+                                        </div>
+                                      }
+                                    />
                                   );
                                 } else {
-                                  if (index === 2 && index < t.length - 1) {
+                                  if (index === 2) {
                                     return (
-                                      <div className={css.more}>
-                                        {t.length - 2} more
-                                      </div>
+                                      <ShowMoreClass
+                                        data={generateClassByDate(
+                                          classes,
+                                          new Date(
+                                            `${
+                                              mod(
+                                                currentDate.getMonth() + 1,
+                                                12
+                                              ) === 1
+                                                ? currentDate.getFullYear() - 1
+                                                : currentDate.getFullYear()
+                                            }-${
+                                              mod(
+                                                currentDate.getMonth() - 1,
+                                                12
+                                              ) + 1
+                                            }-${
+                                              (
+                                                daysInPreviousMonth -
+                                                startDayOfMonth +
+                                                column +
+                                                1
+                                              ).toString().length === 1
+                                                ? `0${
+                                                    daysInPreviousMonth -
+                                                    startDayOfMonth +
+                                                    column +
+                                                    1
+                                                  }`
+                                                : daysInPreviousMonth -
+                                                  startDayOfMonth +
+                                                  column +
+                                                  1
+                                            }`
+                                          )
+                                        )}
+                                        currentDate={
+                                          new Date(
+                                            `${
+                                              mod(
+                                                currentDate.getMonth() + 1,
+                                                12
+                                              ) === 1
+                                                ? currentDate.getFullYear() - 1
+                                                : currentDate.getFullYear()
+                                            }-${
+                                              mod(
+                                                currentDate.getMonth() - 1,
+                                                12
+                                              ) + 1
+                                            }-${
+                                              (
+                                                daysInPreviousMonth -
+                                                startDayOfMonth +
+                                                column +
+                                                1
+                                              ).toString().length === 1
+                                                ? `0${
+                                                    daysInPreviousMonth -
+                                                    startDayOfMonth +
+                                                    column +
+                                                    1
+                                                  }`
+                                                : daysInPreviousMonth -
+                                                  startDayOfMonth +
+                                                  column +
+                                                  1
+                                            }`
+                                          )
+                                        }
+                                        text={`${t.length - 2} more`}
+                                      />
                                     );
                                   }
                                   return;
@@ -142,7 +229,11 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                                 new Date(
                                   `${currentDate.getFullYear()}-${
                                     currentDate.getMonth() + 1
-                                  }-${daysInMonth[0]}`
+                                  }-${
+                                    daysInMonth[0].toString().length === 1
+                                      ? `0${daysInMonth[0]}`
+                                      : daysInMonth[0]
+                                  }`
                                 )
                               )?.map((c, index, t) => {
                                 if (index < 2) {
@@ -157,11 +248,36 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                                     />
                                   );
                                 } else {
-                                  if (index === 2 && index < t.length - 1) {
+                                  if (index === 2) {
                                     return (
-                                      <div className={css.more}>
-                                        {t.length - 2} more
-                                      </div>
+                                      <ShowMoreClass
+                                        currentDate={
+                                          new Date(
+                                            `${currentDate.getFullYear()}-${
+                                              currentDate.getMonth() + 1
+                                            }-${
+                                              daysInMonth[0].toString()
+                                                .length === 1
+                                                ? `0${daysInMonth[0]}`
+                                                : daysInMonth[0]
+                                            }`
+                                          )
+                                        }
+                                        text={`${t.length - 2} more`}
+                                        data={generateClassByDate(
+                                          classes,
+                                          new Date(
+                                            `${currentDate.getFullYear()}-${
+                                              currentDate.getMonth() + 1
+                                            }-${
+                                              daysInMonth[0].toString()
+                                                .length === 1
+                                                ? `0${daysInMonth[0]}`
+                                                : daysInMonth[0]
+                                            }`
+                                          )
+                                        )}
+                                      />
                                     );
                                   }
                                   return;
@@ -171,6 +287,7 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
 
                             <div className={css.cell}>
                               <div>...</div>
+
                               <div>{daysInMonth.splice(0, 1)[0]}</div>
                             </div>
                           </td>
@@ -194,21 +311,104 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                                   mod(currentDate.getMonth() + 2, 12) === 0
                                     ? 12
                                     : mod(currentDate.getMonth() + 2, 12)
-                                }-${row * 7 + column - remainder + 1}`
+                                }-${
+                                  (row * 7 + column - remainder + 1).toString()
+                                    .length === 1
+                                    ? `0${row * 7 + column - remainder + 1}`
+                                    : row * 7 + column - remainder + 1
+                                }`
                               )
                             )?.map((c, index, t) => {
                               if (index < 2) {
                                 return (
-                                  <div className={css.classItem}>
-                                    {c.subject.name} - {c.module}
-                                  </div>
+                                  <ViewClass
+                                    data={c}
+                                    childController={
+                                      <div className={css.classItem}>
+                                        {c.subject.name} - {c.module}
+                                      </div>
+                                    }
+                                  />
                                 );
                               } else {
-                                if (index === 2 && index < t.length - 1) {
+                                if (index === 2) {
                                   return (
-                                    <button className={css.more}>
-                                      {t.length - 2} more
-                                    </button>
+                                    <ShowMoreClass
+                                      currentDate={
+                                        new Date(
+                                          `${
+                                            mod(
+                                              currentDate.getMonth() + 2,
+                                              12
+                                            ) === 1
+                                              ? currentDate.getFullYear() + 1
+                                              : currentDate.getFullYear()
+                                          }-${
+                                            mod(
+                                              currentDate.getMonth() + 2,
+                                              12
+                                            ) === 0
+                                              ? 12
+                                              : mod(
+                                                  currentDate.getMonth() + 2,
+                                                  12
+                                                )
+                                          }-${
+                                            (
+                                              row * 7 +
+                                              column -
+                                              remainder +
+                                              1
+                                            ).toString().length === 1
+                                              ? `0${
+                                                  row * 7 +
+                                                  column -
+                                                  remainder +
+                                                  1
+                                                }`
+                                              : row * 7 + column - remainder + 1
+                                          }`
+                                        )
+                                      }
+                                      data={generateClassByDate(
+                                        classes,
+                                        new Date(
+                                          `${
+                                            mod(
+                                              currentDate.getMonth() + 2,
+                                              12
+                                            ) === 1
+                                              ? currentDate.getFullYear() + 1
+                                              : currentDate.getFullYear()
+                                          }-${
+                                            mod(
+                                              currentDate.getMonth() + 2,
+                                              12
+                                            ) === 0
+                                              ? 12
+                                              : mod(
+                                                  currentDate.getMonth() + 2,
+                                                  12
+                                                )
+                                          }-${
+                                            (
+                                              row * 7 +
+                                              column -
+                                              remainder +
+                                              1
+                                            ).toString().length === 1
+                                              ? `0${
+                                                  row * 7 +
+                                                  column -
+                                                  remainder +
+                                                  1
+                                                }`
+                                              : row * 7 + column - remainder + 1
+                                          }`
+                                        )
+                                      )}
+                                      text={`${t.length - 2} more`}
+                                    />
                                   );
                                 }
                                 return;
@@ -266,11 +466,26 @@ export const MonthCalendar: React.FC<Props> = ({ currentDate }) => {
                                 />
                               );
                             } else {
-                              if (index === 2 && index < t.length - 1) {
+                              if (index === 2) {
                                 return (
-                                  <div className={css.more}>
-                                    {t.length - 2} more
-                                  </div>
+                                  <ShowMoreClass
+                                    currentDate={
+                                      new Date(
+                                        `${currentDate.getFullYear()}-${
+                                          currentDate.getMonth() + 1
+                                        }-${daysInMonth[0]}`
+                                      )
+                                    }
+                                    data={generateClassByDate(
+                                      classes,
+                                      new Date(
+                                        `${currentDate.getFullYear()}-${
+                                          currentDate.getMonth() + 1
+                                        }-${daysInMonth[0]}`
+                                      )
+                                    )}
+                                    text={`${t.length - 2} more`}
+                                  />
                                 );
                               }
                               return;

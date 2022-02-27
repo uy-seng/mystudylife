@@ -5,10 +5,12 @@ const newSubjectMutation = `
     mutation(
         $name: String!,
         $academicYearId: String,
+        $termId: String,
     ){
         newSubject(
             name: $name,
             academicYearId: $academicYearId,
+            termId: $termId,
         )
             {
                 id

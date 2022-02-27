@@ -10,6 +10,7 @@ const initialState: CreateNewSubjectGlobalState = {
   subjectPayload: {
     name: "",
     academicYearId: undefined,
+    termId: undefined,
   },
 };
 
@@ -25,6 +26,9 @@ export const NewSubjectSlice = createSlice({
         case "academicYearId":
           state.subjectPayload[params.payload.key] = params.payload.value;
           break;
+        case "termId":
+          state.subjectPayload[params.payload.key] = params.payload.value;
+          break;
         default:
           break;
       }
@@ -33,6 +37,7 @@ export const NewSubjectSlice = createSlice({
       state.subjectPayload = {
         name: "",
         academicYearId: undefined,
+        termId: undefined,
       };
     },
   },
@@ -49,4 +54,5 @@ export default NewSubjectSlice.reducer;
 export interface SubjectPayload {
   name: string;
   academicYearId: string | undefined;
+  termId: string | undefined;
 }

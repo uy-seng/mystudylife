@@ -3,13 +3,14 @@ import {
   AcademicYearSchedule,
   DayRotationSchedule,
   WeekRotationSchedule,
-  Term,
+  Term
 } from "./AcademicYear";
 import { Class, ClassSchedule, OneOffSchedule, RepeatSchedule } from "./Class";
 import { Exam } from "./Exam";
 import { Subject } from "./Subject";
 import { Task } from "./Task";
 import { User, UserProvider } from "./User";
+import { Holiday } from "./Holiday";
 
 export {
   AcademicYear,
@@ -26,4 +27,5 @@ export {
   User,
   UserProvider,
   Term,
+  Holiday
 };

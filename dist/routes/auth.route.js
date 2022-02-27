@@ -1,12 +1,8 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authRoute = void 0;
 const express_1 = require("express");
 const jsonwebtoken_1 = require("jsonwebtoken");
-const passport_1 = __importDefault(require("passport"));
 const entity_1 = require("../entity");
 const helper_1 = require("../helper");
 const typeorm_1 = require("typeorm");
@@ -33,19 +29,5 @@ exports.authRoute.get("/refresh-token", async (req, res) => {
     return res.status(200).json({
         accessToken: (0, helper_1.createAccessToken)(userPayload.user),
     });
-});
-exports.authRoute.get("/google", passport_1.default.authenticate("google", {
-    scope: ["profile", "email"],
-}));
-exports.authRoute.get("/google/callback", passport_1.default.authenticate("google", {
-    session: false,
-}), (_req, res) => {
-    return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
-});
-exports.authRoute.get("/facebook", passport_1.default.authenticate("facebook"));
-exports.authRoute.get("/facebook/callback", passport_1.default.authenticate("facebook", {
-    session: false,
-}), (_req, res) => {
-    return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
 });
 //# sourceMappingURL=auth.route.js.map

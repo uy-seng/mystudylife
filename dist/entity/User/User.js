@@ -36,8 +36,12 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], User.prototype, "userProviderId", void 0);
+__decorate([
     (0, typeorm_1.OneToOne)(() => __1.UserProvider),
-    (0, typeorm_1.JoinColumn)(),
+    (0, typeorm_1.JoinColumn)({ name: "userProviderId", referencedColumnName: "id" }),
     (0, type_graphql_1.Field)(() => __1.UserProvider),
     __metadata("design:type", __1.UserProvider)
 ], User.prototype, "provider", void 0);
@@ -68,6 +72,10 @@ __decorate([
     }),
     __metadata("design:type", Array)
 ], User.prototype, "academicYears", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => __1.Holiday, (holiday) => holiday.user, { onDelete: "CASCADE" }),
+    __metadata("design:type", Array)
+], User.prototype, "holidays", void 0);
 User = __decorate([
     (0, typeorm_1.Entity)("users"),
     (0, type_graphql_1.ObjectType)()

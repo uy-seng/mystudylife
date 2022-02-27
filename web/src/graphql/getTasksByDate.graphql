@@ -14,5 +14,6 @@ query GetTasksByDate($date: DateTime!) {
       id
       name
     }
+    completed
   }
 }

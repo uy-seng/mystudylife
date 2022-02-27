@@ -1,0 +1,42 @@
+.managetask {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header > :first-child {
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.header:hover > :first-child {
+  background-color: var(--border-gray);
+}
+
+.body {
+  height: 100%;
+}
+
+.body > .left,
+.body > .right {
+  padding: 0.5rem;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.body > .left {
+  border-right: 1px solid var(--border-gray);
+}
+
+.body > .right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.body > .newtask {
+  position: relative;
+}

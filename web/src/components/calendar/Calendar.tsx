@@ -5,8 +5,8 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { MonthCalendar } from "./MonthCalendar";
 import cx from "classnames";
 import { WeekCalendar } from "./WeekCalendar";
-interface Props {}
 
+interface Props {}
 export const Calendar: React.FC<Props> = () => {
   const [currentDate, setCurrentDate] = React.useState<Date>(new Date());
   const [activeCalendar, setActiveCalendar] = React.useState<string>("month");
@@ -16,56 +16,51 @@ export const Calendar: React.FC<Props> = () => {
       <div className={css.header}>
         <div className={css.left}>
           <div>
-            <FaChevronLeft
-              onClick={() => {
-                setCurrentDate(() => {
-                  const cd = new Date();
-                  const m = new Date(
-                    currentDate.setMonth(currentDate.getMonth() - 1)
-                  );
-                  let d = new Date(m.setDate(1));
-                  if (
-                    d.getFullYear() === cd.getFullYear() &&
-                    d.getMonth() === cd.getMonth()
-                  ) {
-                    d = cd;
-                  }
-                  return d;
-                });
-              }}
-            />
+            {activeCalendar === "month" && (
+              <FaChevronLeft
+                onClick={() => {
+                  setCurrentDate(() => {
+                    const oldDate = new Date();
+                    const newMonth = new Date(
+                      currentDate.setMonth(currentDate.getMonth() - 1)
+                    );
+                    let newDate = new Date(newMonth.setDate(1));
+                    if (
+                      newDate.getFullYear() === oldDate.getFullYear() &&
+                      newDate.getMonth() === oldDate.getMonth()
+                    ) {
+                      newDate = oldDate;
+                    }
+                    return newDate;
+                  });
+                }}
+              />
+            )}
           </div>
           <div>
-            {activeCalendar === "month" &&
-              currentDate
-                .toLocaleDateString("en-US", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                })
-                .split(" ")
-                .filter((e, index) => index !== 1)
-                .join(" ")}
+            {activeCalendar === "month" && formatCalendarHeader(currentDate)}
           </div>
           <div>
-            <FaChevronRight
-              onClick={() => {
-                setCurrentDate(() => {
-                  const cd = new Date();
-                  const m = new Date(
-                    currentDate.setMonth(currentDate.getMonth() + 1)
-                  );
-                  let d = new Date(m.setDate(1));
-                  if (
-                    d.getFullYear() === cd.getFullYear() &&
-                    d.getMonth() === cd.getMonth()
-                  ) {
-                    d = cd;
-                  }
-                  return d;
-                });
-              }}
-            />
+            {activeCalendar === "month" && (
+              <FaChevronRight
+                onClick={() => {
+                  setCurrentDate(() => {
+                    const oldDate = new Date();
+                    const newMonth = new Date(
+                      currentDate.setMonth(currentDate.getMonth() + 1)
+                    );
+                    let newDate = new Date(newMonth.setDate(1));
+                    if (
+                      newDate.getFullYear() === oldDate.getFullYear() &&
+                      newDate.getMonth() === oldDate.getMonth()
+                    ) {
+                      newDate = oldDate;
+                    }
+                    return newDate;
+                  });
+                }}
+              />
+            )}
           </div>
         </div>
         <div className={css.right}>
@@ -83,10 +78,33 @@ export const Calendar: React.FC<Props> = () => {
           </button>
         </div>
       </div>
-      {activeCalendar === "month" && (
-        <MonthCalendar currentDate={currentDate} />
-      )}
-      {activeCalendar === "week" && <WeekCalendar currentDate={currentDate} />}
+      <CalendarFactory type={activeCalendar} currentDate={currentDate} />
     </div>
   );
+};
+
+const formatCalendarHeader = (date: Date) => {
+  return date
+    .toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    })
+    .split(" ")
+    .filter((_, index) => index !== 1)
+    .join(" ");
+};
+
+const CalendarFactory: React.FC<CalendarFactoryProps> = ({
+  type,
+  ...props
+}) => {
+  switch (type) {
+    case "month":
+      return <MonthCalendar {...props} />;
+    case "week":
+      return <WeekCalendar {...props} />;
+    default:
+      return null;
+  }
 };

@@ -1,0 +1,15 @@
+mutation UpdateHoliday(
+    $id: String!,
+    $name: String!,
+    $startDate: String!,
+    $endDate: String!,
+    $academicYearId: String!,
+){
+    updateHoliday(
+        id: $id,
+        name: $name,
+        startDate: $startDate,
+        endDate: $endDate,
+        academicYearId: $academicYearId
+    )
+}

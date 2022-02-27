@@ -13,13 +13,18 @@ import {
   selectDayRotationPayload,
   selectWeekRotationPayload,
   selectCreateTermComponentState,
-  Term,
   WeekRotationPayload,
   DayRotationPayload,
   AcademicYearSchedulePayload,
+  TermPayload,
 } from "../../../shared/NewAcademicYear.slice";
 import { Pair } from "../../../types";
-import { isValidDateFormat, getMonthName, formatDate } from "../../../utils";
+import {
+  isValidDateFormat,
+  getMonthName,
+  formatDate,
+  asyncForEach,
+} from "../../../utils";
 import { Button, LoaderButton } from "../../button";
 import { FormikDatepicker } from "../../input";
 import { NewTerm } from "../../modal";
@@ -233,7 +238,7 @@ const MyForm = withFormik<any, AcademicYearPayload>({
     const dayRotationPayload = props.dayRotationPayload as DayRotationPayload;
     const weekRotationPayload =
       props.weekRotationPayload as WeekRotationPayload;
-    const terms = props.terms as Term[];
+    const terms = props.terms as TermPayload[];
 
     const setShow = props.setShow as React.Dispatch<
       React.SetStateAction<boolean>
@@ -241,8 +246,21 @@ const MyForm = withFormik<any, AcademicYearPayload>({
 
     newAcademicYear({
       variables: academicYearPayload,
-    }).then((response) => {
+    }).then(async (response) => {
       const academicYearId = response.data!.newAcademicYear.id;
+      if (terms.length > 0) {
+        await asyncForEach(terms, async (term) => {
+          await newTerm({
+            variables: {
+              academicYearId: academicYearId,
+              endDate: term.endDate,
+              name: term.name,
+              startDate: term.startDate,
+            },
+          });
+        });
+      }
+
       newAcademicYearSchedule({
         variables: {
           academicYearId: academicYearId,

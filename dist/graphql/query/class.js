@@ -87,6 +87,9 @@ const getClassByIdQuery = `
                 startDate
                 endDate
             }
+            term{
+                id
+            }
             schedule{
                 id
                 type

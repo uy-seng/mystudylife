@@ -57,6 +57,7 @@ __decorate([
 ], Class.prototype, "academicYear", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => __1.Term, (term) => term.classes),
+    (0, type_graphql_1.Field)(() => __1.Term, { nullable: true }),
     __metadata("design:type", __1.Term)
 ], Class.prototype, "term", void 0);
 __decorate([
@@ -71,8 +72,8 @@ __decorate([
 Class = __decorate([
     (0, typeorm_1.Entity)("classes", {
         orderBy: {
-            createdAt: "ASC",
-        },
+            createdAt: "ASC"
+        }
     }),
     (0, type_graphql_1.ObjectType)()
 ], Class);

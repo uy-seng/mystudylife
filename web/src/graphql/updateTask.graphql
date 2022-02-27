@@ -6,6 +6,7 @@ mutation UpdateTask(
   $due_date: String!
   $title: String
   $detail: String
+  $completed: Float
 ) {
   updateTask(
     id: $id
@@ -15,5 +16,6 @@ mutation UpdateTask(
     due_date: $due_date
     title: $title
     detail: $detail
+    completed: $completed
   )
 }

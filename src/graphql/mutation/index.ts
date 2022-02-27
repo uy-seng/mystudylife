@@ -1,16 +1,43 @@
-import { newAcademicYearMutation } from "./academicYear";
+import {
+  newAcademicYearMutation,
+  deleteAcademicYearMutation
+} from "./academicYear";
 import {
   newPartialDayRotationMutation,
   newPartialWeekRotationMutation,
-  newScheduleMutation,
+  newScheduleMutation
 } from "./academicYearSchedule";
 import { newTermMutation } from "./term";
 import { loginMutation, registerMutation } from "./auth";
-import { newSubjectMutation, deleteSubjectMutation } from "./subject";
-import { newClassMutation, deleteClassMutation } from "./class";
+import {
+  newSubjectMutation,
+  deleteSubjectMutation,
+  updateSubjectMutation
+} from "./subject";
+import {
+  newClassMutation,
+  deleteClassMutation,
+  updateClassMutation
+} from "./class";
 import { newClassScheduleMutation } from "./classSchedule";
-import { newOneOffScheduleMutation } from "./oneOffSchedule";
-import { newRepeatScheduleMutation } from "./repeatSchedule";
+import {
+  newOneOffScheduleMutation,
+  updateOneOffScheduleMutation
+} from "./oneOffSchedule";
+import {
+  newRepeatScheduleMutation,
+  updateRepeatScheduleMutation
+} from "./repeatSchedule";
+import {
+  newHolidayMutation,
+  deleteHolidayMutation,
+  updateHolidayMutation
+} from "./holiday";
+import {
+  newTaskMutation,
+  deleteTaskMutation,
+  updateTaskMutation
+} from "./task";
 
 export {
   newAcademicYearMutation,
@@ -27,4 +54,15 @@ export {
   newClassScheduleMutation,
   newOneOffScheduleMutation,
   newRepeatScheduleMutation,
+  deleteAcademicYearMutation,
+  deleteHolidayMutation,
+  deleteTaskMutation,
+  newHolidayMutation,
+  newTaskMutation,
+  updateClassMutation,
+  updateHolidayMutation,
+  updateOneOffScheduleMutation,
+  updateRepeatScheduleMutation,
+  updateTaskMutation,
+  updateSubjectMutation
 };

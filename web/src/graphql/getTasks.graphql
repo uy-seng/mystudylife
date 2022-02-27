@@ -14,5 +14,6 @@ query GetTasks {
       id
       name
     }
+    completed
   }
 }

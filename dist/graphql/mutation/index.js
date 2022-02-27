@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.newRepeatScheduleMutation = exports.newOneOffScheduleMutation = exports.newClassScheduleMutation = exports.deleteClassMutation = exports.newClassMutation = exports.deleteSubjectMutation = exports.newSubjectMutation = exports.registerMutation = exports.loginMutation = exports.newTermMutation = exports.newScheduleMutation = exports.newPartialWeekRotationMutation = exports.newPartialDayRotationMutation = exports.newAcademicYearMutation = void 0;
+exports.updateSubjectMutation = exports.updateTaskMutation = exports.updateRepeatScheduleMutation = exports.updateOneOffScheduleMutation = exports.updateHolidayMutation = exports.updateClassMutation = exports.newTaskMutation = exports.newHolidayMutation = exports.deleteTaskMutation = exports.deleteHolidayMutation = exports.deleteAcademicYearMutation = exports.newRepeatScheduleMutation = exports.newOneOffScheduleMutation = exports.newClassScheduleMutation = exports.deleteClassMutation = exports.newClassMutation = exports.deleteSubjectMutation = exports.newSubjectMutation = exports.registerMutation = exports.loginMutation = exports.newTermMutation = exports.newScheduleMutation = exports.newPartialWeekRotationMutation = exports.newPartialDayRotationMutation = exports.newAcademicYearMutation = void 0;
 const academicYear_1 = require("./academicYear");
 Object.defineProperty(exports, "newAcademicYearMutation", { enumerable: true, get: function () { return academicYear_1.newAcademicYearMutation; } });
+Object.defineProperty(exports, "deleteAcademicYearMutation", { enumerable: true, get: function () { return academicYear_1.deleteAcademicYearMutation; } });
 const academicYearSchedule_1 = require("./academicYearSchedule");
 Object.defineProperty(exports, "newPartialDayRotationMutation", { enumerable: true, get: function () { return academicYearSchedule_1.newPartialDayRotationMutation; } });
 Object.defineProperty(exports, "newPartialWeekRotationMutation", { enumerable: true, get: function () { return academicYearSchedule_1.newPartialWeekRotationMutation; } });
@@ -15,13 +16,25 @@ Object.defineProperty(exports, "registerMutation", { enumerable: true, get: func
 const subject_1 = require("./subject");
 Object.defineProperty(exports, "newSubjectMutation", { enumerable: true, get: function () { return subject_1.newSubjectMutation; } });
 Object.defineProperty(exports, "deleteSubjectMutation", { enumerable: true, get: function () { return subject_1.deleteSubjectMutation; } });
+Object.defineProperty(exports, "updateSubjectMutation", { enumerable: true, get: function () { return subject_1.updateSubjectMutation; } });
 const class_1 = require("./class");
 Object.defineProperty(exports, "newClassMutation", { enumerable: true, get: function () { return class_1.newClassMutation; } });
 Object.defineProperty(exports, "deleteClassMutation", { enumerable: true, get: function () { return class_1.deleteClassMutation; } });
+Object.defineProperty(exports, "updateClassMutation", { enumerable: true, get: function () { return class_1.updateClassMutation; } });
 const classSchedule_1 = require("./classSchedule");
 Object.defineProperty(exports, "newClassScheduleMutation", { enumerable: true, get: function () { return classSchedule_1.newClassScheduleMutation; } });
 const oneOffSchedule_1 = require("./oneOffSchedule");
 Object.defineProperty(exports, "newOneOffScheduleMutation", { enumerable: true, get: function () { return oneOffSchedule_1.newOneOffScheduleMutation; } });
+Object.defineProperty(exports, "updateOneOffScheduleMutation", { enumerable: true, get: function () { return oneOffSchedule_1.updateOneOffScheduleMutation; } });
 const repeatSchedule_1 = require("./repeatSchedule");
 Object.defineProperty(exports, "newRepeatScheduleMutation", { enumerable: true, get: function () { return repeatSchedule_1.newRepeatScheduleMutation; } });
+Object.defineProperty(exports, "updateRepeatScheduleMutation", { enumerable: true, get: function () { return repeatSchedule_1.updateRepeatScheduleMutation; } });
+const holiday_1 = require("./holiday");
+Object.defineProperty(exports, "newHolidayMutation", { enumerable: true, get: function () { return holiday_1.newHolidayMutation; } });
+Object.defineProperty(exports, "deleteHolidayMutation", { enumerable: true, get: function () { return holiday_1.deleteHolidayMutation; } });
+Object.defineProperty(exports, "updateHolidayMutation", { enumerable: true, get: function () { return holiday_1.updateHolidayMutation; } });
+const task_1 = require("./task");
+Object.defineProperty(exports, "newTaskMutation", { enumerable: true, get: function () { return task_1.newTaskMutation; } });
+Object.defineProperty(exports, "deleteTaskMutation", { enumerable: true, get: function () { return task_1.deleteTaskMutation; } });
+Object.defineProperty(exports, "updateTaskMutation", { enumerable: true, get: function () { return task_1.updateTaskMutation; } });
 //# sourceMappingURL=index.js.map

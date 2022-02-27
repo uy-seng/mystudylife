@@ -14,6 +14,20 @@ const BaseModal: React.FC<BaseModalProps> & BaseModalSubcomponents = ({
   if (className) className += ` ${css.modal}`;
   else className = css.modal;
 
+  React.useLayoutEffect(() => {
+    if (show) {
+      // check if body element is overflow
+      const body = document.querySelector("body") as HTMLElement;
+      const bodyIsScrollable = window.innerWidth > body.clientWidth;
+
+      if (bodyIsScrollable) {
+        const modal = document.querySelector(`.${css.modal}`) as HTMLElement;
+        const heightOverflowValue = body.clientHeight - window.innerHeight;
+        modal.style.top = `calc((2 * ${window.scrollY}px) - ${heightOverflowValue}px)`;
+      }
+    }
+  }, [show]);
+
   if (show && parent)
     return ReactDOM.createPortal(
       <React.Fragment>

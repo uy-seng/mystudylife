@@ -42,6 +42,11 @@ __decorate([
     __metadata("design:type", String)
 ], Task.prototype, "detail", void 0);
 __decorate([
+    (0, typeorm_1.Column)(),
+    (0, type_graphql_1.Field)(() => type_graphql_1.Int, { defaultValue: 0 }),
+    __metadata("design:type", Number)
+], Task.prototype, "completed", void 0);
+__decorate([
     (0, typeorm_1.CreateDateColumn)({ default: () => "NOW()" }),
     __metadata("design:type", Date)
 ], Task.prototype, "createdAt", void 0);

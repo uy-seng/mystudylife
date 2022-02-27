@@ -26,13 +26,14 @@ let ClassResolver = class ClassResolver {
         this.subjectRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.Subject);
         this.userRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.User);
         this.academicYearRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.AcademicYear);
+        this.termRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.Term);
     }
-    async newClass({ subjectId, building, module, room, teacher, academicYearId }, { user }) {
+    async newClass({ subjectId, building, module, room, teacher, academicYearId, termId }, { user }) {
         const newClass = this.classRespository.create({
             building: building,
             module: module,
             room: room,
-            teacher: teacher,
+            teacher: teacher
         });
         const subject = await this.subjectRepository.findOne(subjectId);
         if (!subject)
@@ -43,6 +44,12 @@ let ClassResolver = class ClassResolver {
             if (!academicYear)
                 throw new apollo_server_errors_1.ValidationError("invalid academic year id");
             newClass.academicYear = academicYear;
+        }
+        if (termId) {
+            const term = await this.termRepository.findOne(termId);
+            if (!term)
+                throw new apollo_server_errors_1.ValidationError("invalid term id");
+            newClass.term = term;
         }
         const qUser = (await this.userRepository.findOne(user.id));
         newClass.user = qUser;
@@ -60,12 +67,13 @@ let ClassResolver = class ClassResolver {
                 "academicYear.schedule",
                 "academicYear.schedule.dayRotation",
                 "academicYear.schedule.weekRotation",
+                "term"
             ],
             where: {
                 user: {
-                    id: user.id,
-                },
-            },
+                    id: user.id
+                }
+            }
         });
         return classes;
     }
@@ -78,7 +86,8 @@ let ClassResolver = class ClassResolver {
                 "academicYear",
                 "user",
                 "subject",
-            ],
+                "term"
+            ]
         });
         if (!q || q.user.id !== user.id)
             throw new apollo_server_errors_1.ApolloError("result not found");
@@ -92,12 +101,13 @@ let ClassResolver = class ClassResolver {
                 "schedule.repeat",
                 "user",
                 "academicYear",
+                "term"
             ],
             where: {
                 user: {
-                    id: user.id,
-                },
-            },
+                    id: user.id
+                }
+            }
         });
         return classes.filter((c) => {
             if (c.schedule.type === "oneOff") {
@@ -120,8 +130,8 @@ let ClassResolver = class ClassResolver {
         const c = await this.classRespository.findOne(id, {
             relations: ["user"],
             where: {
-                user: user.id,
-            },
+                user: user.id
+            }
         });
         if (!c)
             throw new apollo_server_errors_1.ValidationError("class not found for this user, please check id again");
@@ -130,7 +140,7 @@ let ClassResolver = class ClassResolver {
     }
     async updateClass(updateContext, { user }) {
         const q = await this.classRespository.findOne(updateContext.id, {
-            relations: ["user", "schedule", "academicYear"],
+            relations: ["user", "schedule", "academicYear", "term"]
         });
         const updatedSubject = await this.subjectRepository.findOne(updateContext.subjectId);
         const updatedAcademicYear = await this.academicYearRepository.findOne(updateContext.academicYearId);
@@ -142,6 +152,12 @@ let ClassResolver = class ClassResolver {
         q.teacher = updateContext.teacher;
         q.academicYear = updatedAcademicYear;
         q.subject = updatedSubject;
+        if (updateContext.termId && q.term) {
+            const updatedTerm = await this.termRepository.findOne(updateContext.termId);
+            if (!updatedTerm)
+                throw new apollo_server_errors_1.ValidationError("invalid term id");
+            q.term = updatedTerm;
+        }
         await this.classRespository.save(q);
         return true;
     }

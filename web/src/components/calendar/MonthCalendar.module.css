@@ -5,12 +5,11 @@
 
 .left {
   flex: 1;
-  padding-top: 2rem;
 }
 
 .right {
-  flex: 0.5;
-  padding-top: 2rem;
+  flex: 0.25;
+  /* padding-top: 2rem; */
   display: flex;
   flex-direction: column;
 }
@@ -89,64 +88,101 @@
 }
 
 .classItem {
-  max-height: 0.5rem;
+  /* max-height: 0.5rem; */
   overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .class {
   position: absolute;
-  width: calc(100% - 1.75rem);
+  width: calc(100% - 1rem);
 }
 
-.class .classItem:not(.more) {
+.calendar td.active .more {
+  color: white !important;
+}
+
+.calendar td.active .more:hover {
+  color: var(--primary) !important;
+}
+
+.calendar td.focused .more {
+  color: white !important;
+}
+
+.calendar td.focused .more:hover {
+  color: var(--primary) !important;
+}
+
+.more {
+  background: none !important;
+  font-size: 12px;
+  padding: 4px !important;
+  font-weight: bold;
+  border-radius: 4px;
+  color: var(--primary) !important;
+}
+
+.more:hover {
+  background-color: white !important;
+  cursor: pointer;
+  color: var(--primary) !important;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.class > div[data-type="modal"] {
   background-color: var(--primary);
   color: white;
   padding: 6px;
   font-size: 12px;
-  width: 100%;
   border-radius: 4px;
   cursor: pointer;
   margin-bottom: 4px;
-}
-
-.class .classItem:not(:last-child) {
-  margin-bottom: 4px;
-}
-
-.more {
-  background: none;
-  font-size: 12px;
-  padding: 6px;
+  font-size: 10px;
   font-weight: bold;
-  width: 100%;
+}
+
+.moreContent > div[data-type="modal"] {
+  background-color: var(--primary);
+  color: white;
+  padding: 6px;
+  font-size: 12px;
   border-radius: 4px;
-}
-
-.more:hover {
-  background-color: white;
   cursor: pointer;
-  color: var(--primary);
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  margin-bottom: 4px;
+  font-size: 10px;
+  font-weight: bold;
 }
 
-.expandedClass {
-  width: 100%;
+.moreContent {
   position: absolute;
-  top: -85%;
-  left: 0;
+  top: -125%;
+  left: -25%;
+  height: 200%;
+  z-index: 1;
+  width: 150%;
   background-color: white;
+  color: var(--primary);
+  padding: 1rem;
   box-shadow: 0 1px 3px 0 rgb(60 64 67 / 30%), 0 4px 8px 3px rgb(60 64 67 / 15%);
-  transform: scale(0);
+  animation: growFromCenterAnimation 0.25s alternate;
   border-radius: 8px;
-  z-index: 0;
 }
 
-.expandedClass.active {
-  transform: scale(100%);
+@keyframes growFromCenterAnimation {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
 }
 
-.expandedClass > .class {
-  padding: 0.5rem;
-  display: grid;
-  grid-template-columns: 1fr;
+.moreContent > .title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

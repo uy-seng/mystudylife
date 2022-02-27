@@ -25,6 +25,7 @@ export type AcademicYear = {
   schedule: AcademicYearSchedule;
   subjects: Array<Subject>;
   classes: Array<Class>;
+  holidays: Array<Holiday>;
 };
 
 export type AcademicYearSchedule = {
@@ -50,6 +51,7 @@ export type Class = {
   subject: Subject;
   schedule: ClassSchedule;
   academicYear?: Maybe<AcademicYear>;
+  term?: Maybe<Term>;
   user: User;
 };
 
@@ -83,6 +85,14 @@ export type DayRotationSchedule = {
   repeatDays: Array<Scalars['Int']>;
 };
 
+export type Holiday = {
+  __typename?: 'Holiday';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  startDate: Scalars['String'];
+  endDate: Scalars['String'];
+};
+
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   accessToken: Scalars['String'];
@@ -90,18 +100,15 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  register?: Maybe<Scalars['Boolean']>;
-  login: LoginResponse;
-  logout: Scalars['Boolean'];
   newAcademicYear: AcademicYear;
   deleteAcademicYear: Scalars['Boolean'];
   newSchedule: AcademicYearSchedule;
   newPartialWeekRotation: WeekRotationSchedule;
   newPartialDayRotation: DayRotationSchedule;
   newTerm: Term;
-  newSubject: Subject;
-  deleteSubject: Scalars['Boolean'];
-  updateSubject: Scalars['Boolean'];
+  register?: Maybe<Scalars['Boolean']>;
+  login: LoginResponse;
+  logout: Scalars['Boolean'];
   newClass: Class;
   deleteClass: Scalars['Boolean'];
   updateClass: Scalars['Boolean'];
@@ -111,22 +118,15 @@ export type Mutation = {
   newRepeatSchedule: RepeatSchedule;
   updateRepeatSchedule: Scalars['Boolean'];
   deleteRepeatSchedule: Scalars['Boolean'];
+  newHoliday: Holiday;
+  deleteHoliday: Scalars['Boolean'];
+  updateHoliday: Scalars['Boolean'];
+  newSubject: Subject;
+  deleteSubject: Scalars['Boolean'];
+  updateSubject: Scalars['Boolean'];
   newTask: Task;
   deleteTask: Scalars['Boolean'];
   updateTask: Scalars['Boolean'];
-};
-
-
-export type MutationRegisterArgs = {
-  password: Scalars['String'];
-  email: Scalars['String'];
-  username: Scalars['String'];
-};
-
-
-export type MutationLoginArgs = {
-  password: Scalars['String'];
-  email: Scalars['String'];
 };
 
 
@@ -170,21 +170,16 @@ export type MutationNewTermArgs = {
 };
 
 
-export type MutationNewSubjectArgs = {
-  academicYearId?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
+export type MutationRegisterArgs = {
+  password: Scalars['String'];
+  email: Scalars['String'];
+  username: Scalars['String'];
 };
 
 
-export type MutationDeleteSubjectArgs = {
-  id: Scalars['String'];
-};
-
-
-export type MutationUpdateSubjectArgs = {
-  academicYearId?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
-  id: Scalars['String'];
+export type MutationLoginArgs = {
+  password: Scalars['String'];
+  email: Scalars['String'];
 };
 
 
@@ -195,6 +190,7 @@ export type MutationNewClassArgs = {
   building?: Maybe<Scalars['String']>;
   teacher?: Maybe<Scalars['String']>;
   academicYearId?: Maybe<Scalars['String']>;
+  termId?: Maybe<Scalars['String']>;
 };
 
 
@@ -210,6 +206,7 @@ export type MutationUpdateClassArgs = {
   building?: Maybe<Scalars['String']>;
   teacher?: Maybe<Scalars['String']>;
   academicYearId?: Maybe<Scalars['String']>;
+  termId?: Maybe<Scalars['String']>;
   id: Scalars['String'];
 };
 
@@ -265,6 +262,48 @@ export type MutationDeleteRepeatScheduleArgs = {
 };
 
 
+export type MutationNewHolidayArgs = {
+  academicYearId: Scalars['String'];
+  name: Scalars['String'];
+  startDate: Scalars['String'];
+  endDate: Scalars['String'];
+};
+
+
+export type MutationDeleteHolidayArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationUpdateHolidayArgs = {
+  academicYearId: Scalars['String'];
+  name: Scalars['String'];
+  startDate: Scalars['String'];
+  endDate: Scalars['String'];
+  id: Scalars['String'];
+};
+
+
+export type MutationNewSubjectArgs = {
+  termId?: Maybe<Scalars['String']>;
+  academicYearId?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+};
+
+
+export type MutationDeleteSubjectArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationUpdateSubjectArgs = {
+  termId?: Maybe<Scalars['String']>;
+  academicYearId?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  id: Scalars['String'];
+};
+
+
 export type MutationNewTaskArgs = {
   subjectId: Scalars['String'];
   academicYearId?: Maybe<Scalars['String']>;
@@ -288,6 +327,7 @@ export type MutationUpdateTaskArgs = {
   title?: Maybe<Scalars['String']>;
   detail?: Maybe<Scalars['String']>;
   id: Scalars['String'];
+  completed?: Maybe<Scalars['Float']>;
 };
 
 export type OneOffSchedule = {
@@ -300,14 +340,14 @@ export type OneOffSchedule = {
 
 export type Query = {
   __typename?: 'Query';
-  me: User;
   getAcademicYears: Array<AcademicYear>;
   getAcademicYear?: Maybe<AcademicYear>;
-  getSubjects: Array<Subject>;
-  getSubject: Subject;
+  me: User;
   getClasses: Array<Class>;
   getClassById: Class;
   getClassesByDate: Array<Class>;
+  getSubjects: Array<Subject>;
+  getSubject: Subject;
   getTasks: Array<Task>;
   getTaskById: Task;
   getTasksByDate: Array<Task>;
@@ -319,11 +359,6 @@ export type QueryGetAcademicYearArgs = {
 };
 
 
-export type QueryGetSubjectArgs = {
-  id: Scalars['String'];
-};
-
-
 export type QueryGetClassByIdArgs = {
   id: Scalars['String'];
 };
@@ -331,6 +366,11 @@ export type QueryGetClassByIdArgs = {
 
 export type QueryGetClassesByDateArgs = {
   date: Scalars['DateTime'];
+};
+
+
+export type QueryGetSubjectArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -359,6 +399,7 @@ export type Subject = {
   id: Scalars['String'];
   name: Scalars['String'];
   academicYear?: Maybe<AcademicYear>;
+  term?: Maybe<Term>;
 };
 
 export type Task = {
@@ -368,6 +409,7 @@ export type Task = {
   due_date: Scalars['String'];
   title: Scalars['String'];
   detail: Scalars['String'];
+  completed?: Maybe<Scalars['Int']>;
   subject: Subject;
   academicYear?: Maybe<AcademicYear>;
 };
@@ -422,6 +464,13 @@ export type DeleteClassMutationVariables = Exact<{
 
 export type DeleteClassMutation = { __typename?: 'Mutation', deleteClass: boolean };
 
+export type DeleteHolidayMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeleteHolidayMutation = { __typename?: 'Mutation', deleteHoliday: boolean };
+
 export type DeleteRepeatScheduleMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -453,29 +502,29 @@ export type GetAcademicYearQuery = { __typename?: 'Query', getAcademicYear?: May
 export type GetAcademicYearsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAcademicYearsQuery = { __typename?: 'Query', getAcademicYears: Array<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string, terms: Array<{ __typename?: 'Term', id: string, name: string, startDate: string, endDate: string }>, schedule: { __typename?: 'AcademicYearSchedule', id: string, type: AcademicYearScheduleType, dayRotation?: Maybe<{ __typename?: 'DayRotationSchedule', id: string, numOfDay: number, startDay: number, repeatDays: Array<number> }>, weekRotation?: Maybe<{ __typename?: 'WeekRotationSchedule', id: string, numOfWeek: number, startWeek: number }> } }> };
+export type GetAcademicYearsQuery = { __typename?: 'Query', getAcademicYears: Array<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string, terms: Array<{ __typename?: 'Term', id: string, name: string, startDate: string, endDate: string }>, schedule: { __typename?: 'AcademicYearSchedule', id: string, type: AcademicYearScheduleType, dayRotation?: Maybe<{ __typename?: 'DayRotationSchedule', id: string, numOfDay: number, startDay: number, repeatDays: Array<number> }>, weekRotation?: Maybe<{ __typename?: 'WeekRotationSchedule', id: string, numOfWeek: number, startWeek: number }> }, holidays: Array<{ __typename?: 'Holiday', id: string, name: string, startDate: string, endDate: string }> }> };
 
 export type GetClassesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetClassesQuery = { __typename?: 'Query', getClasses: Array<{ __typename?: 'Class', id: string, building: string, module: string, room: string, teacher: string, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string, schedule: { __typename?: 'AcademicYearSchedule', type: AcademicYearScheduleType, dayRotation?: Maybe<{ __typename?: 'DayRotationSchedule', id: string }>, weekRotation?: Maybe<{ __typename?: 'WeekRotationSchedule', id: string, numOfWeek: number }> } }>, subject: { __typename?: 'Subject', id: string, name: string }, schedule: { __typename?: 'ClassSchedule', id: string, type: ClassScheduleType, oneOff?: Maybe<{ __typename?: 'OneOffSchedule', id: string, date: string, startTime: string, endTime: string }>, repeat?: Maybe<Array<{ __typename?: 'RepeatSchedule', id: string, startTime: string, endTime: string, repeatDays: Array<DayOfWeek>, startDate?: Maybe<string>, endDate?: Maybe<string>, rotationWeek?: Maybe<number> }>> } }> };
+export type GetClassesQuery = { __typename?: 'Query', getClasses: Array<{ __typename?: 'Class', id: string, building: string, module: string, room: string, teacher: string, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string, schedule: { __typename?: 'AcademicYearSchedule', type: AcademicYearScheduleType, dayRotation?: Maybe<{ __typename?: 'DayRotationSchedule', id: string }>, weekRotation?: Maybe<{ __typename?: 'WeekRotationSchedule', id: string, numOfWeek: number, startWeek: number }> } }>, term?: Maybe<{ __typename?: 'Term', id: string, name: string, startDate: string, endDate: string }>, subject: { __typename?: 'Subject', id: string, name: string }, schedule: { __typename?: 'ClassSchedule', id: string, type: ClassScheduleType, oneOff?: Maybe<{ __typename?: 'OneOffSchedule', id: string, date: string, startTime: string, endTime: string }>, repeat?: Maybe<Array<{ __typename?: 'RepeatSchedule', id: string, startTime: string, endTime: string, repeatDays: Array<DayOfWeek>, startDate?: Maybe<string>, endDate?: Maybe<string>, rotationWeek?: Maybe<number> }>> } }> };
 
 export type GetSubjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSubjectsQuery = { __typename?: 'Query', getSubjects: Array<{ __typename?: 'Subject', id: string, name: string, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string }> }> };
+export type GetSubjectsQuery = { __typename?: 'Query', getSubjects: Array<{ __typename?: 'Subject', id: string, name: string, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string }>, term?: Maybe<{ __typename?: 'Term', id: string, startDate: string, endDate: string }> }> };
 
 export type GetTasksQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTasksQuery = { __typename?: 'Query', getTasks: Array<{ __typename?: 'Task', id: string, title: string, detail: string, type: string, due_date: string, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string }>, subject: { __typename?: 'Subject', id: string, name: string } }> };
+export type GetTasksQuery = { __typename?: 'Query', getTasks: Array<{ __typename?: 'Task', id: string, title: string, detail: string, type: string, due_date: string, completed?: Maybe<number>, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string }>, subject: { __typename?: 'Subject', id: string, name: string } }> };
 
 export type GetTasksByDateQueryVariables = Exact<{
   date: Scalars['DateTime'];
 }>;
 
 
-export type GetTasksByDateQuery = { __typename?: 'Query', getTasksByDate: Array<{ __typename?: 'Task', id: string, title: string, detail: string, type: string, due_date: string, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string }>, subject: { __typename?: 'Subject', id: string, name: string } }> };
+export type GetTasksByDateQuery = { __typename?: 'Query', getTasksByDate: Array<{ __typename?: 'Task', id: string, title: string, detail: string, type: string, due_date: string, completed?: Maybe<number>, academicYear?: Maybe<{ __typename?: 'AcademicYear', id: string, startDate: string, endDate: string }>, subject: { __typename?: 'Subject', id: string, name: string } }> };
 
 export type LoginMutationVariables = Exact<{
   loginPassword: Scalars['String'];
@@ -518,6 +567,7 @@ export type NewClassMutationVariables = Exact<{
   building?: Maybe<Scalars['String']>;
   teacher?: Maybe<Scalars['String']>;
   academicYearId?: Maybe<Scalars['String']>;
+  termId?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -530,6 +580,16 @@ export type NewClassScheduleMutationVariables = Exact<{
 
 
 export type NewClassScheduleMutation = { __typename?: 'Mutation', newClassSchedule: { __typename?: 'ClassSchedule', id: string } };
+
+export type NewHolidayMutationVariables = Exact<{
+  academicYearId: Scalars['String'];
+  name: Scalars['String'];
+  startDate: Scalars['String'];
+  endDate: Scalars['String'];
+}>;
+
+
+export type NewHolidayMutation = { __typename?: 'Mutation', newHoliday: { __typename?: 'Holiday', id: string } };
 
 export type NewOneOffScheduleMutationVariables = Exact<{
   scheduleId: Scalars['String'];
@@ -576,6 +636,7 @@ export type NewRepeatScheduleMutation = { __typename?: 'Mutation', newRepeatSche
 export type NewSubjectMutationVariables = Exact<{
   name: Scalars['String'];
   academicYearId?: Maybe<Scalars['String']>;
+  termId?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -625,6 +686,17 @@ export type UpdateClassMutationVariables = Exact<{
 
 export type UpdateClassMutation = { __typename?: 'Mutation', updateClass: boolean };
 
+export type UpdateHolidayMutationVariables = Exact<{
+  id: Scalars['String'];
+  name: Scalars['String'];
+  startDate: Scalars['String'];
+  endDate: Scalars['String'];
+  academicYearId: Scalars['String'];
+}>;
+
+
+export type UpdateHolidayMutation = { __typename?: 'Mutation', updateHoliday: boolean };
+
 export type UpdateOneOffScheduleMutationVariables = Exact<{
   id: Scalars['String'];
   scheduleId: Scalars['String'];
@@ -653,6 +725,7 @@ export type UpdateSubjectMutationVariables = Exact<{
   id: Scalars['String'];
   name: Scalars['String'];
   academicYearId?: Maybe<Scalars['String']>;
+  termId?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -666,6 +739,7 @@ export type UpdateTaskMutationVariables = Exact<{
   due_date: Scalars['String'];
   title?: Maybe<Scalars['String']>;
   detail?: Maybe<Scalars['String']>;
+  completed?: Maybe<Scalars['Float']>;
 }>;
 
 
@@ -734,6 +808,37 @@ export function useDeleteClassMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeleteClassMutationHookResult = ReturnType<typeof useDeleteClassMutation>;
 export type DeleteClassMutationResult = Apollo.MutationResult<DeleteClassMutation>;
 export type DeleteClassMutationOptions = Apollo.BaseMutationOptions<DeleteClassMutation, DeleteClassMutationVariables>;
+export const DeleteHolidayDocument = gql`
+    mutation DeleteHoliday($id: String!) {
+  deleteHoliday(id: $id)
+}
+    `;
+export type DeleteHolidayMutationFn = Apollo.MutationFunction<DeleteHolidayMutation, DeleteHolidayMutationVariables>;
+
+/**
+ * __useDeleteHolidayMutation__
+ *
+ * To run a mutation, you first call `useDeleteHolidayMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteHolidayMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteHolidayMutation, { data, loading, error }] = useDeleteHolidayMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteHolidayMutation(baseOptions?: Apollo.MutationHookOptions<DeleteHolidayMutation, DeleteHolidayMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteHolidayMutation, DeleteHolidayMutationVariables>(DeleteHolidayDocument, options);
+      }
+export type DeleteHolidayMutationHookResult = ReturnType<typeof useDeleteHolidayMutation>;
+export type DeleteHolidayMutationResult = Apollo.MutationResult<DeleteHolidayMutation>;
+export type DeleteHolidayMutationOptions = Apollo.BaseMutationOptions<DeleteHolidayMutation, DeleteHolidayMutationVariables>;
 export const DeleteRepeatScheduleDocument = gql`
     mutation DeleteRepeatSchedule($id: String!) {
   deleteRepeatSchedule(id: $id)
@@ -901,6 +1006,12 @@ export const GetAcademicYearsDocument = gql`
         startWeek
       }
     }
+    holidays {
+      id
+      name
+      startDate
+      endDate
+    }
   }
 }
     `;
@@ -951,8 +1062,15 @@ export const GetClassesDocument = gql`
         weekRotation {
           id
           numOfWeek
+          startWeek
         }
       }
+    }
+    term {
+      id
+      name
+      startDate
+      endDate
     }
     subject {
       id
@@ -1015,6 +1133,11 @@ export const GetSubjectsDocument = gql`
     academicYear {
       id
     }
+    term {
+      id
+      startDate
+      endDate
+    }
   }
 }
     `;
@@ -1062,6 +1185,7 @@ export const GetTasksDocument = gql`
       id
       name
     }
+    completed
   }
 }
     `;
@@ -1109,6 +1233,7 @@ export const GetTasksByDateDocument = gql`
       id
       name
     }
+    completed
   }
 }
     `;
@@ -1309,7 +1434,7 @@ export type NewAcademicYearScheduleMutationHookResult = ReturnType<typeof useNew
 export type NewAcademicYearScheduleMutationResult = Apollo.MutationResult<NewAcademicYearScheduleMutation>;
 export type NewAcademicYearScheduleMutationOptions = Apollo.BaseMutationOptions<NewAcademicYearScheduleMutation, NewAcademicYearScheduleMutationVariables>;
 export const NewClassDocument = gql`
-    mutation newClass($subjectId: String!, $module: String, $room: String, $building: String, $teacher: String, $academicYearId: String) {
+    mutation newClass($subjectId: String!, $module: String, $room: String, $building: String, $teacher: String, $academicYearId: String, $termId: String) {
   newClass(
     subjectId: $subjectId
     module: $module
@@ -1317,6 +1442,7 @@ export const NewClassDocument = gql`
     building: $building
     teacher: $teacher
     academicYearId: $academicYearId
+    termId: $termId
   ) {
     id
   }
@@ -1343,6 +1469,7 @@ export type NewClassMutationFn = Apollo.MutationFunction<NewClassMutation, NewCl
  *      building: // value for 'building'
  *      teacher: // value for 'teacher'
  *      academicYearId: // value for 'academicYearId'
+ *      termId: // value for 'termId'
  *   },
  * });
  */
@@ -1387,6 +1514,47 @@ export function useNewClassScheduleMutation(baseOptions?: Apollo.MutationHookOpt
 export type NewClassScheduleMutationHookResult = ReturnType<typeof useNewClassScheduleMutation>;
 export type NewClassScheduleMutationResult = Apollo.MutationResult<NewClassScheduleMutation>;
 export type NewClassScheduleMutationOptions = Apollo.BaseMutationOptions<NewClassScheduleMutation, NewClassScheduleMutationVariables>;
+export const NewHolidayDocument = gql`
+    mutation NewHoliday($academicYearId: String!, $name: String!, $startDate: String!, $endDate: String!) {
+  newHoliday(
+    academicYearId: $academicYearId
+    name: $name
+    startDate: $startDate
+    endDate: $endDate
+  ) {
+    id
+  }
+}
+    `;
+export type NewHolidayMutationFn = Apollo.MutationFunction<NewHolidayMutation, NewHolidayMutationVariables>;
+
+/**
+ * __useNewHolidayMutation__
+ *
+ * To run a mutation, you first call `useNewHolidayMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNewHolidayMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [newHolidayMutation, { data, loading, error }] = useNewHolidayMutation({
+ *   variables: {
+ *      academicYearId: // value for 'academicYearId'
+ *      name: // value for 'name'
+ *      startDate: // value for 'startDate'
+ *      endDate: // value for 'endDate'
+ *   },
+ * });
+ */
+export function useNewHolidayMutation(baseOptions?: Apollo.MutationHookOptions<NewHolidayMutation, NewHolidayMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<NewHolidayMutation, NewHolidayMutationVariables>(NewHolidayDocument, options);
+      }
+export type NewHolidayMutationHookResult = ReturnType<typeof useNewHolidayMutation>;
+export type NewHolidayMutationResult = Apollo.MutationResult<NewHolidayMutation>;
+export type NewHolidayMutationOptions = Apollo.BaseMutationOptions<NewHolidayMutation, NewHolidayMutationVariables>;
 export const NewOneOffScheduleDocument = gql`
     mutation newOneOffSchedule($scheduleId: String!, $date: String!, $startTime: String!, $endTime: String!) {
   newOneOffSchedule(
@@ -1556,8 +1724,8 @@ export type NewRepeatScheduleMutationHookResult = ReturnType<typeof useNewRepeat
 export type NewRepeatScheduleMutationResult = Apollo.MutationResult<NewRepeatScheduleMutation>;
 export type NewRepeatScheduleMutationOptions = Apollo.BaseMutationOptions<NewRepeatScheduleMutation, NewRepeatScheduleMutationVariables>;
 export const NewSubjectDocument = gql`
-    mutation NewSubject($name: String!, $academicYearId: String) {
-  newSubject(name: $name, academicYearId: $academicYearId) {
+    mutation NewSubject($name: String!, $academicYearId: String, $termId: String) {
+  newSubject(name: $name, academicYearId: $academicYearId, termId: $termId) {
     id
   }
 }
@@ -1579,6 +1747,7 @@ export type NewSubjectMutationFn = Apollo.MutationFunction<NewSubjectMutation, N
  *   variables: {
  *      name: // value for 'name'
  *      academicYearId: // value for 'academicYearId'
+ *      termId: // value for 'termId'
  *   },
  * });
  */
@@ -1757,6 +1926,47 @@ export function useUpdateClassMutation(baseOptions?: Apollo.MutationHookOptions<
 export type UpdateClassMutationHookResult = ReturnType<typeof useUpdateClassMutation>;
 export type UpdateClassMutationResult = Apollo.MutationResult<UpdateClassMutation>;
 export type UpdateClassMutationOptions = Apollo.BaseMutationOptions<UpdateClassMutation, UpdateClassMutationVariables>;
+export const UpdateHolidayDocument = gql`
+    mutation UpdateHoliday($id: String!, $name: String!, $startDate: String!, $endDate: String!, $academicYearId: String!) {
+  updateHoliday(
+    id: $id
+    name: $name
+    startDate: $startDate
+    endDate: $endDate
+    academicYearId: $academicYearId
+  )
+}
+    `;
+export type UpdateHolidayMutationFn = Apollo.MutationFunction<UpdateHolidayMutation, UpdateHolidayMutationVariables>;
+
+/**
+ * __useUpdateHolidayMutation__
+ *
+ * To run a mutation, you first call `useUpdateHolidayMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateHolidayMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateHolidayMutation, { data, loading, error }] = useUpdateHolidayMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *      startDate: // value for 'startDate'
+ *      endDate: // value for 'endDate'
+ *      academicYearId: // value for 'academicYearId'
+ *   },
+ * });
+ */
+export function useUpdateHolidayMutation(baseOptions?: Apollo.MutationHookOptions<UpdateHolidayMutation, UpdateHolidayMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateHolidayMutation, UpdateHolidayMutationVariables>(UpdateHolidayDocument, options);
+      }
+export type UpdateHolidayMutationHookResult = ReturnType<typeof useUpdateHolidayMutation>;
+export type UpdateHolidayMutationResult = Apollo.MutationResult<UpdateHolidayMutation>;
+export type UpdateHolidayMutationOptions = Apollo.BaseMutationOptions<UpdateHolidayMutation, UpdateHolidayMutationVariables>;
 export const UpdateOneOffScheduleDocument = gql`
     mutation UpdateOneOffSchedule($id: String!, $scheduleId: String!, $date: String!, $startTime: String!, $endTime: String!) {
   updateOneOffSchedule(
@@ -1844,8 +2054,13 @@ export type UpdateRepeatScheduleMutationHookResult = ReturnType<typeof useUpdate
 export type UpdateRepeatScheduleMutationResult = Apollo.MutationResult<UpdateRepeatScheduleMutation>;
 export type UpdateRepeatScheduleMutationOptions = Apollo.BaseMutationOptions<UpdateRepeatScheduleMutation, UpdateRepeatScheduleMutationVariables>;
 export const UpdateSubjectDocument = gql`
-    mutation UpdateSubject($id: String!, $name: String!, $academicYearId: String) {
-  updateSubject(id: $id, name: $name, academicYearId: $academicYearId)
+    mutation UpdateSubject($id: String!, $name: String!, $academicYearId: String, $termId: String) {
+  updateSubject(
+    id: $id
+    name: $name
+    academicYearId: $academicYearId
+    termId: $termId
+  )
 }
     `;
 export type UpdateSubjectMutationFn = Apollo.MutationFunction<UpdateSubjectMutation, UpdateSubjectMutationVariables>;
@@ -1866,6 +2081,7 @@ export type UpdateSubjectMutationFn = Apollo.MutationFunction<UpdateSubjectMutat
  *      id: // value for 'id'
  *      name: // value for 'name'
  *      academicYearId: // value for 'academicYearId'
+ *      termId: // value for 'termId'
  *   },
  * });
  */
@@ -1877,7 +2093,7 @@ export type UpdateSubjectMutationHookResult = ReturnType<typeof useUpdateSubject
 export type UpdateSubjectMutationResult = Apollo.MutationResult<UpdateSubjectMutation>;
 export type UpdateSubjectMutationOptions = Apollo.BaseMutationOptions<UpdateSubjectMutation, UpdateSubjectMutationVariables>;
 export const UpdateTaskDocument = gql`
-    mutation UpdateTask($id: String!, $subjectId: String!, $academicYearId: String, $type: TaskType!, $due_date: String!, $title: String, $detail: String) {
+    mutation UpdateTask($id: String!, $subjectId: String!, $academicYearId: String, $type: TaskType!, $due_date: String!, $title: String, $detail: String, $completed: Float) {
   updateTask(
     id: $id
     subjectId: $subjectId
@@ -1886,6 +2102,7 @@ export const UpdateTaskDocument = gql`
     due_date: $due_date
     title: $title
     detail: $detail
+    completed: $completed
   )
 }
     `;
@@ -1911,6 +2128,7 @@ export type UpdateTaskMutationFn = Apollo.MutationFunction<UpdateTaskMutation, U
  *      due_date: // value for 'due_date'
  *      title: // value for 'title'
  *      detail: // value for 'detail'
+ *      completed: // value for 'completed'
  *   },
  * });
  */

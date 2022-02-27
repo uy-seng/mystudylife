@@ -23,10 +23,11 @@ let SubjectResolver = class SubjectResolver {
         this.subjectRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.Subject);
         this.academicYearRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.AcademicYear);
         this.userRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.User);
+        this.termRepository = (0, typeorm_1.getConnection)(process.env.NODE_ENV).getRepository(entity_1.Term);
     }
-    async newSubject(name, academicYearId, { user }) {
+    async newSubject(name, academicYearId, termId, { user }) {
         const partialSubject = this.subjectRepository.create({
-            name: name,
+            name: name
         });
         const newSubject = await this.subjectRepository.save(partialSubject);
         if (academicYearId) {
@@ -35,13 +36,19 @@ let SubjectResolver = class SubjectResolver {
                 throw new apollo_server_errors_1.ValidationError("invalid academic year id");
             newSubject.academicYear = academicYear;
         }
+        if (termId) {
+            const term = await this.termRepository.findOne(termId);
+            if (!term)
+                throw new apollo_server_errors_1.ValidationError("invalid term id");
+            newSubject.term = term;
+        }
         const currentUser = (await this.userRepository.findOne(user.id));
         newSubject.user = currentUser;
         return await this.subjectRepository.save(newSubject);
     }
     async deleteSubject(id, { user }) {
         const subject = await this.subjectRepository.findOne(id, {
-            relations: ["user"],
+            relations: ["user"]
         });
         if (!subject)
             throw new apollo_server_errors_1.ValidationError("invalid id");
@@ -52,18 +59,18 @@ let SubjectResolver = class SubjectResolver {
     }
     async getSubjects({ user }) {
         const subjects = await this.subjectRepository.find({
-            relations: ["academicYear"],
+            relations: ["academicYear", "term"],
             where: {
                 user: {
-                    id: user.id,
-                },
-            },
+                    id: user.id
+                }
+            }
         });
         return subjects;
     }
     async getSubject(id, { user }) {
         const subject = await this.subjectRepository.findOne(id, {
-            relations: ["academicYear"],
+            relations: ["academicYear"]
         });
         if (!subject)
             throw new apollo_server_errors_1.ValidationError("invalid subject id");
@@ -71,14 +78,14 @@ let SubjectResolver = class SubjectResolver {
             throw new apollo_server_errors_1.ForbiddenError("academic year not found for this user");
         return subject;
     }
-    async updateSubject(id, name, academicYearId, { user }) {
+    async updateSubject(id, name, academicYearId, termId, { user }) {
         const q = await this.subjectRepository.findOne(id, {
-            relations: ["user"],
+            relations: ["user", "academicYear", "term"],
             where: {
                 user: {
-                    id: user.id,
-                },
-            },
+                    id: user.id
+                }
+            }
         });
         if (!q)
             throw new apollo_server_errors_1.ApolloError("item not found. please provide a valid id");
@@ -90,6 +97,12 @@ let SubjectResolver = class SubjectResolver {
                 throw new apollo_server_errors_1.ApolloError("item not found. pleaase provide a valid academic year id");
             q.academicYear = toBeUpdatedAcademicYear;
         }
+        if (termId && (!q.term || q.term.id !== termId)) {
+            const toBeUpdatedTerm = await this.termRepository.findOne(termId);
+            if (!toBeUpdatedTerm)
+                throw new apollo_server_errors_1.ApolloError("item not found. please provide a valid term id");
+            q.term = toBeUpdatedTerm;
+        }
         await this.subjectRepository.save(q);
         return true;
     }
@@ -99,9 +112,10 @@ __decorate([
     (0, type_graphql_1.UseMiddleware)(middleware_1.authenticationGate),
     __param(0, (0, type_graphql_1.Arg)("name")),
     __param(1, (0, type_graphql_1.Arg)("academicYearId", { nullable: true })),
-    __param(2, (0, type_graphql_1.Ctx)()),
+    __param(2, (0, type_graphql_1.Arg)("termId", { nullable: true })),
+    __param(3, (0, type_graphql_1.Ctx)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, Object]),
+    __metadata("design:paramtypes", [String, String, String, Object]),
     __metadata("design:returntype", Promise)
 ], SubjectResolver.prototype, "newSubject", null);
 __decorate([
@@ -136,9 +150,10 @@ __decorate([
     __param(0, (0, type_graphql_1.Arg)("id", () => String)),
     __param(1, (0, type_graphql_1.Arg)("name")),
     __param(2, (0, type_graphql_1.Arg)("academicYearId", { nullable: true })),
-    __param(3, (0, type_graphql_1.Ctx)()),
+    __param(3, (0, type_graphql_1.Arg)("termId", { nullable: true })),
+    __param(4, (0, type_graphql_1.Ctx)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String, Object]),
+    __metadata("design:paramtypes", [String, String, String, String, Object]),
     __metadata("design:returntype", Promise)
 ], SubjectResolver.prototype, "updateSubject", null);
 SubjectResolver = __decorate([

@@ -51,6 +51,11 @@ __decorate([
     __metadata("design:type", Array)
 ], AcademicYear.prototype, "classes", void 0);
 __decorate([
+    (0, typeorm_1.OneToMany)(() => __1.Holiday, (holiday) => holiday.academicYear),
+    (0, type_graphql_1.Field)(() => [__1.Holiday]),
+    __metadata("design:type", Array)
+], AcademicYear.prototype, "holidays", void 0);
+__decorate([
     (0, typeorm_1.ManyToOne)(() => __1.Task, (task) => task.academicYear),
     __metadata("design:type", Array)
 ], AcademicYear.prototype, "tasks", void 0);

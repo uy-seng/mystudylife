@@ -8,35 +8,22 @@ import { RootState } from "../../../app/store";
 import { TermPayload } from "../../../shared/NewAcademicYear.slice";
 
 import { Pair } from "../../../types";
-import { Button, LoaderButton } from "../../button";
-import { FormikBasicTextInput, SelectInput } from "../../input";
+import { LoaderButton } from "../../button";
+import { FormikBasicTextInput } from "../../input";
 
 import css from "./EditClass.module.css";
 import {
   ClassPayload,
   ClassSchedulePayload,
   OneOffSchedulePayload,
-  RepeatSchedulePayload,
-  selectClassPayload,
-  selectClassSchedulePayload,
-  selectOneOffSchedulePayload,
-  selectRepeatSchedules,
-  setClassPayload,
-  setClassSchedulePayload,
+  RepeatSchedulePayload
 } from "../../../shared/NewClass.slice";
 import {
   Exact,
   GetClassesQuery,
-  NewClassMutationFn,
-  NewClassScheduleMutationFn,
-  NewOneOffScheduleMutationFn,
   NewRepeatScheduleMutationFn,
-  useGetAcademicYearsQuery,
   useGetClassesQuery,
   useGetSubjectsQuery,
-  useNewClassMutation,
-  useNewClassScheduleMutation,
-  useNewOneOffScheduleMutation,
   useNewRepeatScheduleMutation,
   useUpdateClassMutation,
   useUpdateOneOffScheduleMutation,
@@ -45,10 +32,10 @@ import {
   useUpdateRepeatScheduleMutation,
   UpdateRepeatScheduleMutationFn,
   useDeleteRepeatScheduleMutation,
-  DeleteRepeatScheduleMutationFn,
+  DeleteRepeatScheduleMutationFn
 } from "../../../generated/graphql";
 import { FormikBasicSelectInput } from "../../input/BasicSelectInput";
-import { NewClass, NewSubject } from "../../modal";
+import { NewSubject } from "../../modal";
 import { asyncForEach } from "../../../utils";
 import { ApolloQueryResult } from "@apollo/client";
 import {
@@ -61,7 +48,7 @@ import {
   setDefaultToBeUpdatedClassPayload,
   setNewRepeatSchedules,
   setToBeDeletedRepeatSchedules,
-  setToBeUpdatedClassPayload,
+  setToBeUpdatedClassPayload
 } from "../../../shared/EditClass.slice";
 import { OneOffSchedule } from "./OneOffSchedule";
 import { RepeatSchedule } from "./RepeatSchedule";
@@ -107,7 +94,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
               <div
                 style={{
                   gridTemplateColumns: "1fr min-content",
-                  columnGap: 0,
+                  columnGap: 0
                 }}
                 className={css.row}
               >
@@ -126,13 +113,13 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
                       return {
                         key: subject.id,
                         value: subject.id,
-                        label: subject.name,
+                        label: subject.name
                       };
                     })}
                   onChange={(e) => {
                     setToBeUpdatedClassPayload({
                       key: "subjectId",
-                      value: e.target.value,
+                      value: e.target.value
                     });
                   }}
                 />
@@ -141,30 +128,25 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
               <FormikBasicTextInput
                 className={css.name}
                 name="module"
-                // validate={validateName}
                 value={toBeUpdatedClassPayload.module}
                 onChange={(e) => {
                   setToBeUpdatedClassPayload({
                     key: "module",
-                    value: e.target.value,
+                    value: e.target.value
                   });
                 }}
                 label="Module"
               />
-              {/* {touched.name && errors.name && (
-              <div className="error">{errors.name}</div>
-            )} */}
             </div>
             <div className={css.row}>
               <FormikBasicTextInput
                 className={css.name}
                 name="room"
-                // validate={validateName}
                 value={toBeUpdatedClassPayload.room}
                 onChange={(e) => {
                   setToBeUpdatedClassPayload({
                     key: "room",
-                    value: e.target.value,
+                    value: e.target.value
                   });
                 }}
                 label="Room"
@@ -172,12 +154,11 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
               <FormikBasicTextInput
                 className={css.name}
                 name="building"
-                // validate={validateName}
                 value={toBeUpdatedClassPayload.building}
                 onChange={(e) => {
                   setToBeUpdatedClassPayload({
                     key: "building",
-                    value: e.target.value,
+                    value: e.target.value
                   });
                 }}
                 label="Building"
@@ -187,12 +168,11 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
               <FormikBasicTextInput
                 className={css.name}
                 name="teacher"
-                // validate={validateName}
                 value={toBeUpdatedClassPayload.teacher}
                 onChange={(e) => {
                   setToBeUpdatedClassPayload({
                     key: "teacher",
-                    value: e.target.value,
+                    value: e.target.value
                   });
                 }}
                 label="Teacher"
@@ -200,7 +180,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
             </div>
             <div
               style={{
-                marginTop: "2rem",
+                marginTop: "2rem"
               }}
             >
               {toBeUpdatedClassSchedulePayload?.type === "oneOff" && (
@@ -216,7 +196,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
         <div className={css.btns}>
           <LoaderButton
             style={{
-              padding: "1rem 2rem",
+              padding: "1rem 2rem"
             }}
             loading={isSubmitting}
             type="submit"
@@ -287,8 +267,8 @@ const MyForm = withFormik<any, ClassPayload>({
         building: toBeUpdatedClassPayload.building,
         module: toBeUpdatedClassPayload.module,
         room: toBeUpdatedClassPayload.room,
-        teacher: toBeUpdatedClassPayload.teacher,
-      },
+        teacher: toBeUpdatedClassPayload.teacher
+      }
     })
       .then(async (response) => {
         if (toBeUpdatedClassSchedulePayload.type === "oneOff") {
@@ -298,8 +278,8 @@ const MyForm = withFormik<any, ClassPayload>({
               date: toBeUpdatedOneOffSchedulePayload.date,
               endTime: toBeUpdatedOneOffSchedulePayload.endTime,
               startTime: toBeUpdatedOneOffSchedulePayload.startTime,
-              scheduleId: toBeUpdatedClassSchedulePayload.id,
-            },
+              scheduleId: toBeUpdatedClassSchedulePayload.id
+            }
           });
         } else if (toBeUpdatedClassSchedulePayload.type === "repeat") {
           if (toBeDeletedRepeatSchedules.length > 0)
@@ -308,8 +288,8 @@ const MyForm = withFormik<any, ClassPayload>({
               async (repeatSchedule) => {
                 await deleteRepeatSchedule({
                   variables: {
-                    id: repeatSchedule.id,
-                  },
+                    id: repeatSchedule.id
+                  }
                 });
               }
             );
@@ -323,8 +303,8 @@ const MyForm = withFormik<any, ClassPayload>({
                     startTime: toBeUpdatedRepeatSchedulePayload.startTime,
                     endTime: toBeUpdatedRepeatSchedulePayload.endTime,
                     scheduleId: toBeUpdatedClassSchedulePayload.id,
-                    repeatDays: toBeUpdatedRepeatSchedulePayload.days,
-                  },
+                    repeatDays: toBeUpdatedRepeatSchedulePayload.days
+                  }
                 });
               }
             );
@@ -335,8 +315,8 @@ const MyForm = withFormik<any, ClassPayload>({
                   scheduleId: toBeUpdatedClassSchedulePayload.id,
                   startTime: repeatSchedule.startTime,
                   endTime: repeatSchedule.endTime,
-                  repeatDays: repeatSchedule.days,
-                },
+                  repeatDays: repeatSchedule.days
+                }
               });
             });
           }
@@ -360,8 +340,9 @@ const MyForm = withFormik<any, ClassPayload>({
       room: props.room,
       subjectId: props.subjectId,
       teacher: props.teacher,
+      termId: props.termId
     };
-  },
+  }
 })(InnerForm);
 
 const mapStateToProps = (state: RootState) => {
@@ -375,7 +356,7 @@ interface DispatchMap {
 const mapDispatchToProps = (dispatch: Dispatch): DispatchMap => ({
   setToBeUpdatedClassPayload: (params: Pair<ClassPayload>) => {
     dispatch(setToBeUpdatedClassPayload(params));
-  },
+  }
 });
 
 const ConnectedForm = connect(mapStateToProps, mapDispatchToProps)(MyForm);

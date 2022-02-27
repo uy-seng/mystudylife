@@ -11,10 +11,10 @@ const apollo_server_express_1 = require("apollo-server-express");
 const type_graphql_1 = require("type-graphql");
 const cors_1 = __importDefault(require("cors"));
 const routes_1 = require("./routes");
+const oauth_route_1 = require("./routes/oauth.route");
 const resolvers_1 = require("./graphql/resolvers");
 const services_1 = require("./services");
 const path_1 = __importDefault(require("path"));
-const task_resolver_1 = require("./graphql/resolvers/task/task.resolver");
 (async () => {
     const app = (0, express_1.default)();
     app.use(body_parser_1.default.urlencoded({ extended: true }));
@@ -25,11 +25,18 @@ const task_resolver_1 = require("./graphql/resolvers/task/task.resolver");
         origin: [
             "https://studio.apollographql.com",
             "http://localhost:3000",
-            "http://localhost:3001",
-        ],
+            "http://localhost:3001"
+        ]
     }));
     const databaseService = new services_1.DatabaseService();
     await databaseService.init();
+    const passportService = new services_1.PassportService(app);
+    passportService.initGoogleOAuthStrategy();
+    passportService.initFacebookOAuthStrategy();
+    app.get("/", (_req, res) => {
+        res.redirect("/graphql");
+    });
+    app.use("/oauth", oauth_route_1.oauthRoute);
     app.use("/api", routes_1.apiRoute);
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: await (0, type_graphql_1.buildSchema)({
@@ -43,10 +50,11 @@ const task_resolver_1 = require("./graphql/resolvers/task/task.resolver");
                 resolvers_1.ClassScheduleResolver,
                 resolvers_1.OneOffScheduleResolver,
                 resolvers_1.RepeatScheduleResolver,
-                task_resolver_1.TaskResolver,
-            ],
+                resolvers_1.TaskResolver,
+                resolvers_1.HolidayResolver
+            ]
         }),
-        context: ({ req, res }) => ({ req, res }),
+        context: ({ req, res }) => ({ req, res })
     });
     await apolloServer.start();
     apolloServer.applyMiddleware({ app, cors: false });

@@ -47,9 +47,14 @@
   padding: 0.5rem;
   font-weight: 500;
   font-size: 14px;
+  flex: 1;
 }
 
 .dropdownOption:hover {
   background-color: var(--bg-light-gray);
   cursor: pointer;
+}
+
+.children {
+  padding-left: 1rem;
 }

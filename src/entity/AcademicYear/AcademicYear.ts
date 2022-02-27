@@ -5,9 +5,17 @@ import {
   ManyToOne,
   OneToMany,
   OneToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { Task, Subject, Class, User, Term, AcademicYearSchedule } from "..";
+import {
+  Task,
+  Subject,
+  Class,
+  User,
+  Term,
+  AcademicYearSchedule,
+  Holiday
+} from "..";
 
 @Entity("academic_years")
 @ObjectType()
@@ -40,6 +48,11 @@ export class AcademicYear {
   @Field(() => [Class])
   classes: Class[];
 
+  @OneToMany(() => Holiday, (holiday) => holiday.academicYear)
+  @Field(() => [Holiday])
+  holidays: Holiday[];
+
+  //! one to many
   @ManyToOne(() => Task, (task) => task.academicYear)
   tasks: Task[];
 

@@ -5,7 +5,7 @@ import {
   ClassPayload,
   ClassSchedulePayload,
   OneOffSchedulePayload,
-  RepeatSchedulePayload,
+  RepeatSchedulePayload
 } from "./NewClass.slice";
 
 export interface EditClassGlobalState {
@@ -29,7 +29,7 @@ const initialState: EditClassGlobalState = {
   toBeUpdatedOneOffSchedulePayload: undefined,
   toBeUpdatedRepeatSchedules: undefined,
   newRepeatSchedules: [],
-  toBeDeletedRepeatSchedules: [],
+  toBeDeletedRepeatSchedules: []
 };
 
 export const EditClassSlice = createSlice({
@@ -47,6 +47,7 @@ export const EditClassSlice = createSlice({
         switch (params.payload.key) {
           case "academicYearId":
           case "subjectId":
+          case "termId":
             state.toBeUpdatedClassPayload[params.payload.key] =
               params.payload.value;
             break;
@@ -128,8 +129,8 @@ export const EditClassSlice = createSlice({
       }
     ) => {
       state.newRepeatSchedules = params.payload;
-    },
-  },
+    }
+  }
 });
 
 export const selectToBeUpdatedClassPayload = (state: RootState) =>
@@ -156,7 +157,7 @@ export const {
   setDefaultToBeUpdatedOneOffSchedulePayload,
   setDefaultToBeUpdatedRepeatSchedules,
   setDefaultToBeDeletedRepeatSchedules,
-  setToBeDeletedRepeatSchedules,
+  setToBeDeletedRepeatSchedules
 } = EditClassSlice.actions;
 
 export default EditClassSlice.reducer;

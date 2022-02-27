@@ -1,5 +1,5 @@
-mutation NewSubject($name: String!, $academicYearId: String) {
-  newSubject(name: $name, academicYearId: $academicYearId) {
+mutation NewSubject($name: String!, $academicYearId: String, $termId: String) {
+  newSubject(name: $name, academicYearId: $academicYearId, termId: $termId) {
     id
   }
 }

@@ -13,7 +13,7 @@ export const ManageCalendar: React.FC<Props> = () => {
           borderBottom: "1px solid #cdd4d4",
           paddingLeft: "1rem",
           fontWeight: 400,
-          paddingBottom: "1rem",
+          paddingBottom: "1rem"
         }}
       >
         Calendar

@@ -4,7 +4,7 @@ import { ManageSubject, NewSubject } from "..";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import {
   useGetAcademicYearsQuery,
-  useGetSubjectsQuery,
+  useGetSubjectsQuery
 } from "../../../generated/graphql";
 import {
   selectClassPayload,
@@ -13,7 +13,7 @@ import {
   setClassPayloadToDefault,
   setClassSchedulePayloadToDefault,
   setOneOffSchedulePayloadToDefault,
-  setRepeatSchedulesToDefault,
+  setRepeatSchedulesToDefault
 } from "../../../shared/NewClass.slice";
 import { selectScheduleComponentState } from "../../../shared/Schedule.slice";
 import { Button } from "../../button";
@@ -28,14 +28,17 @@ interface Props {}
 export const NewClass: React.FC<Props> = () => {
   const [show, setShow] = React.useState<boolean>(false);
   const { data: academicYears } = useGetAcademicYearsQuery();
-  const { academicYearId } = useAppSelector(selectClassPayload);
+  const { academicYearId, termId } = useAppSelector(selectClassPayload);
   const dispatch = useAppDispatch();
   const { type: classScheduleType } = useAppSelector(
     selectClassSchedulePayload
   );
-  const { data: subjects, loading: fetchingSubject } = useGetSubjectsQuery();
+  const { data: subjects } = useGetSubjectsQuery();
 
-  const { selectedYear } = useAppSelector(selectScheduleComponentState);
+  const { selectedYear, selectedTerm } = useAppSelector(
+    selectScheduleComponentState
+  );
+  const { subjectId } = useAppSelector(selectClassPayload);
 
   const close = () => {
     dispatch(setClassPayloadToDefault());
@@ -50,18 +53,26 @@ export const NewClass: React.FC<Props> = () => {
       dispatch(
         setClassPayload({
           key: "academicYearId",
-          value: selectedYear.id,
+          value: selectedYear.id
         })
       );
     }
-  }, [selectedYear]);
+    if (selectedTerm) {
+      dispatch(
+        setClassPayload({
+          key: "termId",
+          value: selectedTerm.id
+        })
+      );
+    }
+  }, [selectedYear, selectedTerm]);
 
   if (academicYears && subjects)
     return (
       <React.Fragment>
         <Button
           style={{
-            padding: "0.5rem",
+            padding: "0.5rem"
           }}
           as="primary"
           text={`New Class`}
@@ -87,16 +98,24 @@ export const NewClass: React.FC<Props> = () => {
                   dispatch(
                     setClassPayload({
                       key: "academicYearId",
-                      value: value,
+                      value: value
                     })
                   )
                 }
+                setSubState={(value) => {
+                  dispatch(
+                    setClassPayload({
+                      key: "termId",
+                      value: value
+                    })
+                  );
+                }}
                 label="New Class"
                 data={[
                   {
                     key: "None",
                     value: null,
-                    label: "No year/term",
+                    label: "No year/term"
                   },
                   ...academicYears.getAcademicYears.map((academicYear) => {
                     return {
@@ -107,8 +126,19 @@ export const NewClass: React.FC<Props> = () => {
                         academicYear.endDate.split("-")[0]
                       }`,
                       value: academicYear.id,
+                      children: [...academicYear?.terms]
+                        .sort((a, b) =>
+                          new Date(a.startDate) > new Date(b.startDate) ? 1 : -1
+                        )
+                        .map((term) => {
+                          return {
+                            key: term.name,
+                            value: term.id,
+                            label: term.name
+                          };
+                        })
                     };
-                  }),
+                  })
                 ]}
               />
             )}
@@ -116,7 +146,7 @@ export const NewClass: React.FC<Props> = () => {
               onClick={close}
               className="close"
               style={{
-                top: subjects.getSubjects.length > 0 ? "2rem" : "1rem",
+                top: subjects.getSubjects.length > 0 ? "2rem" : "1rem"
               }}
             >
               <AiOutlineClose />
@@ -124,7 +154,7 @@ export const NewClass: React.FC<Props> = () => {
           </BaseModal.Header>
           <BaseModal.Body
             style={{
-              maxWidth: "550px",
+              maxWidth: "550px"
             }}
           >
             {subjects.getSubjects.filter(
@@ -133,7 +163,27 @@ export const NewClass: React.FC<Props> = () => {
               <React.Fragment>
                 {classScheduleType === "repeat" && (
                   <div className={css.reminder}>
-                    {academicYearId
+                    {subjects.getSubjects.filter(
+                      (subject) => subject.id === subjectId
+                    )[0]?.term?.id
+                      ? `This class will exist in your timetable from ${new Date(
+                          subjects.getSubjects.filter(
+                            (subject) => subject.id === subjectId
+                          )[0].term!.startDate
+                        ).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "2-digit",
+                          year: "numeric"
+                        })} - ${new Date(
+                          subjects.getSubjects.filter(
+                            (subject) => subject.id === subjectId
+                          )[0].term!.endDate
+                        ).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "2-digit",
+                          year: "numeric"
+                        })} unless start/end dates are specified.`
+                      : academicYearId
                       ? `This class will exist in your timetable from ${new Date(
                           academicYears.getAcademicYears.filter(
                             (academicYear) => academicYear.id === academicYearId
@@ -141,7 +191,7 @@ export const NewClass: React.FC<Props> = () => {
                         ).toLocaleDateString("en-US", {
                           month: "short",
                           day: "2-digit",
-                          year: "numeric",
+                          year: "numeric"
                         })} - ${new Date(
                           academicYears.getAcademicYears.filter(
                             (academicYear) => academicYear.id === academicYearId
@@ -149,7 +199,7 @@ export const NewClass: React.FC<Props> = () => {
                         ).toLocaleDateString("en-US", {
                           month: "short",
                           day: "2-digit",
-                          year: "numeric",
+                          year: "numeric"
                         })} unless start/end dates are specified.`
                       : "This class will exist in your timetable indefinitely unless a year/term is set or start/end dates are specified."}
                   </div>

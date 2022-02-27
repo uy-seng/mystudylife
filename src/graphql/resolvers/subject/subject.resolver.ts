@@ -1,9 +1,9 @@
 import {
   ForbiddenError,
   ValidationError,
-  ApolloError,
+  ApolloError
 } from "apollo-server-errors";
-import { Subject, AcademicYear, User } from "../../../entity";
+import { Subject, AcademicYear, User, Term } from "../../../entity";
 import { Context } from "../../../interface";
 import {
   Arg,
@@ -11,7 +11,7 @@ import {
   Mutation,
   Query,
   Resolver,
-  UseMiddleware,
+  UseMiddleware
 } from "type-graphql";
 import { getConnection } from "typeorm";
 import { authenticationGate } from "../../../middleware";
@@ -27,16 +27,20 @@ export class SubjectResolver {
   private readonly userRepository = getConnection(
     process.env.NODE_ENV
   ).getRepository(User);
+  private readonly termRepository = getConnection(
+    process.env.NODE_ENV
+  ).getRepository(Term);
 
   @Mutation(() => Subject)
   @UseMiddleware(authenticationGate)
   async newSubject(
     @Arg("name") name: string,
     @Arg("academicYearId", { nullable: true }) academicYearId: string,
+    @Arg("termId", { nullable: true }) termId: string,
     @Ctx() { user }: Context
   ) {
     const partialSubject = this.subjectRepository.create({
-      name: name,
+      name: name
     });
     const newSubject = await this.subjectRepository.save(partialSubject);
     if (academicYearId) {
@@ -46,6 +50,13 @@ export class SubjectResolver {
       if (!academicYear) throw new ValidationError("invalid academic year id");
       newSubject.academicYear = academicYear;
     }
+
+    if (termId) {
+      const term = await this.termRepository.findOne(termId);
+      if (!term) throw new ValidationError("invalid term id");
+      newSubject.term = term;
+    }
+
     const currentUser = (await this.userRepository.findOne(user!.id)) as User;
     newSubject.user = currentUser;
     return await this.subjectRepository.save(newSubject);
@@ -55,7 +66,7 @@ export class SubjectResolver {
   @UseMiddleware(authenticationGate)
   async deleteSubject(@Arg("id") id: string, @Ctx() { user }: Context) {
     const subject = await this.subjectRepository.findOne(id, {
-      relations: ["user"],
+      relations: ["user"]
     });
     if (!subject) throw new ValidationError("invalid id");
     if (subject.user.id !== user!.id)
@@ -68,12 +79,12 @@ export class SubjectResolver {
   @UseMiddleware(authenticationGate)
   async getSubjects(@Ctx() { user }: Context) {
     const subjects = await this.subjectRepository.find({
-      relations: ["academicYear"],
+      relations: ["academicYear", "term"],
       where: {
         user: {
-          id: user!.id,
-        },
-      },
+          id: user!.id
+        }
+      }
     });
     return subjects;
   }
@@ -82,7 +93,7 @@ export class SubjectResolver {
   @UseMiddleware(authenticationGate)
   async getSubject(@Arg("id") id: string, @Ctx() { user }: Context) {
     const subject = await this.subjectRepository.findOne(id, {
-      relations: ["academicYear"],
+      relations: ["academicYear"]
     });
     if (!subject) throw new ValidationError("invalid subject id");
     if (subject?.user.id !== user!.id)
@@ -96,15 +107,16 @@ export class SubjectResolver {
     @Arg("id", () => String) id: string,
     @Arg("name") name: string,
     @Arg("academicYearId", { nullable: true }) academicYearId: string,
+    @Arg("termId", { nullable: true }) termId: string,
     @Ctx() { user }: Context
   ) {
     const q = await this.subjectRepository.findOne(id, {
-      relations: ["user"],
+      relations: ["user", "academicYear", "term"],
       where: {
         user: {
-          id: user!.id,
-        },
-      },
+          id: user!.id
+        }
+      }
     });
     if (!q) throw new ApolloError("item not found. please provide a valid id");
     q.name = name;
@@ -120,6 +132,12 @@ export class SubjectResolver {
           "item not found. pleaase provide a valid academic year id"
         );
       q.academicYear = toBeUpdatedAcademicYear;
+    }
+    if (termId && (!q.term || q.term.id !== termId)) {
+      const toBeUpdatedTerm = await this.termRepository.findOne(termId);
+      if (!toBeUpdatedTerm)
+        throw new ApolloError("item not found. please provide a valid term id");
+      q.term = toBeUpdatedTerm;
     }
     await this.subjectRepository.save(q);
     return true;

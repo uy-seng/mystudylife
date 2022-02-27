@@ -17,14 +17,14 @@ import {
   selectSubjectPayload,
   setSubjectPayload,
   setSubjectPayloadToDefault,
-  SubjectPayload,
+  SubjectPayload
 } from "../../../shared/NewSubject.slice";
 import {
   Exact,
   GetSubjectsQuery,
   NewSubjectMutationFn,
   useGetSubjectsQuery,
-  useNewSubjectMutation,
+  useNewSubjectMutation
 } from "../../../generated/graphql";
 import { ApolloQueryResult } from "@apollo/client";
 import { formatDate } from "../../../utils";
@@ -56,7 +56,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
               onChange={(e) => {
                 setSubjectPayload({
                   key: "name",
-                  value: e.target.value,
+                  value: e.target.value
                 });
               }}
               label="Name"
@@ -81,7 +81,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
       <div className={css.btns}>
         <LoaderButton
           style={{
-            padding: "1rem 2rem",
+            padding: "1rem 2rem"
           }}
           loading={isSubmitting}
           type="submit"
@@ -95,7 +95,7 @@ const InnerForm = (props: FormikProps<TermPayload> & DispatchMap) => {
 
 const AdvancedMenu: React.FC = () => {
   const { academicYears } = useAppSelector(selectScheduleComponentState);
-  const { academicYearId } = useAppSelector(selectSubjectPayload);
+  const { academicYearId, termId } = useAppSelector(selectSubjectPayload);
   const dispatch = useAppDispatch();
 
   return (
@@ -107,7 +107,15 @@ const AdvancedMenu: React.FC = () => {
             dispatch(
               setSubjectPayload({
                 key: "academicYearId",
-                value: value,
+                value: value
+              })
+            );
+          }}
+          setSubState={(value) => {
+            dispatch(
+              setSubjectPayload({
+                key: "termId",
+                value: value
               })
             );
           }}
@@ -115,7 +123,7 @@ const AdvancedMenu: React.FC = () => {
           options={[
             {
               key: "None",
-              value: undefined,
+              value: undefined
             },
             ...academicYears.map((academicYear) => {
               return {
@@ -123,29 +131,61 @@ const AdvancedMenu: React.FC = () => {
                   academicYear.endDate.split("-")[0]
                 }`,
                 value: academicYear.id,
+                children: [...academicYear?.terms]
+                  .sort((a, b) => {
+                    return new Date(a.startDate) > new Date(b.startDate)
+                      ? 1
+                      : -1;
+                  })
+                  .map((term) => {
+                    return {
+                      key: term.name,
+                      value: term.id
+                    };
+                  })
               };
-            }),
+            })
           ]}
         />
         <div
           className="txt-sm"
           style={{ paddingBottom: "0.5rem", paddingLeft: "0.5rem" }}
         >
-          {academicYearId
-            ? `In timetable from ${formatDate(
-                new Date(
-                  academicYears.filter(
+          {termId &&
+            academicYearId &&
+            `In timetable from ${formatDate(
+              new Date(
+                academicYears
+                  .filter(
                     (academicYear) => academicYear.id === academicYearId
-                  )[0]?.startDate
-                )
-              )} to ${formatDate(
-                new Date(
-                  academicYears.filter(
+                  )[0]
+                  ?.terms.filter((term) => term.id === termId)[0]?.startDate
+              )
+            )} to ${formatDate(
+              new Date(
+                academicYears
+                  .filter(
                     (academicYear) => academicYear.id === academicYearId
-                  )[0]?.endDate
-                )
-              )}`
-            : `In timetable indefinitely`}
+                  )[0]
+                  ?.terms.filter((term) => term.id === termId)[0]?.endDate
+              )
+            )}`}
+          {!termId &&
+            academicYearId &&
+            `In timetable from ${formatDate(
+              new Date(
+                academicYears.filter(
+                  (academicYear) => academicYear.id === academicYearId
+                )[0]?.startDate
+              )
+            )} to ${formatDate(
+              new Date(
+                academicYears.filter(
+                  (academicYear) => academicYear.id === academicYearId
+                )[0]?.endDate
+              )
+            )}`}
+          {!termId && !academicYearId && `In timetable indefinitely`}
         </div>
       </div>
       <div className="txt-sm">
@@ -183,7 +223,8 @@ const MyForm = withFormik<any, SubjectPayload>({
       variables: {
         name: props.name,
         academicYearId: props.academicYearId,
-      },
+        termId: props.termId
+      }
     }).then(async () => {
       setDefault();
       await refetch();
@@ -195,8 +236,9 @@ const MyForm = withFormik<any, SubjectPayload>({
     return {
       name: props.name,
       academicYearId: props.academicYearId,
+      termId: props.termId
     };
-  },
+  }
 })(InnerForm);
 
 const mapStateToProps = (state: RootState) => {
@@ -210,7 +252,7 @@ interface DispatchMap {
 const mapDispatchToProps = (dispatch: Dispatch): DispatchMap => ({
   setSubjectPayload: (params: Pair<SubjectPayload>) => {
     dispatch(setSubjectPayload(params));
-  },
+  }
 });
 
 const ConnectedForm = connect(mapStateToProps, mapDispatchToProps)(MyForm);

@@ -13,22 +13,23 @@ export interface CreateNewClasstGlobalState {
 
 const initialState: CreateNewClasstGlobalState = {
   classPayload: {
+    termId: undefined,
     academicYearId: undefined,
     subjectId: undefined,
     module: "",
     room: "",
     building: "",
-    teacher: "",
+    teacher: ""
   },
   classSchedulePayload: {
-    type: "oneOff",
+    type: "oneOff"
   },
   oneOffSchedulePayload: {
     date: formatDate(new Date()),
     startTime: "08:00",
-    endTime: "09:50",
+    endTime: "09:50"
   },
-  repeatSchedules: [],
+  repeatSchedules: []
 };
 
 export const NewClassSlice = createSlice({
@@ -39,6 +40,7 @@ export const NewClassSlice = createSlice({
       switch (params.payload.key) {
         case "academicYearId":
         case "subjectId":
+        case "termId":
           state.classPayload[params.payload.key] = params.payload.value;
           break;
         default:
@@ -50,10 +52,11 @@ export const NewClassSlice = createSlice({
       state.classPayload = {
         academicYearId: state.classPayload.academicYearId,
         subjectId: undefined,
+        termId: undefined,
         module: "",
         room: "",
         building: "",
-        teacher: "",
+        teacher: ""
       };
     },
     setClassSchedulePayload: (
@@ -64,7 +67,7 @@ export const NewClassSlice = createSlice({
     },
     setClassSchedulePayloadToDefault: (state) => {
       state.classSchedulePayload = {
-        type: "oneOff",
+        type: "oneOff"
       };
     },
     setOneOffSchedulePayload: (
@@ -77,7 +80,7 @@ export const NewClassSlice = createSlice({
       state.oneOffSchedulePayload = {
         date: formatDate(new Date()),
         startTime: "08:00",
-        endTime: "09:50",
+        endTime: "09:50"
       };
     },
     setRepeatSchedules: (
@@ -88,8 +91,8 @@ export const NewClassSlice = createSlice({
     },
     setRepeatSchedulesToDefault: (state) => {
       state.repeatSchedules = [];
-    },
-  },
+    }
+  }
 });
 
 export const selectClassPayload = (state: RootState) =>
@@ -109,7 +112,7 @@ export const {
   setClassPayloadToDefault,
   setClassSchedulePayloadToDefault,
   setOneOffSchedulePayloadToDefault,
-  setRepeatSchedulesToDefault,
+  setRepeatSchedulesToDefault
 } = NewClassSlice.actions;
 
 export default NewClassSlice.reducer;
@@ -117,6 +120,7 @@ export default NewClassSlice.reducer;
 export interface ClassPayload {
   subjectId: string | undefined;
   academicYearId: string | undefined;
+  termId: string | undefined;
   module: string;
   room: string;
   building: string;

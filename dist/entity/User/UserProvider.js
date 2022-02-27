@@ -16,7 +16,7 @@ const __1 = require("..");
 let UserProvider = class UserProvider {
 };
 __decorate([
-    (0, typeorm_1.PrimaryColumn)("uuid"),
+    (0, typeorm_1.PrimaryColumn)(),
     (0, type_graphql_1.Field)(() => String),
     __metadata("design:type", String)
 ], UserProvider.prototype, "id", void 0);

@@ -36,6 +36,7 @@ __decorate([
 ], Subject.prototype, "academicYear", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => __1.Term, (term) => term.subjects),
+    (0, type_graphql_1.Field)(() => __1.Term, { nullable: true }),
     __metadata("design:type", __1.Term)
 ], Subject.prototype, "term", void 0);
 __decorate([

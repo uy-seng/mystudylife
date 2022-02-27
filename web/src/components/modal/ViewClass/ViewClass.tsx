@@ -25,7 +25,9 @@ export const ViewClass: React.FC<Props> = ({ childController, data }) => {
     return (
       <React.Fragment>
         {childController ? (
-          <div onClick={() => setShow(true)}>{childController}</div>
+          <div data-type="modal" onClick={() => setShow(true)}>
+            {childController}
+          </div>
         ) : (
           <Button
             as="neutral"
@@ -44,7 +46,7 @@ export const ViewClass: React.FC<Props> = ({ childController, data }) => {
             <BaseModal.Title
               style={{
                 fontSize: "20px",
-                maxWidth: "300px",
+                maxWidth: "300px"
               }}
             >
               {`${data?.subject.name}`}
@@ -103,14 +105,14 @@ export const ViewClass: React.FC<Props> = ({ childController, data }) => {
                     <div
                       style={{
                         display: "grid",
-                        gridTemplateColumns: "1fr 1fr 1fr",
+                        gridTemplateColumns: "1fr 1fr 1fr"
                       }}
                     >
                       {data.schedule?.repeat?.map((day, i) => (
                         <div>
                           <div
                             style={{
-                              textTransform: "capitalize",
+                              textTransform: "capitalize"
                             }}
                           >
                             {day.repeatDays.join(", ")}
@@ -144,7 +146,11 @@ export const ViewClass: React.FC<Props> = ({ childController, data }) => {
                 data.schedule.repeat.map((d) => (
                   <div className={css.rotationWeek}>
                     <div className={ctx(css.weekNumber, css.levelOne)}>
-                      <span>{`Week ${d.rotationWeek}`}</span>
+                      <span>{`${
+                        d.rotationWeek === 0
+                          ? `Weekly`
+                          : `Week ${d.rotationWeek}`
+                      }`}</span>
                       <div />
                     </div>
                     <div className={ctx(css.weekDetail, css.levelTwo)}>

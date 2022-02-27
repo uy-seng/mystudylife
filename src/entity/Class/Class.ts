@@ -5,14 +5,14 @@ import {
   Entity,
   ManyToOne,
   OneToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from "typeorm";
 import { Subject, AcademicYear, Term, User, ClassSchedule } from "..";
 
 @Entity("classes", {
   orderBy: {
-    createdAt: "ASC",
-  },
+    createdAt: "ASC"
+  }
 })
 @ObjectType()
 export class Class {
@@ -49,6 +49,7 @@ export class Class {
   academicYear: AcademicYear;
 
   @ManyToOne(() => Term, (term) => term.classes)
+  @Field(() => Term, { nullable: true })
   term: Term;
 
   @ManyToOne(() => User, (user) => user.classes)

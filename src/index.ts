@@ -6,6 +6,7 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import cors from "cors";
 import { apiRoute } from "./routes";
+import { oauthRoute } from "./routes/oauth.route";
 import {
   AuthResolver,
   AcademicYearResolver,
@@ -16,10 +17,11 @@ import {
   ClassScheduleResolver,
   OneOffScheduleResolver,
   RepeatScheduleResolver,
+  TaskResolver,
+  HolidayResolver
 } from "./graphql/resolvers";
-import { DatabaseService } from "./services";
+import { DatabaseService, PassportService } from "./services";
 import path from "path";
-import { TaskResolver } from "./graphql/resolvers/task/task.resolver";
 
 (async () => {
   const app = express();
@@ -32,12 +34,19 @@ import { TaskResolver } from "./graphql/resolvers/task/task.resolver";
       origin: [
         "https://studio.apollographql.com",
         "http://localhost:3000",
-        "http://localhost:3001",
-      ],
+        "http://localhost:3001"
+      ]
     })
   );
   const databaseService = new DatabaseService();
   await databaseService.init();
+  const passportService = new PassportService(app);
+  passportService.initGoogleOAuthStrategy();
+  passportService.initFacebookOAuthStrategy();
+  app.get("/", (_req, res) => {
+    res.redirect("/graphql");
+  });
+  app.use("/oauth", oauthRoute);
   app.use("/api", apiRoute);
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
@@ -52,9 +61,10 @@ import { TaskResolver } from "./graphql/resolvers/task/task.resolver";
         OneOffScheduleResolver,
         RepeatScheduleResolver,
         TaskResolver,
-      ],
+        HolidayResolver
+      ]
     }),
-    context: ({ req, res }) => ({ req, res }),
+    context: ({ req, res }) => ({ req, res })
   });
 
   await apolloServer.start();

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Term = exports.UserProvider = exports.User = exports.Task = exports.Subject = exports.Exam = exports.RepeatSchedule = exports.OneOffSchedule = exports.ClassSchedule = exports.Class = exports.WeekRotationSchedule = exports.DayRotationSchedule = exports.AcademicYearSchedule = exports.AcademicYear = void 0;
+exports.Holiday = exports.Term = exports.UserProvider = exports.User = exports.Task = exports.Subject = exports.Exam = exports.RepeatSchedule = exports.OneOffSchedule = exports.ClassSchedule = exports.Class = exports.WeekRotationSchedule = exports.DayRotationSchedule = exports.AcademicYearSchedule = exports.AcademicYear = void 0;
 const AcademicYear_1 = require("./AcademicYear");
 Object.defineProperty(exports, "AcademicYear", { enumerable: true, get: function () { return AcademicYear_1.AcademicYear; } });
 Object.defineProperty(exports, "AcademicYearSchedule", { enumerable: true, get: function () { return AcademicYear_1.AcademicYearSchedule; } });
@@ -21,4 +21,6 @@ Object.defineProperty(exports, "Task", { enumerable: true, get: function () { re
 const User_1 = require("./User");
 Object.defineProperty(exports, "User", { enumerable: true, get: function () { return User_1.User; } });
 Object.defineProperty(exports, "UserProvider", { enumerable: true, get: function () { return User_1.UserProvider; } });
+const Holiday_1 = require("./Holiday");
+Object.defineProperty(exports, "Holiday", { enumerable: true, get: function () { return Holiday_1.Holiday; } });
 //# sourceMappingURL=index.js.map

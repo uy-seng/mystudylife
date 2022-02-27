@@ -27,6 +27,7 @@ export class Subject {
   academicYear: AcademicYear;
 
   @ManyToOne(() => Term, (term) => term.subjects)
+  @Field(() => Term, { nullable: true })
   term: Term;
 
   @ManyToOne(() => User, (user) => user.subjects)
