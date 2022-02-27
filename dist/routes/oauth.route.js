@@ -13,11 +13,10 @@ exports.oauthRoute.get("/google", passport_1.default.authenticate("google", {
 }));
 exports.oauthRoute.get("/google/callback", passport_1.default.authenticate("google", {
     session: false,
+    successRedirect: "/dashboard",
 }), (req, res) => {
-    console.log("woof");
-    console.log(req.user);
+    console.log((0, helper_1.createRefreshToken)(req.user));
     (0, helper_1.sendRefreshToken)(res, (0, helper_1.createRefreshToken)(req.user));
-    return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
 });
 exports.oauthRoute.get("/facebook", passport_1.default.authenticate("facebook"));
 exports.oauthRoute.get("/facebook/callback", passport_1.default.authenticate("facebook", {
