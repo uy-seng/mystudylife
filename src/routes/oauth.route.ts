@@ -14,14 +14,9 @@ oauthRoute.get(
 
 oauthRoute.get(
   "/google/callback",
-  passport.authenticate("google", {
-    session: false,
-    // successRedirect: "/dashboard",
-  }),
-  (req, res) => {
-    // console.log(createRefreshToken(req.user as Partial<User>));
-    sendRefreshToken(res, createRefreshToken(req.user as Partial<User>));
-  }
+  passport.authenticate("google", ({ user }: any, _req, res) => {
+    sendRefreshToken(res, createRefreshToken(user));
+  })
 );
 
 oauthRoute.get("/facebook", passport.authenticate("facebook"));

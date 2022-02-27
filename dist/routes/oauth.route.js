@@ -11,11 +11,9 @@ exports.oauthRoute = express_1.default.Router();
 exports.oauthRoute.get("/google", passport_1.default.authenticate("google", {
     scope: ["profile", "email"],
 }));
-exports.oauthRoute.get("/google/callback", passport_1.default.authenticate("google", {
-    session: false,
-}), (req, res) => {
-    (0, helper_1.sendRefreshToken)(res, (0, helper_1.createRefreshToken)(req.user));
-});
+exports.oauthRoute.get("/google/callback", passport_1.default.authenticate("google", ({ user }, _req, res) => {
+    (0, helper_1.sendRefreshToken)(res, (0, helper_1.createRefreshToken)(user));
+}));
 exports.oauthRoute.get("/facebook", passport_1.default.authenticate("facebook"));
 exports.oauthRoute.get("/facebook/callback", passport_1.default.authenticate("facebook", {
     session: false,
