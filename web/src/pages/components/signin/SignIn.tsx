@@ -40,7 +40,7 @@ const SocialMedia: React.FC = () => {
     <div className={css.content}>
       <div className={css.section}>
         <SocialMediaButton
-          href={`http://localhost:8000/oauth/facebook`}
+          href={`https://mystudylife-clone-useng.herokuapp.com/oauth/facebook`}
           style={{
             background: "#3b5998",
             color: "white",
@@ -49,7 +49,7 @@ const SocialMedia: React.FC = () => {
           text={"Continue with Facebook"}
         />
         <SocialMediaButton
-          href={`http://localhost:8000/oauth/google`}
+          href={`https://mystudylife-clone-useng.herokuapp.com/oauth/google`}
           style={{
             background: "#cc3732",
             color: "white",

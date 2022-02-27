@@ -92,7 +92,8 @@ export class PassportService {
         {
           clientID: process.env.FACEBOOK_CLIENT_ID!,
           clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
-          callbackURL: "http://localhost:8000/oauth/facebook/callback",
+          callbackURL:
+            "https://mystudylife-clone-useng.herokuapp.com/oauth/facebook/callback",
         },
         async (
           _accessToken: string,
