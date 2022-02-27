@@ -18,7 +18,7 @@ import {
   OneOffScheduleResolver,
   RepeatScheduleResolver,
   TaskResolver,
-  HolidayResolver
+  HolidayResolver,
 } from "./graphql/resolvers";
 import { DatabaseService, PassportService } from "./services";
 import path from "path";
@@ -34,8 +34,8 @@ import path from "path";
       origin: [
         "https://studio.apollographql.com",
         "http://localhost:3000",
-        "http://localhost:3001"
-      ]
+        "http://localhost:3001",
+      ],
     })
   );
   const databaseService = new DatabaseService();
@@ -43,9 +43,6 @@ import path from "path";
   const passportService = new PassportService(app);
   passportService.initGoogleOAuthStrategy();
   passportService.initFacebookOAuthStrategy();
-  app.get("/", (_req, res) => {
-    res.redirect("/graphql");
-  });
   app.use("/oauth", oauthRoute);
   app.use("/api", apiRoute);
   const apolloServer = new ApolloServer({
@@ -61,10 +58,10 @@ import path from "path";
         OneOffScheduleResolver,
         RepeatScheduleResolver,
         TaskResolver,
-        HolidayResolver
-      ]
+        HolidayResolver,
+      ],
     }),
-    context: ({ req, res }) => ({ req, res })
+    context: ({ req, res }) => ({ req, res }),
   });
 
   await apolloServer.start();
@@ -81,6 +78,7 @@ import path from "path";
     });
   }
   app.listen(PORT, () => {
+    console.log("Client running at http://localhost:8000");
     console.log(
       `Server running at http://localhost:8000\nGraphql running at http://localhost:8000/graphql`
     );
