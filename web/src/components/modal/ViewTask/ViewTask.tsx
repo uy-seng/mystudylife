@@ -1,5 +1,11 @@
 import React from "react";
-import { GetClassesQuery, GetTasksQuery } from "../../../generated/graphql";
+import {
+  GetClassesQuery,
+  GetTasksQuery,
+  TaskType,
+  useGetTasksQuery,
+  useUpdateTaskMutation,
+} from "../../../generated/graphql";
 import { Button } from "../../button";
 import BaseModal from "../BaseModal";
 import { HiLocationMarker } from "react-icons/hi";
@@ -23,6 +29,28 @@ interface Props {
 
 export const ViewTask: React.FC<Props> = ({ childController, data }) => {
   const [show, setShow] = React.useState(false);
+  const [updateTask, { loading }] = useUpdateTaskMutation();
+  const { refetch } = useGetTasksQuery();
+
+  const updateTaskProgress = async (value: number) => {
+    if (data)
+      try {
+        await updateTask({
+          variables: {
+            ...data,
+            subjectId: data!.subject.id,
+            academicYearId: data!.academicYear?.id,
+            type: data!.type as TaskType,
+            completed: value,
+          },
+        });
+        refetch();
+      } catch (error) {
+        console.log(error);
+        console.log("Cannot Update Task Progress, something went wrong");
+        throw error;
+      }
+  };
 
   if (data)
     return (
@@ -41,7 +69,7 @@ export const ViewTask: React.FC<Props> = ({ childController, data }) => {
 
         <BaseModal
           hide={() => setShow(false)}
-          className="viewTask"
+          className={ctx("viewTask", css.viewTask)}
           parent={document.querySelector(".App") as Element}
           show={show}
         >
@@ -83,18 +111,32 @@ export const ViewTask: React.FC<Props> = ({ childController, data }) => {
                 <BsCalendar />
               </div>
               <div className={css.info}>
-                <div>Due {formatDate(new Date(data.due_date))}</div>
-                {new Date(data.due_date) < new Date() && (
+                <div>
+                  Due {formatDate(new Date(data.due_date + "T00:00:00"))}
+                </div>
+                {Math.floor(
+                  Math.abs(
+                    +new Date(new Date(data.due_date).setHours(0, 0, 0, 0)) -
+                      +new Date(new Date().setHours(0, 0, 0, 0))
+                  ) /
+                    (1000 * 60 * 60 * 24)
+                ) -
+                  1 >
+                  0 && (
                   <div className="txt-sm">
                     <span
                       style={{ color: "var(--error)" }}
                       className="txt-bold"
                     >
                       Overdue by{" "}
-                      {Math.ceil(
-                        Math.abs(+new Date() - +new Date(data.due_date)) /
+                      {Math.floor(
+                        Math.abs(
+                          +new Date(
+                            new Date(data.due_date).setHours(0, 0, 0, 0)
+                          ) - +new Date(new Date().setHours(0, 0, 0, 0))
+                        ) /
                           (1000 * 60 * 60 * 24)
-                      )}{" "}
+                      ) - 1}{" "}
                       days
                     </span>
                   </div>
@@ -107,8 +149,24 @@ export const ViewTask: React.FC<Props> = ({ childController, data }) => {
                 <GrInProgress />
               </div>
               <div className={css.info}>
-                <Slider min={0} max={100} />
+                <Slider
+                  defaultValue={data.completed || 0}
+                  onChange={async (newValue: number) =>
+                    await updateTaskProgress(newValue)
+                  }
+                  min={0}
+                  max={100}
+                />
               </div>
+            </div>
+
+            <div className={css.block}>
+              <div className={css.description}></div>
+            </div>
+
+            <div className={css.block}>
+              <div className={css.block_header}></div>
+              <div></div>
             </div>
           </BaseModal.Body>
         </BaseModal>

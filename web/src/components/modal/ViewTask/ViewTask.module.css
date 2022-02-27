@@ -8,3 +8,7 @@
   margin-right: 0.5rem;
   padding-top: 4px;
 }
+
+.viewTask {
+  min-width: 500px;
+}

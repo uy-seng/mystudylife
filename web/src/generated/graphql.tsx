@@ -739,6 +739,7 @@ export type UpdateTaskMutationVariables = Exact<{
   due_date: Scalars['String'];
   title?: Maybe<Scalars['String']>;
   detail?: Maybe<Scalars['String']>;
+  completed?: Maybe<Scalars['Float']>;
 }>;
 
 
@@ -2092,7 +2093,7 @@ export type UpdateSubjectMutationHookResult = ReturnType<typeof useUpdateSubject
 export type UpdateSubjectMutationResult = Apollo.MutationResult<UpdateSubjectMutation>;
 export type UpdateSubjectMutationOptions = Apollo.BaseMutationOptions<UpdateSubjectMutation, UpdateSubjectMutationVariables>;
 export const UpdateTaskDocument = gql`
-    mutation UpdateTask($id: String!, $subjectId: String!, $academicYearId: String, $type: TaskType!, $due_date: String!, $title: String, $detail: String) {
+    mutation UpdateTask($id: String!, $subjectId: String!, $academicYearId: String, $type: TaskType!, $due_date: String!, $title: String, $detail: String, $completed: Float) {
   updateTask(
     id: $id
     subjectId: $subjectId
@@ -2101,6 +2102,7 @@ export const UpdateTaskDocument = gql`
     due_date: $due_date
     title: $title
     detail: $detail
+    completed: $completed
   )
 }
     `;
@@ -2126,6 +2128,7 @@ export type UpdateTaskMutationFn = Apollo.MutationFunction<UpdateTaskMutation, U
  *      due_date: // value for 'due_date'
  *      title: // value for 'title'
  *      detail: // value for 'detail'
+ *      completed: // value for 'completed'
  *   },
  * });
  */

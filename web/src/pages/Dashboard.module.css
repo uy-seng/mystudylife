@@ -71,3 +71,7 @@
 .task .left > :last-child {
   font-size: small;
 }
+
+.task .right > :first-child {
+  white-space: nowrap;
+}
