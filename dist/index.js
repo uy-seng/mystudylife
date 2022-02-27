@@ -59,7 +59,7 @@ const path_1 = __importDefault(require("path"));
     if (process.env.NODE_ENV === "production") {
         app.use(express_1.default.static("web/build"));
         app.get("*", (_req, res) => {
-            return res.sendFile(path_1.default.resolve(__dirname, "web", "build", "index.html"));
+            return res.sendFile(path_1.default.resolve("web", "build", "index.html"));
         });
     }
     app.listen(PORT, () => {
