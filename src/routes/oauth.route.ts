@@ -16,12 +16,11 @@ oauthRoute.get(
   "/google/callback",
   passport.authenticate("google", {
     session: false,
+    successRedirect: "/dashboard",
   }),
   (req, res) => {
-    console.log("woof");
-    console.log(req.user);
+    console.log(createRefreshToken(req.user as Partial<User>));
     sendRefreshToken(res, createRefreshToken(req.user as Partial<User>));
-    return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
   }
 );
 
