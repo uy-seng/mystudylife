@@ -22,7 +22,10 @@ const path_1 = __importDefault(require("path"));
     app.use((0, cookie_parser_1.default)());
     app.use((0, cors_1.default)({
         credentials: true,
-        origin: ["https://mystudylife-clone-useng.herokuapp.com"],
+        origin: [
+            "https://mystudylife-clone-useng.herokuapp.com",
+            "http://mystudylife-clone-useng.herokuapp.com",
+        ],
     }));
     const databaseService = new services_1.DatabaseService();
     await databaseService.init();

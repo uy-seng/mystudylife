@@ -31,7 +31,10 @@ import path from "path";
   app.use(
     cors({
       credentials: true,
-      origin: ["https://mystudylife-clone-useng.herokuapp.com"],
+      origin: [
+        "https://mystudylife-clone-useng.herokuapp.com",
+        "http://mystudylife-clone-useng.herokuapp.com",
+      ],
     })
   );
   const databaseService = new DatabaseService();
