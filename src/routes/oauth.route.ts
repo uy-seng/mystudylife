@@ -18,6 +18,8 @@ oauthRoute.get(
     session: false,
   }),
   (req, res) => {
+    console.log("woof");
+    console.log(req.user);
     sendRefreshToken(res, createRefreshToken(req.user as Partial<User>));
     return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
   }

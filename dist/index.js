@@ -22,11 +22,7 @@ const path_1 = __importDefault(require("path"));
     app.use((0, cookie_parser_1.default)());
     app.use((0, cors_1.default)({
         credentials: true,
-        origin: [
-            "https://studio.apollographql.com",
-            "http://localhost:3000",
-            "http://localhost:3001",
-        ],
+        origin: ["https://mystudylife-clone-useng.herokuapp.com"],
     }));
     const databaseService = new services_1.DatabaseService();
     await databaseService.init();
@@ -59,12 +55,11 @@ const path_1 = __importDefault(require("path"));
     if (process.env.NODE_ENV === "production") {
         app.use(express_1.default.static("web/build"));
         app.get("*", (_req, res) => {
-            return res.sendFile(path_1.default.resolve("app", "web", "build", "index.html"));
+            return res.sendFile(path_1.default.resolve("web", "build", "index.html"));
         });
     }
     app.listen(PORT, () => {
-        console.log("Client running at http://localhost:8000");
-        console.log(`Server running at http://localhost:8000\nGraphql running at http://localhost:8000/graphql`);
+        console.log("Client running at https://mystudylife-clone-useng.herokuapp.com/");
     });
 })();
 //# sourceMappingURL=index.js.map

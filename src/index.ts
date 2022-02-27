@@ -31,11 +31,7 @@ import path from "path";
   app.use(
     cors({
       credentials: true,
-      origin: [
-        "https://studio.apollographql.com",
-        "http://localhost:3000",
-        "http://localhost:3001",
-      ],
+      origin: ["https://mystudylife-clone-useng.herokuapp.com"],
     })
   );
   const databaseService = new DatabaseService();
@@ -72,13 +68,12 @@ import path from "path";
   if (process.env.NODE_ENV === "production") {
     app.use(express.static("web/build"));
     app.get("*", (_req, res) => {
-      return res.sendFile(path.resolve("app", "web", "build", "index.html"));
+      return res.sendFile(path.resolve("web", "build", "index.html"));
     });
   }
   app.listen(PORT, () => {
-    console.log("Client running at http://localhost:8000");
     console.log(
-      `Server running at http://localhost:8000\nGraphql running at http://localhost:8000/graphql`
+      "Client running at https://mystudylife-clone-useng.herokuapp.com/"
     );
   });
 })();
