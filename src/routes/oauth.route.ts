@@ -14,7 +14,9 @@ oauthRoute.get(
 
 oauthRoute.get(
   "/google/callback",
-  passport.authenticate("google"),
+  passport.authenticate("google", {
+    session: false,
+  }),
   (req, res) => {
     sendRefreshToken(res, createRefreshToken(req.user as Partial<User>));
     return res.redirect("/dashboard");
