@@ -11,7 +11,7 @@ import {
   AiFillCheckSquare,
   AiFillSnippets,
   AiFillSchedule,
-  AiOutlineFileSearch
+  AiOutlineFileSearch,
 } from "react-icons/ai";
 import { Sidebar } from "./components/sidebar";
 import { Playground } from "./pages/Playground";
@@ -21,6 +21,7 @@ import { PageLoader } from "./components/loading";
 import { ManageCalendar } from "./pages/ManageCalendar";
 import { Setting } from "./pages/Setting";
 import { ManageTask } from "./pages/ManageTask";
+import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 
 function App() {
   const { data, loading, error } = useMeQuery();
@@ -35,6 +36,7 @@ function App() {
         <Switch>
           <PublicRoute data={data} exact path="/" component={Guest} />
           <PublicRoute data={data} path="/sign-up" component={SignUp} />
+          <Route exact path="/privacy-policy" component={PrivacyPolicy} />
           <React.Fragment>
             <div className={css.page}>
               <Sidebar
@@ -45,7 +47,7 @@ function App() {
                   { icon: <AiFillCheckSquare />, pathname: "task" },
                   { icon: <AiFillSnippets />, pathname: "exam" },
                   { icon: <AiFillSchedule />, pathname: "schedule" },
-                  { icon: <AiOutlineFileSearch />, pathname: "search" }
+                  { icon: <AiOutlineFileSearch />, pathname: "search" },
                 ]}
               />
               <PrivateRoute
