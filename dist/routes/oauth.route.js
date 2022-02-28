@@ -12,8 +12,8 @@ exports.oauthRoute.get("/google", passport_1.default.authenticate("google", {
     scope: ["profile", "email"],
 }));
 exports.oauthRoute.get("/google/callback", passport_1.default.authenticate("google"), (req, res) => {
-    console.log(req.user);
     (0, helper_1.sendRefreshToken)(res, (0, helper_1.createRefreshToken)(req.user));
+    return res.redirect("/dashboard");
 });
 exports.oauthRoute.get("/facebook", passport_1.default.authenticate("facebook"));
 exports.oauthRoute.get("/facebook/callback", passport_1.default.authenticate("facebook", {

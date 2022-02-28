@@ -28,6 +28,7 @@ import path from "path";
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(cookieParser());
+  app.enable("trust proxy");
   app.use(
     cors({
       credentials: true,
