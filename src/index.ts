@@ -33,7 +33,7 @@ import path from "path";
     cors({
       credentials: true,
       origin: [
-        "https://mystudylife-clone-useng.herokuapp.com",
+        "https://mystudylife-clone.onrender.com",
         "http://mystudylife-clone-useng.herokuapp.com",
       ],
     })
@@ -76,8 +76,6 @@ import path from "path";
     });
   }
   app.listen(PORT, () => {
-    console.log(
-      "Client running at https://mystudylife-clone-useng.herokuapp.com/"
-    );
+    console.log("Client running at https://mystudylife-clone.onrender.com/");
   });
 })();
