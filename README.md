@@ -10,11 +10,11 @@ Interactive demos of the app (hosted from this repository's `static/` folder):
 
 Login flow demonstration
 
-https://github.com/uy-seng/mystudylife/raw/refs/heads/main/static/login.mov
+https://github.com/user-attachments/assets/3ec0e90d-d57d-4d36-a0cb-c6c5cbdc95f1
 
 Main app / calendar demo
 
-https://github.com/uy-seng/mystudylife/raw/refs/heads/main/static/login.mov
+https://github.com/user-attachments/assets/5cdd7e7f-f36a-4af7-aa9e-8eefb9841256
 
 If the embedded player does not work in your browser, click the links above to download and watch the .mov files.
 
