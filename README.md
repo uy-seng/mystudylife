@@ -10,17 +10,11 @@ Interactive demos of the app (hosted from this repository's `static/` folder):
 
 Login flow demonstration
 
-<video width="720" controls>
-	<source src="https://raw.githubusercontent.com/uy-seng/mystudylife/main/static/login.mov" type="video/quicktime">
-	Your browser does not support the video tag. Download the login demo: [login.mov](https://raw.githubusercontent.com/uy-seng/mystudylife/main/static/login.mov)
-</video>
+https://github.com/uy-seng/mystudylife/raw/refs/heads/main/static/login.mov
 
 Main app / calendar demo
 
-<video width="960" controls>
-	<source src="https://raw.githubusercontent.com/uy-seng/mystudylife/main/static/demo.mov" type="video/quicktime">
-	Your browser does not support the video tag. Download the demo: [demo.mov](https://raw.githubusercontent.com/uy-seng/mystudylife/main/static/demo.mov)
-</video>
+https://github.com/uy-seng/mystudylife/raw/refs/heads/main/static/login.mov
 
 If the embedded player does not work in your browser, click the links above to download and watch the .mov files.
 
