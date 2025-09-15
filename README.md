@@ -1,6 +1,4 @@
-# Awesome Project Build with TypeORM
-
-mystudylife (clone)
+# mystudylife (clone)
 
 This repository is a personal re-implementation and study of a student productivity app called "mystudylife". The goal of this project is to recreate the application from scratch to learn its architecture, data model, and integration between server and client.
 
